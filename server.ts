@@ -1,6 +1,26 @@
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
+import fs from "fs";
+import * as fflate from "fflate";
+import yaml from "js-yaml";
+import * as admin from "firebase-admin";
+
+// Load Firebase config for server-side use
+const firebaseConfig = JSON.parse(fs.readFileSync(path.join(process.cwd(), "firebase-applet-config.json"), "utf8"));
+
+// Initialize Firebase Admin SDK
+if (!admin.apps.length) {
+  admin.initializeApp({
+    projectId: firebaseConfig.projectId,
+  });
+}
+const db = admin.firestore();
+if (firebaseConfig.firestoreDatabaseId) {
+  // Note: firebase-admin doesn't support named databases in the same way as the client SDK 
+  // without specific configuration, but for default databases it works fine.
+  // If a specific databaseId is needed, it's usually handled via the settings.
+}
 
 async function startServer() {
   const app = express();
@@ -171,6 +191,127 @@ You must respond in EXACTLY this JSON format, nothing else:
     } catch (error: any) {
       console.error("Verdict Engine Error:", error);
       res.status(500).json({ error: error.message || "Internal server error" });
+    }
+  });
+
+  // --- Local Ingestion API ---
+  app.post("/api/ingest-local", async (req, res) => {
+    const filePath = path.join(process.cwd(), "cricket_data.zip");
+    
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ error: "cricket_data.zip not found in root directory. Please upload it via the file explorer." });
+    }
+
+    try {
+      const buffer = fs.readFileSync(filePath);
+      const zip = fflate.unzipSync(new Uint8Array(buffer));
+      
+      const files = Object.keys(zip).filter(name => name.endsWith('.json') || name.endsWith('.yaml') || name.endsWith('.yml'));
+      const totalFiles = files.length;
+      
+      const playerStats: Record<string, any> = {};
+      const teamStats: Record<string, any> = {};
+      let matchCount = 0;
+
+      for (let i = 0; i < totalFiles; i++) {
+        const fileName = files[i];
+        const fileData = zip[fileName];
+        const text = fflate.strFromU8(fileData);
+        
+        try {
+          let matchData: any;
+          if (fileName.endsWith('.json')) {
+            matchData = JSON.parse(text);
+          } else {
+            matchData = yaml.load(text);
+          }
+
+          if (matchData?.info) {
+            matchCount++;
+            const teams = matchData.info.teams || [];
+            teams.forEach((t: string) => {
+              if (!teamStats[t]) teamStats[t] = { matches: 0, wins: 0 };
+              teamStats[t].matches++;
+              if (matchData.info.outcome?.winner === t) teamStats[t].wins++;
+            });
+
+            if (matchData.innings) {
+              matchData.innings.forEach((inning: any) => {
+                const overs = inning.overs || [];
+                overs.forEach((over: any) => {
+                  const deliveries = over.deliveries || [];
+                  deliveries.forEach((ball: any) => {
+                    const batter = ball.batter;
+                    const bowler = ball.bowler;
+                    const runs = ball.runs?.batter || 0;
+                    const extras = ball.runs?.extras || 0;
+                    const isWicket = !!ball.wickets;
+
+                    if (!playerStats[batter]) playerStats[batter] = { matches: 0, runs: 0, balls: 0, outs: 0 };
+                    playerStats[batter].runs += runs;
+                    playerStats[batter].balls += 1;
+                    if (isWicket && ball.wickets.some((w: any) => w.player_out === batter)) {
+                      playerStats[batter].outs += 1;
+                    }
+
+                    if (!playerStats[bowler]) playerStats[bowler] = { matches: 0, runs_conceded: 0, balls_bowled: 0, wickets: 0 };
+                    playerStats[bowler].runs_conceded += (runs + extras);
+                    playerStats[bowler].balls_bowled += 1;
+                    if (isWicket && ball.wickets.some((w: any) => w.kind !== 'run out')) {
+                      playerStats[bowler].wickets += 1;
+                    }
+                  });
+                });
+              });
+            }
+
+            if (matchData.info.players) {
+              Object.values(matchData.info.players).forEach((teamPlayers: any) => {
+                teamPlayers.forEach((p: string) => {
+                  if (!playerStats[p]) playerStats[p] = { matches: 0, runs: 0, balls: 0, outs: 0, wickets: 0, balls_bowled: 0 };
+                  playerStats[p].matches++;
+                });
+              });
+            }
+          }
+        } catch (err) {
+          console.warn(`Failed to parse ${fileName}`, err);
+        }
+      }
+
+      const topPlayers = Object.entries(playerStats)
+        .sort((a: any, b: any) => b[1].matches - a[1].matches)
+        .slice(0, 1000)
+        .map(([name, s]: [string, any]) => {
+          const avg = s.outs > 0 ? (s.runs / s.outs).toFixed(2) : s.runs;
+          const sr = s.balls > 0 ? ((s.runs / s.balls) * 100).toFixed(2) : 0;
+          const econ = s.balls_bowled > 0 ? ((s.runs_conceded / (s.balls_bowled / 6))).toFixed(2) : 0;
+          const bowlAvg = s.wickets > 0 ? (s.runs_conceded / s.wickets).toFixed(2) : 0;
+          
+          return [name, {
+            ...s,
+            bat_avg: avg,
+            bat_sr: sr,
+            bowl_econ: econ,
+            bowl_avg: bowlAvg
+          }];
+        })
+        .reduce((acc, [k, v]) => ({ ...acc, [k as string]: v }), {});
+
+      await db.collection('verdict_engine').doc('summary').set({
+        totalMatches: matchCount,
+        totalPlayers: Object.keys(playerStats).length,
+        totalTeams: Object.keys(teamStats).length,
+        lastUpdated: new Date().toISOString()
+      });
+
+      await db.collection('verdict_engine').doc('top_players').set(topPlayers);
+
+      res.json({ success: true, matches: matchCount, players: Object.keys(playerStats).length });
+      
+    } catch (error: any) {
+      console.error("Local Ingestion Error:", error);
+      res.status(500).json({ error: error.message });
     }
   });
 

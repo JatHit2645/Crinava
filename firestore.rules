@@ -29,7 +29,7 @@ service cloud.firestore {
 
     function isAdmin() {
       return isAuthenticated() &&
-        (request.auth.token.email == "hemnanijatin9@gmail.com" && request.auth.token.email_verified == true);
+        (request.auth.token.email == "hemnanijatin9@gmail.com");
     }
 
     function isValidEmail(email) {
@@ -44,8 +44,8 @@ service cloud.firestore {
       return hasOnlyAllowedFields(['id', 'email', 'cricket_iq', 'crinava_coins', 'updated_at']) &&
              data.id is string && data.id == request.auth.uid &&
              data.email is string && isValidEmail(data.email) &&
-             data.cricket_iq is int && data.cricket_iq >= 0 &&
-             data.crinava_coins is int && data.crinava_coins >= 0;
+             data.cricket_iq is number && data.cricket_iq >= 0 &&
+             data.crinava_coins is number && data.crinava_coins >= 0;
     }
 
     // ===============================================================
@@ -62,7 +62,7 @@ service cloud.firestore {
     }
 
     match /verdict_engine/{docId} {
-      allow read: if isAuthenticated();
+      allow read: if true;
       allow write: if isAdmin();
     }
 
