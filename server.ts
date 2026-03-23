@@ -102,6 +102,78 @@ async function startServer() {
   // --- Vertex AI Super-Computer Bridge with Caching ---
   // Removed in favor of direct frontend Gemini integration
 
+  // --- Claude Verdict Engine API ---
+  app.post("/api/verdict", async (req, res) => {
+    try {
+      const { claim, contextData } = req.body;
+      
+      if (!process.env.CLAUDE_API_KEY) {
+        return res.status(500).json({ error: "CLAUDE_API_KEY is not set in environment variables." });
+      }
+
+      const Anthropic = (await import('@anthropic-ai/sdk')).default;
+      const anthropic = new Anthropic({
+        apiKey: process.env.CLAUDE_API_KEY,
+      });
+
+      const prompt = `
+You are an expert cricket analyst and statistician. You are powering a "Verdict Engine".
+The user has provided a claim about cricket, and some statistical context extracted from a database of 21,357 matches.
+
+Context Data:
+${JSON.stringify(contextData, null, 2)}
+
+Claim: "${claim}"
+
+Based on the context data and your expert knowledge, provide a verdict.
+You must respond in EXACTLY this JSON format, nothing else:
+{
+  "claim": "The original claim",
+  "verdict": "TRUE" | "FALSE" | "LARGELY TRUE" | "CONTESTED",
+  "confidence": <number between 0 and 100>,
+  "rawStats": [
+    { "label": "Stat Name", "value": "Stat Value", "comparison": "Contextual comparison" }
+  ],
+  "contextStats": [
+    { "label": "Context Name", "value": "Context Value", "description": "Why this matters" }
+  ],
+  "surpriseStat": {
+    "value": "Surprising value",
+    "label": "Surprising label",
+    "context": "Why it's surprising"
+  },
+  "nuance": "A paragraph explaining the nuance of the verdict"
+}
+`;
+
+      const response = await anthropic.messages.create({
+        model: "claude-3-haiku-20240307",
+        max_tokens: 1000,
+        temperature: 0.2,
+        system: "You are a cricket verdict engine. Always respond in valid JSON.",
+        messages: [
+          { role: "user", content: prompt }
+        ]
+      });
+
+      const text = response.content[0].type === 'text' ? response.content[0].text : '';
+      
+      try {
+        // Find JSON in the response
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : text);
+        res.json(parsed);
+      } catch (e) {
+        console.error("Failed to parse Claude response:", text);
+        res.status(500).json({ error: "Failed to parse verdict from AI." });
+      }
+
+    } catch (error: any) {
+      console.error("Verdict Engine Error:", error);
+      res.status(500).json({ error: error.message || "Internal server error" });
+    }
+  });
+
   // --- Vite Middleware for Development ---
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

@@ -1,0 +1,74 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: profiles
+    // Document ID: {userId}
+    // Fields:
+    //   - id: string (required) - User's UID
+    //   - email: string (required) - User's email
+    //   - cricket_iq: number (required) - User's Cricket IQ score
+    //   - crinava_coins: number (required) - User's Crinava Coin balance
+    //   - updated_at: string (optional) - Last update timestamp
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (request.auth.token.email == "hemnanijatin9@gmail.com" && request.auth.token.email_verified == true);
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function isValidUserProfile(data) {
+      return hasOnlyAllowedFields(['id', 'email', 'cricket_iq', 'crinava_coins', 'updated_at']) &&
+             data.id is string && data.id == request.auth.uid &&
+             data.email is string && isValidEmail(data.email) &&
+             data.cricket_iq is int && data.cricket_iq >= 0 &&
+             data.crinava_coins is int && data.crinava_coins >= 0;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /profiles/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && isValidUserProfile(request.resource.data);
+      allow update: if (isOwner(userId) && isValidUserProfile(request.resource.data) &&
+                      request.resource.data.id == resource.data.id &&
+                      request.resource.data.email == resource.data.email) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /verdict_engine/{docId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

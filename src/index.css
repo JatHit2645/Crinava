@@ -3,8 +3,8 @@
 
 @theme {
   --color-primary: #00E5FF;
-  --color-surface: #050505;
-  --color-on-surface: #ffffff;
+  --color-surface: var(--surface);
+  --color-on-surface: var(--on-surface);
   --color-aurora-teal: #00E5FF;
   --color-metallic-gold: #FFD700;
   
@@ -12,9 +12,19 @@
   --font-body: "Inter", sans-serif;
 }
 
+:root {
+  --surface: #ffffff;
+  --on-surface: #050505;
+}
+
+.dark {
+  --surface: #050505;
+  --on-surface: #FFD700;
+}
+
 @layer base {
   body {
-    @apply bg-surface text-white font-body selection:bg-primary selection:text-black overflow-x-hidden;
+    @apply bg-surface text-on-surface font-body selection:bg-primary selection:text-black overflow-x-hidden transition-colors duration-300;
     -webkit-tap-highlight-color: transparent;
   }
   
@@ -25,7 +35,7 @@
 
 @layer utilities {
   .brand-gradient {
-    background: linear-gradient(90deg, #FFFFFF 0%, #00E5FF 100%);
+    background: linear-gradient(90deg, #FFD700 0%, #00E5FF 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -44,5 +54,15 @@
 
   .active-gold .material-symbols-outlined {
     font-variation-settings: 'FILL' 1;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .animate-shimmer {
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite linear;
   }
 }

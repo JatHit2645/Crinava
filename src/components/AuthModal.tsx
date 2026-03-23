@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Mail, Lock, Loader2, LogOut, Chrome, Zap } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { X, Mail, Lock, Loader2, LogOut, Chrome, Sparkles } from 'lucide-react';
+import { auth, signInWithGoogle, sendMagicLink } from '../lib/firebase';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -26,27 +27,14 @@ export function AuthModal({ isOpen, onClose, session }: AuthModalProps) {
 
     try {
       if (isMagicLink) {
-        const { error } = await supabase.auth.signInWithOtp({
-          email,
-          options: {
-            emailRedirectTo: window.location.origin,
-          },
-        });
-        if (error) throw error;
+        await sendMagicLink(email);
+        window.localStorage.setItem('emailForSignIn', email);
         setMessage('Magic link sent! Check your email inbox.');
       } else if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-        });
-        if (error) throw error;
-        setMessage('Check your email for the confirmation link!');
+        await createUserWithEmailAndPassword(auth, email, password);
+        onClose();
       } else {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-        if (error) throw error;
+        await signInWithEmailAndPassword(auth, email, password);
         onClose();
       }
     } catch (err: any) {
@@ -60,13 +48,8 @@ export function AuthModal({ isOpen, onClose, session }: AuthModalProps) {
     setLoading(true);
     setError(null);
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin,
-        },
-      });
-      if (error) throw error;
+      await signInWithGoogle();
+      onClose();
     } catch (err: any) {
       setError(err.message || 'Failed to initialize Google login.');
     } finally {
@@ -76,7 +59,7 @@ export function AuthModal({ isOpen, onClose, session }: AuthModalProps) {
 
   const handleSignOut = async () => {
     setLoading(true);
-    await supabase.auth.signOut();
+    await signOut(auth);
     setLoading(false);
     onClose();
   };
@@ -90,11 +73,11 @@ export function AuthModal({ isOpen, onClose, session }: AuthModalProps) {
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl overflow-hidden relative"
+          className="w-full max-w-md bg-[#0a0a0a] border border-metallic-gold/10 rounded-2xl shadow-2xl overflow-hidden relative"
         >
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-white/5"
+            className="absolute top-4 right-4 p-2 text-gray-400 hover:text-metallic-gold transition-colors rounded-full hover:bg-metallic-gold/5"
           >
             <X size={20} />
           </button>
@@ -111,7 +94,7 @@ export function AuthModal({ isOpen, onClose, session }: AuthModalProps) {
                     ? 'Sign in with a one-time link sent to your email'
                     : isSignUp 
                       ? 'Create an account to track your Cricket IQ' 
-                      : 'Sign in to access your predictions and wallet'}
+                      : 'Sign in to access your predictions and coins'}
               </p>
             </div>
 
@@ -122,7 +105,7 @@ export function AuthModal({ isOpen, onClose, session }: AuthModalProps) {
                 </div>
                 <div className="text-center">
                   <p className="text-sm text-gray-400 uppercase tracking-widest mb-1">Logged in as</p>
-                  <p className="text-lg font-bold text-white">{session.user.email}</p>
+                  <p className="text-lg font-bold text-metallic-gold">{session.user.email}</p>
                 </div>
                 <button
                   onClick={handleSignOut}
@@ -139,7 +122,7 @@ export function AuthModal({ isOpen, onClose, session }: AuthModalProps) {
                   <button
                     onClick={handleGoogleLogin}
                     disabled={loading}
-                    className="w-full py-3 px-4 bg-white text-black hover:bg-gray-100 rounded-xl font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-3"
+                    className="w-full py-3 px-4 bg-metallic-gold text-black hover:bg-metallic-gold/90 rounded-xl font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-3"
                   >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                       <path
@@ -156,7 +139,7 @@ export function AuthModal({ isOpen, onClose, session }: AuthModalProps) {
                       />
                       <path
                         fill="#EA4335"
-                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                       />
                     </svg>
                     Continue with Google
@@ -165,7 +148,7 @@ export function AuthModal({ isOpen, onClose, session }: AuthModalProps) {
 
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-white/10"></div>
+                    <div className="w-full border-t border-metallic-gold/10"></div>
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
                     <span className="bg-[#0a0a0a] px-2 text-gray-500 tracking-widest font-bold">Or email</span>
@@ -194,7 +177,7 @@ export function AuthModal({ isOpen, onClose, session }: AuthModalProps) {
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-aurora-teal/50 text-white placeholder-gray-500 transition-colors"
+                        className="w-full pl-10 pr-4 py-3 bg-metallic-gold/5 border border-metallic-gold/10 rounded-xl focus:outline-none focus:border-aurora-teal/50 text-metallic-gold placeholder-gray-500 transition-colors"
                         placeholder="Email address"
                       />
                     </div>
@@ -209,7 +192,7 @@ export function AuthModal({ isOpen, onClose, session }: AuthModalProps) {
                           required
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-aurora-teal/50 text-white placeholder-gray-500 transition-colors"
+                          className="w-full pl-10 pr-4 py-3 bg-metallic-gold/5 border border-metallic-gold/10 rounded-xl focus:outline-none focus:border-aurora-teal/50 text-metallic-gold placeholder-gray-500 transition-colors"
                           placeholder="Password"
                         />
                       </div>
@@ -225,7 +208,7 @@ export function AuthModal({ isOpen, onClose, session }: AuthModalProps) {
                       <Loader2 size={20} className="animate-spin" />
                     ) : isMagicLink ? (
                       <>
-                        <Zap size={20} />
+                        <Sparkles size={20} />
                         Send Magic Link
                       </>
                     ) : (
@@ -242,7 +225,7 @@ export function AuthModal({ isOpen, onClose, session }: AuthModalProps) {
                         setError(null);
                         setMessage(null);
                       }}
-                      className="text-sm text-gray-400 hover:text-white transition-colors"
+                      className="text-sm text-gray-400 hover:text-metallic-gold transition-colors"
                     >
                       {isSignUp 
                         ? 'Already have an account? Sign in' 
