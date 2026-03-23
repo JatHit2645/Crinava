@@ -1,0 +1,48 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cinzel:wght@700;900&family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  --color-primary: #00E5FF;
+  --color-surface: #050505;
+  --color-on-surface: #ffffff;
+  --color-aurora-teal: #00E5FF;
+  --color-metallic-gold: #FFD700;
+  
+  --font-headline: "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-white font-body selection:bg-primary selection:text-black overflow-x-hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-headline font-black tracking-tighter uppercase;
+  }
+}
+
+@layer utilities {
+  .brand-gradient {
+    background: linear-gradient(90deg, #FFFFFF 0%, #00E5FF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+
+  .suggestion-chip {
+    transition: all 0.2s ease;
+  }
+  
+  .active-gold {
+    color: #FFD700 !important;
+  }
+
+  .active-gold .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1;
+  }
+}
