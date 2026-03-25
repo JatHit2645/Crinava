@@ -15,6 +15,7 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete
   const [checking, setChecking] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const cache = React.useRef(new Map<string, boolean>());
 
   useEffect(() => {
     if (username.length < 3) {
@@ -23,11 +24,19 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete
     }
 
     const checkAvailability = async () => {
+      const lowerUsername = username.toLowerCase();
+      if (cache.current.has(lowerUsername)) {
+        setIsAvailable(cache.current.get(lowerUsername)!);
+        return;
+      }
+
       setChecking(true);
       try {
-        const usernameRef = doc(db, 'usernames', username.toLowerCase());
+        const usernameRef = doc(db, 'usernames', lowerUsername);
         const docSnap = await getDoc(usernameRef);
-        setIsAvailable(!docSnap.exists());
+        const available = !docSnap.exists();
+        cache.current.set(lowerUsername, available);
+        setIsAvailable(available);
       } catch (err) {
         console.error('Error checking username availability:', err);
       } finally {
@@ -122,7 +131,11 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete
                     value={username}
                     onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ''))}
                     placeholder="cricket_pro_99"
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-5 pl-12 pr-12 text-white text-sm font-bold focus:outline-none focus:border-aurora-teal/50 transition-all"
+                    className={`w-full bg-white/5 border rounded-2xl py-5 pl-12 pr-12 text-white text-sm font-bold focus:outline-none transition-all ${
+                      isAvailable === true ? 'border-green-500/50 focus:border-green-500' : 
+                      isAvailable === false ? 'border-red-500/50 focus:border-red-500' : 
+                      'border-white/10 focus:border-aurora-teal/50'
+                    }`}
                     maxLength={20}
                     required
                   />

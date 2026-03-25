@@ -1653,20 +1653,19 @@ export default function App() {
                   exit={{ opacity: 0, y: 40, scale: 0.98 }}
                   viewport={{ once: false, amount: 0.2, margin: "-50px" }}
                   transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                  className="bg-[#080808] border border-white/5 rounded-[80px] p-16 md:p-24 pl-4 md:pl-6 relative overflow-hidden group"
+                  className="bg-[#080808] border border-white/5 rounded-[80px] p-8 md:p-12 relative overflow-hidden group"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-aurora-teal/[0.02] via-transparent to-metallic-gold/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
                   <div className="w-full relative z-10 flex flex-col items-start">
-                    <div className="space-y-6 w-full flex flex-col items-start pl-0">
-                      <h3 className="text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase italic tracking-tighter leading-[0.8] text-left w-full">
-                        THE<br />ECOSYSTEM
-                      </h3>
-                      <p className="text-gray-400 text-lg md:text-xl font-medium tracking-tight text-left max-w-xs">Beyond analysis. A complete cricket experience.</p>
+                    <div className="space-y-6 w-full flex flex-col items-center">
+                      <h3 className="text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase italic tracking-tighter leading-[0.8]">THE</h3>
+                      <h3 className="text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase italic tracking-tighter leading-[0.8]">ECOSYSTEM</h3>
+                      <p className="text-gray-400 text-lg md:text-xl font-medium tracking-tight text-center max-w-xs">Beyond analysis. A complete cricket experience.</p>
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 w-full">
                       {[
                         { icon: <TrendingUp size={24} />, title: 'Live', tab: 'live' },
-                        { icon: <Trophy size={24} />, title: 'Raffle', tab: 'raffle' },
+                        { icon: <Ticket size={24} />, title: 'Raffle', tab: 'raffle' },
                         { icon: <Info size={24} />, title: 'Notes', tab: 'blog' },
                         { icon: <ShieldCheck size={24} />, title: 'Oracle', tab: 'verdict' }
                       ].map((extra, i) => (
@@ -1679,7 +1678,7 @@ export default function App() {
                           <div className="w-20 h-20 mx-auto bg-white/5 rounded-3xl flex items-center justify-center text-aurora-teal border border-white/5 group-hover/item:bg-aurora-teal group-hover/item:text-black group-hover/item:border-aurora-teal group-hover/item:shadow-[0_0_30px_rgba(0,229,255,0.3)] transition-all duration-500">
                             {extra.icon}
                           </div>
-                          <span className="block text-xs font-black text-white uppercase tracking-[0.3em] group-hover/item:text-aurora-teal transition-colors">{extra.title}</span>
+                          <span className="block text-xs font-black text-white uppercase tracking-[0.3em] group-hover/item:text-aurora-teal transition-colors mt-4 text-center">{extra.title}</span>
                         </motion.div>
                       ))}
                     </div>
@@ -2418,16 +2417,19 @@ export default function App() {
               exit={{ opacity: 0, y: -20 }}
               className="w-full max-w-2xl space-y-8"
             >
-              <div className="bg-gradient-to-br from-metallic-gold/20 to-transparent p-8 rounded-3xl border border-metallic-gold/20 relative overflow-hidden">
+              <div className="bg-gradient-to-br from-metallic-gold/20 to-transparent p-8 rounded-3xl border border-metallic-gold/20 relative">
                 <div className="relative z-10 space-y-6">
-                  <div className="flex justify-between items-start">
+                  <div className="relative">
                     <div className="space-y-1">
                       <h2 className="text-3xl font-black text-white tracking-tighter uppercase italic">IPL Raffle</h2>
                       <p className="text-metallic-gold text-[10px] font-black uppercase tracking-widest">Next Draw: 2h 45m</p>
                     </div>
-                    <div className="bg-black/40 px-4 py-2 rounded-xl border border-white/10">
-                      <span className="text-2xl font-black text-white">10 Coins</span>
-                      <span className="text-[8px] text-gray-500 font-black uppercase tracking-widest block">Per Ticket</span>
+                    <div className="absolute -top-2 -right-6 bg-black/40 px-4 py-2 rounded-xl border border-white/10">
+                      <div className="flex items-center gap-1">
+                        <span className="text-2xl font-black text-white">10</span>
+                        <CoinIcon size={20} />
+                      </div>
+                      <span className="text-[8px] text-gray-500 font-black uppercase tracking-widest block mt-1">Per Ticket</span>
                     </div>
                   </div>
                   

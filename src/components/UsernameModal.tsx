@@ -21,6 +21,7 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({ isOpen, uid, email
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const cache = React.useRef(new Map<string, boolean>());
 
   const isLeapYear = (year: number) => (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
   
@@ -75,11 +76,19 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({ isOpen, uid, email
     }
 
     const checkAvailability = async () => {
+      const lowerUsername = username.toLowerCase();
+      if (cache.current.has(lowerUsername)) {
+        setIsAvailable(cache.current.get(lowerUsername)!);
+        return;
+      }
+
       setChecking(true);
       try {
-        const usernameRef = doc(db, 'usernames', username.toLowerCase());
+        const usernameRef = doc(db, 'usernames', lowerUsername);
         const docSnap = await getDoc(usernameRef);
-        setIsAvailable(!docSnap.exists());
+        const available = !docSnap.exists();
+        cache.current.set(lowerUsername, available);
+        setIsAvailable(available);
       } catch (err) {
         console.error('Error checking username availability', err);
       } finally {
