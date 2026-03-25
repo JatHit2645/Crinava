@@ -12,6 +12,7 @@ service cloud.firestore {
     //   - email: string (required) - User's email
     //   - cricket_iq: number (required) - User's Cricket IQ score
     //   - crinava_coins: number (required) - User's Crinava Coin balance
+    //   - photoURL: string (optional) - User's profile picture URL (base64)
     //   - updated_at: string (optional) - Last update timestamp
     //
     // ===============================================================
@@ -29,7 +30,7 @@ service cloud.firestore {
 
     function isAdmin() {
       return isAuthenticated() &&
-        (request.auth.token.email == "hemnanijatin9@gmail.com");
+        (request.auth.token.email == "hemnanijatin9@gmail.com" && request.auth.token.email_verified == true);
     }
 
     function isValidEmail(email) {
@@ -41,11 +42,12 @@ service cloud.firestore {
     }
 
     function isValidUserProfile(data) {
-      return hasOnlyAllowedFields(['id', 'email', 'cricket_iq', 'crinava_coins', 'updated_at']) &&
+      return hasOnlyAllowedFields(['id', 'email', 'cricket_iq', 'crinava_coins', 'photoURL', 'updated_at']) &&
              data.id is string && data.id == request.auth.uid &&
              data.email is string && isValidEmail(data.email) &&
-             data.cricket_iq is number && data.cricket_iq >= 0 &&
-             data.crinava_coins is number && data.crinava_coins >= 0;
+             data.cricket_iq is int && data.cricket_iq >= 0 &&
+             data.crinava_coins is int && data.crinava_coins >= 0 &&
+             (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() < 1048576)); // Max 1MB
     }
 
     // ===============================================================
@@ -59,11 +61,6 @@ service cloud.firestore {
                       request.resource.data.id == resource.data.id &&
                       request.resource.data.email == resource.data.email) || isAdmin();
       allow delete: if isAdmin();
-    }
-
-    match /verdict_engine/{docId} {
-      allow read: if true;
-      allow write: if isAdmin();
     }
 
     // Default deny

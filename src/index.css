@@ -1,10 +1,10 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cinzel:wght@700;900&family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
 
 @theme {
   --color-primary: #00E5FF;
-  --color-surface: var(--surface);
-  --color-on-surface: var(--on-surface);
+  --color-surface: #020202;
+  --color-on-surface: #ffffff;
   --color-aurora-teal: #00E5FF;
   --color-metallic-gold: #FFD700;
   
@@ -12,22 +12,25 @@
   --font-body: "Inter", sans-serif;
 }
 
-:root {
-  --surface: #ffffff;
-  --on-surface: #050505;
-}
-
-.dark {
-  --surface: #050505;
-  --on-surface: #FFFFFF;
-}
-
 @layer base {
   body {
-    @apply bg-surface text-on-surface font-body selection:bg-primary selection:text-black overflow-x-hidden transition-colors duration-300;
+    @apply bg-surface text-white font-body selection:bg-primary selection:text-black overflow-x-hidden;
     -webkit-tap-highlight-color: transparent;
   }
   
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-headline font-black tracking-tighter uppercase;
   }
@@ -49,7 +52,7 @@
   }
   
   .active-gold {
-    color: #FFFFFF !important;
+    color: #FFD700 !important;
   }
 
   .active-gold .material-symbols-outlined {
@@ -64,5 +67,32 @@
   .animate-shimmer {
     background-size: 200% 100%;
     animation: shimmer 3s infinite linear;
+  }
+
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 229, 255, 0.3);
+  }
+
+  /* Premium Glows */
+  .premium-glow {
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
+  }
+
+  .premium-glow-gold {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
   }
 }

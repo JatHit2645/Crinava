@@ -9,6 +9,7 @@
         "email": { "type": "string", "format": "email", "description": "User's email" },
         "cricket_iq": { "type": "integer", "description": "User's Cricket IQ score" },
         "crinava_coins": { "type": "integer", "description": "User's Crinava Coin balance" },
+        "photoURL": { "type": "string", "description": "User's profile picture URL (base64)" },
         "updated_at": { "type": "string", "format": "date-time", "description": "Last update timestamp" }
       },
       "required": ["id", "email", "cricket_iq", "crinava_coins"]
