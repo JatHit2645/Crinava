@@ -18,8 +18,11 @@ export const signInWithGoogle = () => signInWithPopup(auth, googleProvider);
 
 // Helper for Magic Link
 export const sendMagicLink = (email: string) => {
+  const url = window.location.href.split('?')[0];
+  console.log('Sending magic link with redirect URL:', url);
   const actionCodeSettings = {
-    url: window.location.origin,
+    // Use the exact current URL but strip query params for authorized domain matching
+    url,
     handleCodeInApp: true,
   };
   return sendSignInLinkToEmail(auth, email, actionCodeSettings);

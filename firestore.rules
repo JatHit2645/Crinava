@@ -42,12 +42,18 @@ service cloud.firestore {
     }
 
     function isValidUserProfile(data) {
-      return hasOnlyAllowedFields(['id', 'email', 'cricket_iq', 'crinava_coins', 'photoURL', 'updated_at']) &&
+      return hasOnlyAllowedFields(['id', 'email', 'username', 'cricket_iq', 'crinava_coins', 'photoURL', 'career_path', 'expertise_badge', 'professional_comparison', 'updated_at']) &&
              data.id is string && data.id == request.auth.uid &&
              data.email is string && isValidEmail(data.email) &&
-             data.cricket_iq is int && data.cricket_iq >= 0 &&
-             data.crinava_coins is int && data.crinava_coins >= 0 &&
-             (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() < 1048576)); // Max 1MB
+             data.username is string && data.username.size() >= 3 && data.username.size() <= 20 &&
+             data.cricket_iq is number && data.cricket_iq >= 0 &&
+             data.crinava_coins is number && data.crinava_coins >= 0 &&
+             (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() < 1048576)) &&
+             (!('career_path' in data) || (data.career_path is string)) &&
+             (!('expertise_badge' in data) || (data.expertise_badge is string)) &&
+             (!('professional_comparison' in data) || (data.professional_comparison is map)) &&
+             // Ensure username mapping exists and points to this user in the same batch
+             getAfter(/databases/$(database)/documents/usernames/$(data.username.lower())).data.uid == request.auth.uid;
     }
 
     // ===============================================================
@@ -59,7 +65,15 @@ service cloud.firestore {
       allow create: if isOwner(userId) && isValidUserProfile(request.resource.data);
       allow update: if (isOwner(userId) && isValidUserProfile(request.resource.data) &&
                       request.resource.data.id == resource.data.id &&
-                      request.resource.data.email == resource.data.email) || isAdmin();
+                      request.resource.data.email == resource.data.email &&
+                      (request.resource.data.username == resource.data.username || !('username' in resource.data))) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /usernames/{username} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow update: if false;
       allow delete: if isAdmin();
     }
 

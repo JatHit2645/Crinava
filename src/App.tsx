@@ -33,7 +33,18 @@ import {
   Ticket,
   Brain,
   Infinity,
-  Sparkles
+  Sparkles,
+  Award,
+  Medal,
+  Zap,
+  HelpCircle,
+  X,
+  BarChart3,
+  Shield,
+  Star,
+  ArrowUpRight,
+  TrendingUp as TrendingUpIcon,
+  ChevronRight as ChevronRightIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
@@ -52,7 +63,8 @@ import ReactMarkdown from 'react-markdown';
 import { auth, db, handleFirestoreError, OperationType } from './lib/firebase';
 import { onAuthStateChanged, isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { doc, setDoc, updateDoc, onSnapshot } from 'firebase/firestore';
-// import { AuthModal } from './components/AuthModal';
+import { AuthModal } from './components/AuthModal';
+import { UsernameModal } from './components/UsernameModal';
 
 // --- Types ---
 
@@ -537,6 +549,26 @@ export default function App() {
   const [showIQ, setShowIQ] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [showCareerInfo, setShowCareerInfo] = useState(false);
+  const [showProInfo, setShowProInfo] = useState(false);
+  const [showBadgesModal, setShowBadgesModal] = useState(false);
+
+  const badges = [
+    { id: 'early-bird', name: 'Early Bird', description: 'Joined Crinava in its inaugural month.', icon: '🌟', requirement: 'Join before April 2026', progress: 100 },
+    { id: 'strategist', name: 'Strategist', description: 'Master of tactical debates.', icon: '🧠', requirement: 'Win 10 community debates', progress: 40 },
+    { id: 'oracle', name: 'Oracle', description: 'Uncanny ability to predict match outcomes.', icon: '🔮', requirement: '80% accuracy over 50 predictions', progress: 15 },
+    { id: 'iron-man', name: 'Iron Man', description: 'Unwavering consistency.', icon: '🛡️', requirement: '30-day login streak', progress: 60 },
+    { id: 'mastermind', name: 'Mastermind', description: 'Advanced simulation expert.', icon: '⚡', requirement: 'Score > 90 in 5 advanced simulations', progress: 0 },
+  ];
+
+  const careerLevels = [
+    { name: 'Rookie', range: '0 - 500 CP', actions: 'Daily Login: +10 CP' },
+    { name: 'Amateur', range: '501 - 1500 CP', actions: 'Correct Prediction: +50 CP' },
+    { name: 'Professional', range: '1501 - 3500 CP', actions: 'Debate Win: +100 CP' },
+    { name: 'Elite', range: '3501 - 7500 CP', actions: 'Simulation Mastery: +150 CP' },
+    { name: 'Legend', range: '7501+ CP', actions: 'Difficulty increases exponentially' },
+  ];
+
   const [notifications, setNotifications] = useState([
     { id: '1', title: 'Match Alert', message: 'IND vs PAK starting in 30 mins!', time: '10m ago', read: false },
     { id: '2', title: 'New Analysis', message: 'The Oracle has a new verdict on Kohli\'s form.', time: '1h ago', read: true },
@@ -544,7 +576,9 @@ export default function App() {
   ]);
   const [session, setSession] = useState<any>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showUsernameModal, setShowUsernameModal] = useState(false);
   const [profile, setProfile] = useState<any>(null);
+  const [isProfileLoading, setIsProfileLoading] = useState(true);
 
   const [activeDebateChat, setActiveDebateChat] = useState<string | null>(null);
   const [debateMessages, setDebateMessages] = useState<any[]>([]);
@@ -612,53 +646,94 @@ export default function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setSession(user ? { user } : null);
+      if (!user) {
+        setIsProfileLoading(false);
+        setProfile(null);
+      }
     });
 
     // Handle Magic Link
-    if (isSignInWithEmailLink(auth, window.location.href)) {
-      let email = window.localStorage.getItem('emailForSignIn');
-      if (!email) {
-        email = window.prompt('Please provide your email for confirmation');
-      }
-      if (email) {
-        signInWithEmailLink(auth, email, window.location.href)
-          .then(() => {
+    const handleMagicLink = async () => {
+      // Wait for Firebase to fully initialize
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const href = window.location.href;
+      console.log('Checking for magic link at:', href);
+      
+      if (isSignInWithEmailLink(auth, href)) {
+        console.log('Valid magic link detected');
+        let email = window.localStorage.getItem('emailForSignIn');
+        console.log('Stored email from localStorage:', email);
+        
+        if (!email) {
+          email = window.prompt('Please provide your email for confirmation');
+        }
+        
+        if (email) {
+          try {
+            console.log('Attempting sign-in with email link for:', email);
+            const result = await signInWithEmailLink(auth, email, href);
+            console.log('Sign-in successful for:', result.user.email);
+            
             window.localStorage.removeItem('emailForSignIn');
-          })
-          .catch((error) => {
-            console.error('Error signing in with email link', error);
-          });
+            // Remove the query params from URL without refreshing
+            window.history.replaceState({}, document.title, window.location.pathname);
+            // Force profile refresh
+            setIsProfileLoading(true);
+          } catch (error: any) {
+            console.error('Error signing in with email link:', error);
+            let message = 'Failed to sign in with magic link. ';
+            if (error.code === 'auth/invalid-action-code') {
+              message += 'The link has expired or already been used.';
+            } else if (error.code === 'auth/email-mismatch') {
+              message += 'The email provided does not match the one used to request the link.';
+            } else {
+              message += error.message;
+            }
+            alert(message);
+          }
+        }
       }
-    }
+    };
+
+    handleMagicLink();
 
     return () => unsubscribe();
   }, []);
 
   useEffect(() => {
     if (session?.user) {
+      setIsProfileLoading(true);
       // Real-time profile sync
       const profileRef = doc(db, 'profiles', session.user.uid);
       const unsubscribe = onSnapshot(profileRef, (docSnap) => {
         if (docSnap.exists()) {
-          setProfile(docSnap.data());
+          const data = docSnap.data();
+          setProfile(data);
+          if (!data.username) {
+            setShowUsernameModal(true);
+          }
         } else {
-          // Create profile if it doesn't exist
-          const newProfile = {
-            id: session.user.uid,
-            email: session.user.email,
-            cricket_iq: 100,
-            crinava_coins: 500,
-            updated_at: new Date().toISOString()
-          };
-          setDoc(profileRef, newProfile).catch(err => handleFirestoreError(err, OperationType.CREATE, 'profiles'));
+          // Profile doesn't exist, show username modal
+          setShowUsernameModal(true);
         }
-      }, (err) => handleFirestoreError(err, OperationType.GET, 'profiles'));
+        setIsProfileLoading(false);
+      }, (err) => {
+        console.error('Profile sync error:', err);
+        setIsProfileLoading(false);
+      });
 
       return () => unsubscribe();
-    } else {
-      setProfile(null);
     }
   }, [session]);
+
+  useEffect(() => {
+    if (session && !isProfileLoading && !profile?.username) {
+      const timer = setTimeout(() => {
+        setShowUsernameModal(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [session, profile, isProfileLoading]);
 
   // Sync state with profile
   useEffect(() => {
@@ -1017,25 +1092,25 @@ export default function App() {
             </div>
           </div>
           <div className="flex items-center space-x-4 md:space-x-6">
-            <div className="flex items-center gap-2">
-              <AnimatePresence>
-                {showIQ && (
-                  <motion.div 
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    className="px-3 py-1 bg-aurora-teal/10 border border-aurora-teal/20 rounded-lg"
-                  >
-                    <span className="text-xs font-black text-white italic tracking-tighter">{cricketIQ} IQ</span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+            <div className="relative">
               <button 
                 onClick={() => setShowIQ(!showIQ)}
                 className={`p-2 rounded-full border transition-all group ${showIQ ? 'bg-aurora-teal/20 border-aurora-teal premium-glow' : 'bg-white/5 border-white/10 hover:border-aurora-teal/30'}`}
               >
                 <Brain size={20} className={showIQ ? 'text-aurora-teal' : 'text-metallic-gold group-hover:scale-110 transition-transform'} />
               </button>
+              <AnimatePresence>
+                {showIQ && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-3 py-1 bg-aurora-teal/10 border border-aurora-teal/20 rounded-lg backdrop-blur-md z-50 whitespace-nowrap"
+                  >
+                    <span className="text-xs font-black text-white italic tracking-tighter">{cricketIQ} IQ</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
             
             <div className="relative">
@@ -1102,7 +1177,15 @@ export default function App() {
             
             <div className="relative">
               <button 
-                onClick={() => session ? setShowProfileDropdown(!showProfileDropdown) : setShowAuthModal(true)}
+                onClick={() => {
+                  if (!session) {
+                    setShowAuthModal(true);
+                  } else if (!profile?.username) {
+                    setShowUsernameModal(true);
+                  } else {
+                    setShowProfileDropdown(!showProfileDropdown);
+                  }
+                }}
                 className={`flex items-center gap-2 p-1.5 rounded-xl border transition-all ${showProfileDropdown ? 'bg-white/10 border-aurora-teal' : 'bg-white/5 border-white/10 hover:border-aurora-teal/30'}`}
               >
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-aurora-teal/20 to-metallic-gold/20 flex items-center justify-center border border-white/10 overflow-hidden relative">
@@ -1113,8 +1196,8 @@ export default function App() {
                   )}
                 </div>
                 <div className="hidden md:block text-left pr-2">
-                  <div className="text-[10px] font-black text-white uppercase tracking-tighter leading-none">
-                    {session ? (profile?.email?.split('@')[0] || 'User') : 'Sign In'}
+                  <div className="text-[10px] font-black text-white tracking-tighter leading-none">
+                    {session ? (profile?.username || profile?.email?.split('@')[0] || 'User') : 'Sign In'}
                   </div>
                   <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">
                     {session ? `${cricketIQ} IQ` : 'Guest'}
@@ -1129,7 +1212,7 @@ export default function App() {
                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    className="absolute right-0 mt-4 w-72 bg-[#0A0A0A]/95 border border-white/10 rounded-[32px] shadow-[0_40px_80px_rgba(0,0,0,0.9)] overflow-hidden z-[60] origin-top-right backdrop-blur-3xl"
+                    className="absolute right-0 mt-4 w-72 max-h-[70vh] bg-[#0A0A0A]/95 border border-white/10 rounded-[32px] shadow-[0_40px_80px_rgba(0,0,0,0.9)] overflow-y-auto z-[60] origin-top-right backdrop-blur-3xl custom-scrollbar"
                   >
                     <div className="p-6 border-b border-white/5 bg-gradient-to-br from-white/[0.03] to-transparent">
                       <div className="flex items-center gap-4 mb-6">
@@ -1141,12 +1224,12 @@ export default function App() {
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-[13px] font-black text-white truncate uppercase tracking-tight">
-                            {profile?.email?.split('@')[0] || 'User'}
+                          <p className="text-[13px] font-black text-white truncate tracking-tight">
+                            {profile?.username || profile?.email?.split('@')[0] || 'User'}
                           </p>
                           <div className="flex items-center gap-1.5 mt-1">
                             <div className="w-1.5 h-1.5 rounded-full bg-aurora-teal animate-pulse" />
-                            <p className="text-[9px] font-black text-metallic-gold uppercase tracking-[0.2em]">Elite Member</p>
+                            <p className="text-[9px] font-black text-metallic-gold uppercase tracking-[0.2em]">{profile?.expertise_badge || 'Elite Member'}</p>
                           </div>
                         </div>
                       </div>
@@ -1162,6 +1245,75 @@ export default function App() {
                           <div className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Cricket IQ</div>
                           <div className="text-[13px] font-black text-white">{cricketIQ}</div>
                         </div>
+                      </div>
+
+                      <div className="mt-6 space-y-4">
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center px-1">
+                            <div className="flex items-center gap-1">
+                              <span className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Career Path</span>
+                              <button 
+                                onClick={(e) => { e.stopPropagation(); setShowCareerInfo(true); }}
+                                className="text-gray-600 hover:text-aurora-teal transition-colors"
+                              >
+                                <Info size={10} />
+                              </button>
+                            </div>
+                            <span className="text-[8px] font-black text-aurora-teal uppercase tracking-widest">{profile?.career_path || 'Rookie'}</span>
+                          </div>
+                          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              animate={{ width: `${Math.min((cricketIQ / 7500) * 100, 100)}%` }}
+                              className="h-full bg-gradient-to-r from-aurora-teal to-metallic-gold"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Trophy size={14} className="text-metallic-gold" />
+                              <span className="text-[9px] font-black text-white uppercase tracking-widest">Pro Comparison</span>
+                              <button 
+                                onClick={(e) => { e.stopPropagation(); setShowProInfo(true); }}
+                                className="text-gray-600 hover:text-aurora-teal transition-colors"
+                              >
+                                <Info size={10} />
+                              </button>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
+                                <User size={16} className="text-gray-500" />
+                              </div>
+                              <div className="text-left">
+                                <p className="text-[9px] font-black text-white uppercase tracking-tight">{profile?.professional_comparison?.match || 'Virat Kohli'}</p>
+                                <p className="text-[7px] font-bold text-gray-500 uppercase tracking-widest">92% Similarity</p>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-[10px] font-black text-aurora-teal uppercase tracking-tighter">Top 1%</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <button 
+                          onClick={() => setShowBadgesModal(true)}
+                          className="w-full p-4 rounded-2xl bg-gradient-to-br from-aurora-teal/10 to-metallic-gold/10 border border-white/10 flex items-center justify-between group hover:border-aurora-teal/30 transition-all"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-metallic-gold">
+                              <Award size={16} />
+                            </div>
+                            <div className="text-left">
+                              <div className="text-[10px] font-black text-white uppercase tracking-widest">Badges</div>
+                              <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">View Achievements</div>
+                            </div>
+                          </div>
+                          <ChevronRight size={14} className="text-gray-600 group-hover:text-white transition-colors" />
+                        </button>
                       </div>
                     </div>
                     <div className="p-3">
@@ -1198,11 +1350,158 @@ export default function App() {
         </div>
       </header>
 
-      {/* <AuthModal 
+      <AuthModal 
         isOpen={showAuthModal} 
         onClose={() => setShowAuthModal(false)} 
         session={session} 
-      /> */}
+      />
+
+      {/* Info Modals */}
+      <AnimatePresence>
+        {showCareerInfo && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="w-full max-w-md bg-[#0A0A0A] border border-white/10 rounded-[32px] p-8 relative"
+            >
+              <button onClick={() => setShowCareerInfo(false)} className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors">
+                <X size={20} />
+              </button>
+              <h3 className="text-xl font-black text-white uppercase italic tracking-tighter mb-6 flex items-center gap-2">
+                <TrendingUpIcon className="text-aurora-teal" size={20} />
+                Career Progression
+              </h3>
+              <div className="space-y-4">
+                <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
+                  <h4 className="text-[10px] font-black text-aurora-teal uppercase tracking-widest mb-2">How to earn CP (Cricket IQ)</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="text-[9px] font-bold text-gray-400">Daily Login: <span className="text-white">+10 CP</span></div>
+                    <div className="text-[9px] font-bold text-gray-400">Correct Prediction: <span className="text-white">+50 CP</span></div>
+                    <div className="text-[9px] font-bold text-gray-400">Debate Win: <span className="text-white">+100 CP</span></div>
+                    <div className="text-[9px] font-bold text-gray-400">Simulation Mastery: <span className="text-white">+150 CP</span></div>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-[10px] font-black text-metallic-gold uppercase tracking-widest">Difficulty Curve</h4>
+                  {careerLevels.map((level) => (
+                    <div key={level.name} className="flex justify-between items-center p-2 rounded-xl bg-white/[0.02] border border-white/5">
+                      <span className="text-[9px] font-black text-white uppercase tracking-widest">{level.name}</span>
+                      <span className="text-[9px] font-bold text-gray-500">{level.range}</span>
+                    </div>
+                  ))}
+                  <p className="text-[8px] text-gray-600 font-medium italic mt-2">Difficulty increases exponentially as you reach higher tiers.</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {showProInfo && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="w-full max-w-md bg-[#0A0A0A] border border-white/10 rounded-[32px] p-8 relative"
+            >
+              <button onClick={() => setShowProInfo(false)} className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors">
+                <X size={20} />
+              </button>
+              <h3 className="text-xl font-black text-white uppercase italic tracking-tighter mb-6 flex items-center gap-2">
+                <UserCircle className="text-aurora-teal" size={20} />
+                Pro Comparison
+              </h3>
+              <div className="space-y-4">
+                <p className="text-xs text-gray-400 leading-relaxed">
+                  Our advanced AI engine analyzes your performance across all Crinava activities to determine which professional cricketer your style most closely resembles.
+                </p>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-aurora-teal mt-1.5" />
+                    <p className="text-[10px] text-gray-300 font-medium"><span className="text-white font-black">Predictions:</span> Accuracy in match outcomes and player performances.</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-aurora-teal mt-1.5" />
+                    <p className="text-[10px] text-gray-300 font-medium"><span className="text-white font-black">Debates:</span> Quality of tactical arguments and community consensus.</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-aurora-teal mt-1.5" />
+                    <p className="text-[10px] text-gray-300 font-medium"><span className="text-white font-black">Simulations:</span> Decision-making speed and strategic depth in Smart XI scenarios.</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {showBadgesModal && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="w-full max-w-lg bg-[#0A0A0A] border border-white/10 rounded-[32px] p-8 relative max-h-[80vh] overflow-hidden flex flex-col"
+            >
+              <button onClick={() => setShowBadgesModal(false)} className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors">
+                <X size={20} />
+              </button>
+              <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-8 flex items-center gap-3">
+                <Award className="text-metallic-gold" size={28} />
+                Hall of Fame
+              </h3>
+              <div className="flex-1 overflow-y-auto pr-2 space-y-4 custom-scrollbar">
+                {badges.map((badge) => (
+                  <div key={badge.id} className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 flex items-center gap-4 group hover:border-aurora-teal/30 transition-all">
+                    <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                      {badge.icon}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex justify-between items-center mb-1">
+                        <h4 className="text-[11px] font-black text-white uppercase tracking-widest">{badge.name}</h4>
+                        <span className="text-[8px] font-black text-metallic-gold uppercase tracking-widest">Locked</span>
+                      </div>
+                      <p className="text-[10px] text-gray-500 font-medium mb-2">{badge.description}</p>
+                      <div className="flex items-center gap-1.5 mb-3">
+                        <HelpCircle size={10} className="text-gray-600" />
+                        <span className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">Req: {badge.requirement}</span>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex justify-between items-center text-[7px] font-black uppercase tracking-widest">
+                          <span className="text-gray-600">Progress</span>
+                          <span className={badge.progress === 100 ? 'text-metallic-gold' : 'text-gray-400'}>{badge.progress}%</span>
+                        </div>
+                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: `${badge.progress}%` }}
+                            className={`h-full ${badge.progress === 100 ? 'bg-metallic-gold' : 'bg-gray-600'}`}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      <UsernameModal 
+        isOpen={showUsernameModal} 
+        uid={session?.user?.uid} 
+        email={session?.user?.email}
+        onComplete={(username) => {
+          setShowUsernameModal(false);
+          // Profile will be updated by onSnapshot
+        }}
+        onClose={() => {
+          setShowUsernameModal(false);
+          auth.signOut();
+        }}
+      />
 
       <main className="pt-24 px-4 pb-28 max-w-[1200px] mx-auto flex flex-col items-center">
         <AnimatePresence mode="wait">
@@ -1354,13 +1653,15 @@ export default function App() {
                   exit={{ opacity: 0, y: 40, scale: 0.98 }}
                   viewport={{ once: false, amount: 0.2, margin: "-50px" }}
                   transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                  className="bg-[#080808] border border-white/5 rounded-[80px] p-16 md:p-24 relative overflow-hidden group"
+                  className="bg-[#080808] border border-white/5 rounded-[80px] p-16 md:p-24 pl-4 md:pl-6 relative overflow-hidden group"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-aurora-teal/[0.02] via-transparent to-metallic-gold/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                  <div className="max-w-4xl mx-auto text-center space-y-16 relative z-10">
-                    <div className="space-y-6">
-                      <h3 className="text-5xl md:text-8xl font-black text-white uppercase italic tracking-tighter leading-none">The Ecosystem</h3>
-                      <p className="text-gray-400 text-xl font-medium tracking-tight">Beyond analysis. A complete cricket experience.</p>
+                  <div className="w-full relative z-10 flex flex-col items-start">
+                    <div className="space-y-6 w-full flex flex-col items-start pl-0">
+                      <h3 className="text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase italic tracking-tighter leading-[0.8] text-left w-full">
+                        THE<br />ECOSYSTEM
+                      </h3>
+                      <p className="text-gray-400 text-lg md:text-xl font-medium tracking-tight text-left max-w-xs">Beyond analysis. A complete cricket experience.</p>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
                       {[
@@ -1601,66 +1902,161 @@ export default function App() {
                 ))}
               </div>
             </motion.div>
-          )}
-
-          {activeTab === 'career' && (
+          )}          {activeTab === 'career' && (
             <motion.div 
               key="career"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="w-full max-w-4xl space-y-8"
+              className="w-full max-w-4xl space-y-12 pb-20"
             >
               <div className="text-center space-y-2">
-                <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter">Career Story</h2>
-                <p className="text-aurora-teal text-xs font-black uppercase tracking-widest">The Deep Diver Journey</p>
+                <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter">Crinava Career</h2>
+                <p className="text-aurora-teal text-[10px] font-black uppercase tracking-widest">Your Path to Cricket Immortality</p>
               </div>
 
-              <div className="flex justify-center">
-                <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10">
-                  {['Virat Kohli', 'Sachin Tendulkar', 'MS Dhoni'].map((p) => (
-                    <button 
-                      key={p}
-                      onClick={() => {
-                      setCareerPlayer(p);
-                      if (session) {
-                        updateProfileStats(cricketIQ + 5);
-                      }
-                    }}
-                      className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${careerPlayer === p ? 'bg-aurora-teal text-black' : 'text-gray-400 hover:text-white'}`}
-                    >
-                      {p}
-                    </button>
-                  ))}
+              {/* 1. Crinava Career Path */}
+              <div className="space-y-6">
+                <div className="flex justify-between items-end">
+                  <div className="space-y-1">
+                    <h3 className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
+                      <TrendingUp size={14} className="text-aurora-teal" />
+                      Career Path
+                    </h3>
+                    <p className="text-[10px] text-gray-500 font-medium italic">Level up your cricket intelligence</p>
+                  </div>
+                  <span className="text-[10px] font-black text-aurora-teal uppercase tracking-widest">Stage: {profile?.career_path || 'Rookie'}</span>
+                </div>
+
+                <div className="grid grid-cols-5 gap-2">
+                  {['Rookie', 'Amateur', 'Semi-Pro', 'Pro', 'Legend'].map((stage, idx) => {
+                    const stages = ['Rookie', 'Amateur', 'Semi-Pro', 'Pro', 'Legend'];
+                    const currentIdx = stages.indexOf(profile?.career_path || 'Rookie');
+                    const isActive = idx <= currentIdx;
+                    return (
+                      <div key={stage} className="space-y-3">
+                        <div className={`h-1.5 rounded-full transition-all duration-500 ${isActive ? 'bg-aurora-teal shadow-[0_0_10px_rgba(0,255,200,0.3)]' : 'bg-white/5'}`} />
+                        <p className={`text-[8px] font-black uppercase text-center tracking-tighter ${isActive ? 'text-white' : 'text-gray-600'}`}>{stage}</p>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
-              {careerPlayer ? (
-                <div className="space-y-12">
-                  {/* Timeline */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* 2. Expertise Badge */}
+                <div className="p-8 rounded-3xl bg-[#111111] border border-white/5 space-y-6 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <Award size={80} className="text-aurora-teal" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
+                      <Medal size={14} className="text-aurora-teal" />
+                      Expertise Badge
+                    </h3>
+                    <p className="text-[10px] text-gray-500 font-medium italic">Your current mastery level</p>
+                  </div>
+
+                  <div className="flex items-center gap-6">
+                    <div className="relative">
+                      <div className="w-24 h-24 rounded-full bg-gradient-to-br from-aurora-teal/20 to-transparent border border-aurora-teal/30 flex items-center justify-center">
+                        <Zap className="text-aurora-teal" size={40} />
+                      </div>
+                      <div className="absolute -bottom-2 -right-2 bg-white text-black text-[8px] font-black px-2 py-1 rounded-full uppercase italic">
+                        {profile?.expertise_badge || 'Novice'}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-xs text-white font-bold italic uppercase tracking-tighter">
+                        {profile?.expertise_badge === 'Novice' ? 'The Journey Begins' : 
+                         profile?.expertise_badge === 'Analyst' ? 'The Data Master' : 'The Oracle'}
+                      </p>
+                      <p className="text-[10px] text-gray-500 leading-relaxed">
+                        Complete 5 more correct predictions to unlock the <span className="text-aurora-teal font-bold">Analyst</span> badge.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Professional Comparison */}
+                <div className="p-8 rounded-3xl bg-[#111111] border border-white/5 space-y-6">
+                  <div className="space-y-1">
+                    <h3 className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
+                      <BarChart3 size={14} className="text-aurora-teal" />
+                      Pro Comparison
+                    </h3>
+                    <p className="text-[10px] text-gray-500 font-medium italic">You vs. The Elite</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    {[
+                      { label: 'Batting IQ', user: profile?.professional_comparison?.batting || 45, pro: 92 },
+                      { label: 'Bowling IQ', user: profile?.professional_comparison?.bowling || 30, pro: 88 },
+                      { label: 'Strategy', user: profile?.professional_comparison?.strategy || 40, pro: 95 }
+                    ].map((stat) => (
+                      <div key={stat.label} className="space-y-2">
+                        <div className="flex justify-between text-[8px] font-black uppercase tracking-widest">
+                          <span className="text-gray-400">{stat.label}</span>
+                          <span className="text-white">{stat.user}% <span className="text-gray-600">/ {stat.pro}%</span></span>
+                        </div>
+                        <div className="h-1 bg-white/5 rounded-full overflow-hidden flex">
+                          <div className="h-full bg-aurora-teal" style={{ width: `${stat.user}%` }} />
+                          <div className="h-full bg-white/10" style={{ width: `${stat.pro - stat.user}%` }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Original Career Story Section (Integrated) */}
+              <div className="space-y-8">
+                <div className="flex justify-center">
+                  <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10">
+                    {['Virat Kohli', 'Sachin Tendulkar', 'MS Dhoni'].map((p) => (
+                      <button 
+                        key={p}
+                        onClick={() => setCareerPlayer(p)}
+                        className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${careerPlayer === p ? 'bg-aurora-teal text-black' : 'text-gray-400 hover:text-white'}`}
+                      >
+                        {p}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {careerPlayer ? (
                   <div className="p-8 rounded-3xl bg-[#111111] border border-white/5 space-y-8">
                     <div className="flex justify-between items-center">
-                      <h3 className="text-xs font-black text-aurora-teal uppercase tracking-widest">Performance Timeline</h3>
-                      <span className="text-[10px] font-black text-metallic-gold uppercase">Peak: 2016-2018</span>
+                      <h3 className="text-xs font-black text-aurora-teal uppercase tracking-widest">{careerPlayer} Performance Timeline</h3>
+                      <span className="text-[10px] font-black text-metallic-gold uppercase">Historical Data</span>
                     </div>
                     <div className="h-[200px] w-full">
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={careerData?.points || []}>
                           <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
                           <XAxis dataKey="year" stroke="#ffffff20" fontSize={10} />
-                          <YAxis hide />
+                          <YAxis stroke="#ffffff20" fontSize={10} />
                           <Tooltip 
-                            contentStyle={{ backgroundColor: '#111', border: '1px solid #ffffff10', borderRadius: '12px' }}
-                            itemStyle={{ color: '#00FFCC', fontSize: '10px', fontWeight: 'bold' }}
+                            contentStyle={{ backgroundColor: '#0A0A0A', border: '1px solid #ffffff10', borderRadius: '12px' }}
+                            itemStyle={{ color: '#00FFC8', fontSize: '10px', fontWeight: 'bold' }}
                           />
-                          <Line type="monotone" dataKey="rating" stroke="#00FFCC" strokeWidth={4} dot={{ fill: '#00FFCC', r: 4 }} activeDot={{ r: 8, stroke: '#00FFCC', strokeWidth: 2, fill: '#000' }} />
+                          <Line type="monotone" dataKey="runs" stroke="#00FFC8" strokeWidth={3} dot={{ fill: '#00FFC8', r: 4 }} activeDot={{ r: 6 }} />
                         </LineChart>
                       </ResponsiveContainer>
                     </div>
                   </div>
+                ) : (
+                  <div className="py-20 flex flex-col items-center justify-center space-y-4">
+                    <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-dashed border-white/10">
+                      <BookOpen size={30} className="text-gray-700" />
+                    </div>
+                    <p className="text-xs text-gray-500 font-black uppercase tracking-widest">Select a player to explore their story</p>
+                  </div>
+                )}
 
-                  {/* Chapters */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Chapters */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {(careerData?.chapters || []).map((chapter, i) => (
                       <div key={i} className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 space-y-3 hover:border-aurora-teal/30 transition-all">
                         <div className="text-[8px] font-black text-aurora-teal uppercase tracking-[0.2em]">{chapter.year}</div>
@@ -1681,14 +2077,6 @@ export default function App() {
                     </button>
                   </div>
                 </div>
-              ) : (
-                <div className="py-20 flex flex-col items-center justify-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-dashed border-white/10">
-                    <BookOpen size={30} className="text-gray-700" />
-                  </div>
-                  <p className="text-xs text-gray-500 font-black uppercase tracking-widest">Select a player to explore their story</p>
-                </div>
-              )}
             </motion.div>
           )}
 
