@@ -3,6 +3,7 @@ import { createServer as createViteServer } from "vite";
 import path from "path";
 
 async function startServer() {
+  console.log("Starting server...");
   const app = express();
   const PORT = 3000;
 
@@ -59,6 +60,7 @@ async function startServer() {
   ];
 
   app.get("/api/debates", (req, res) => {
+    console.log("Received request for /api/debates");
     res.json(debates);
   });
 

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { User, Check, X, Loader2, Sparkles, ArrowRight } from 'lucide-react';
-import { db, auth, handleFirestoreError, OperationType } from '../lib/firebase';
-import { doc, getDoc, setDoc, writeBatch, serverTimestamp } from 'firebase/firestore';
+import { supabase } from '../lib/supabaseClient';
 
 interface UsernameSetupProps {
   isOpen: boolean;
@@ -32,9 +31,13 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete
 
       setChecking(true);
       try {
-        const usernameRef = doc(db, 'usernames', lowerUsername);
-        const docSnap = await getDoc(usernameRef);
-        const available = !docSnap.exists();
+        const { data, error } = await supabase
+          .from('usernames')
+          .select('id')
+          .eq('id', lowerUsername)
+          .maybeSingle();
+        
+        const available = !data;
         cache.current.set(lowerUsername, available);
         setIsAvailable(available);
       } catch (err) {
@@ -50,42 +53,48 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!username || !isAvailable || !auth.currentUser) return;
+    if (!username || !isAvailable) return;
 
     setLoading(true);
     setError(null);
 
     try {
-      const batch = writeBatch(db);
-      const userId = auth.currentUser.uid;
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('No user found');
+
+      const userId = user.id;
       const lowerUsername = username.toLowerCase();
 
       // 1. Create username mapping
-      batch.set(doc(db, 'usernames', lowerUsername), {
-        uid: userId,
-        created_at: serverTimestamp()
-      });
+      const { error: usernameError } = await supabase
+        .from('usernames')
+        .insert({ id: lowerUsername, uid: userId });
+      
+      if (usernameError) throw usernameError;
 
       // 2. Create/Update profile
-      batch.set(doc(db, 'profiles', userId), {
-        id: userId,
-        email: auth.currentUser.email,
-        username: username,
-        cricket_iq: 100,
-        crinava_coins: 500,
-        career_path: 'Rookie',
-        expertise_badge: 'Novice',
-        professional_comparison: {
-          match: 'Unranked',
-          similarity: 0
-        },
-        updated_at: serverTimestamp()
-      }, { merge: true });
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: userId,
+          email: user.email,
+          username: username,
+          cricket_iq: 100,
+          crinava_coins: 500,
+          career_path: 'Rookie',
+          expertise_badge: 'Novice',
+          professional_comparison: {
+            match: 'Unranked',
+            similarity: 0
+          },
+          updated_at: new Date().toISOString()
+        });
 
-      await batch.commit();
+      if (profileError) throw profileError;
+
       onComplete(username);
     } catch (err: any) {
-      handleFirestoreError(err, OperationType.WRITE, 'profiles/usernames');
+      console.error('Failed to set username:', err);
       setError(err.message || 'Failed to set username. Please try again.');
     } finally {
       setLoading(false);

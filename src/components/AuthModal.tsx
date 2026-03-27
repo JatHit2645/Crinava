@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Mail, Sparkles, Loader2, ArrowRight } from 'lucide-react';
-import { signInWithGoogle, sendMagicLink } from '../lib/firebase';
+import { supabase } from '../lib/supabaseClient';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -49,7 +49,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, session }
     setLoading(true);
     setError(null);
     try {
-      await signInWithGoogle();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) throw error;
       onClose();
     } catch (err: any) {
       setError(formatError(err));
@@ -64,7 +70,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, session }
     setLoading(true);
     setError(null);
     try {
-      await sendMagicLink(email);
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) throw error;
       setSent(true);
       window.localStorage.setItem('emailForSignIn', email);
     } catch (err: any) {

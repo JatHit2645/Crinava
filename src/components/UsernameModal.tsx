@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { User, Check, X, Loader2, Sparkles, Calendar, ChevronDown } from 'lucide-react';
-import { db, handleFirestoreError, OperationType } from '../lib/firebase';
-import { doc, getDoc, setDoc, writeBatch } from 'firebase/firestore';
+import { supabase } from '../lib/supabaseClient';
 
 interface UsernameModalProps {
   isOpen: boolean;
@@ -84,9 +83,13 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({ isOpen, uid, email
 
       setChecking(true);
       try {
-        const usernameRef = doc(db, 'usernames', lowerUsername);
-        const docSnap = await getDoc(usernameRef);
-        const available = !docSnap.exists();
+        const { data, error } = await supabase
+          .from('usernames')
+          .select('id')
+          .eq('id', lowerUsername)
+          .maybeSingle();
+        
+        const available = !data;
         cache.current.set(lowerUsername, available);
         setIsAvailable(available);
       } catch (err) {
@@ -113,38 +116,41 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({ isOpen, uid, email
     setError(null);
 
     try {
-      const batch = writeBatch(db);
-      
       // 1. Create username mapping
-      const usernameRef = doc(db, 'usernames', username.toLowerCase());
-      batch.set(usernameRef, { uid });
+      const { error: usernameError } = await supabase
+        .from('usernames')
+        .insert({ id: username.toLowerCase(), uid });
+      
+      if (usernameError) throw usernameError;
 
       // 2. Create user profile
-      const profileRef = doc(db, 'profiles', uid);
-      batch.set(profileRef, {
-        id: uid,
-        username: username,
-        email: email,
-        dob: dob,
-        gender: gender,
-        cricket_iq: 100,
-        crinava_coins: 500,
-        career_path: 'Rookie',
-        expertise_badge: 'Novice',
-        professional_comparison: {
-          batting: 45,
-          bowling: 30,
-          fielding: 55,
-          strategy: 40
-        },
-        updated_at: new Date().toISOString()
-      });
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .insert({
+          id: uid,
+          username: username,
+          email: email,
+          dob: dob,
+          gender: gender,
+          cricket_iq: 100,
+          crinava_coins: 500,
+          career_path: 'Rookie',
+          expertise_badge: 'Novice',
+          professional_comparison: {
+            batting: 45,
+            bowling: 30,
+            fielding: 55,
+            strategy: 40
+          },
+          updated_at: new Date().toISOString()
+        });
 
-      await batch.commit();
+      if (profileError) throw profileError;
+
       onComplete(username);
     } catch (err: any) {
       setError(err.message || 'Failed to set username');
-      handleFirestoreError(err, OperationType.WRITE, 'profiles/usernames');
+      console.error('Failed to set username:', err);
     } finally {
       setLoading(false);
     }

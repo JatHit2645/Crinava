@@ -60,16 +60,16 @@ import {
   Line
 } from 'recharts';
 import ReactMarkdown from 'react-markdown';
-import { auth, db, handleFirestoreError, OperationType } from './lib/firebase';
-import { onAuthStateChanged, isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
-import { doc, setDoc, updateDoc, onSnapshot } from 'firebase/firestore';
+import { supabase } from './lib/supabaseClient';
 import { AuthModal } from './components/AuthModal';
 import { UsernameModal } from './components/UsernameModal';
+import { PredictionGame } from './components/PredictionGame';
+import { MatchesSection } from './components/MatchesSection';
 
 // --- Types ---
 
 type VerdictStatus = 'TRUE' | 'FALSE' | 'LARGELY TRUE' | 'CONTESTED';
-type AppTab = 'home' | 'verdict' | 'momentum' | 'debate' | 'career' | 'smartxi' | 'live' | 'raffle' | 'blog' | 'prediction' | 'admin' | 'store';
+type AppTab = 'home' | 'verdict' | 'momentum' | 'debate' | 'career' | 'smartxi' | 'matches' | 'raffle' | 'blog' | 'prediction' | 'admin' | 'store';
 
 const CoinIcon = ({ size = 24, className = "", noShadow = false }: { size?: number, className?: string, noShadow?: boolean }) => (
   <div 
@@ -301,7 +301,7 @@ async function getCricketVerdict(claim: string): Promise<VerdictData> {
 }
 
 async function getLiveScores(): Promise<MatchData[]> {
-  const prompt = "Get the current live cricket scores for all ongoing matches worldwide. Return a list of matches with teams, current score, status, venue, format, and series name.";
+  const prompt = "Get the current cricket matches worldwide. Return a list of matches with teams, score, status, venue, format, and series name.";
   const config = {
     responseMimeType: "application/json",
     responseSchema: {
@@ -344,7 +344,7 @@ async function getLiveScores(): Promise<MatchData[]> {
       });
       return JSON.parse(response.text || '[]');
     } catch (fallbackError) {
-      console.error("Error fetching live scores (all attempts failed):", fallbackError);
+      console.error("Error fetching matches scores (all attempts failed):", fallbackError);
       return [];
     }
   }
@@ -514,7 +514,7 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [coinBalance, setCoinBalance] = useState(500); // Balance in Crinava Coins
   const [cricketIQ, setCricketIQ] = useState(1240); // User's Cricket IQ score
-  const [liveMatches, setLiveMatches] = useState<MatchData[]>([]);
+  const [matches, setMatches] = useState<MatchData[]>([]);
   const [prediction, setPrediction] = useState<PredictionResult | null>(null);
   const [isSubscribed, setIsSubscribed] = useState(true);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([
@@ -577,6 +577,7 @@ export default function App() {
   const [session, setSession] = useState<any>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUsernameModal, setShowUsernameModal] = useState(false);
+  const [showPredictionGame, setShowPredictionGame] = useState(false);
   const [profile, setProfile] = useState<any>(null);
   const [isProfileLoading, setIsProfileLoading] = useState(true);
 
@@ -644,70 +645,34 @@ export default function App() {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setSession(user ? { user } : null);
-      if (!user) {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session ? { user: session.user } : null);
+      if (!session) {
         setIsProfileLoading(false);
         setProfile(null);
       }
     });
 
-    // Handle Magic Link
-    const handleMagicLink = async () => {
-      // Wait for Firebase to fully initialize
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const href = window.location.href;
-      console.log('Checking for magic link at:', href);
-      
-      if (isSignInWithEmailLink(auth, href)) {
-        console.log('Valid magic link detected');
-        let email = window.localStorage.getItem('emailForSignIn');
-        console.log('Stored email from localStorage:', email);
-        
-        if (!email) {
-          email = window.prompt('Please provide your email for confirmation');
-        }
-        
-        if (email) {
-          try {
-            console.log('Attempting sign-in with email link for:', email);
-            const result = await signInWithEmailLink(auth, email, href);
-            console.log('Sign-in successful for:', result.user.email);
-            
-            window.localStorage.removeItem('emailForSignIn');
-            // Remove the query params from URL without refreshing
-            window.history.replaceState({}, document.title, window.location.pathname);
-            // Force profile refresh
-            setIsProfileLoading(true);
-          } catch (error: any) {
-            console.error('Error signing in with email link:', error);
-            let message = 'Failed to sign in with magic link. ';
-            if (error.code === 'auth/invalid-action-code') {
-              message += 'The link has expired or already been used.';
-            } else if (error.code === 'auth/email-mismatch') {
-              message += 'The email provided does not match the one used to request the link.';
-            } else {
-              message += error.message;
-            }
-            alert(message);
-          }
-        }
-      }
-    };
+    // Handle Magic Link (Supabase handles this differently, but for now let's just keep the session check)
+    setIsProfileLoading(false);
 
-    handleMagicLink();
-
-    return () => unsubscribe();
+    return () => subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
     if (session?.user) {
       setIsProfileLoading(true);
       // Real-time profile sync
-      const profileRef = doc(db, 'profiles', session.user.uid);
-      const unsubscribe = onSnapshot(profileRef, (docSnap) => {
-        if (docSnap.exists()) {
-          const data = docSnap.data();
+      const fetchProfile = async () => {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.uid)
+          .single();
+        
+        if (error && error.code !== 'PGRST116') { // PGRST116 is 'no rows returned'
+          console.error('Profile sync error:', error);
+        } else if (data) {
           setProfile(data);
           if (!data.username) {
             setShowUsernameModal(true);
@@ -717,12 +682,8 @@ export default function App() {
           setShowUsernameModal(true);
         }
         setIsProfileLoading(false);
-      }, (err) => {
-        console.error('Profile sync error:', err);
-        setIsProfileLoading(false);
-      });
-
-      return () => unsubscribe();
+      };
+      fetchProfile();
     }
   }, [session]);
 
@@ -756,10 +717,13 @@ export default function App() {
     updates.updated_at = new Date().toISOString();
 
     try {
-      const profileRef = doc(db, 'profiles', session.user.uid);
-      await updateDoc(profileRef, updates);
+      const { error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('id', session.user.uid);
+      if (error) throw error;
     } catch (error) {
-      handleFirestoreError(error, OperationType.UPDATE, 'profiles');
+      console.error('Profile update error:', error);
     }
   };
 
@@ -994,7 +958,7 @@ export default function App() {
   const fetchLiveScores = async () => {
     setLoading(true);
     const scores = await getLiveScores();
-    setLiveMatches(scores);
+    setMatches(scores);
     setLoading(false);
   };
 
@@ -1045,7 +1009,7 @@ export default function App() {
   };
 
   React.useEffect(() => {
-    if (activeTab === 'live') {
+    if (activeTab === 'matches') {
       fetchLiveScores();
     }
   }, [activeTab]);
@@ -1335,7 +1299,7 @@ export default function App() {
                     </div>
                     <div className="p-3 border-t border-white/5 bg-white/[0.01]">
                       <button 
-                        onClick={() => { auth.signOut(); setShowProfileDropdown(false); }}
+                        onClick={() => { supabase.auth.signOut(); setShowProfileDropdown(false); }}
                         className="w-full flex items-center gap-4 px-5 py-3.5 text-[11px] font-black text-red-400/80 uppercase tracking-[0.15em] hover:bg-red-500/10 hover:text-red-400 rounded-2xl transition-all group"
                       >
                         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
@@ -1499,7 +1463,7 @@ export default function App() {
         }}
         onClose={() => {
           setShowUsernameModal(false);
-          auth.signOut();
+          supabase.auth.signOut();
         }}
       />
 
@@ -1664,7 +1628,7 @@ export default function App() {
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 w-full">
                       {[
-                        { icon: <TrendingUp size={24} />, title: 'Live', tab: 'live' },
+                        { icon: <TrendingUp size={24} />, title: 'Matches', tab: 'matches' },
                         { icon: <Ticket size={24} />, title: 'Raffle', tab: 'raffle' },
                         { icon: <Info size={24} />, title: 'Notes', tab: 'blog' },
                         { icon: <ShieldCheck size={24} />, title: 'Oracle', tab: 'verdict' }
@@ -2189,60 +2153,15 @@ export default function App() {
             </motion.div>
           )}
 
-          {activeTab === 'live' && (
+          {activeTab === 'matches' && (
             <motion.div 
-              key="live"
+              key="matches"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               className="w-full max-w-2xl space-y-6"
             >
-              <div className="flex justify-between items-center mb-8">
-                <div className="space-y-1">
-                  <h2 className="text-3xl font-black italic text-white uppercase tracking-tighter">Live Telemetry</h2>
-                  <p className="text-aurora-teal text-[10px] font-black uppercase tracking-widest">Global Match Sync Active</p>
-                </div>
-                <button 
-                  onClick={fetchLiveScores}
-                  className="p-2 bg-white/5 rounded-lg hover:bg-white/10 transition-all"
-                >
-                  <TrendingUp size={20} className="text-aurora-teal" />
-                </button>
-              </div>
-
-              {loading ? (
-                <div className="flex flex-col items-center justify-center py-20 space-y-4">
-                  <div className="w-12 h-12 border-4 border-aurora-teal/20 border-t-aurora-teal rounded-full animate-spin"></div>
-                  <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Scanning Satellites...</span>
-                </div>
-              ) : liveMatches.length > 0 ? (
-                <div className="grid grid-cols-1 gap-4">
-                  {liveMatches.map((match, i) => (
-                    <div key={i} className="p-6 bg-[#111111] border border-white/5 rounded-2xl space-y-4 hover:border-aurora-teal/30 transition-all group">
-                      <div className="flex justify-between items-start">
-                        <div className="space-y-1">
-                          <div className="text-[8px] text-aurora-teal font-black uppercase tracking-widest flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 bg-aurora-teal rounded-full animate-pulse"></span>
-                            {match.series}
-                          </div>
-                          <h3 className="text-lg font-black text-white uppercase italic">{match.teams.join(' vs ')}</h3>
-                          <div className="text-[9px] text-gray-500 font-medium">{match.venue} • {match.format}</div>
-                        </div>
-                        <div className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black text-white uppercase tracking-widest">
-                          {match.status}
-                        </div>
-                      </div>
-                      <div className="text-2xl font-black text-white tracking-tighter">
-                        {match.score}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-20 bg-[#111111] rounded-3xl border border-white/5">
-                  <p className="text-gray-500 text-xs font-black uppercase tracking-widest">No Active Telemetry Found</p>
-                </div>
-              )}
+              <MatchesSection />
             </motion.div>
           )}
 
@@ -2254,7 +2173,9 @@ export default function App() {
               exit={{ opacity: 0, y: -20 }}
               className="w-full max-w-2xl space-y-8"
             >
-              {!prediction && !simulating ? (
+              {showPredictionGame ? (
+                <PredictionGame onBack={() => setShowPredictionGame(false)} />
+              ) : !prediction && !simulating ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="p-8 rounded-2xl bg-gradient-to-br from-aurora-teal/20 to-transparent border border-aurora-teal/20 space-y-6 relative overflow-hidden group">
                     <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -2303,15 +2224,7 @@ export default function App() {
                       Compete with the community and climb the leaderboard.
                     </p>
                     <button 
-                      onClick={() => {
-                        /*
-                        if (!session) {
-                          setShowAuthModal(true);
-                          return;
-                        }
-                        */
-                        // Logic for entering arena
-                      }}
+                      onClick={() => setShowPredictionGame(true)}
                       className="w-full py-3 border border-metallic-gold text-metallic-gold font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-metallic-gold/10 transition-all"
                     >
                       Enter Arena
@@ -2881,7 +2794,7 @@ export default function App() {
                   </div>
                   <div className="space-y-2">
                     <h3 className="text-xl font-black text-white uppercase italic">Tournaments</h3>
-                    <p className="text-xs text-gray-500">Organize and manage live cricket events.</p>
+                    <p className="text-xs text-gray-500">Organize and manage cricket events.</p>
                   </div>
                   <button className="w-full py-3 bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white/10 transition-all">
                     Manage Events
@@ -3015,11 +2928,11 @@ export default function App() {
           <span className="text-[8px] font-black uppercase tracking-widest">Home</span>
         </button>
         <button 
-          onClick={() => setActiveTab('live')}
-          className={`flex flex-col items-center gap-1 min-w-[50px] transition-all hover:scale-110 ${activeTab === 'live' ? 'text-metallic-gold' : 'text-gray-500'}`}
+          onClick={() => setActiveTab('matches')}
+          className={`flex flex-col items-center gap-1 min-w-[50px] transition-all hover:scale-110 ${activeTab === 'matches' ? 'text-metallic-gold' : 'text-gray-500'}`}
         >
           <TrendingUp size={20} />
-          <span className="text-[8px] font-black uppercase tracking-widest">Live</span>
+          <span className="text-[8px] font-black uppercase tracking-widest">Matches</span>
         </button>
         <button 
           onClick={() => setActiveTab('prediction')}
