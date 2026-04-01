@@ -95,27 +95,27 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, session }
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-aurora-950/80 backdrop-blur-sm">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="w-full max-w-md bg-[#0A0A0A] border border-white/10 rounded-[40px] overflow-hidden shadow-2xl relative"
+          className="w-full max-w-md bg-aurora-950 border border-aurora-600 rounded-[40px] overflow-hidden shadow-2xl relative"
         >
           <div className="p-8 space-y-8">
             <div className="flex justify-between items-start">
               <div className="space-y-2">
-                <h2 className="text-3xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
-                  <Sparkles className="text-aurora-teal" size={24} />
+                <h2 className="text-3xl font-black text-text-primary uppercase italic tracking-tighter flex items-center gap-2">
+                  <Sparkles className="text-aurora-500" size={24} />
                   {isSignUp ? 'Join Crinava' : 'Welcome Back'}
                 </h2>
-                <p className="text-xs text-gray-500 font-medium">
+                <p className="text-xs text-text-muted font-medium">
                   {isSignUp ? 'Step into the future of cricket intelligence.' : 'Continue your journey in the ecosystem.'}
                 </p>
               </div>
               <button 
                 onClick={handleClose}
-                className="p-2 hover:bg-white/5 rounded-xl transition-colors text-gray-400 hover:text-white"
+                className="p-2 hover:bg-aurora-700/50 rounded-xl transition-colors text-text-body hover:text-text-primary"
               >
                 <X size={20} />
               </button>
@@ -125,24 +125,24 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, session }
               <motion.div 
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl"
+                className="p-4 bg-loss-red/10 border border-loss-red/20 rounded-2xl"
               >
-                <p className="text-[10px] text-red-500 font-black uppercase tracking-widest text-center">{error}</p>
+                <p className="text-[10px] text-loss-red font-black uppercase tracking-widest text-center">{error}</p>
               </motion.div>
             )}
 
             {sent ? (
               <div className="space-y-6 text-center py-8">
-                <div className="w-16 h-16 bg-aurora-teal/10 rounded-full flex items-center justify-center mx-auto">
-                  <Mail className="text-aurora-teal" size={32} />
+                <div className="w-16 h-16 bg-aurora-500/10 rounded-full flex items-center justify-center mx-auto">
+                  <Mail className="text-aurora-500" size={32} />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-black text-white uppercase italic">Check your email</h3>
-                  <p className="text-xs text-gray-500">We've sent a magic link to <span className="text-white font-bold">{email}</span>.</p>
+                  <h3 className="text-xl font-black text-text-primary uppercase italic">Check your email</h3>
+                  <p className="text-xs text-text-muted">We've sent a magic link to <span className="text-text-primary font-bold">{email}</span>.</p>
                 </div>
                 <button 
                   onClick={() => setSent(false)}
-                  className="text-[10px] text-aurora-teal font-black uppercase tracking-widest hover:underline"
+                  className="text-[10px] text-aurora-500 font-black uppercase tracking-widest hover:underline"
                 >
                   Try another email
                 </button>
@@ -152,7 +152,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, session }
                 <button
                   onClick={handleGoogleSignIn}
                   disabled={loading}
-                  className="w-full py-4 bg-white text-black rounded-2xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-3 hover:bg-gray-200 transition-all disabled:opacity-50"
+                  className="w-full py-4 bg-text-primary text-aurora-950 rounded-2xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-3 hover:bg-aurora-100 transition-all disabled:opacity-50"
                 >
                   {loading ? <Loader2 className="animate-spin" size={18} /> : <GoogleLogo />}
                   Continue with Google
@@ -160,24 +160,24 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, session }
 
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-white/5"></div>
+                    <div className="w-full border-t border-aurora-600/50"></div>
                   </div>
-                  <div className="relative flex justify-center text-[8px] uppercase font-black tracking-[0.2em] text-gray-600">
-                    <span className="bg-[#0A0A0A] px-4">Or use magic link</span>
+                  <div className="relative flex justify-center text-[8px] uppercase font-black tracking-[0.2em] text-text-muted">
+                    <span className="bg-aurora-950 px-4">Or use magic link</span>
                   </div>
                 </div>
 
                 <form onSubmit={handleMagicLink} className="space-y-4">
                   <div className="space-y-2">
-                    <label className="text-[10px] text-gray-500 font-black uppercase tracking-widest ml-1">Email Address</label>
+                    <label className="text-[10px] text-text-muted font-black uppercase tracking-widest ml-1">Email Address</label>
                     <div className="relative">
-                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={16} />
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" size={16} />
                       <input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="name@example.com"
-                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white text-xs focus:outline-none focus:border-aurora-teal/50 transition-all"
+                        className="w-full bg-aurora-700/50 border border-aurora-600 rounded-2xl py-4 pl-12 pr-4 text-text-primary text-xs focus:outline-none focus:border-aurora-500/50 transition-all"
                         required
                       />
                     </div>
@@ -185,12 +185,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, session }
                   <button
                     type="submit"
                     disabled={loading || !email}
-                    className="w-full py-4 bg-white/5 border border-white/10 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-white/10 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="w-full py-4 bg-aurora-700/50 border border-aurora-600 text-text-primary rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-aurora-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {loading ? <Loader2 className="animate-spin" size={18} /> : (
                       <>
                         {isSignUp ? 'Create Account' : 'Sign In'}
-                        <ArrowRight size={14} className="text-aurora-teal" />
+                        <ArrowRight size={14} className="text-aurora-500" />
                       </>
                     )}
                   </button>
@@ -202,9 +202,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, session }
                     className="text-[10px] font-black uppercase tracking-widest transition-all"
                   >
                     {isSignUp ? (
-                      <span className="text-gray-500">Already a member? <span className="text-aurora-teal hover:text-white">Sign In</span></span>
+                      <span className="text-text-muted">Already a member? <span className="text-aurora-500 hover:text-text-primary">Sign In</span></span>
                     ) : (
-                      <span className="text-gray-500">New to Crinava? <span className="text-aurora-teal hover:text-white">Create Account</span></span>
+                      <span className="text-text-muted">New to Crinava? <span className="text-aurora-500 hover:text-text-primary">Create Account</span></span>
                     )}
                   </button>
                 </div>
@@ -212,7 +212,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, session }
             )}
 
             <div className="pt-4 text-center">
-              <p className="text-[8px] text-gray-600 font-black uppercase tracking-widest">
+              <p className="text-[8px] text-text-muted font-black uppercase tracking-widest">
                 By continuing, you agree to Crinava's Terms of Service and Privacy Policy.
               </p>
             </div>

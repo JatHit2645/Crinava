@@ -250,9 +250,9 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
   // Render Splash
   if (view === 'splash') {
     return (
-      <motion.div className="fixed inset-0 z-50 bg-[#07090f] flex flex-col items-center justify-center">
-        <h1 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-metallic-gold to-white tracking-[0.2em]">CRICARENA</h1>
-        <p className="text-metallic-gold/60 tracking-[0.3em] mt-2 text-xs font-black">IPL 2026</p>
+      <motion.div className="fixed inset-0 z-50 bg-aurora-950 flex flex-col items-center justify-center">
+        <h1 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-metallic-gold to-aurora-300 tracking-[0.2em]">CRICARENA</h1>
+        <p className="text-gold-base/60 tracking-[0.3em] mt-2 text-xs font-black">IPL 2026</p>
         <button 
           onClick={() => {
             if (st.room && st.bid) {
@@ -261,7 +261,7 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
               setView('setup');
             }
           }} 
-          className="mt-16 border border-metallic-gold/50 text-metallic-gold px-12 py-4 rounded-full tracking-widest font-black text-xs hover:bg-metallic-gold/10 transition-colors animate-pulse"
+          className="mt-16 border border-gold-base/50 text-gold-base px-12 py-4 rounded-full tracking-widest font-black text-xs hover:bg-gold-base/10 transition-colors animate-pulse"
         >
           TAP TO ENTER
         </button>
@@ -273,11 +273,11 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
   if (loading) {
     return (
       <div className="w-full max-w-2xl mx-auto flex flex-col items-center justify-center py-32 space-y-6">
-        <div className="text-metallic-gold font-black tracking-widest text-xl animate-pulse">{loading}</div>
+        <div className="text-gold-base font-black tracking-widest text-xl animate-pulse">{loading}</div>
         <div className="flex gap-2">
-          <div className="w-2 h-2 bg-metallic-gold rounded-full animate-bounce" />
-          <div className="w-2 h-2 bg-metallic-gold rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-          <div className="w-2 h-2 bg-metallic-gold rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
+          <div className="w-2 h-2 bg-gold-base rounded-full animate-bounce" />
+          <div className="w-2 h-2 bg-gold-base rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+          <div className="w-2 h-2 bg-gold-base rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
         </div>
       </div>
     );
@@ -287,43 +287,43 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
   if (view === 'setup') {
     return (
       <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} className="w-full max-w-md mx-auto space-y-8 pt-8">
-        <button onClick={onBack} className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors mb-4">
+        <button onClick={onBack} className="flex items-center gap-2 text-text-muted hover:text-text-primary transition-colors mb-4">
           <ArrowLeft size={18} />
           <span className="text-[10px] font-black uppercase tracking-widest">Back to Hub</span>
         </button>
         <div className="text-center mb-8">
-          <h2 className="text-4xl font-black text-metallic-gold tracking-widest">CRICARENA</h2>
-          <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest mt-2">PREDICT · COMPETE · WIN</p>
+          <h2 className="text-4xl font-black text-gold-base tracking-widest">CRICARENA</h2>
+          <p className="text-text-muted text-[10px] font-black uppercase tracking-widest mt-2">PREDICT · COMPETE · WIN</p>
         </div>
         
         {!showJoin ? (
-          <div className="bg-[#111111] border border-white/10 rounded-3xl p-8 space-y-6 shadow-2xl">
+          <div className="bg-aurora-800 border border-aurora-600 rounded-3xl p-8 space-y-6 shadow-2xl">
             <div className="space-y-2">
-              <label className="text-[10px] text-gray-500 font-black tracking-widest uppercase">Player 1 — You</label>
-              <input value={p1Input} onChange={e=>setP1Input(e.target.value)} placeholder="Your name" className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-metallic-gold outline-none transition-colors" />
+              <label className="text-[10px] text-text-muted font-black tracking-widest uppercase">Player 1 — You</label>
+              <input value={p1Input} onChange={e=>setP1Input(e.target.value)} placeholder="Your name" className="w-full bg-aurora-900 border border-aurora-600 rounded-xl px-4 py-3 text-sm text-text-primary focus:border-gold-base outline-none transition-colors" />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] text-gray-500 font-black tracking-widest uppercase">Player 2 — Friend</label>
-              <input value={p2Input} onChange={e=>setP2Input(e.target.value)} placeholder="Friend's name" className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-metallic-gold outline-none transition-colors" />
+              <label className="text-[10px] text-text-muted font-black tracking-widest uppercase">Player 2 — Friend</label>
+              <input value={p2Input} onChange={e=>setP2Input(e.target.value)} placeholder="Friend's name" className="w-full bg-aurora-900 border border-aurora-600 rounded-xl px-4 py-3 text-sm text-text-primary focus:border-gold-base outline-none transition-colors" />
             </div>
-            <button onClick={handleCreate} className="w-full bg-gradient-to-r from-metallic-gold to-[#d49a18] text-black font-black py-4 rounded-xl text-xs tracking-widest hover:scale-[1.02] transition-transform">
+            <button onClick={handleCreate} className="w-full bg-gradient-to-r from-gold-base to-gold-dark text-aurora-950 font-black py-4 rounded-xl text-xs tracking-widest hover:scale-[1.02] transition-transform">
               CREATE ROOM
             </button>
-            <div className="text-center text-gray-600 text-[10px] font-black uppercase tracking-widest py-2">or</div>
-            <button onClick={() => setShowJoin(true)} className="w-full border border-white/20 text-white py-4 rounded-xl text-xs font-black tracking-widest hover:border-metallic-gold hover:text-metallic-gold transition-colors">
+            <div className="text-center text-text-muted text-[10px] font-black uppercase tracking-widest py-2">or</div>
+            <button onClick={() => setShowJoin(true)} className="w-full border border-aurora-600 text-text-primary py-4 rounded-xl text-xs font-black tracking-widest hover:border-gold-base hover:text-gold-base transition-colors">
               JOIN EXISTING ROOM
             </button>
           </div>
         ) : (
-          <div className="bg-[#111111] border border-white/10 rounded-3xl p-8 space-y-6 shadow-2xl">
+          <div className="bg-aurora-800 border border-aurora-600 rounded-3xl p-8 space-y-6 shadow-2xl">
             <div className="space-y-2">
-              <label className="text-[10px] text-gray-500 font-black tracking-widest uppercase">Room Code</label>
-              <input value={joinCode} onChange={e=>setJoinCode(e.target.value)} placeholder="Paste full code (e.g. ABCD12:abc123)" className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-metallic-gold outline-none transition-colors font-mono" />
+              <label className="text-[10px] text-text-muted font-black tracking-widest uppercase">Room Code</label>
+              <input value={joinCode} onChange={e=>setJoinCode(e.target.value)} placeholder="Paste full code (e.g. ABCD12:abc123)" className="w-full bg-aurora-900 border border-aurora-600 rounded-xl px-4 py-3 text-sm text-text-primary focus:border-gold-base outline-none transition-colors font-mono" />
             </div>
-            <button onClick={handleJoin} className="w-full bg-gradient-to-r from-metallic-gold to-[#d49a18] text-black font-black py-4 rounded-xl text-xs tracking-widest hover:scale-[1.02] transition-transform">
+            <button onClick={handleJoin} className="w-full bg-gradient-to-r from-gold-base to-gold-dark text-aurora-950 font-black py-4 rounded-xl text-xs tracking-widest hover:scale-[1.02] transition-transform">
               JOIN ROOM
             </button>
-            <button onClick={() => setShowJoin(false)} className="w-full border border-white/20 text-white py-4 rounded-xl text-xs font-black tracking-widest hover:border-white/40 transition-colors">
+            <button onClick={() => setShowJoin(false)} className="w-full border border-aurora-600 text-text-primary py-4 rounded-xl text-xs font-black tracking-widest hover:border-white/40 transition-colors">
               BACK
             </button>
           </div>
@@ -336,19 +336,19 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
   if (view === 'onboard') {
     return (
       <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} className="w-full max-w-md mx-auto space-y-8 pt-8">
-        <div className="bg-[#111111] border border-white/10 rounded-3xl p-8 shadow-2xl">
+        <div className="bg-aurora-800 border border-aurora-600 rounded-3xl p-8 shadow-2xl">
           {onboardStep === 0 && (
             <div className="space-y-6">
               <div className="text-center">
-                <h3 className="text-2xl font-black text-metallic-gold tracking-widest">YOUR LEGEND</h3>
-                <p className="text-[10px] text-gray-500 font-bold mt-2">Who is your favourite cricketer?</p>
+                <h3 className="text-2xl font-black text-gold-base tracking-widest">YOUR LEGEND</h3>
+                <p className="text-[10px] text-text-muted font-bold mt-2">Who is your favourite cricketer?</p>
               </div>
               <div className="grid grid-cols-3 gap-4">
                 {Object.entries(PLAYER_INFO).map(([key, p]) => (
                   <button 
                     key={key} 
                     onClick={() => setTempProf({...tempProf, player: key})}
-                    className={`p-4 rounded-2xl border flex flex-col items-center gap-2 transition-all ${tempProf.player === key ? 'border-metallic-gold bg-metallic-gold/10 scale-105' : 'border-white/10 bg-black/40 hover:border-white/30'}`}
+                    className={`p-4 rounded-2xl border flex flex-col items-center gap-2 transition-all ${tempProf.player === key ? 'border-gold-base bg-gold-base/10 scale-105' : 'border-aurora-600 bg-aurora-900 hover:border-aurora-600'}`}
                   >
                     <span className="text-3xl">{p.emoji}</span>
                     <span className="text-xs font-black tracking-widest">{p.name.split(' ')[0]}</span>
@@ -357,7 +357,7 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
               </div>
               <button 
                 onClick={() => tempProf.player ? setOnboardStep(1) : showToast('Pick a player!')} 
-                className="w-full bg-gradient-to-r from-metallic-gold to-[#d49a18] text-black font-black py-4 rounded-xl text-xs tracking-widest hover:scale-[1.02] transition-transform"
+                className="w-full bg-gradient-to-r from-gold-base to-gold-dark text-aurora-950 font-black py-4 rounded-xl text-xs tracking-widest hover:scale-[1.02] transition-transform"
               >
                 NEXT →
               </button>
@@ -366,10 +366,10 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
           {onboardStep === 1 && (
             <div className="space-y-6">
               <div className="text-center">
-                <h3 className="text-2xl font-black text-metallic-gold tracking-widest">YOUR VIBE</h3>
-                <p className="text-[10px] text-gray-500 font-bold mt-2">Pick an emoji for your profile.</p>
+                <h3 className="text-2xl font-black text-gold-base tracking-widest">YOUR VIBE</h3>
+                <p className="text-[10px] text-text-muted font-bold mt-2">Pick an emoji for your profile.</p>
               </div>
-              <div className="flex items-center justify-center gap-4 p-4 bg-black/40 rounded-xl border border-white/5">
+              <div className="flex items-center justify-center gap-4 p-4 bg-aurora-900 rounded-xl border border-aurora-600/50">
                 <span className="text-4xl">{tempProf.emoji}</span>
               </div>
               <div className="grid grid-cols-8 gap-2 h-48 overflow-y-auto pr-2 custom-scrollbar">
@@ -377,7 +377,7 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
                   <button 
                     key={index} 
                     onClick={() => setTempProf({...tempProf, emoji: e})}
-                    className={`aspect-square rounded-lg text-xl flex items-center justify-center transition-all ${tempProf.emoji === e ? 'bg-metallic-gold/20 border border-metallic-gold' : 'bg-black/40 border border-transparent hover:bg-white/10'}`}
+                    className={`aspect-square rounded-lg text-xl flex items-center justify-center transition-all ${tempProf.emoji === e ? 'bg-gold-base/20 border border-gold-base' : 'bg-aurora-900 border border-transparent hover:bg-aurora-700'}`}
                   >
                     {e}
                   </button>
@@ -385,7 +385,7 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
               </div>
               <button 
                 onClick={() => setOnboardStep(2)} 
-                className="w-full bg-gradient-to-r from-metallic-gold to-[#d49a18] text-black font-black py-4 rounded-xl text-xs tracking-widest hover:scale-[1.02] transition-transform"
+                className="w-full bg-gradient-to-r from-gold-base to-gold-dark text-aurora-950 font-black py-4 rounded-xl text-xs tracking-widest hover:scale-[1.02] transition-transform"
               >
                 NEXT →
               </button>
@@ -394,24 +394,24 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
           {onboardStep === 2 && (
             <div className="space-y-6">
               <div className="text-center">
-                <h3 className="text-2xl font-black text-metallic-gold tracking-widest">SET YOUR PIN</h3>
-                <p className="text-[10px] text-gray-500 font-bold mt-2">Create a 4-digit PIN to rejoin later.</p>
+                <h3 className="text-2xl font-black text-gold-base tracking-widest">SET YOUR PIN</h3>
+                <p className="text-[10px] text-text-muted font-bold mt-2">Create a 4-digit PIN to rejoin later.</p>
               </div>
               <input 
                 type="text" 
                 maxLength={4} 
                 value={tempProf.pin} 
                 onChange={e => setTempProf({...tempProf, pin: e.target.value.replace(/\D/g, '')})}
-                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-center text-2xl tracking-[1em] font-mono text-metallic-gold focus:border-metallic-gold outline-none transition-colors" 
+                className="w-full bg-aurora-900 border border-aurora-600 rounded-xl px-4 py-4 text-center text-2xl tracking-[1em] font-mono text-gold-base focus:border-gold-base outline-none transition-colors" 
                 placeholder="••••"
               />
-              <div className="flex items-start gap-3 p-4 bg-metallic-gold/10 border border-metallic-gold/20 rounded-xl">
-                <AlertTriangle className="text-metallic-gold shrink-0" size={16} />
-                <p className="text-[10px] text-metallic-gold leading-relaxed">Remember this PIN! You will need it to rejoin this room after leaving.</p>
+              <div className="flex items-start gap-3 p-4 bg-gold-base/10 border border-gold-base/20 rounded-xl">
+                <AlertTriangle className="text-gold-base shrink-0" size={16} />
+                <p className="text-[10px] text-gold-base leading-relaxed">Remember this PIN! You will need it to rejoin this room after leaving.</p>
               </div>
               <button 
                 onClick={handleFinishOnboard} 
-                className="w-full bg-gradient-to-r from-metallic-gold to-[#d49a18] text-black font-black py-4 rounded-xl text-xs tracking-widest hover:scale-[1.02] transition-transform"
+                className="w-full bg-gradient-to-r from-gold-base to-gold-dark text-aurora-950 font-black py-4 rounded-xl text-xs tracking-widest hover:scale-[1.02] transition-transform"
               >
                 ENTER THE ARENA →
               </button>
@@ -431,27 +431,27 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6 pb-24">
       {/* Header */}
-      <div className="flex items-center justify-between bg-[#111111] border border-white/10 rounded-2xl p-4">
+      <div className="flex items-center justify-between bg-aurora-800 border border-aurora-600 rounded-2xl p-4">
         <div className="flex items-center gap-4">
-          <button onClick={onBack} className="text-gray-500 hover:text-white transition-colors">
+          <button onClick={onBack} className="text-text-muted hover:text-text-primary transition-colors">
             <ArrowLeft size={20} />
           </button>
           <div>
-            <div className="text-sm font-black text-metallic-gold tracking-widest">CRICARENA</div>
-            <div className="text-[9px] text-gray-500 font-black uppercase tracking-widest">Room: {st.room}</div>
+            <div className="text-sm font-black text-gold-base tracking-widest">CRICARENA</div>
+            <div className="text-[9px] text-text-muted font-black uppercase tracking-widest">Room: {st.room}</div>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <button onClick={() => {
             navigator.clipboard.writeText(`${st.room}:${st.bid}`);
             showToast('Code copied!');
-          }} className="p-2 bg-white/5 rounded-lg text-gray-400 hover:text-white transition-colors">
+          }} className="p-2 bg-aurora-700/50 rounded-lg text-text-body hover:text-text-primary transition-colors">
             <Copy size={16} />
           </button>
           <button onClick={() => {
             setSt({ room: '', bid: '', p1: '', p2: '', me: null, preds: {}, results: {}, p1prof: {}, p2prof: {}, myProf: { player: null, emoji: '😎', pin: '' } });
             setView('setup');
-          }} className="p-2 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500/20 transition-colors">
+          }} className="p-2 bg-loss-red/10 text-loss-red rounded-lg hover:bg-loss-red/20 transition-colors">
             <LogOut size={16} />
           </button>
         </div>
@@ -459,39 +459,39 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
 
       {/* Scoreboard */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-[#111111] border border-metallic-gold/30 rounded-2xl p-6 relative overflow-hidden">
+        <div className="bg-aurora-800 border border-gold-base/30 rounded-2xl p-6 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-metallic-gold to-transparent" />
           <div className="flex items-center gap-3 mb-4">
             <span className="text-2xl">{myEmoji}</span>
             <div>
-              <div className="text-sm font-bold text-white">{myName}</div>
-              <div className="text-[9px] text-gray-500 tracking-widest uppercase">You</div>
+              <div className="text-sm font-bold text-text-primary">{myName}</div>
+              <div className="text-[9px] text-text-muted tracking-widest uppercase">You</div>
             </div>
           </div>
-          <div className="text-5xl font-black text-metallic-gold">{calcScore(st.me || 'p1')}</div>
-          <div className="text-[9px] text-gray-500 tracking-widest uppercase mt-2">Correct Picks</div>
+          <div className="text-5xl font-black text-gold-base">{calcScore(st.me || 'p1')}</div>
+          <div className="text-[9px] text-text-muted tracking-widest uppercase mt-2">Correct Picks</div>
         </div>
-        <div className="bg-[#111111] border border-white/10 rounded-2xl p-6 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white/20 to-transparent" />
+        <div className="bg-aurora-800 border border-aurora-600 rounded-2xl p-6 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-aurora-300/20 to-transparent" />
           <div className="flex items-center gap-3 mb-4">
             <span className="text-2xl">{otherEmoji}</span>
             <div>
-              <div className="text-sm font-bold text-white">{otherName}</div>
-              <div className="text-[9px] text-gray-500 tracking-widest uppercase">Opponent</div>
+              <div className="text-sm font-bold text-text-primary">{otherName}</div>
+              <div className="text-[9px] text-text-muted tracking-widest uppercase">Opponent</div>
             </div>
           </div>
-          <div className="text-5xl font-black text-white">{calcScore(st.me === 'p1' ? 'p2' : 'p1')}</div>
-          <div className="text-[9px] text-gray-500 tracking-widest uppercase mt-2">Correct Picks</div>
+          <div className="text-5xl font-black text-text-primary">{calcScore(st.me === 'p1' ? 'p2' : 'p1')}</div>
+          <div className="text-[9px] text-text-muted tracking-widest uppercase mt-2">Correct Picks</div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex bg-[#111111] border border-white/10 rounded-xl p-1 overflow-x-auto hide-scrollbar">
+      <div className="flex bg-aurora-800 border border-aurora-600 rounded-xl p-1 overflow-x-auto hide-scrollbar">
         {['predict', 'results', 'oracle', 'stats', 'profile'].map(tab => (
           <button 
             key={tab}
             onClick={() => setActiveTab(tab as any)}
-            className={`flex-1 min-w-[80px] py-3 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${activeTab === tab ? 'bg-metallic-gold text-black' : 'text-gray-500 hover:text-white'}`}
+            className={`flex-1 min-w-[80px] py-3 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${activeTab === tab ? 'bg-gold-base text-aurora-950' : 'text-text-muted hover:text-text-primary'}`}
           >
             {tab}
           </button>
@@ -515,13 +515,13 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
                 <motion.div 
                   initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} transition={{delay: idx*0.05}}
                   key={m.id} 
-                  className="bg-[#111111] border border-white/10 rounded-2xl overflow-hidden"
+                  className="bg-aurora-800 border border-aurora-600 rounded-2xl overflow-hidden"
                 >
-                  <div className="flex justify-between items-center p-4 border-b border-white/5 bg-white/[0.02]">
-                    <span className="text-xs font-black text-metallic-gold tracking-widest">MATCH {m.id}</span>
+                  <div className="flex justify-between items-center p-4 border-b border-aurora-600/50 bg-aurora-700/30">
+                    <span className="text-xs font-black text-gold-base tracking-widest">MATCH {m.id}</span>
                     <div className="text-right">
-                      <div className="text-[10px] text-gray-400">{m.date} · {m.day}</div>
-                      <div className="text-[9px] text-gray-600">{m.time}</div>
+                      <div className="text-[10px] text-text-body">{m.date} · {m.day}</div>
+                      <div className="text-[9px] text-text-muted">{m.time}</div>
                     </div>
                   </div>
                   
@@ -529,15 +529,15 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
                     <div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-center">
                       <button 
                         onClick={() => !myPick && !result && handleConfirmPick(m.id, m.h)}
-                        className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${myPick === m.h ? 'border-metallic-gold bg-metallic-gold/10' : result === m.h ? 'border-green-500 bg-green-500/10' : 'border-white/10 bg-black/40 hover:border-white/30'} ${myPick || result ? 'cursor-default' : ''}`}
+                        className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${myPick === m.h ? 'border-gold-base bg-gold-base/10' : result === m.h ? 'border-win-green bg-win-green/10' : 'border-aurora-600 bg-aurora-900 hover:border-aurora-600'} ${myPick || result ? 'cursor-default' : ''}`}
                       >
                         <span className="text-3xl">{h.logo}</span>
                         <span className="text-sm font-black tracking-widest">{h.short}</span>
                       </button>
-                      <div className="text-xs font-black text-gray-600 tracking-widest">VS</div>
+                      <div className="text-xs font-black text-text-muted tracking-widest">VS</div>
                       <button 
                         onClick={() => !myPick && !result && handleConfirmPick(m.id, m.a)}
-                        className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${myPick === m.a ? 'border-metallic-gold bg-metallic-gold/10' : result === m.a ? 'border-green-500 bg-green-500/10' : 'border-white/10 bg-black/40 hover:border-white/30'} ${myPick || result ? 'cursor-default' : ''}`}
+                        className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${myPick === m.a ? 'border-gold-base bg-gold-base/10' : result === m.a ? 'border-win-green bg-win-green/10' : 'border-aurora-600 bg-aurora-900 hover:border-aurora-600'} ${myPick || result ? 'cursor-default' : ''}`}
                       >
                         <span className="text-3xl">{a.logo}</span>
                         <span className="text-sm font-black tracking-widest">{a.short}</span>
@@ -545,22 +545,22 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
                     </div>
                   </div>
 
-                  <div className="flex gap-2 p-4 border-t border-white/5 bg-black/20">
-                    <div className={`flex-1 p-2 rounded-lg text-[10px] font-bold text-center border ${myPick ? 'bg-metallic-gold/10 border-metallic-gold text-metallic-gold' : 'bg-white/5 border-white/10 text-gray-500'}`}>
+                  <div className="flex gap-2 p-4 border-t border-aurora-600/50 bg-aurora-950/20">
+                    <div className={`flex-1 p-2 rounded-lg text-[10px] font-bold text-center border ${myPick ? 'bg-gold-base/10 border-gold-base text-gold-base' : 'bg-aurora-700/50 border-aurora-600 text-text-muted'}`}>
                       <span className="block text-[8px] opacity-60 mb-1 uppercase">{myName}</span>
                       {myPick ? `${myPick} 🔒` : '—'}
                     </div>
-                    <div className={`flex-1 p-2 rounded-lg text-[10px] font-bold text-center border ${otherPick ? 'bg-white/10 border-white/20 text-white' : 'bg-white/5 border-white/10 text-gray-500'}`}>
+                    <div className={`flex-1 p-2 rounded-lg text-[10px] font-bold text-center border ${otherPick ? 'bg-aurora-700 border-aurora-600 text-text-primary' : 'bg-aurora-700/50 border-aurora-600 text-text-muted'}`}>
                       <span className="block text-[8px] opacity-60 mb-1 uppercase">{otherName}</span>
                       {otherPick ? (both ? `${otherPick} 🔒` : 'Predicted 🔒') : '—'}
                     </div>
                   </div>
 
                   {both && !result && (
-                    <div className="p-4 border-t border-white/5 flex gap-4 items-center">
+                    <div className="p-4 border-t border-aurora-600/50 flex gap-4 items-center">
                       <select 
                         id={`res-${m.id}`}
-                        className="flex-1 bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:border-green-500 outline-none"
+                        className="flex-1 bg-aurora-900 border border-aurora-600 rounded-lg px-3 py-2 text-xs text-text-primary focus:border-win-green outline-none"
                       >
                         <option value="">Set Winner...</option>
                         <option value={m.h}>{m.h}</option>
@@ -571,7 +571,7 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
                           const val = (document.getElementById(`res-${m.id}`) as HTMLSelectElement).value;
                           if (val) handleSetResult(m.id, val);
                         }}
-                        className="bg-green-500 text-black font-black text-[10px] px-4 py-2 rounded-lg tracking-widest"
+                        className="bg-win-green text-aurora-950 font-black text-[10px] px-4 py-2 rounded-lg tracking-widest"
                       >
                         SET
                       </button>
@@ -586,7 +586,7 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
         {activeTab === 'results' && (
           <div className="space-y-4">
             {MATCHES.filter(m => (st.results || {})[m.id]).length === 0 ? (
-              <div className="text-center py-20 text-gray-500 text-xs font-black uppercase tracking-widest">No results yet</div>
+              <div className="text-center py-20 text-text-muted text-xs font-black uppercase tracking-widest">No results yet</div>
             ) : (
               MATCHES.filter(m => (st.results || {})[m.id]).map(m => {
                 const w = (st.results || {})[m.id];
@@ -594,17 +594,17 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
                 const p1ok = pred.p1 === w;
                 const p2ok = pred.p2 === w;
                 return (
-                  <div key={m.id} className="bg-[#111111] border border-white/10 rounded-2xl overflow-hidden">
-                    <div className="flex justify-between items-center p-4 border-b border-white/5 bg-green-500/5">
-                      <span className="text-xs font-black text-gray-400 tracking-widest">MATCH {m.id}</span>
-                      <span className="text-xs font-black text-green-500 tracking-widest">{w && TEAMS[w] ? TEAMS[w].short : '—'} WON 🏆</span>
+                  <div key={m.id} className="bg-aurora-800 border border-aurora-600 rounded-2xl overflow-hidden">
+                    <div className="flex justify-between items-center p-4 border-b border-aurora-600/50 bg-win-green/5">
+                      <span className="text-xs font-black text-text-body tracking-widest">MATCH {m.id}</span>
+                      <span className="text-xs font-black text-win-green tracking-widest">{w && TEAMS[w] ? TEAMS[w].short : '—'} WON 🏆</span>
                     </div>
                     <div className="flex gap-2 p-4">
-                      <div className={`flex-1 p-3 rounded-xl text-xs font-bold text-center border ${p1ok ? 'bg-green-500/10 border-green-500 text-green-500' : 'bg-red-500/10 border-red-500 text-red-500'}`}>
+                      <div className={`flex-1 p-3 rounded-xl text-xs font-bold text-center border ${p1ok ? 'bg-win-green/10 border-win-green text-win-green' : 'bg-loss-red/10 border-loss-red text-loss-red'}`}>
                         <span className="block text-[9px] opacity-60 mb-1 uppercase">{st.p1}</span>
                         {pred.p1 || '—'} {p1ok ? '✓' : '✗'}
                       </div>
-                      <div className={`flex-1 p-3 rounded-xl text-xs font-bold text-center border ${p2ok ? 'bg-green-500/10 border-green-500 text-green-500' : 'bg-red-500/10 border-red-500 text-red-500'}`}>
+                      <div className={`flex-1 p-3 rounded-xl text-xs font-bold text-center border ${p2ok ? 'bg-win-green/10 border-win-green text-win-green' : 'bg-loss-red/10 border-loss-red text-loss-red'}`}>
                         <span className="block text-[9px] opacity-60 mb-1 uppercase">{st.p2}</span>
                         {pred.p2 || '—'} {p2ok ? '✓' : '✗'}
                       </div>
@@ -618,8 +618,8 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
 
         {/* Other tabs can be implemented similarly */}
         {(activeTab === 'oracle' || activeTab === 'stats' || activeTab === 'profile') && (
-          <div className="text-center py-20 bg-[#111111] rounded-3xl border border-white/5">
-            <p className="text-gray-500 text-xs font-black uppercase tracking-widest">Section under construction for React</p>
+          <div className="text-center py-20 bg-aurora-800 rounded-3xl border border-aurora-600/50">
+            <p className="text-text-muted text-xs font-black uppercase tracking-widest">Section under construction for React</p>
           </div>
         )}
       </div>
@@ -629,7 +629,7 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
         {toastMsg && (
           <motion.div 
             initial={{opacity:0, y:50, x:'-50%'}} animate={{opacity:1, y:0, x:'-50%'}} exit={{opacity:0, y:20, x:'-50%'}}
-            className="fixed bottom-8 left-1/2 bg-[#1a1a1a] border border-metallic-gold text-white px-6 py-3 rounded-full text-xs font-bold shadow-[0_0_30px_rgba(240,180,41,0.2)] z-50"
+            className="fixed bottom-8 left-1/2 bg-aurora-800 border border-gold-base text-text-primary px-6 py-3 rounded-full text-xs font-bold shadow-[0_0_30px_rgba(240,180,41,0.2)] z-50"
           >
             {toastMsg}
           </motion.div>

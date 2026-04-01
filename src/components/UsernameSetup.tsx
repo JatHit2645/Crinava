@@ -105,70 +105,70 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+      <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-aurora-950/90 backdrop-blur-md">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          className="w-full max-w-md bg-[#0A0A0A] border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl"
+          className="w-full max-w-md bg-aurora-950 border border-aurora-600 rounded-[2rem] overflow-hidden shadow-2xl"
         >
           <div className="p-8 space-y-8">
             <div className="space-y-2 text-center">
-              <div className="w-16 h-16 bg-aurora-teal/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="text-aurora-teal" size={32} />
+              <div className="w-16 h-16 bg-aurora-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="text-aurora-500" size={32} />
               </div>
-              <h2 className="text-3xl font-black text-white uppercase italic tracking-tighter">
+              <h2 className="text-3xl font-black text-text-primary uppercase italic tracking-tighter">
                 Claim Your Identity
               </h2>
-              <p className="text-xs text-gray-500 font-medium tracking-wide">
+              <p className="text-xs text-text-muted font-medium tracking-wide">
                 Choose a unique username to start your Crinava career.
               </p>
             </div>
 
             {error && (
-              <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl">
-                <p className="text-[10px] text-red-500 font-black uppercase tracking-widest text-center">{error}</p>
+              <div className="p-4 bg-loss-red/10 border border-loss-red/20 rounded-2xl">
+                <p className="text-[10px] text-loss-red font-black uppercase tracking-widest text-center">{error}</p>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[10px] text-gray-500 font-black uppercase tracking-widest ml-1">Username</label>
+                <label className="text-[10px] text-text-muted font-black uppercase tracking-widest ml-1">Username</label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={18} />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" size={18} />
                   <input
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ''))}
                     placeholder="cricket_pro_99"
-                    className={`w-full bg-white/5 border rounded-2xl py-5 pl-12 pr-12 text-white text-sm font-bold focus:outline-none transition-all ${
-                      isAvailable === true ? 'border-green-500/50 focus:border-green-500' : 
-                      isAvailable === false ? 'border-red-500/50 focus:border-red-500' : 
-                      'border-white/10 focus:border-aurora-teal/50'
+                    className={`w-full bg-aurora-700/50 border rounded-2xl py-5 pl-12 pr-12 text-text-primary text-sm font-bold focus:outline-none transition-all ${
+                      isAvailable === true ? 'border-win-green/50 focus:border-win-green' : 
+                      isAvailable === false ? 'border-loss-red/50 focus:border-loss-red' : 
+                      'border-aurora-600 focus:border-aurora-500/50'
                     }`}
                     maxLength={20}
                     required
                   />
                   <div className="absolute right-4 top-1/2 -translate-y-1/2">
                     {checking ? (
-                      <Loader2 className="animate-spin text-gray-600" size={18} />
+                      <Loader2 className="animate-spin text-text-muted" size={18} />
                     ) : isAvailable === true ? (
-                      <Check className="text-green-500" size={18} />
+                      <Check className="text-win-green" size={18} />
                     ) : isAvailable === false ? (
-                      <X className="text-red-500" size={18} />
+                      <X className="text-loss-red" size={18} />
                     ) : null}
                   </div>
                 </div>
                 <div className="flex justify-between px-1">
                   <p className={`text-[9px] font-black uppercase tracking-widest ${
-                    isAvailable === true ? 'text-green-500' : 
-                    isAvailable === false ? 'text-red-500' : 
-                    'text-gray-600'
+                    isAvailable === true ? 'text-win-green' : 
+                    isAvailable === false ? 'text-loss-red' : 
+                    'text-text-muted'
                   }`}>
                     {isAvailable === true ? 'Username Available' : 
                      isAvailable === false ? 'Username Taken' : 
                      'Min. 3 characters'}
                   </p>
-                  <p className="text-[9px] text-gray-600 font-black uppercase tracking-widest">
+                  <p className="text-[9px] text-text-muted font-black uppercase tracking-widest">
                     {username.length}/20
                   </p>
                 </div>
@@ -177,7 +177,7 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete
               <button
                 type="submit"
                 disabled={loading || !isAvailable || checking}
-                className="w-full py-5 bg-white text-black rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-aurora-teal hover:text-white transition-all disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-black group"
+                className="w-full py-5 bg-text-primary text-aurora-950 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-aurora-500 hover:text-text-primary transition-all disabled:opacity-50 disabled:hover:bg-text-primary disabled:hover:text-aurora-950 group"
               >
                 {loading ? (
                   <Loader2 className="animate-spin" size={20} />
@@ -191,7 +191,7 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete
             </form>
 
             <div className="pt-4 text-center">
-              <p className="text-[8px] text-gray-600 font-black uppercase tracking-widest leading-relaxed">
+              <p className="text-[8px] text-text-muted font-black uppercase tracking-widest leading-relaxed">
                 Your username is permanent and will be used across all Crinava features, including leaderboards and debates.
               </p>
             </div>

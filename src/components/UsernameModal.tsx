@@ -160,42 +160,42 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({ isOpen, uid, email
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+      <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-aurora-950/90 backdrop-blur-md">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          className="w-full max-w-md bg-[#0A0A0A] border border-white/10 rounded-3xl overflow-hidden shadow-2xl relative"
+          className="w-full max-w-md bg-aurora-950 border border-aurora-600 rounded-3xl overflow-hidden shadow-2xl relative"
         >
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 hover:bg-white/5 rounded-xl transition-colors text-gray-400 hover:text-white z-20"
+            className="absolute top-4 right-4 p-2 hover:bg-aurora-700/50 rounded-xl transition-colors text-text-body hover:text-text-primary z-20"
           >
             <X size={20} />
           </button>
 
           <div className="p-8 pt-12 space-y-8">
             <div className="space-y-2">
-              <h2 className="text-3xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
-                <Sparkles className="text-aurora-teal" size={24} />
+              <h2 className="text-3xl font-black text-text-primary uppercase italic tracking-tighter flex items-center gap-2">
+                <Sparkles className="text-aurora-500" size={24} />
                 Choose Identity
               </h2>
-              <p className="text-xs text-gray-500 font-medium">Every legend needs a name. What's yours?</p>
+              <p className="text-xs text-text-muted font-medium">Every legend needs a name. What's yours?</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[10px] text-gray-500 font-black uppercase tracking-widest ml-1">Username</label>
+                <label className="text-[10px] text-text-muted font-black uppercase tracking-widest ml-1">Username</label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={16} />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" size={16} />
                   <input
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ''))}
                     placeholder="cricket_legend_1"
-                    className={`w-full bg-white/5 border rounded-2xl py-4 pl-12 pr-12 text-white text-xs focus:outline-none transition-all ${
-                      isAvailable === true ? 'border-green-500/50 focus:border-green-500' : 
-                      isAvailable === false ? 'border-red-500/50 focus:border-red-500' : 
-                      'border-white/10 focus:border-aurora-teal/50'
+                    className={`w-full bg-aurora-700/50 border rounded-2xl py-4 pl-12 pr-12 text-text-primary text-xs focus:outline-none transition-all ${
+                      isAvailable === true ? 'border-win-green/50 focus:border-win-green' : 
+                      isAvailable === false ? 'border-loss-red/50 focus:border-loss-red' : 
+                      'border-aurora-600 focus:border-aurora-500/50'
                     }`}
                     required
                     minLength={3}
@@ -203,18 +203,18 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({ isOpen, uid, email
                   />
                   <div className="absolute right-4 top-1/2 -translate-y-1/2">
                     {checking ? (
-                      <Loader2 className="animate-spin text-gray-500" size={16} />
+                      <Loader2 className="animate-spin text-text-muted" size={16} />
                     ) : isAvailable === true ? (
-                      <Check className="text-green-500" size={16} />
+                      <Check className="text-win-green" size={16} />
                     ) : isAvailable === false ? (
-                      <X className="text-red-500" size={16} />
+                      <X className="text-loss-red" size={16} />
                     ) : null}
                   </div>
                 </div>
                 <p className={`text-[8px] font-black uppercase tracking-widest ml-1 ${
-                  isAvailable === true ? 'text-green-500' : 
-                  isAvailable === false ? 'text-red-500' : 
-                  'text-gray-600'
+                  isAvailable === true ? 'text-win-green' : 
+                  isAvailable === false ? 'text-loss-red' : 
+                  'text-text-muted'
                 }`}>
                   {isAvailable === true ? 'Username is available' : 
                    isAvailable === false ? 'Username is already taken' : 
@@ -223,31 +223,31 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({ isOpen, uid, email
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] text-gray-500 font-black uppercase tracking-widest ml-1">Date of Birth</label>
+                <label className="text-[10px] text-text-muted font-black uppercase tracking-widest ml-1">Date of Birth</label>
                 <div className="relative">
-                  <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={16} />
+                  <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" size={16} />
                   <input
                     type="text"
                     value={dob}
                     onChange={handleDOBChange}
                     placeholder="YYYY/MM/DD"
-                    className={`w-full bg-white/5 border rounded-2xl py-4 pl-12 pr-4 text-white text-xs focus:outline-none transition-all ${
-                      isDobValid === true ? 'border-green-500/50 focus:border-green-500' : 
-                      isDobValid === false ? 'border-red-500/50 focus:border-red-500' : 
-                      'border-white/10 focus:border-aurora-teal/50'
+                    className={`w-full bg-aurora-700/50 border rounded-2xl py-4 pl-12 pr-4 text-text-primary text-xs focus:outline-none transition-all ${
+                      isDobValid === true ? 'border-win-green/50 focus:border-win-green' : 
+                      isDobValid === false ? 'border-loss-red/50 focus:border-loss-red' : 
+                      'border-aurora-600 focus:border-aurora-500/50'
                     }`}
                     required
                   />
                 </div>
                 <p className={`text-[8px] font-black uppercase tracking-widest ml-1 ${
-                  isDobValid === false ? 'text-red-500' : 'text-gray-600'
+                  isDobValid === false ? 'text-loss-red' : 'text-text-muted'
                 }`}>
                   {isDobValid === false ? 'Invalid Date' : 'Format: YYYY/MM/DD (e.g. 1995/05/24)'}
                 </p>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] text-gray-500 font-black uppercase tracking-widest ml-1">Gender</label>
+                <label className="text-[10px] text-text-muted font-black uppercase tracking-widest ml-1">Gender</label>
                 <div className="grid grid-cols-2 gap-2">
                   {['Male', 'Female', 'Others', "Can't say"].map((option) => (
                     <button
@@ -256,8 +256,8 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({ isOpen, uid, email
                       onClick={() => setGender(option)}
                       className={`py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${
                         gender === option 
-                          ? 'bg-aurora-teal/10 border-aurora-teal text-aurora-teal' 
-                          : 'bg-white/5 border-white/10 text-gray-500 hover:bg-white/10'
+                          ? 'bg-aurora-500/10 border-aurora-500 text-aurora-500' 
+                          : 'bg-aurora-700/50 border-aurora-600 text-text-muted hover:bg-aurora-700'
                       }`}
                     >
                       {option}
@@ -267,21 +267,21 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({ isOpen, uid, email
               </div>
 
               <div className="pt-2">
-                <p className="text-[8px] text-gray-600 leading-relaxed text-center px-4">
+                <p className="text-[8px] text-text-muted leading-relaxed text-center px-4">
                   Your personal information is collected solely for security and verification purposes. We are committed to your privacy and will never share your sensitive data with third parties.
                 </p>
               </div>
 
               {error && (
-                <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl">
-                  <p className="text-[10px] text-red-500 font-black uppercase tracking-widest">{error}</p>
+                <div className="p-4 bg-loss-red/10 border border-loss-red/20 rounded-2xl">
+                  <p className="text-[10px] text-loss-red font-black uppercase tracking-widest">{error}</p>
                 </div>
               )}
 
               <button
                 type="submit"
                 disabled={loading || !isAvailable || !isDobValid || !gender}
-                className="w-full py-4 bg-aurora-teal text-black rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-aurora-teal/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-4 bg-aurora-500 text-aurora-950 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-aurora-500/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? <Loader2 className="animate-spin mx-auto" size={18} /> : 'Claim Identity'}
               </button>
