@@ -1,0 +1,686 @@
+[
+  {
+    "match_id": "CREX_10ZE",
+    "event_key": "feed:CREX_10ZE:1781612321411",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_321411",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "India Squad: Shubman Gill (c), Rohit Sharma, Shreyas Iyer, KL Rahul (wk), Ishan Kishan (wk), Nitish Kumar Reddy, Washington Sundar, Kuldeep Yadav, Arshdeep Singh, Prasidh Krishna, Prince Yadav, Gurnoor Brar, Harsh Dubey, Yashasvi Jaiswal",
+    "raw_commentary": "India Squad: Shubman Gill (c), Rohit Sharma, Shreyas Iyer, KL Rahul (wk), Ishan Kishan (wk), Nitish Kumar Reddy, Washington Sundar, Kuldeep Yadav, Arshdeep Singh, Prasidh Krishna, Prince Yadav, Gurnoor Brar, Harsh Dubey, Yashasvi Jaiswal",
+    "timestamp": 1781635037.545951,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_10ZE",
+    "event_key": "feed:CREX_10ZE:1781612938071",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_938071",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Afghanistan Squad : Hashmatullah Shahidi (c), Rahmanullah Gurbaz (wk), Ibrahim Zadran, Sediqullah Atal, Darwish Rasooli, Rahmat Shah, Ikram Alikhil (wk), Mohammad Nabi, Azmatullah Omarzai, Rashid Khan, Nangeyalia Kharote, AM Ghazanfar, Ziaur Rahman Sharifi, Fareed Malik, Bilal Sami, Mohammad Saleem Safi",
+    "raw_commentary": "Afghanistan Squad : Hashmatullah Shahidi (c), Rahmanullah Gurbaz (wk), Ibrahim Zadran, Sediqullah Atal, Darwish Rasooli, Rahmat Shah, Ikram Alikhil (wk), Mohammad Nabi, Azmatullah Omarzai, Rashid Khan, Nangeyalia Kharote, AM Ghazanfar, Ziaur Rahman Sharifi, Fareed Malik, Bilal Sami, Mohammad Saleem Safi",
+    "timestamp": 1781635037.5499206,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_10ZE",
+    "event_key": "feed:CREX_10ZE:1781612946322",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_946322",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Head-to-Head in ODIs : Matches Played: 5 India Won: 4 Tied: 1",
+    "raw_commentary": "Head-to-Head in ODIs : Matches Played: 5 India Won: 4 Tied: 1",
+    "timestamp": 1781635037.5515807,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_10ZE",
+    "event_key": "feed:CREX_10ZE:1781612964124",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_TOSS_964124",
+    "runs_scored": "INFO",
+    "flavor": [
+      "toss"
+    ],
+    "commentary": "Preview by AkshayaKrishna Polya After a comprehensive seven-wicket win in the rain-curtailed series opener in Dharamsala on Saturday, India will now aim to take an unassailable lead in this three-match ODI series when they take the field against Afghanistan in the second game at Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium , Lucknow, on Wednesday (June 17). It took more than four hours for the officials, players and the fans to witness some action after relentless rain at the picturesque venue in the foothills of the Himalayas. The contest was reduced to a 25-over-per-side game. India won the toss and decided to bowl first, which was a no-brainer in a shortened match. India's new-ball bowlers Gurnoor Brar and Arshdeep Singh reduced Afghanistan to 26/3 inside the five-over powerplay, but Rahmanullah Gurbaz had other ideas. The wicketkeeper batter teed off from the get-go and scored a 48-ball century, the fastest for Afghanistan in the ODIs. However, he was cleaned up soon by Nitish Kumar Reddy, who broke the 116-run partnership that Gurbaz stitched with his skipper Hashmatullah Shahidi. Reddy and debutants Harsh Dubey & Brar then bowled brilliantly in the slog overs to pull things back and bundle out Afghanistan for 194 inside the allotted 25 overs. The Men in Blue were off to a flying start, with Azmatullah Omarzai failing to control the swing up front. He also hit Rohit Sharma on his right wrist in the first over, but the former Indian skipper battled with the injury to hit run-a-ball 16 before getting run out, courtesy of a mix-up with Shubman Gill just after the powerplay. Gill and Ishan Kishan went hammer and tongs to bring the required run rate under control with a 70-run stand. Rashid Khan outfoxed Kishan with a wrong 'un and knocked him over for a 22-ball 34. Shreyas Iyer couldn't get going. The Indian captain had very little pressure on him as he hit some stylish strokes during his glorious 84 off just 66 balls, but KL Rahul later took the limelight and also hit the finishing runs with an unbeaten 39 off just 19 balls. There is no rain on the radar for the matchday. Traditionally, Ekana aids spin bowling, and India might bring in Kuldeep Yadav in place of Prasidh Krishna , who wasn't at his best in the first ODI. On the other hand, Darwish Rasooli, who missed the previous ODI due to a family bereavement, has rejoined the team in Lucknow. Can Afghanistan win their maiden ODI against India and force a decider, or will the hosts prove to be too good for the tourists once again? To know, join us at 12:30 PM IST, Local Time, on Wednesday for its live coverage!",
+    "raw_commentary": "Preview by AkshayaKrishna Polya After a comprehensive seven-wicket win in the rain-curtailed series opener in Dharamsala on Saturday, India will now aim to take an unassailable lead in this three-match ODI series when they take the field against Afghanistan in the second game at Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium , Lucknow, on Wednesday (June 17). It took more than four hours for the officials, players and the fans to witness some action after relentless rain at the picturesque venue in the foothills of the Himalayas. The contest was reduced to a 25-over-per-side game. India won the toss and decided to bowl first, which was a no-brainer in a shortened match. India's new-ball bowlers Gurnoor Brar and Arshdeep Singh reduced Afghanistan to 26/3 inside the five-over powerplay, but Rahmanullah Gurbaz had other ideas. The wicketkeeper batter teed off from the get-go and scored a 48-ball century, the fastest for Afghanistan in the ODIs. However, he was cleaned up soon by Nitish Kumar Reddy, who broke the 116-run partnership that Gurbaz stitched with his skipper Hashmatullah Shahidi. Reddy and debutants Harsh Dubey & Brar then bowled brilliantly in the slog overs to pull things back and bundle out Afghanistan for 194 inside the allotted 25 overs. The Men in Blue were off to a flying start, with Azmatullah Omarzai failing to control the swing up front. He also hit Rohit Sharma on his right wrist in the first over, but the former Indian skipper battled with the injury to hit run-a-ball 16 before getting run out, courtesy of a mix-up with Shubman Gill just after the powerplay. Gill and Ishan Kishan went hammer and tongs to bring the required run rate under control with a 70-run stand. Rashid Khan outfoxed Kishan with a wrong 'un and knocked him over for a 22-ball 34. Shreyas Iyer couldn't get going. The Indian captain had very little pressure on him as he hit some stylish strokes during his glorious 84 off just 66 balls, but KL Rahul later took the limelight and also hit the finishing runs with an unbeaten 39 off just 19 balls. There is no rain on the radar for the matchday. Traditionally, Ekana aids spin bowling, and India might bring in Kuldeep Yadav in place of Prasidh Krishna , who wasn't at his best in the first ODI. On the other hand, Darwish Rasooli, who missed the previous ODI due to a family bereavement, has rejoined the team in Lucknow. Can Afghanistan win their maiden ODI against India and force a decider, or will the hosts prove to be too good for the tourists once again? To know, join us at 12:30 PM IST, Local Time, on Wednesday for its live coverage!",
+    "timestamp": 1781635037.555467,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_10ZE",
+    "event_key": "feed:CREX_10ZE:1781619223679",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_223679",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "India Probable XI: Shubman Gill (c), Rohit Sharma, KL Rahul, Shreyas Iyer, Ishan Kishan (wk), Washington Sundar, Nitish Kumar Reddy, Harsh Dubey, Gurnoor Brar, Arshdeep Singh, Prasidh Krishna/Kuldeep Yadav",
+    "raw_commentary": "India Probable XI: Shubman Gill (c), Rohit Sharma, KL Rahul, Shreyas Iyer, Ishan Kishan (wk), Washington Sundar, Nitish Kumar Reddy, Harsh Dubey, Gurnoor Brar, Arshdeep Singh, Prasidh Krishna/Kuldeep Yadav",
+    "timestamp": 1781635037.5584543,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_10ZE",
+    "event_key": "feed:CREX_10ZE:1781619246544",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_246544",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Afghanistan Probable XI : Rahmanullah Gurbaz (wk), Ibrahim Zadran, Sediqullah Atal, Rahmat Shah, Hashmatullah Shahidi (c), Mohammad Nabi, Rashid Khan, Azmatullah Omarzai, Allah Mohammad Ghazanfar, Mohammad Saleem Safi, Ziaur Rahman Sharifi",
+    "raw_commentary": "Afghanistan Probable XI : Rahmanullah Gurbaz (wk), Ibrahim Zadran, Sediqullah Atal, Rahmat Shah, Hashmatullah Shahidi (c), Mohammad Nabi, Rashid Khan, Azmatullah Omarzai, Allah Mohammad Ghazanfar, Mohammad Saleem Safi, Ziaur Rahman Sharifi",
+    "timestamp": 1781635037.5609412,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_10ZE",
+    "event_key": "feed:CREX_10ZE:1781620220378",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_STAT_220378",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781737200000, 'isExpiry': True, 'match_fKey': '10ZE', 'o': [{'option_value': 'Yes', 'poid': 204065, 'sequence': 0, 'votes': 0}, {'option_value': \"Don't tinker with the winning XI\", 'poid': 204066, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56162, 'q': 'Should India bring in Kuldeep Yadav to their XI?'}",
+    "raw_commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781737200000, 'isExpiry': True, 'match_fKey': '10ZE', 'o': [{'option_value': 'Yes', 'poid': 204065, 'sequence': 0, 'votes': 0}, {'option_value': \"Don't tinker with the winning XI\", 'poid': 204066, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56162, 'q': 'Should India bring in Kuldeep Yadav to their XI?'}",
+    "timestamp": 1781635037.5641055,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_10ZE",
+    "event_key": "feed:CREX_10ZE:1781612321411",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_321411",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "India Squad: Shubman Gill (c), Rohit Sharma, Shreyas Iyer, KL Rahul (wk), Ishan Kishan (wk), Nitish Kumar Reddy, Washington Sundar, Kuldeep Yadav, Arshdeep Singh, Prasidh Krishna, Prince Yadav, Gurnoor Brar, Harsh Dubey, Yashasvi Jaiswal",
+    "raw_commentary": "India Squad: Shubman Gill (c), Rohit Sharma, Shreyas Iyer, KL Rahul (wk), Ishan Kishan (wk), Nitish Kumar Reddy, Washington Sundar, Kuldeep Yadav, Arshdeep Singh, Prasidh Krishna, Prince Yadav, Gurnoor Brar, Harsh Dubey, Yashasvi Jaiswal",
+    "timestamp": 1781635046.7975667,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_10ZE",
+    "event_key": "feed:CREX_10ZE:1781612946322",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_946322",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Head-to-Head in ODIs : Matches Played: 5 India Won: 4 Tied: 1",
+    "raw_commentary": "Head-to-Head in ODIs : Matches Played: 5 India Won: 4 Tied: 1",
+    "timestamp": 1781635050.4977784,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_10ZE",
+    "event_key": "feed:CREX_10ZE:1781612964124",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_TOSS_964124",
+    "runs_scored": "INFO",
+    "flavor": [
+      "toss"
+    ],
+    "commentary": "Preview by AkshayaKrishna Polya After a comprehensive seven-wicket win in the rain-curtailed series opener in Dharamsala on Saturday, India will now aim to take an unassailable lead in this three-match ODI series when they take the field against Afghanistan in the second game at Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium , Lucknow, on Wednesday (June 17). It took more than four hours for the officials, players and the fans to witness some action after relentless rain at the picturesque venue in the foothills of the Himalayas. The contest was reduced to a 25-over-per-side game. India won the toss and decided to bowl first, which was a no-brainer in a shortened match. India's new-ball bowlers Gurnoor Brar and Arshdeep Singh reduced Afghanistan to 26/3 inside the five-over powerplay, but Rahmanullah Gurbaz had other ideas. The wicketkeeper batter teed off from the get-go and scored a 48-ball century, the fastest for Afghanistan in the ODIs. However, he was cleaned up soon by Nitish Kumar Reddy, who broke the 116-run partnership that Gurbaz stitched with his skipper Hashmatullah Shahidi. Reddy and debutants Harsh Dubey & Brar then bowled brilliantly in the slog overs to pull things back and bundle out Afghanistan for 194 inside the allotted 25 overs. The Men in Blue were off to a flying start, with Azmatullah Omarzai failing to control the swing up front. He also hit Rohit Sharma on his right wrist in the first over, but the former Indian skipper battled with the injury to hit run-a-ball 16 before getting run out, courtesy of a mix-up with Shubman Gill just after the powerplay. Gill and Ishan Kishan went hammer and tongs to bring the required run rate under control with a 70-run stand. Rashid Khan outfoxed Kishan with a wrong 'un and knocked him over for a 22-ball 34. Shreyas Iyer couldn't get going. The Indian captain had very little pressure on him as he hit some stylish strokes during his glorious 84 off just 66 balls, but KL Rahul later took the limelight and also hit the finishing runs with an unbeaten 39 off just 19 balls. There is no rain on the radar for the matchday. Traditionally, Ekana aids spin bowling, and India might bring in Kuldeep Yadav in place of Prasidh Krishna , who wasn't at his best in the first ODI. On the other hand, Darwish Rasooli, who missed the previous ODI due to a family bereavement, has rejoined the team in Lucknow. Can Afghanistan win their maiden ODI against India and force a decider, or will the hosts prove to be too good for the tourists once again? To know, join us at 12:30 PM IST, Local Time, on Wednesday for its live coverage!",
+    "raw_commentary": "Preview by AkshayaKrishna Polya After a comprehensive seven-wicket win in the rain-curtailed series opener in Dharamsala on Saturday, India will now aim to take an unassailable lead in this three-match ODI series when they take the field against Afghanistan in the second game at Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium , Lucknow, on Wednesday (June 17). It took more than four hours for the officials, players and the fans to witness some action after relentless rain at the picturesque venue in the foothills of the Himalayas. The contest was reduced to a 25-over-per-side game. India won the toss and decided to bowl first, which was a no-brainer in a shortened match. India's new-ball bowlers Gurnoor Brar and Arshdeep Singh reduced Afghanistan to 26/3 inside the five-over powerplay, but Rahmanullah Gurbaz had other ideas. The wicketkeeper batter teed off from the get-go and scored a 48-ball century, the fastest for Afghanistan in the ODIs. However, he was cleaned up soon by Nitish Kumar Reddy, who broke the 116-run partnership that Gurbaz stitched with his skipper Hashmatullah Shahidi. Reddy and debutants Harsh Dubey & Brar then bowled brilliantly in the slog overs to pull things back and bundle out Afghanistan for 194 inside the allotted 25 overs. The Men in Blue were off to a flying start, with Azmatullah Omarzai failing to control the swing up front. He also hit Rohit Sharma on his right wrist in the first over, but the former Indian skipper battled with the injury to hit run-a-ball 16 before getting run out, courtesy of a mix-up with Shubman Gill just after the powerplay. Gill and Ishan Kishan went hammer and tongs to bring the required run rate under control with a 70-run stand. Rashid Khan outfoxed Kishan with a wrong 'un and knocked him over for a 22-ball 34. Shreyas Iyer couldn't get going. The Indian captain had very little pressure on him as he hit some stylish strokes during his glorious 84 off just 66 balls, but KL Rahul later took the limelight and also hit the finishing runs with an unbeaten 39 off just 19 balls. There is no rain on the radar for the matchday. Traditionally, Ekana aids spin bowling, and India might bring in Kuldeep Yadav in place of Prasidh Krishna , who wasn't at his best in the first ODI. On the other hand, Darwish Rasooli, who missed the previous ODI due to a family bereavement, has rejoined the team in Lucknow. Can Afghanistan win their maiden ODI against India and force a decider, or will the hosts prove to be too good for the tourists once again? To know, join us at 12:30 PM IST, Local Time, on Wednesday for its live coverage!",
+    "timestamp": 1781635050.518247,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_10ZE",
+    "event_key": "feed:CREX_10ZE:1781612938071",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_938071",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Afghanistan Squad : Hashmatullah Shahidi (c), Rahmanullah Gurbaz (wk), Ibrahim Zadran, Sediqullah Atal, Darwish Rasooli, Rahmat Shah, Ikram Alikhil (wk), Mohammad Nabi, Azmatullah Omarzai, Rashid Khan, Nangeyalia Kharote, AM Ghazanfar, Ziaur Rahman Sharifi, Fareed Malik, Bilal Sami, Mohammad Saleem Safi",
+    "raw_commentary": "Afghanistan Squad : Hashmatullah Shahidi (c), Rahmanullah Gurbaz (wk), Ibrahim Zadran, Sediqullah Atal, Darwish Rasooli, Rahmat Shah, Ikram Alikhil (wk), Mohammad Nabi, Azmatullah Omarzai, Rashid Khan, Nangeyalia Kharote, AM Ghazanfar, Ziaur Rahman Sharifi, Fareed Malik, Bilal Sami, Mohammad Saleem Safi",
+    "timestamp": 1781635051.6979883,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_10ZE",
+    "event_key": "feed:CREX_10ZE:1781620220378",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_STAT_220378",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781737200000, 'isExpiry': True, 'match_fKey': '10ZE', 'o': [{'option_value': 'Yes', 'poid': 204065, 'sequence': 0, 'votes': 0}, {'option_value': \"Don't tinker with the winning XI\", 'poid': 204066, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56162, 'q': 'Should India bring in Kuldeep Yadav to their XI?'}",
+    "raw_commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781737200000, 'isExpiry': True, 'match_fKey': '10ZE', 'o': [{'option_value': 'Yes', 'poid': 204065, 'sequence': 0, 'votes': 0}, {'option_value': \"Don't tinker with the winning XI\", 'poid': 204066, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56162, 'q': 'Should India bring in Kuldeep Yadav to their XI?'}",
+    "timestamp": 1781635060.7704723,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  }
+]

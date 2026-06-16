@@ -1,0 +1,914 @@
+[
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781608258610",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_258610",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Bangladesh Women Squad : Nigar Sultana (c/wk), Dilara Akter (wk), Juairiya Ferdous, Sharmin Akhter, Sobhana Mostary, Shorna Akter, Ritu Moni, Nahida Akter, Fahima Khatun, Shanjida Akter Meghla, Marufa Akter, Rabeya Khan, Sultana Khatun, Fariha Trisna, Taj Nehar",
+    "raw_commentary": "Bangladesh Women Squad : Nigar Sultana (c/wk), Dilara Akter (wk), Juairiya Ferdous, Sharmin Akhter, Sobhana Mostary, Shorna Akter, Ritu Moni, Nahida Akter, Fahima Khatun, Shanjida Akter Meghla, Marufa Akter, Rabeya Khan, Sultana Khatun, Fariha Trisna, Taj Nehar",
+    "timestamp": 1781635119.7715173,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781608348534",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_348534",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Australia Women Squad : Sophie Molineux (c), Phoebe Litchfield, Beth Mooney (wk), Georgia Voll, Tahlia McGrath, Ashleigh Gardner, Kim Garth, Lucy Hamilton, Grace Harris, Alana King, Ellyse Perry, Annabel Sutherland, Nicola Carey, Megan Schutt, Georgia Wareham",
+    "raw_commentary": "Australia Women Squad : Sophie Molineux (c), Phoebe Litchfield, Beth Mooney (wk), Georgia Voll, Tahlia McGrath, Ashleigh Gardner, Kim Garth, Lucy Hamilton, Grace Harris, Alana King, Ellyse Perry, Annabel Sutherland, Nicola Carey, Megan Schutt, Georgia Wareham",
+    "timestamp": 1781635119.7776368,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781608393496",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_393496",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Head-to-Head in WT20 WC : Australia: 2 Bangladesh: 0",
+    "raw_commentary": "Head-to-Head in WT20 WC : Australia: 2 Bangladesh: 0",
+    "timestamp": 1781635119.7806425,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781608415977",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_415977",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Head-to-Head in WT20Is : Australia: 5 Bangladesh: 0",
+    "raw_commentary": "Head-to-Head in WT20Is : Australia: 5 Bangladesh: 0",
+    "timestamp": 1781635119.7832594,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781608427218",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_RAIN_427218",
+    "runs_scored": "INFO",
+    "flavor": [
+      "weather"
+    ],
+    "commentary": "Preview by Mohammad Anab The Women's T20 World Cup is now moving to the iconic Headingley in Leeds, where A ustralia Women will face Bangladesh Women on Wednesday . With both teams opening their campaigns with victories, the Group A clash presents an opportunity for either side to take a significant step towards the semi-finals. The six-time WT20 WC champions, Australia, entered the tournament determined to re-establish themselves as the dominant force in women's cricket and they proved by registering a massive victory in their first game of the campaign against the runners-up of the last two WT20 WC, South Africa. Batting first, Australia scored a massive 172/8 on the back of a quickfire 50 from Phoebe Litchfield, who turned fully fit just in the nick of time. Later, Ellyse Perry and Georgia Wareham scored a 30-odd each and stitched a 58-run stand for the fifth wicket. All these efforts helped Australia reach the 170-run mark. In reply, South Africa had a horrible start as they lost their first two wickets in the first couple of overs. Except for South African skipper Laura Wolvaardt (44), none of the Proteas batters scored over 25 runs. South Africa got all out for 107 in 16.4 overs. This was their second-lowest total in a completed WT20I innings against Australia. Sophie Molineux and Alana King picked up two wickets each but leggie Wareham starred with the ball as she picked up three wickets. The 65-run win gave a huge NRR boost to Australia. Bangladesh, meanwhile, arrive full of confidence after securing a convincing six-wicket victory over the Netherlands in their opening match. Opener Juairiya Ferdous (50) starred with a half-century, while the experienced Sharmin Akhter (37*) guided the chase to help Bangladesh collect two valuable points. Bangladesh chased down a target of 140 in the last over against Dutch, which was the former's highest successful chase in a WT20 WC game. In the first innings, pacer Marufa Akter starred with the ball by picking 2/31 while Ritu Moni proved economical. The result demonstrated the progress Bangladesh have made in recent years and reinforced their reputation as a disciplined and competitive T20 side. However, their WT20 WC record is not that great. The win against Netherlands was only their second T20 World Cup victory since beating Ireland in 2014. The Asian side went winless in 2016, 2018, 2020 and 2023 before defeating Scotland in the 2024 edition. Much of Bangladesh's challenge will rest on the shoulders of captain Nigar Sultana Joty and an experienced bowling unit featuring Nahida Akter, Marufa Akter, Ritu Moni and Fahima Khatun. Their spin-heavy attack has often been the foundation of their success, and they will need another strong performance to contain Australia's powerful batting lineup. History favours Australia heading into the contest. The two teams have met five times in WT20Is, with Australia winning all five encounters. Headingley has traditionally offered assistance to seamers early in an innings before becoming more batting-friendly as the match progresses. The weather forecast suggests that rain could play the spoilsport during the game. Who will win this match? Join us at 2 PM IST (9:30 AM Local Time) on Wednesday for the live coverage.",
+    "raw_commentary": "Preview by Mohammad Anab The Women's T20 World Cup is now moving to the iconic Headingley in Leeds, where A ustralia Women will face Bangladesh Women on Wednesday . With both teams opening their campaigns with victories, the Group A clash presents an opportunity for either side to take a significant step towards the semi-finals. The six-time WT20 WC champions, Australia, entered the tournament determined to re-establish themselves as the dominant force in women's cricket and they proved by registering a massive victory in their first game of the campaign against the runners-up of the last two WT20 WC, South Africa. Batting first, Australia scored a massive 172/8 on the back of a quickfire 50 from Phoebe Litchfield, who turned fully fit just in the nick of time. Later, Ellyse Perry and Georgia Wareham scored a 30-odd each and stitched a 58-run stand for the fifth wicket. All these efforts helped Australia reach the 170-run mark. In reply, South Africa had a horrible start as they lost their first two wickets in the first couple of overs. Except for South African skipper Laura Wolvaardt (44), none of the Proteas batters scored over 25 runs. South Africa got all out for 107 in 16.4 overs. This was their second-lowest total in a completed WT20I innings against Australia. Sophie Molineux and Alana King picked up two wickets each but leggie Wareham starred with the ball as she picked up three wickets. The 65-run win gave a huge NRR boost to Australia. Bangladesh, meanwhile, arrive full of confidence after securing a convincing six-wicket victory over the Netherlands in their opening match. Opener Juairiya Ferdous (50) starred with a half-century, while the experienced Sharmin Akhter (37*) guided the chase to help Bangladesh collect two valuable points. Bangladesh chased down a target of 140 in the last over against Dutch, which was the former's highest successful chase in a WT20 WC game. In the first innings, pacer Marufa Akter starred with the ball by picking 2/31 while Ritu Moni proved economical. The result demonstrated the progress Bangladesh have made in recent years and reinforced their reputation as a disciplined and competitive T20 side. However, their WT20 WC record is not that great. The win against Netherlands was only their second T20 World Cup victory since beating Ireland in 2014. The Asian side went winless in 2016, 2018, 2020 and 2023 before defeating Scotland in the 2024 edition. Much of Bangladesh's challenge will rest on the shoulders of captain Nigar Sultana Joty and an experienced bowling unit featuring Nahida Akter, Marufa Akter, Ritu Moni and Fahima Khatun. Their spin-heavy attack has often been the foundation of their success, and they will need another strong performance to contain Australia's powerful batting lineup. History favours Australia heading into the contest. The two teams have met five times in WT20Is, with Australia winning all five encounters. Headingley has traditionally offered assistance to seamers early in an innings before becoming more batting-friendly as the match progresses. The weather forecast suggests that rain could play the spoilsport during the game. Who will win this match? Join us at 2 PM IST (9:30 AM Local Time) on Wednesday for the live coverage.",
+    "timestamp": 1781635119.7865741,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781608438459",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_438459",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Bangladesh Women (Probable XI) : Dilara Akter, Juairiya Ferdous, Sharmin Akhter, Nigar Sultana (c & wk), Sobhana Mostary, Shorna Akter, Ritu Moni, Rabeya Khan, Marufa Akter, Sanjida Akter Meghla, Fariha Trisna",
+    "raw_commentary": "Bangladesh Women (Probable XI) : Dilara Akter, Juairiya Ferdous, Sharmin Akhter, Nigar Sultana (c & wk), Sobhana Mostary, Shorna Akter, Ritu Moni, Rabeya Khan, Marufa Akter, Sanjida Akter Meghla, Fariha Trisna",
+    "timestamp": 1781635119.789389,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781609190938",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_190938",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Australia Women (Probable XI) : Beth Mooney (wk), Georgia Voll, Phoebe Litchfield, Ellyse Perry, Ashleigh Gardner, Georgia Wareham, Annabel Sutherland, Nicola Carey, Sophie Molineux (c), Kim Garth, Alana King",
+    "raw_commentary": "Australia Women (Probable XI) : Beth Mooney (wk), Georgia Voll, Phoebe Litchfield, Ellyse Perry, Ashleigh Gardner, Georgia Wareham, Annabel Sutherland, Nicola Carey, Sophie Molineux (c), Kim Garth, Alana King",
+    "timestamp": 1781635119.7928932,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781622092763",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_STAT_092763",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781717400000, 'isExpiry': True, 'match_fKey': 'V8A', 'o': [{'option_value': 'Yes! The Bangla spinners can trouble Aus', 'poid': 204079, 'sequence': 0, 'votes': 0}, {'option_value': 'No! Aus are six-time champions for a reason', 'poid': 204078, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56166, 'q': 'Can Bangladesh register their first-ever WT20I win against Australia?'}",
+    "raw_commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781717400000, 'isExpiry': True, 'match_fKey': 'V8A', 'o': [{'option_value': 'Yes! The Bangla spinners can trouble Aus', 'poid': 204079, 'sequence': 0, 'votes': 0}, {'option_value': 'No! Aus are six-time champions for a reason', 'poid': 204078, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56166, 'q': 'Can Bangladesh register their first-ever WT20I win against Australia?'}",
+    "timestamp": 1781635119.7967286,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781608348534",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_348534",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Australia Women Squad : Sophie Molineux (c), Phoebe Litchfield, Beth Mooney (wk), Georgia Voll, Tahlia McGrath, Ashleigh Gardner, Kim Garth, Lucy Hamilton, Grace Harris, Alana King, Ellyse Perry, Annabel Sutherland, Nicola Carey, Megan Schutt, Georgia Wareham",
+    "raw_commentary": "Australia Women Squad : Sophie Molineux (c), Phoebe Litchfield, Beth Mooney (wk), Georgia Voll, Tahlia McGrath, Ashleigh Gardner, Kim Garth, Lucy Hamilton, Grace Harris, Alana King, Ellyse Perry, Annabel Sutherland, Nicola Carey, Megan Schutt, Georgia Wareham",
+    "timestamp": 1781635121.760518,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781608258610",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_258610",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Bangladesh Women Squad : Nigar Sultana (c/wk), Dilara Akter (wk), Juairiya Ferdous, Sharmin Akhter, Sobhana Mostary, Shorna Akter, Ritu Moni, Nahida Akter, Fahima Khatun, Shanjida Akter Meghla, Marufa Akter, Rabeya Khan, Sultana Khatun, Fariha Trisna, Taj Nehar",
+    "raw_commentary": "Bangladesh Women Squad : Nigar Sultana (c/wk), Dilara Akter (wk), Juairiya Ferdous, Sharmin Akhter, Sobhana Mostary, Shorna Akter, Ritu Moni, Nahida Akter, Fahima Khatun, Shanjida Akter Meghla, Marufa Akter, Rabeya Khan, Sultana Khatun, Fariha Trisna, Taj Nehar",
+    "timestamp": 1781635122.2342792,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781608415977",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_415977",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Head-to-Head in WT20Is : Australia: 5 Bangladesh: 0",
+    "raw_commentary": "Head-to-Head in WT20Is : Australia: 5 Bangladesh: 0",
+    "timestamp": 1781635122.2397401,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781608427218",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_RAIN_427218",
+    "runs_scored": "INFO",
+    "flavor": [
+      "weather"
+    ],
+    "commentary": "Preview by Mohammad Anab The Women's T20 World Cup is now moving to the iconic Headingley in Leeds, where A ustralia Women will face Bangladesh Women on Wednesday . With both teams opening their campaigns with victories, the Group A clash presents an opportunity for either side to take a significant step towards the semi-finals. The six-time WT20 WC champions, Australia, entered the tournament determined to re-establish themselves as the dominant force in women's cricket and they proved by registering a massive victory in their first game of the campaign against the runners-up of the last two WT20 WC, South Africa. Batting first, Australia scored a massive 172/8 on the back of a quickfire 50 from Phoebe Litchfield, who turned fully fit just in the nick of time. Later, Ellyse Perry and Georgia Wareham scored a 30-odd each and stitched a 58-run stand for the fifth wicket. All these efforts helped Australia reach the 170-run mark. In reply, South Africa had a horrible start as they lost their first two wickets in the first couple of overs. Except for South African skipper Laura Wolvaardt (44), none of the Proteas batters scored over 25 runs. South Africa got all out for 107 in 16.4 overs. This was their second-lowest total in a completed WT20I innings against Australia. Sophie Molineux and Alana King picked up two wickets each but leggie Wareham starred with the ball as she picked up three wickets. The 65-run win gave a huge NRR boost to Australia. Bangladesh, meanwhile, arrive full of confidence after securing a convincing six-wicket victory over the Netherlands in their opening match. Opener Juairiya Ferdous (50) starred with a half-century, while the experienced Sharmin Akhter (37*) guided the chase to help Bangladesh collect two valuable points. Bangladesh chased down a target of 140 in the last over against Dutch, which was the former's highest successful chase in a WT20 WC game. In the first innings, pacer Marufa Akter starred with the ball by picking 2/31 while Ritu Moni proved economical. The result demonstrated the progress Bangladesh have made in recent years and reinforced their reputation as a disciplined and competitive T20 side. However, their WT20 WC record is not that great. The win against Netherlands was only their second T20 World Cup victory since beating Ireland in 2014. The Asian side went winless in 2016, 2018, 2020 and 2023 before defeating Scotland in the 2024 edition. Much of Bangladesh's challenge will rest on the shoulders of captain Nigar Sultana Joty and an experienced bowling unit featuring Nahida Akter, Marufa Akter, Ritu Moni and Fahima Khatun. Their spin-heavy attack has often been the foundation of their success, and they will need another strong performance to contain Australia's powerful batting lineup. History favours Australia heading into the contest. The two teams have met five times in WT20Is, with Australia winning all five encounters. Headingley has traditionally offered assistance to seamers early in an innings before becoming more batting-friendly as the match progresses. The weather forecast suggests that rain could play the spoilsport during the game. Who will win this match? Join us at 2 PM IST (9:30 AM Local Time) on Wednesday for the live coverage.",
+    "raw_commentary": "Preview by Mohammad Anab The Women's T20 World Cup is now moving to the iconic Headingley in Leeds, where A ustralia Women will face Bangladesh Women on Wednesday . With both teams opening their campaigns with victories, the Group A clash presents an opportunity for either side to take a significant step towards the semi-finals. The six-time WT20 WC champions, Australia, entered the tournament determined to re-establish themselves as the dominant force in women's cricket and they proved by registering a massive victory in their first game of the campaign against the runners-up of the last two WT20 WC, South Africa. Batting first, Australia scored a massive 172/8 on the back of a quickfire 50 from Phoebe Litchfield, who turned fully fit just in the nick of time. Later, Ellyse Perry and Georgia Wareham scored a 30-odd each and stitched a 58-run stand for the fifth wicket. All these efforts helped Australia reach the 170-run mark. In reply, South Africa had a horrible start as they lost their first two wickets in the first couple of overs. Except for South African skipper Laura Wolvaardt (44), none of the Proteas batters scored over 25 runs. South Africa got all out for 107 in 16.4 overs. This was their second-lowest total in a completed WT20I innings against Australia. Sophie Molineux and Alana King picked up two wickets each but leggie Wareham starred with the ball as she picked up three wickets. The 65-run win gave a huge NRR boost to Australia. Bangladesh, meanwhile, arrive full of confidence after securing a convincing six-wicket victory over the Netherlands in their opening match. Opener Juairiya Ferdous (50) starred with a half-century, while the experienced Sharmin Akhter (37*) guided the chase to help Bangladesh collect two valuable points. Bangladesh chased down a target of 140 in the last over against Dutch, which was the former's highest successful chase in a WT20 WC game. In the first innings, pacer Marufa Akter starred with the ball by picking 2/31 while Ritu Moni proved economical. The result demonstrated the progress Bangladesh have made in recent years and reinforced their reputation as a disciplined and competitive T20 side. However, their WT20 WC record is not that great. The win against Netherlands was only their second T20 World Cup victory since beating Ireland in 2014. The Asian side went winless in 2016, 2018, 2020 and 2023 before defeating Scotland in the 2024 edition. Much of Bangladesh's challenge will rest on the shoulders of captain Nigar Sultana Joty and an experienced bowling unit featuring Nahida Akter, Marufa Akter, Ritu Moni and Fahima Khatun. Their spin-heavy attack has often been the foundation of their success, and they will need another strong performance to contain Australia's powerful batting lineup. History favours Australia heading into the contest. The two teams have met five times in WT20Is, with Australia winning all five encounters. Headingley has traditionally offered assistance to seamers early in an innings before becoming more batting-friendly as the match progresses. The weather forecast suggests that rain could play the spoilsport during the game. Who will win this match? Join us at 2 PM IST (9:30 AM Local Time) on Wednesday for the live coverage.",
+    "timestamp": 1781635122.6667433,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781608393496",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_393496",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Head-to-Head in WT20 WC : Australia: 2 Bangladesh: 0",
+    "raw_commentary": "Head-to-Head in WT20 WC : Australia: 2 Bangladesh: 0",
+    "timestamp": 1781635122.6725783,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781608438459",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_438459",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Bangladesh Women (Probable XI) : Dilara Akter, Juairiya Ferdous, Sharmin Akhter, Nigar Sultana (c & wk), Sobhana Mostary, Shorna Akter, Ritu Moni, Rabeya Khan, Marufa Akter, Sanjida Akter Meghla, Fariha Trisna",
+    "raw_commentary": "Bangladesh Women (Probable XI) : Dilara Akter, Juairiya Ferdous, Sharmin Akhter, Nigar Sultana (c & wk), Sobhana Mostary, Shorna Akter, Ritu Moni, Rabeya Khan, Marufa Akter, Sanjida Akter Meghla, Fariha Trisna",
+    "timestamp": 1781635124.2393997,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781622092763",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_STAT_092763",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781717400000, 'isExpiry': True, 'match_fKey': 'V8A', 'o': [{'option_value': 'Yes! The Bangla spinners can trouble Aus', 'poid': 204079, 'sequence': 0, 'votes': 0}, {'option_value': 'No! Aus are six-time champions for a reason', 'poid': 204078, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56166, 'q': 'Can Bangladesh register their first-ever WT20I win against Australia?'}",
+    "raw_commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781717400000, 'isExpiry': True, 'match_fKey': 'V8A', 'o': [{'option_value': 'Yes! The Bangla spinners can trouble Aus', 'poid': 204079, 'sequence': 0, 'votes': 0}, {'option_value': 'No! Aus are six-time champions for a reason', 'poid': 204078, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56166, 'q': 'Can Bangladesh register their first-ever WT20I win against Australia?'}",
+    "timestamp": 1781635124.7828908,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_V8A",
+    "event_key": "feed:CREX_V8A:1781609190938",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_190938",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Australia Women (Probable XI) : Beth Mooney (wk), Georgia Voll, Phoebe Litchfield, Ellyse Perry, Ashleigh Gardner, Georgia Wareham, Annabel Sutherland, Nicola Carey, Sophie Molineux (c), Kim Garth, Alana King",
+    "raw_commentary": "Australia Women (Probable XI) : Beth Mooney (wk), Georgia Voll, Phoebe Litchfield, Ellyse Perry, Ashleigh Gardner, Georgia Wareham, Annabel Sutherland, Nicola Carey, Sophie Molineux (c), Kim Garth, Alana King",
+    "timestamp": 1781635125.314042,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  }
+]

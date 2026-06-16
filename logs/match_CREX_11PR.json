@@ -1,0 +1,800 @@
+[
+  {
+    "match_id": "CREX_11PR",
+    "event_key": "feed:CREX_11PR:1781622453416",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_453416",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Bangladesh Squad : Litton Kumar Das (c and wk), Parvez Hossain Emon, Tanzid Hasan Tamim, Mohammad Saif Hassan, Shamim Hossain, Towhid Hridoy, Nurul Hasan Sohan (wk), Mahedi Hasan, Nasum Ahmed, Rishad Hossain, Shoriful Islam, Mustafizur Rahman, Taskin Ahmed, Nahid Rana, Abdul Gaffar Saqlain, Soumya Sarkar",
+    "raw_commentary": "Bangladesh Squad : Litton Kumar Das (c and wk), Parvez Hossain Emon, Tanzid Hasan Tamim, Mohammad Saif Hassan, Shamim Hossain, Towhid Hridoy, Nurul Hasan Sohan (wk), Mahedi Hasan, Nasum Ahmed, Rishad Hossain, Shoriful Islam, Mustafizur Rahman, Taskin Ahmed, Nahid Rana, Abdul Gaffar Saqlain, Soumya Sarkar",
+    "timestamp": 1781635032.9961257,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_11PR",
+    "event_key": "feed:CREX_11PR:1781622547466",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_547466",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Australia Squad : Mitchell Marsh (c), Xavier Bartlett, Cooper Connolly, Tim David, Joel Davies, Nathan Ellis, Aaron Hardie, Josh Inglis (wk), Spencer Johnson, Matthew Kuhnemann, Riley Meredith, Josh Philippe (wk), Matthew Renshaw, Adam Zampa, Nikhil Chaudhary",
+    "raw_commentary": "Australia Squad : Mitchell Marsh (c), Xavier Bartlett, Cooper Connolly, Tim David, Joel Davies, Nathan Ellis, Aaron Hardie, Josh Inglis (wk), Spencer Johnson, Matthew Kuhnemann, Riley Meredith, Josh Philippe (wk), Matthew Renshaw, Adam Zampa, Nikhil Chaudhary",
+    "timestamp": 1781635033.00453,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_11PR",
+    "event_key": "feed:CREX_11PR:1781623248981",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_248981",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Head-to-Head in T20Is : Matches Played: 11 Bangladesh Won: 4 Australia Won: 7",
+    "raw_commentary": "Head-to-Head in T20Is : Matches Played: 11 Bangladesh Won: 4 Australia Won: 7",
+    "timestamp": 1781635033.0072947,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_11PR",
+    "event_key": "feed:CREX_11PR:1781623610016",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_TOSS_610016",
+    "runs_scored": "INFO",
+    "flavor": [
+      "toss"
+    ],
+    "commentary": "Preview by AkshayaKrishna Polya Bangladesh 's capital went bonkers when they thumped Australia in the ODI series earlier this month. It was the first time that the Tigers managed to hunt down the Kangaroos in an ODI series. However, a Cooper Connolly special in the third ODI upstaged Shoriful Islam's six-fer before Adam Zampa hit the winning runs to deny the hosts a rare chance of a whitewash. The focus now shifts to the shortest format, with Bir Sreshtho Flight Lieutenant Matiur Rahman Stadium in Chattogram hosting the T20Is. The series opener will take place on Wednesday (June 17). The Aussies have now lost back-to-back ODI series in the subcontinent in the absence of several key players. However, the tourists are bolstered by the arrival of the skipper Mitchell Marsh. He missed the last two ODI series due to an ankle injury he sustained while playing for Lucknow Super Giants in the Indian Premier League. However, the 2021 T20 World Champions will be without some of their senior players. Speedsters Josh Hazlewood and Pat Cummins remain rested, while Travis Head was a late pull-out from the tour and has also been rested. Tanveer Sangha has been ruled out due to a hamstring injury he picked up in the ODIs against Pakistan. The all-rounders Marcus Stoinis and Glenn Maxwell have been left out because the visitors are looking to give young players a chance to build a team for the future. Cameron Green, who was previously selected for the entire tour, has now been rested, given a long home summer coming up. It gives the youngster, Joel Davies , who was sensational with his all-round prowess for Sydney Sixers, a chance to showcase his talent at the highest level, as he received a maiden call-up. The firepower of Tim David and wicketkeeper batter Josh Inglis , who led in the ODIs, are the experienced batters in the lineup, while Adam Zampa will lead the spin attack alongside the seamers Nathan Ellis and Xavier Bartlett . Spencer Johnson returns after a long injury lay-off and is fresh off some IPL experience with Chennai Super Kings. Riley Meredith, who recently made his international comeback after a stellar Big Bash season with Hobart Hurricanes, is also in the squad. All-rounder Aaron Hardie , left-arm spinner Matthew Kuhnemann , middle-order batter Matt Renshaw , wicketkeeper batter Josh Philippe and Cooper Connolly , fresh off a match-winning 149, make it a good bunch of talented players. India-born all-rounder Nikhil Chaudhary , who has been brilliant for the Hurricanes in the BBL, has received a maiden call-up, following Head's withdrawal. On the flip side, Bangladesh, despite being a strong suit at home and coming off a famous 2-1 ODI series win over their counterparts, have some injuries to deal with in the camp. Skipper Litton Das , who suffered a leg injury in the third ODI and was also retired hurt at one stage, remains in doubt for the series opener. A call on his participation will be taken very close to the toss. As a result, Soumya Sarkar has been added to the squad as a cover. Promising middle-order batter Towhid Hridoy is the vice-captain and most probably will come out to lead the side if Das is unavailable. In addition, Parvez Hossain Emon is ill and could miss the first T20I. The pace trio - Taskin Ahmed , Mustafizur Rahman and Nahid Rana - have all made a comeback into the T20I side after missing the previous series against New Zealand. That meant the likes of Tanzim Hasan Sakib , Ripon Mondal and Mohammad Saifuddin were dropped. However, whether Bangla Tigers field all three seamers is a question they will answer at the toss, as Shoriful Islam, who has been doing a fine job in the shortest format and is fresh off a brilliant six-wicket haul in the last ODI, is expected to retain his place. Bangladesh will heavily rely on the likes of Tanzid Hasan Tamim , Saif Hassan , Hridoy and Shamim Hossain with the bat, while b will be the backup gloveman in the side.",
+    "raw_commentary": "Preview by AkshayaKrishna Polya Bangladesh 's capital went bonkers when they thumped Australia in the ODI series earlier this month. It was the first time that the Tigers managed to hunt down the Kangaroos in an ODI series. However, a Cooper Connolly special in the third ODI upstaged Shoriful Islam's six-fer before Adam Zampa hit the winning runs to deny the hosts a rare chance of a whitewash. The focus now shifts to the shortest format, with Bir Sreshtho Flight Lieutenant Matiur Rahman Stadium in Chattogram hosting the T20Is. The series opener will take place on Wednesday (June 17). The Aussies have now lost back-to-back ODI series in the subcontinent in the absence of several key players. However, the tourists are bolstered by the arrival of the skipper Mitchell Marsh. He missed the last two ODI series due to an ankle injury he sustained while playing for Lucknow Super Giants in the Indian Premier League. However, the 2021 T20 World Champions will be without some of their senior players. Speedsters Josh Hazlewood and Pat Cummins remain rested, while Travis Head was a late pull-out from the tour and has also been rested. Tanveer Sangha has been ruled out due to a hamstring injury he picked up in the ODIs against Pakistan. The all-rounders Marcus Stoinis and Glenn Maxwell have been left out because the visitors are looking to give young players a chance to build a team for the future. Cameron Green, who was previously selected for the entire tour, has now been rested, given a long home summer coming up. It gives the youngster, Joel Davies , who was sensational with his all-round prowess for Sydney Sixers, a chance to showcase his talent at the highest level, as he received a maiden call-up. The firepower of Tim David and wicketkeeper batter Josh Inglis , who led in the ODIs, are the experienced batters in the lineup, while Adam Zampa will lead the spin attack alongside the seamers Nathan Ellis and Xavier Bartlett . Spencer Johnson returns after a long injury lay-off and is fresh off some IPL experience with Chennai Super Kings. Riley Meredith, who recently made his international comeback after a stellar Big Bash season with Hobart Hurricanes, is also in the squad. All-rounder Aaron Hardie , left-arm spinner Matthew Kuhnemann , middle-order batter Matt Renshaw , wicketkeeper batter Josh Philippe and Cooper Connolly , fresh off a match-winning 149, make it a good bunch of talented players. India-born all-rounder Nikhil Chaudhary , who has been brilliant for the Hurricanes in the BBL, has received a maiden call-up, following Head's withdrawal. On the flip side, Bangladesh, despite being a strong suit at home and coming off a famous 2-1 ODI series win over their counterparts, have some injuries to deal with in the camp. Skipper Litton Das , who suffered a leg injury in the third ODI and was also retired hurt at one stage, remains in doubt for the series opener. A call on his participation will be taken very close to the toss. As a result, Soumya Sarkar has been added to the squad as a cover. Promising middle-order batter Towhid Hridoy is the vice-captain and most probably will come out to lead the side if Das is unavailable. In addition, Parvez Hossain Emon is ill and could miss the first T20I. The pace trio - Taskin Ahmed , Mustafizur Rahman and Nahid Rana - have all made a comeback into the T20I side after missing the previous series against New Zealand. That meant the likes of Tanzim Hasan Sakib , Ripon Mondal and Mohammad Saifuddin were dropped. However, whether Bangla Tigers field all three seamers is a question they will answer at the toss, as Shoriful Islam, who has been doing a fine job in the shortest format and is fresh off a brilliant six-wicket haul in the last ODI, is expected to retain his place. Bangladesh will heavily rely on the likes of Tanzid Hasan Tamim , Saif Hassan , Hridoy and Shamim Hossain with the bat, while b will be the backup gloveman in the side.",
+    "timestamp": 1781635033.0115867,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_11PR",
+    "event_key": "feed:CREX_11PR:1781622453416",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_453416",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Bangladesh Squad : Litton Kumar Das (c and wk), Parvez Hossain Emon, Tanzid Hasan Tamim, Mohammad Saif Hassan, Shamim Hossain, Towhid Hridoy, Nurul Hasan Sohan (wk), Mahedi Hasan, Nasum Ahmed, Rishad Hossain, Shoriful Islam, Mustafizur Rahman, Taskin Ahmed, Nahid Rana, Abdul Gaffar Saqlain, Soumya Sarkar",
+    "raw_commentary": "Bangladesh Squad : Litton Kumar Das (c and wk), Parvez Hossain Emon, Tanzid Hasan Tamim, Mohammad Saif Hassan, Shamim Hossain, Towhid Hridoy, Nurul Hasan Sohan (wk), Mahedi Hasan, Nasum Ahmed, Rishad Hossain, Shoriful Islam, Mustafizur Rahman, Taskin Ahmed, Nahid Rana, Abdul Gaffar Saqlain, Soumya Sarkar",
+    "timestamp": 1781635039.882059,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_11PR",
+    "event_key": "feed:CREX_11PR:1781623248981",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_248981",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Head-to-Head in T20Is : Matches Played: 11 Bangladesh Won: 4 Australia Won: 7",
+    "raw_commentary": "Head-to-Head in T20Is : Matches Played: 11 Bangladesh Won: 4 Australia Won: 7",
+    "timestamp": 1781635040.7815928,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_11PR",
+    "event_key": "feed:CREX_11PR:1781622547466",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_547466",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Australia Squad : Mitchell Marsh (c), Xavier Bartlett, Cooper Connolly, Tim David, Joel Davies, Nathan Ellis, Aaron Hardie, Josh Inglis (wk), Spencer Johnson, Matthew Kuhnemann, Riley Meredith, Josh Philippe (wk), Matthew Renshaw, Adam Zampa, Nikhil Chaudhary",
+    "raw_commentary": "Australia Squad : Mitchell Marsh (c), Xavier Bartlett, Cooper Connolly, Tim David, Joel Davies, Nathan Ellis, Aaron Hardie, Josh Inglis (wk), Spencer Johnson, Matthew Kuhnemann, Riley Meredith, Josh Philippe (wk), Matthew Renshaw, Adam Zampa, Nikhil Chaudhary",
+    "timestamp": 1781635041.5819254,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_11PR",
+    "event_key": "feed:CREX_11PR:1781623610016",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_TOSS_610016",
+    "runs_scored": "INFO",
+    "flavor": [
+      "toss"
+    ],
+    "commentary": "Preview by AkshayaKrishna Polya Bangladesh 's capital went bonkers when they thumped Australia in the ODI series earlier this month. It was the first time that the Tigers managed to hunt down the Kangaroos in an ODI series. However, a Cooper Connolly special in the third ODI upstaged Shoriful Islam's six-fer before Adam Zampa hit the winning runs to deny the hosts a rare chance of a whitewash. The focus now shifts to the shortest format, with Bir Sreshtho Flight Lieutenant Matiur Rahman Stadium in Chattogram hosting the T20Is. The series opener will take place on Wednesday (June 17). The Aussies have now lost back-to-back ODI series in the subcontinent in the absence of several key players. However, the tourists are bolstered by the arrival of the skipper Mitchell Marsh. He missed the last two ODI series due to an ankle injury he sustained while playing for Lucknow Super Giants in the Indian Premier League. However, the 2021 T20 World Champions will be without some of their senior players. Speedsters Josh Hazlewood and Pat Cummins remain rested, while Travis Head was a late pull-out from the tour and has also been rested. Tanveer Sangha has been ruled out due to a hamstring injury he picked up in the ODIs against Pakistan. The all-rounders Marcus Stoinis and Glenn Maxwell have been left out because the visitors are looking to give young players a chance to build a team for the future. Cameron Green, who was previously selected for the entire tour, has now been rested, given a long home summer coming up. It gives the youngster, Joel Davies , who was sensational with his all-round prowess for Sydney Sixers, a chance to showcase his talent at the highest level, as he received a maiden call-up. The firepower of Tim David and wicketkeeper batter Josh Inglis , who led in the ODIs, are the experienced batters in the lineup, while Adam Zampa will lead the spin attack alongside the seamers Nathan Ellis and Xavier Bartlett . Spencer Johnson returns after a long injury lay-off and is fresh off some IPL experience with Chennai Super Kings. Riley Meredith, who recently made his international comeback after a stellar Big Bash season with Hobart Hurricanes, is also in the squad. All-rounder Aaron Hardie , left-arm spinner Matthew Kuhnemann , middle-order batter Matt Renshaw , wicketkeeper batter Josh Philippe and Cooper Connolly , fresh off a match-winning 149, make it a good bunch of talented players. India-born all-rounder Nikhil Chaudhary , who has been brilliant for the Hurricanes in the BBL, has received a maiden call-up, following Head's withdrawal. On the flip side, Bangladesh, despite being a strong suit at home and coming off a famous 2-1 ODI series win over their counterparts, have some injuries to deal with in the camp. Skipper Litton Das , who suffered a leg injury in the third ODI and was also retired hurt at one stage, remains in doubt for the series opener. A call on his participation will be taken very close to the toss. As a result, Soumya Sarkar has been added to the squad as a cover. Promising middle-order batter Towhid Hridoy is the vice-captain and most probably will come out to lead the side if Das is unavailable. In addition, Parvez Hossain Emon is ill and could miss the first T20I. The pace trio - Taskin Ahmed , Mustafizur Rahman and Nahid Rana - have all made a comeback into the T20I side after missing the previous series against New Zealand. That meant the likes of Tanzim Hasan Sakib , Ripon Mondal and Mohammad Saifuddin were dropped. However, whether Bangla Tigers field all three seamers is a question they will answer at the toss, as Shoriful Islam, who has been doing a fine job in the shortest format and is fresh off a brilliant six-wicket haul in the last ODI, is expected to retain his place. Bangladesh will heavily rely on the likes of Tanzid Hasan Tamim , Saif Hassan , Hridoy and Shamim Hossain with the bat, while b will be the backup gloveman in the side.",
+    "raw_commentary": "Preview by AkshayaKrishna Polya Bangladesh 's capital went bonkers when they thumped Australia in the ODI series earlier this month. It was the first time that the Tigers managed to hunt down the Kangaroos in an ODI series. However, a Cooper Connolly special in the third ODI upstaged Shoriful Islam's six-fer before Adam Zampa hit the winning runs to deny the hosts a rare chance of a whitewash. The focus now shifts to the shortest format, with Bir Sreshtho Flight Lieutenant Matiur Rahman Stadium in Chattogram hosting the T20Is. The series opener will take place on Wednesday (June 17). The Aussies have now lost back-to-back ODI series in the subcontinent in the absence of several key players. However, the tourists are bolstered by the arrival of the skipper Mitchell Marsh. He missed the last two ODI series due to an ankle injury he sustained while playing for Lucknow Super Giants in the Indian Premier League. However, the 2021 T20 World Champions will be without some of their senior players. Speedsters Josh Hazlewood and Pat Cummins remain rested, while Travis Head was a late pull-out from the tour and has also been rested. Tanveer Sangha has been ruled out due to a hamstring injury he picked up in the ODIs against Pakistan. The all-rounders Marcus Stoinis and Glenn Maxwell have been left out because the visitors are looking to give young players a chance to build a team for the future. Cameron Green, who was previously selected for the entire tour, has now been rested, given a long home summer coming up. It gives the youngster, Joel Davies , who was sensational with his all-round prowess for Sydney Sixers, a chance to showcase his talent at the highest level, as he received a maiden call-up. The firepower of Tim David and wicketkeeper batter Josh Inglis , who led in the ODIs, are the experienced batters in the lineup, while Adam Zampa will lead the spin attack alongside the seamers Nathan Ellis and Xavier Bartlett . Spencer Johnson returns after a long injury lay-off and is fresh off some IPL experience with Chennai Super Kings. Riley Meredith, who recently made his international comeback after a stellar Big Bash season with Hobart Hurricanes, is also in the squad. All-rounder Aaron Hardie , left-arm spinner Matthew Kuhnemann , middle-order batter Matt Renshaw , wicketkeeper batter Josh Philippe and Cooper Connolly , fresh off a match-winning 149, make it a good bunch of talented players. India-born all-rounder Nikhil Chaudhary , who has been brilliant for the Hurricanes in the BBL, has received a maiden call-up, following Head's withdrawal. On the flip side, Bangladesh, despite being a strong suit at home and coming off a famous 2-1 ODI series win over their counterparts, have some injuries to deal with in the camp. Skipper Litton Das , who suffered a leg injury in the third ODI and was also retired hurt at one stage, remains in doubt for the series opener. A call on his participation will be taken very close to the toss. As a result, Soumya Sarkar has been added to the squad as a cover. Promising middle-order batter Towhid Hridoy is the vice-captain and most probably will come out to lead the side if Das is unavailable. In addition, Parvez Hossain Emon is ill and could miss the first T20I. The pace trio - Taskin Ahmed , Mustafizur Rahman and Nahid Rana - have all made a comeback into the T20I side after missing the previous series against New Zealand. That meant the likes of Tanzim Hasan Sakib , Ripon Mondal and Mohammad Saifuddin were dropped. However, whether Bangla Tigers field all three seamers is a question they will answer at the toss, as Shoriful Islam, who has been doing a fine job in the shortest format and is fresh off a brilliant six-wicket haul in the last ODI, is expected to retain his place. Bangladesh will heavily rely on the likes of Tanzid Hasan Tamim , Saif Hassan , Hridoy and Shamim Hossain with the bat, while b will be the backup gloveman in the side.",
+    "timestamp": 1781635043.1263313,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_11PR",
+    "event_key": "feed:CREX_11PR:1781635317815",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_WICKET_317815",
+    "runs_scored": "INFO",
+    "flavor": [
+      "wicket"
+    ],
+    "commentary": "Bangladesh Probable XI : Saif Hassan, Tanzid Hasan Tamim, Litton Das (c & wk)/Soumya Sarkar, Towhid Hridoy (stand-in captain), Shamim Hossain, Nurul Hasan (backup wicketkeeper)/Parvez Hossain Emon (backup wicketkeeper), Mahedi Hasan, Rishad Hossain/Nasum Ahmed, Shoriful Islam/Taskin Ahmed, Mustafizur Rahman, Nahid Rana",
+    "raw_commentary": "Bangladesh Probable XI : Saif Hassan, Tanzid Hasan Tamim, Litton Das (c & wk)/Soumya Sarkar, Towhid Hridoy (stand-in captain), Shamim Hossain, Nurul Hasan (backup wicketkeeper)/Parvez Hossain Emon (backup wicketkeeper), Mahedi Hasan, Rishad Hossain/Nasum Ahmed, Shoriful Islam/Taskin Ahmed, Mustafizur Rahman, Nahid Rana",
+    "timestamp": 1781635531.0731153,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_11PR",
+    "event_key": "feed:CREX_11PR:1781635317815",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_WICKET_317815",
+    "runs_scored": "INFO",
+    "flavor": [
+      "wicket"
+    ],
+    "commentary": "Bangladesh Probable XI : Saif Hassan, Tanzid Hasan Tamim, Litton Das (c & wk)/Soumya Sarkar, Towhid Hridoy (stand-in captain), Shamim Hossain, Nurul Hasan (backup wicketkeeper)/Parvez Hossain Emon (backup wicketkeeper), Mahedi Hasan, Rishad Hossain/Nasum Ahmed, Shoriful Islam/Taskin Ahmed, Mustafizur Rahman, Nahid Rana",
+    "raw_commentary": "Bangladesh Probable XI : Saif Hassan, Tanzid Hasan Tamim, Litton Das (c & wk)/Soumya Sarkar, Towhid Hridoy (stand-in captain), Shamim Hossain, Nurul Hasan (backup wicketkeeper)/Parvez Hossain Emon (backup wicketkeeper), Mahedi Hasan, Rishad Hossain/Nasum Ahmed, Shoriful Islam/Taskin Ahmed, Mustafizur Rahman, Nahid Rana",
+    "timestamp": 1781635531.9671881,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_11PR",
+    "event_key": "feed:CREX_11PR:1781635558372",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_558372",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Australia Probable XI : Mitchell Marsh (c), Josh Inglis (wk), Cooper Connolly, Tim David, Matt Renshaw, Joel Davies/Nikhil Chaudhary, Aaron Hardie, Nathan Ellis, Xavier Bartlett, Spencer Johnson, Adam Zampa",
+    "raw_commentary": "Australia Probable XI : Mitchell Marsh (c), Josh Inglis (wk), Cooper Connolly, Tim David, Matt Renshaw, Joel Davies/Nikhil Chaudhary, Aaron Hardie, Nathan Ellis, Xavier Bartlett, Spencer Johnson, Adam Zampa",
+    "timestamp": 1781635688.3249297,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_11PR",
+    "event_key": "feed:CREX_11PR:1781635558372",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_558372",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Australia Probable XI : Mitchell Marsh (c), Josh Inglis (wk), Cooper Connolly, Tim David, Matt Renshaw, Joel Davies/Nikhil Chaudhary, Aaron Hardie, Nathan Ellis, Xavier Bartlett, Spencer Johnson, Adam Zampa",
+    "raw_commentary": "Australia Probable XI : Mitchell Marsh (c), Josh Inglis (wk), Cooper Connolly, Tim David, Matt Renshaw, Joel Davies/Nikhil Chaudhary, Aaron Hardie, Nathan Ellis, Xavier Bartlett, Spencer Johnson, Adam Zampa",
+    "timestamp": 1781635690.4026642,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_11PR",
+    "event_key": "feed:CREX_11PR:1781635720673",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_STAT_720673",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781712000000, 'isExpiry': True, 'match_fKey': '11PR', 'o': [{'option_value': 'Yes', 'poid': 204211, 'sequence': 0, 'votes': 0}, {'option_value': 'No, Bangla to dominate again', 'poid': 204212, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56207, 'q': 'Can Australia bounce back in the T20Is?'}",
+    "raw_commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781712000000, 'isExpiry': True, 'match_fKey': '11PR', 'o': [{'option_value': 'Yes', 'poid': 204211, 'sequence': 0, 'votes': 0}, {'option_value': 'No, Bangla to dominate again', 'poid': 204212, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56207, 'q': 'Can Australia bounce back in the T20Is?'}",
+    "timestamp": 1781635768.0454097,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_11PR",
+    "event_key": "feed:CREX_11PR:1781635720673",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_STAT_720673",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781712000000, 'isExpiry': True, 'match_fKey': '11PR', 'o': [{'option_value': 'Yes', 'poid': 204211, 'sequence': 0, 'votes': 0}, {'option_value': 'No, Bangla to dominate again', 'poid': 204212, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56207, 'q': 'Can Australia bounce back in the T20Is?'}",
+    "raw_commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781712000000, 'isExpiry': True, 'match_fKey': '11PR', 'o': [{'option_value': 'Yes', 'poid': 204211, 'sequence': 0, 'votes': 0}, {'option_value': 'No, Bangla to dominate again', 'poid': 204212, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56207, 'q': 'Can Australia bounce back in the T20Is?'}",
+    "timestamp": 1781635768.6304832,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  }
+]

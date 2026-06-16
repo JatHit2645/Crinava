@@ -1,0 +1,800 @@
+[
+  {
+    "match_id": "CREX_124B",
+    "event_key": "feed:CREX_124B:1781625064172",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_064172",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "India A Squad : Tilak Varma (c), Ruturaj Gaikwad, Priyansh Arya, Vaibhav Sooryavanshi, Ayush Badoni, Nishant Sindhu, Suryansh Shedge, Prabhsimran Singh (wk), Kumar Kushagra (wk), Vipraj Nigam, Yash Thakur, Yudhvir Singh, Anshul Kamboj, Arshad Khan, Anukul Roy",
+    "raw_commentary": "India A Squad : Tilak Varma (c), Ruturaj Gaikwad, Priyansh Arya, Vaibhav Sooryavanshi, Ayush Badoni, Nishant Sindhu, Suryansh Shedge, Prabhsimran Singh (wk), Kumar Kushagra (wk), Vipraj Nigam, Yash Thakur, Yudhvir Singh, Anshul Kamboj, Arshad Khan, Anukul Roy",
+    "timestamp": 1781635123.1102946,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_124B",
+    "event_key": "feed:CREX_124B:1781625079631",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_079631",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Afghanistan A Squad : Imran Mir (c), Noor ul Rahman (wk), Hassan Eisakhil, Bahir Shah, Ijaz Ahmad Ahmadzai, Farmanullah Safi, Shams Ur Rahman, Khalil Gurbaz, Zahir Khan, Faridoon Dawoodzai, Mohammad Ibrahim, Abdullah Ahmadzai, Khalid Taniwal, Ishaq Rahimi, Faisal Khan Ahmadzai",
+    "raw_commentary": "Afghanistan A Squad : Imran Mir (c), Noor ul Rahman (wk), Hassan Eisakhil, Bahir Shah, Ijaz Ahmad Ahmadzai, Farmanullah Safi, Shams Ur Rahman, Khalil Gurbaz, Zahir Khan, Faridoon Dawoodzai, Mohammad Ibrahim, Abdullah Ahmadzai, Khalid Taniwal, Ishaq Rahimi, Faisal Khan Ahmadzai",
+    "timestamp": 1781635123.1185691,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_124B",
+    "event_key": "feed:CREX_124B:1781625087360",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_STAT_087360",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "SQUAD UPDATE : - Seamer Yudhvir Singh has been injured and will now fly back to India. He will be replaced by express pacer Ashok Sharma, who came into the limelight after clocking some of the fastest deliveries at IPL 2026.",
+    "raw_commentary": "SQUAD UPDATE : - Seamer Yudhvir Singh has been injured and will now fly back to India. He will be replaced by express pacer Ashok Sharma, who came into the limelight after clocking some of the fastest deliveries at IPL 2026.",
+    "timestamp": 1781635123.1210525,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_124B",
+    "event_key": "feed:CREX_124B:1781625091225",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_RAIN_091225",
+    "runs_scored": "INFO",
+    "flavor": [
+      "weather"
+    ],
+    "commentary": "Preview by Mohammad Anab India A and Afghanistan A will meet once again in a crucial Tri-Nation A Series encounter in Dambulla on Wednesday , with both teams looking to strengthen their chances of reaching the final. This will be India's final league game and with one win from three games, this is a must-win encounter for them if they want to reach the final. Afghanistan A will be playing their second last game and the side has registered one win from their two games so far. If the Afghan side wins both their league games, then they will get a confirmed berth at the final while if they win only one, then NRR will be taken into consideration. Both sides met once in the tri-series and in that high-scoring encounter, it was Afghanistan that emerged victorious. In a 49-over per side encounter, India batted first and scored a mammoth 349/9. Prabhsimran Singh scored 84 while Vaibhav Sooryavanshi smashed 44 off just 22 balls. Later, Ruturaj Gaikwad and Tilak Varma scored 66 each. For Afghanistan, Abdollah Ahmadzai picked up a five-wicket haul while Farmanullah took three scalps but proved expensive. In reply, Afghanistan skipper Imran Mir scored an unbeaten 75 while Bahir smashed an unbeaten 51. Both of them took the Afghanistan score to 177/2 after 25.5 overs before rain intervened. The continuous rain ensured that no further play was possible and Afghanistan won by 4 runs (DLS method). India faced a defeat in their last game against Sri Lanka A, too. Both teams scored 265 and the match went into the Super Over. Batting second in the Super Over, India scored just 9/0 against Sri Lanka's 16/0 and ultimately lost the game. The game took a long time to finish and the Super Over was played in near-darkness. However, after the Super Over, the Indian batting pair of Vaibhav and Suryansh Shedge got involved in a verbal spat with some of the Lankan players. The situation got intense before both parties were separated by some of the onlookers. According to reports, the match referee, Pradeep Jeyapragash, has imposed sanctions on the Lankan players who were involved in the spat. India A have also made a change in their squad too. Seamer Yudhvir Singh, who didn't feature in any of the three games, has suffered a shoulder injury and will be flying back to India. He will be replaced by express pacer Ashok Sharma, who gained attention by bowling some quick spells during the IPL 2026. The management might field Sharma in this fixture against Afghanistan as India wants to bolster their pace attack on the sluggish Dambulla track. One of the key battles could be between India's powerful batting lineup and Afghanistan's disciplined spin attack. Afghanistan will once again look to use spin through the middle overs to disrupt India's rhythm, while India will be keen to attack early and prevent the bowlers from settling. The contest between Ruturaj Gaikwad and Zahir Khan could be particularly influential in determining the course of the match. With a place in the final potentially at stake, neither team can afford a slip-up. India A will be eager to avenge their earlier defeat and reaffirm their credentials as tournament favourites, while Afghanistan A will be looking to prove that their previous success was no fluke. Who will win this match? Join us at 9 AM IST & Local Time on Wednesday for the live coverage.",
+    "raw_commentary": "Preview by Mohammad Anab India A and Afghanistan A will meet once again in a crucial Tri-Nation A Series encounter in Dambulla on Wednesday , with both teams looking to strengthen their chances of reaching the final. This will be India's final league game and with one win from three games, this is a must-win encounter for them if they want to reach the final. Afghanistan A will be playing their second last game and the side has registered one win from their two games so far. If the Afghan side wins both their league games, then they will get a confirmed berth at the final while if they win only one, then NRR will be taken into consideration. Both sides met once in the tri-series and in that high-scoring encounter, it was Afghanistan that emerged victorious. In a 49-over per side encounter, India batted first and scored a mammoth 349/9. Prabhsimran Singh scored 84 while Vaibhav Sooryavanshi smashed 44 off just 22 balls. Later, Ruturaj Gaikwad and Tilak Varma scored 66 each. For Afghanistan, Abdollah Ahmadzai picked up a five-wicket haul while Farmanullah took three scalps but proved expensive. In reply, Afghanistan skipper Imran Mir scored an unbeaten 75 while Bahir smashed an unbeaten 51. Both of them took the Afghanistan score to 177/2 after 25.5 overs before rain intervened. The continuous rain ensured that no further play was possible and Afghanistan won by 4 runs (DLS method). India faced a defeat in their last game against Sri Lanka A, too. Both teams scored 265 and the match went into the Super Over. Batting second in the Super Over, India scored just 9/0 against Sri Lanka's 16/0 and ultimately lost the game. The game took a long time to finish and the Super Over was played in near-darkness. However, after the Super Over, the Indian batting pair of Vaibhav and Suryansh Shedge got involved in a verbal spat with some of the Lankan players. The situation got intense before both parties were separated by some of the onlookers. According to reports, the match referee, Pradeep Jeyapragash, has imposed sanctions on the Lankan players who were involved in the spat. India A have also made a change in their squad too. Seamer Yudhvir Singh, who didn't feature in any of the three games, has suffered a shoulder injury and will be flying back to India. He will be replaced by express pacer Ashok Sharma, who gained attention by bowling some quick spells during the IPL 2026. The management might field Sharma in this fixture against Afghanistan as India wants to bolster their pace attack on the sluggish Dambulla track. One of the key battles could be between India's powerful batting lineup and Afghanistan's disciplined spin attack. Afghanistan will once again look to use spin through the middle overs to disrupt India's rhythm, while India will be keen to attack early and prevent the bowlers from settling. The contest between Ruturaj Gaikwad and Zahir Khan could be particularly influential in determining the course of the match. With a place in the final potentially at stake, neither team can afford a slip-up. India A will be eager to avenge their earlier defeat and reaffirm their credentials as tournament favourites, while Afghanistan A will be looking to prove that their previous success was no fluke. Who will win this match? Join us at 9 AM IST & Local Time on Wednesday for the live coverage.",
+    "timestamp": 1781635123.1250527,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_124B",
+    "event_key": "feed:CREX_124B:1781625095090",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_095090",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "India A (Probable XI) : Prabhsimran Singh (wk), Vaibhav Sooryavanshi, Nishant Sindhu, Ruturaj Gaikwad, Tilak Varma (c), Ayush Badoni, Suryansh Shedge, Anukul Roy, Arshad Khan, Vipraj Nigam, Yash Thakur/Ashok Sharma",
+    "raw_commentary": "India A (Probable XI) : Prabhsimran Singh (wk), Vaibhav Sooryavanshi, Nishant Sindhu, Ruturaj Gaikwad, Tilak Varma (c), Ayush Badoni, Suryansh Shedge, Anukul Roy, Arshad Khan, Vipraj Nigam, Yash Thakur/Ashok Sharma",
+    "timestamp": 1781635123.1275263,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_124B",
+    "event_key": "feed:CREX_124B:1781625173872",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_173872",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Afghanistan A (Probable XI) : Imran Mir (c), Mohammad Ishaq (wk), Bahir Shah, Hassan Eisakhil, Khalid Taniwal, Shams ur Rahman, Farmanullah Safi, Ijaz Ahmad Ahmadzai, Khalil Gurbaz, Zahir Khan, Abdullah Ahmadzai",
+    "raw_commentary": "Afghanistan A (Probable XI) : Imran Mir (c), Mohammad Ishaq (wk), Bahir Shah, Hassan Eisakhil, Khalid Taniwal, Shams ur Rahman, Farmanullah Safi, Ijaz Ahmad Ahmadzai, Khalil Gurbaz, Zahir Khan, Abdullah Ahmadzai",
+    "timestamp": 1781635123.1299112,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_124B",
+    "event_key": "feed:CREX_124B:1781628234154",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_STAT_234154",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781724600000, 'isExpiry': True, 'match_fKey': '124B', 'o': [{'option_value': 'Yes! They will qualify by defeating Afg A', 'poid': 204110, 'sequence': 0, 'votes': 0}, {'option_value': 'No! Afg A will again beat India A', 'poid': 204109, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56180, 'q': 'Will India A be able to qualify for the final of the tri-series?'}",
+    "raw_commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781724600000, 'isExpiry': True, 'match_fKey': '124B', 'o': [{'option_value': 'Yes! They will qualify by defeating Afg A', 'poid': 204110, 'sequence': 0, 'votes': 0}, {'option_value': 'No! Afg A will again beat India A', 'poid': 204109, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56180, 'q': 'Will India A be able to qualify for the final of the tri-series?'}",
+    "timestamp": 1781635123.133952,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_124B",
+    "event_key": "feed:CREX_124B:1781625079631",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_079631",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Afghanistan A Squad : Imran Mir (c), Noor ul Rahman (wk), Hassan Eisakhil, Bahir Shah, Ijaz Ahmad Ahmadzai, Farmanullah Safi, Shams Ur Rahman, Khalil Gurbaz, Zahir Khan, Faridoon Dawoodzai, Mohammad Ibrahim, Abdullah Ahmadzai, Khalid Taniwal, Ishaq Rahimi, Faisal Khan Ahmadzai",
+    "raw_commentary": "Afghanistan A Squad : Imran Mir (c), Noor ul Rahman (wk), Hassan Eisakhil, Bahir Shah, Ijaz Ahmad Ahmadzai, Farmanullah Safi, Shams Ur Rahman, Khalil Gurbaz, Zahir Khan, Faridoon Dawoodzai, Mohammad Ibrahim, Abdullah Ahmadzai, Khalid Taniwal, Ishaq Rahimi, Faisal Khan Ahmadzai",
+    "timestamp": 1781635125.3216612,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_124B",
+    "event_key": "feed:CREX_124B:1781625064172",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_064172",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "India A Squad : Tilak Varma (c), Ruturaj Gaikwad, Priyansh Arya, Vaibhav Sooryavanshi, Ayush Badoni, Nishant Sindhu, Suryansh Shedge, Prabhsimran Singh (wk), Kumar Kushagra (wk), Vipraj Nigam, Yash Thakur, Yudhvir Singh, Anshul Kamboj, Arshad Khan, Anukul Roy",
+    "raw_commentary": "India A Squad : Tilak Varma (c), Ruturaj Gaikwad, Priyansh Arya, Vaibhav Sooryavanshi, Ayush Badoni, Nishant Sindhu, Suryansh Shedge, Prabhsimran Singh (wk), Kumar Kushagra (wk), Vipraj Nigam, Yash Thakur, Yudhvir Singh, Anshul Kamboj, Arshad Khan, Anukul Roy",
+    "timestamp": 1781635125.3315432,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_124B",
+    "event_key": "feed:CREX_124B:1781625087360",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_STAT_087360",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "SQUAD UPDATE : - Seamer Yudhvir Singh has been injured and will now fly back to India. He will be replaced by express pacer Ashok Sharma, who came into the limelight after clocking some of the fastest deliveries at IPL 2026.",
+    "raw_commentary": "SQUAD UPDATE : - Seamer Yudhvir Singh has been injured and will now fly back to India. He will be replaced by express pacer Ashok Sharma, who came into the limelight after clocking some of the fastest deliveries at IPL 2026.",
+    "timestamp": 1781635126.9310117,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_124B",
+    "event_key": "feed:CREX_124B:1781625091225",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_RAIN_091225",
+    "runs_scored": "INFO",
+    "flavor": [
+      "weather"
+    ],
+    "commentary": "Preview by Mohammad Anab India A and Afghanistan A will meet once again in a crucial Tri-Nation A Series encounter in Dambulla on Wednesday , with both teams looking to strengthen their chances of reaching the final. This will be India's final league game and with one win from three games, this is a must-win encounter for them if they want to reach the final. Afghanistan A will be playing their second last game and the side has registered one win from their two games so far. If the Afghan side wins both their league games, then they will get a confirmed berth at the final while if they win only one, then NRR will be taken into consideration. Both sides met once in the tri-series and in that high-scoring encounter, it was Afghanistan that emerged victorious. In a 49-over per side encounter, India batted first and scored a mammoth 349/9. Prabhsimran Singh scored 84 while Vaibhav Sooryavanshi smashed 44 off just 22 balls. Later, Ruturaj Gaikwad and Tilak Varma scored 66 each. For Afghanistan, Abdollah Ahmadzai picked up a five-wicket haul while Farmanullah took three scalps but proved expensive. In reply, Afghanistan skipper Imran Mir scored an unbeaten 75 while Bahir smashed an unbeaten 51. Both of them took the Afghanistan score to 177/2 after 25.5 overs before rain intervened. The continuous rain ensured that no further play was possible and Afghanistan won by 4 runs (DLS method). India faced a defeat in their last game against Sri Lanka A, too. Both teams scored 265 and the match went into the Super Over. Batting second in the Super Over, India scored just 9/0 against Sri Lanka's 16/0 and ultimately lost the game. The game took a long time to finish and the Super Over was played in near-darkness. However, after the Super Over, the Indian batting pair of Vaibhav and Suryansh Shedge got involved in a verbal spat with some of the Lankan players. The situation got intense before both parties were separated by some of the onlookers. According to reports, the match referee, Pradeep Jeyapragash, has imposed sanctions on the Lankan players who were involved in the spat. India A have also made a change in their squad too. Seamer Yudhvir Singh, who didn't feature in any of the three games, has suffered a shoulder injury and will be flying back to India. He will be replaced by express pacer Ashok Sharma, who gained attention by bowling some quick spells during the IPL 2026. The management might field Sharma in this fixture against Afghanistan as India wants to bolster their pace attack on the sluggish Dambulla track. One of the key battles could be between India's powerful batting lineup and Afghanistan's disciplined spin attack. Afghanistan will once again look to use spin through the middle overs to disrupt India's rhythm, while India will be keen to attack early and prevent the bowlers from settling. The contest between Ruturaj Gaikwad and Zahir Khan could be particularly influential in determining the course of the match. With a place in the final potentially at stake, neither team can afford a slip-up. India A will be eager to avenge their earlier defeat and reaffirm their credentials as tournament favourites, while Afghanistan A will be looking to prove that their previous success was no fluke. Who will win this match? Join us at 9 AM IST & Local Time on Wednesday for the live coverage.",
+    "raw_commentary": "Preview by Mohammad Anab India A and Afghanistan A will meet once again in a crucial Tri-Nation A Series encounter in Dambulla on Wednesday , with both teams looking to strengthen their chances of reaching the final. This will be India's final league game and with one win from three games, this is a must-win encounter for them if they want to reach the final. Afghanistan A will be playing their second last game and the side has registered one win from their two games so far. If the Afghan side wins both their league games, then they will get a confirmed berth at the final while if they win only one, then NRR will be taken into consideration. Both sides met once in the tri-series and in that high-scoring encounter, it was Afghanistan that emerged victorious. In a 49-over per side encounter, India batted first and scored a mammoth 349/9. Prabhsimran Singh scored 84 while Vaibhav Sooryavanshi smashed 44 off just 22 balls. Later, Ruturaj Gaikwad and Tilak Varma scored 66 each. For Afghanistan, Abdollah Ahmadzai picked up a five-wicket haul while Farmanullah took three scalps but proved expensive. In reply, Afghanistan skipper Imran Mir scored an unbeaten 75 while Bahir smashed an unbeaten 51. Both of them took the Afghanistan score to 177/2 after 25.5 overs before rain intervened. The continuous rain ensured that no further play was possible and Afghanistan won by 4 runs (DLS method). India faced a defeat in their last game against Sri Lanka A, too. Both teams scored 265 and the match went into the Super Over. Batting second in the Super Over, India scored just 9/0 against Sri Lanka's 16/0 and ultimately lost the game. The game took a long time to finish and the Super Over was played in near-darkness. However, after the Super Over, the Indian batting pair of Vaibhav and Suryansh Shedge got involved in a verbal spat with some of the Lankan players. The situation got intense before both parties were separated by some of the onlookers. According to reports, the match referee, Pradeep Jeyapragash, has imposed sanctions on the Lankan players who were involved in the spat. India A have also made a change in their squad too. Seamer Yudhvir Singh, who didn't feature in any of the three games, has suffered a shoulder injury and will be flying back to India. He will be replaced by express pacer Ashok Sharma, who gained attention by bowling some quick spells during the IPL 2026. The management might field Sharma in this fixture against Afghanistan as India wants to bolster their pace attack on the sluggish Dambulla track. One of the key battles could be between India's powerful batting lineup and Afghanistan's disciplined spin attack. Afghanistan will once again look to use spin through the middle overs to disrupt India's rhythm, while India will be keen to attack early and prevent the bowlers from settling. The contest between Ruturaj Gaikwad and Zahir Khan could be particularly influential in determining the course of the match. With a place in the final potentially at stake, neither team can afford a slip-up. India A will be eager to avenge their earlier defeat and reaffirm their credentials as tournament favourites, while Afghanistan A will be looking to prove that their previous success was no fluke. Who will win this match? Join us at 9 AM IST & Local Time on Wednesday for the live coverage.",
+    "timestamp": 1781635126.9701686,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_124B",
+    "event_key": "feed:CREX_124B:1781625173872",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_173872",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Afghanistan A (Probable XI) : Imran Mir (c), Mohammad Ishaq (wk), Bahir Shah, Hassan Eisakhil, Khalid Taniwal, Shams ur Rahman, Farmanullah Safi, Ijaz Ahmad Ahmadzai, Khalil Gurbaz, Zahir Khan, Abdullah Ahmadzai",
+    "raw_commentary": "Afghanistan A (Probable XI) : Imran Mir (c), Mohammad Ishaq (wk), Bahir Shah, Hassan Eisakhil, Khalid Taniwal, Shams ur Rahman, Farmanullah Safi, Ijaz Ahmad Ahmadzai, Khalil Gurbaz, Zahir Khan, Abdullah Ahmadzai",
+    "timestamp": 1781635127.0214815,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_124B",
+    "event_key": "feed:CREX_124B:1781625095090",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_INFO_095090",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "India A (Probable XI) : Prabhsimran Singh (wk), Vaibhav Sooryavanshi, Nishant Sindhu, Ruturaj Gaikwad, Tilak Varma (c), Ayush Badoni, Suryansh Shedge, Anukul Roy, Arshad Khan, Vipraj Nigam, Yash Thakur/Ashok Sharma",
+    "raw_commentary": "India A (Probable XI) : Prabhsimran Singh (wk), Vaibhav Sooryavanshi, Nishant Sindhu, Ruturaj Gaikwad, Tilak Varma (c), Ayush Badoni, Suryansh Shedge, Anukul Roy, Arshad Khan, Vipraj Nigam, Yash Thakur/Ashok Sharma",
+    "timestamp": 1781635127.0634756,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  },
+  {
+    "match_id": "CREX_124B",
+    "event_key": "feed:CREX_124B:1781628234154",
+    "score": "0/0(0.0",
+    "over_ball": "UPDATE_STAT_234154",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781724600000, 'isExpiry': True, 'match_fKey': '124B', 'o': [{'option_value': 'Yes! They will qualify by defeating Afg A', 'poid': 204110, 'sequence': 0, 'votes': 0}, {'option_value': 'No! Afg A will again beat India A', 'poid': 204109, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56180, 'q': 'Will India A be able to qualify for the final of the tri-series?'}",
+    "raw_commentary": "{'eventStatus': 'UPCOMING_MATCH', 'expiryTime': 1781724600000, 'isExpiry': True, 'match_fKey': '124B', 'o': [{'option_value': 'Yes! They will qualify by defeating Afg A', 'poid': 204110, 'sequence': 0, 'votes': 0}, {'option_value': 'No! Afg A will again beat India A', 'poid': 204109, 'sequence': 1, 'votes': 0}], 'pollType': 'MATCH', 'poll_id': 56180, 'q': 'Will India A be able to qualify for the final of the tri-series?'}",
+    "timestamp": 1781635127.0747228,
+    "telemetry": {
+      "active": {
+        "striker": null,
+        "non_striker": null,
+        "bowler": null
+      },
+      "striker": null,
+      "non_striker": null,
+      "bowler": null,
+      "extras": {
+        "total": 0,
+        "byes": 0,
+        "legByes": 0,
+        "wides": 0,
+        "noBalls": 0,
+        "penalty": 0
+      },
+      "recent_balls": [],
+      "dismissal_timeline": []
+    },
+    "scorecard_cache": {
+      "data": [],
+      "telemetry": {
+        "active": {
+          "striker": null,
+          "non_striker": null,
+          "bowler": null
+        },
+        "striker": null,
+        "non_striker": null,
+        "bowler": null,
+        "extras": {
+          "total": 0,
+          "byes": 0,
+          "legByes": 0,
+          "wides": 0,
+          "noBalls": 0,
+          "penalty": 0
+        },
+        "recent_balls": [],
+        "dismissal_timeline": []
+      },
+      "extras": []
+    }
+  }
+]

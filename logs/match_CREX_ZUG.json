@@ -1,0 +1,266 @@
+[
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779828742208",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "19.5",
+    "runs_scored": "4",
+    "flavor": [
+      "ball"
+    ],
+    "commentary": "Chris Wood to Simon Harmer - FOUR!! DISMISSED!! Good length and outside off. Harmer throws his hands at it and blazes it over the extra cover fielder for a boundary.",
+    "timestamp": 1779893965.9911582,
+    "win_predictor": {
+      "win_probability": 4.87,
+      "momentum_score": 7.68,
+      "history_used": 1,
+      "batting_team": "Ess",
+      "bowling_team": "Ham"
+    }
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779828774802",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "19.6",
+    "runs_scored": "2",
+    "flavor": [
+      "ball"
+    ],
+    "commentary": "Chris Wood to Simon Harmer - DROPPED? Full and around off, with the pace taken off. Harmer gets forward and tries to launch it downtown, but ends up mistiming it to long off, where Vince runs across to his right and slides in, but the ball falls short of him. He did well to bring his body into line to stop the ball. Two runs taken. HAMPSHIRE HAVE DEFEATED ESSEX BY 30 RUNS!!!",
+    "timestamp": 1779893980.5877478,
+    "win_predictor": {
+      "win_probability": 64.27,
+      "momentum_score": 18.51,
+      "history_used": 2,
+      "batting_team": "Ess",
+      "bowling_team": "Ham"
+    }
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779828823748",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "UPDATE",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "HAM won by 30 runs",
+    "timestamp": 1779893997.6897004
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779828877423",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "STAT",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "2:23 AM IST 9:53 PM Local Time: Hampshire win by 30 runs! It has been another one of those outings where Hampshire have overpowered the Essex side! The homecoming has been a fruitful one for them and they are back to winning ways in style! Essex won the toss earlier and elected to field first. The Hampshire openers could not make a significant impact, and they were dismissed early leaving the score at 26/2. Soon they were at 52/3, and it was a delicate stage. However, they were bailed out of that situation with two fine partnerships that followed. Firstly, it was Joe Weatherley and Tristan Stubbs. They stitched 64 runs together and they did that at a good rate . They pushed the score to 116 before Weatherley mistimed one to get out for 47. Stubbs was then joined by Hilton Cartwright. They took the attack to a different sphere altogether. The batters added an unbeaten 84 runs for the 5th wicket. Stubbs finished with 69 off 42 balls. Cartwright signed off with 46 off just 21 balls. Essex had no answer at the backend to this power hitting exhibit as the Hampshire side ended with an even 200 on the board. The pick of the bowlers for Essex was Simon Harmer with 1/23. The chase was always going to be tricky and the powerplay was the key. Hampshire were up to the task with some fine bowling upfront. Chris Wood set the tone early as he picked two wickets in the first 5 overs. The Essex chase was reduced to 35/2. It soon became 41/3 as Scott Currie got rid of the dangerous Michael Pepper. There was a small partnership Luc Benkenstein and Wiaan Mulder. They added 39 runs together before Mulder collapsed to the rising pressure of the required run rate. Noah Thain joined Benkenstein and they took the score to 115 before a collapse took place. From 115/4 they slipped to 130/7. It was Scott Currie who triggered that as he took all the 3 wickets to fall in that space. The match was more or less done there. Luc Benkenstein the key batter was also gone for 48 off 31. The required rate mount to a situation that was practically not possible. However, Simon Harmer did some fine hitting at the backend to make sure the margin of loss wasn't a massive one to dent the NRR. He finished with 36 off 18 balls. However, the honours were taken by Hampshire who won by a decent 30 runs. The pick of the bowlers was Scott Currie for his phenomenal 4/18 in four overs. It was a complete performance from the Hampshire side, and they have bounced back in style at home.",
+    "timestamp": 1779893997.6909583
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779829062282",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "STAT",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "James Vince (Hampshire Captain) : (On where the game was won) \"I think the game was won in the second half of our innings. At one stage, it looked like 170 would probably have been a par score, but the way those guys batted at the back end got us close to 200. It was a fantastic partnership, and then picking up a couple of wickets early always helps as well. Scott Currie\u2019s spell was magnificent too. (On Scott Currie\u2019s effectiveness in T20 cricket) I think Scott is more of a defensive bowler. He does his best work and picks up wickets when batters are trying to attack him. That role suits the balance of our bowling attack at the moment, especially because we are slightly short on bowling options due to injuries and some England and England A call-ups. He\u2019s definitely someone we rely on a lot, and generally, his best performances come when opposition batters are taking risks against him. (Who can be the Player of the Match?) I hate to disagree with whoever picked the Player of the Match, but Hilton deserves a lot of credit as well. Stubbs only arrived last night and immediately fitted into the side brilliantly, which is a really impressive effort. Our batting lineup looks very dangerous when it gets going, and having overseas players like Hilton and Stubbs finishing strongly at the back end gives us a lot of confidence for the rest of the competition.\"",
+    "timestamp": 1779893997.6920965
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779829075963",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "STAT",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "Simon Harmer (Essex Captain) : (On Hampshire taking the game away through a strong partnership) \"Yes, I think Hampshire batted really well during that period. We probably needed a couple of wickets at that stage, but they managed to build a partnership and slowly took the game away from us. (On trying different bowling options during the match) We tried a lot of bowling options (8) because we are still trying to figure out what works best for us, especially at the death. We probably shortened a few options and relied on a couple of safer plans, but it\u2019s definitely something we need to sort out sooner rather than later. (On the positives, despite the defeat) Even though we lost, there are still plenty of positives to take from the game. It\u2019s really exciting to see some of the younger players coming through. The way Benkenstein played after moving up to number four was impressive. Charlie Bennett bowled well, and Matt Critchley also did a good job. So there were definitely some silver linings in the performance, even though we still have a long way to go.\"",
+    "timestamp": 1779893997.6931694
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779829213506",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "UPDATE",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Player of the Match: Tristan Stubbs",
+    "timestamp": 1779893997.6943378
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779829413759",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "STAT",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "Tristan Stubbs (POTM): \"(On his hectic travel from India) I landed at 10 last night. I got to where I am staying at 7 in the morning. I had to do the hard thing but yeah, I am happy to contribute to the team. (Is it part of a sportsperson's life?) I have never done this kind of travel. It was very new to me, and I hopefully can do this whenever required. (On his first experience at the Blast) I had a great experience today. A good crowd that came to cheer us on a Tuesday evening. The wicket was good and yeah in all I had fun out there. (On his partnership with Hilton Cartwright) We knew we could get anything from the back end. It was all about playing through the situation. Incredible how Hilton played at the backend and we got a fine finish.\"",
+    "timestamp": 1779893997.6959467
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779829515494",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "UPDATE",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "That is it from us and the Blast for today! The action keeps coming thick and fast in the English T20 competition. It excites us and I am pretty sure you guys cherish it just as much. On this note, I, Manan Mehta would like to sign off on behalf of my colleagues Dev Rajawat and Raju Khariya . B-byeee!!!",
+    "timestamp": 1779893997.6976218
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "ball:CREX_ZUG:20.0",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "20.0",
+    "runs_scored": "2",
+    "flavor": [],
+    "commentary": "Chris Wood to Simon Harmer - DROPPED? Full and around off, with the pace taken off. Harmer gets forward and tries to launch it downtown, but ends up mistiming it to long off, where Vince runs across to his right and slides in, but the ball falls short of him. He did well to bring his body into line to stop the ball. Two runs taken. HAMPSHIRE HAVE DEFEATED ESSEX BY 30 RUNS!!!",
+    "timestamp": 1779893997.698951
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779828742208",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "19.5",
+    "runs_scored": "4",
+    "flavor": [
+      "ball"
+    ],
+    "commentary": "Chris Wood to Simon Harmer - FOUR!! DISMISSED!! Good length and outside off. Harmer throws his hands at it and blazes it over the extra cover fielder for a boundary.",
+    "timestamp": 1779894032.694103,
+    "win_predictor": {
+      "win_probability": 4.87,
+      "momentum_score": 7.68,
+      "history_used": 1,
+      "batting_team": "Ess",
+      "bowling_team": "Ham"
+    }
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779828877423",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "STAT",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "2:23 AM IST 9:53 PM Local Time: Hampshire win by 30 runs! It has been another one of those outings where Hampshire have overpowered the Essex side! The homecoming has been a fruitful one for them and they are back to winning ways in style! Essex won the toss earlier and elected to field first. The Hampshire openers could not make a significant impact, and they were dismissed early leaving the score at 26/2. Soon they were at 52/3, and it was a delicate stage. However, they were bailed out of that situation with two fine partnerships that followed. Firstly, it was Joe Weatherley and Tristan Stubbs. They stitched 64 runs together and they did that at a good rate . They pushed the score to 116 before Weatherley mistimed one to get out for 47. Stubbs was then joined by Hilton Cartwright. They took the attack to a different sphere altogether. The batters added an unbeaten 84 runs for the 5th wicket. Stubbs finished with 69 off 42 balls. Cartwright signed off with 46 off just 21 balls. Essex had no answer at the backend to this power hitting exhibit as the Hampshire side ended with an even 200 on the board. The pick of the bowlers for Essex was Simon Harmer with 1/23. The chase was always going to be tricky and the powerplay was the key. Hampshire were up to the task with some fine bowling upfront. Chris Wood set the tone early as he picked two wickets in the first 5 overs. The Essex chase was reduced to 35/2. It soon became 41/3 as Scott Currie got rid of the dangerous Michael Pepper. There was a small partnership Luc Benkenstein and Wiaan Mulder. They added 39 runs together before Mulder collapsed to the rising pressure of the required run rate. Noah Thain joined Benkenstein and they took the score to 115 before a collapse took place. From 115/4 they slipped to 130/7. It was Scott Currie who triggered that as he took all the 3 wickets to fall in that space. The match was more or less done there. Luc Benkenstein the key batter was also gone for 48 off 31. The required rate mount to a situation that was practically not possible. However, Simon Harmer did some fine hitting at the backend to make sure the margin of loss wasn't a massive one to dent the NRR. He finished with 36 off 18 balls. However, the honours were taken by Hampshire who won by a decent 30 runs. The pick of the bowlers was Scott Currie for his phenomenal 4/18 in four overs. It was a complete performance from the Hampshire side, and they have bounced back in style at home.",
+    "timestamp": 1779894045.0470598
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779828823748",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "UPDATE",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "HAM won by 30 runs",
+    "timestamp": 1779894045.9114516
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779829062282",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "STAT",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "James Vince (Hampshire Captain) : (On where the game was won) \"I think the game was won in the second half of our innings. At one stage, it looked like 170 would probably have been a par score, but the way those guys batted at the back end got us close to 200. It was a fantastic partnership, and then picking up a couple of wickets early always helps as well. Scott Currie\u2019s spell was magnificent too. (On Scott Currie\u2019s effectiveness in T20 cricket) I think Scott is more of a defensive bowler. He does his best work and picks up wickets when batters are trying to attack him. That role suits the balance of our bowling attack at the moment, especially because we are slightly short on bowling options due to injuries and some England and England A call-ups. He\u2019s definitely someone we rely on a lot, and generally, his best performances come when opposition batters are taking risks against him. (Who can be the Player of the Match?) I hate to disagree with whoever picked the Player of the Match, but Hilton deserves a lot of credit as well. Stubbs only arrived last night and immediately fitted into the side brilliantly, which is a really impressive effort. Our batting lineup looks very dangerous when it gets going, and having overseas players like Hilton and Stubbs finishing strongly at the back end gives us a lot of confidence for the rest of the competition.\"",
+    "timestamp": 1779894047.373116
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779829515494",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "UPDATE",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "That is it from us and the Blast for today! The action keeps coming thick and fast in the English T20 competition. It excites us and I am pretty sure you guys cherish it just as much. On this note, I, Manan Mehta would like to sign off on behalf of my colleagues Dev Rajawat and Raju Khariya . B-byeee!!!",
+    "timestamp": 1779894047.8338675
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779829413759",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "STAT",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "Tristan Stubbs (POTM): \"(On his hectic travel from India) I landed at 10 last night. I got to where I am staying at 7 in the morning. I had to do the hard thing but yeah, I am happy to contribute to the team. (Is it part of a sportsperson's life?) I have never done this kind of travel. It was very new to me, and I hopefully can do this whenever required. (On his first experience at the Blast) I had a great experience today. A good crowd that came to cheer us on a Tuesday evening. The wicket was good and yeah in all I had fun out there. (On his partnership with Hilton Cartwright) We knew we could get anything from the back end. It was all about playing through the situation. Incredible how Hilton played at the backend and we got a fine finish.\"",
+    "timestamp": 1779894047.8418496
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779829213506",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "UPDATE",
+    "runs_scored": "INFO",
+    "flavor": [
+      "update"
+    ],
+    "commentary": "Player of the Match: Tristan Stubbs",
+    "timestamp": 1779894047.844747
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779829075963",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "STAT",
+    "runs_scored": "STAT",
+    "flavor": [
+      "stat"
+    ],
+    "commentary": "Simon Harmer (Essex Captain) : (On Hampshire taking the game away through a strong partnership) \"Yes, I think Hampshire batted really well during that period. We probably needed a couple of wickets at that stage, but they managed to build a partnership and slowly took the game away from us. (On trying different bowling options during the match) We tried a lot of bowling options (8) because we are still trying to figure out what works best for us, especially at the death. We probably shortened a few options and relied on a couple of safer plans, but it\u2019s definitely something we need to sort out sooner rather than later. (On the positives, despite the defeat) Even though we lost, there are still plenty of positives to take from the game. It\u2019s really exciting to see some of the younger players coming through. The way Benkenstein played after moving up to number four was impressive. Charlie Bennett bowled well, and Matt Critchley also did a good job. So there were definitely some silver linings in the performance, even though we still have a long way to go.\"",
+    "timestamp": 1779894047.8480072
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "feed:CREX_ZUG:1779828774802",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "19.6",
+    "runs_scored": "2",
+    "flavor": [
+      "ball"
+    ],
+    "commentary": "Chris Wood to Simon Harmer - DROPPED? Full and around off, with the pace taken off. Harmer gets forward and tries to launch it downtown, but ends up mistiming it to long off, where Vince runs across to his right and slides in, but the ball falls short of him. He did well to bring his body into line to stop the ball. Two runs taken. HAMPSHIRE HAVE DEFEATED ESSEX BY 30 RUNS!!!",
+    "timestamp": 1779894049.5116205,
+    "win_predictor": {
+      "win_probability": 64.27,
+      "momentum_score": 18.51,
+      "history_used": 2,
+      "batting_team": "Ess",
+      "bowling_team": "Ham"
+    }
+  },
+  {
+    "match_id": "CREX_ZUG",
+    "event_key": "ball:CREX_ZUG:20.0",
+    "score": "200/4(20.0 | 170/7(20.0",
+    "over_ball": "20.0",
+    "runs_scored": "2",
+    "flavor": [],
+    "commentary": "Ball 20.0 | 2 | Chris Wood to Simon Harmer - DROPPED? Full and around off, with the pace taken off. Harmer gets forward and tries to launch it downtown, but ends up mistiming it to long off, where Vince runs across to his right and slides in, but the ball falls short of him. He did well to bring his body into line to stop the ball. Two runs taken. HAMPSHIRE HAVE DEFEATED ESSEX BY 30 RUNS!!!",
+    "timestamp": 1779893997.698951
+  }
+]
