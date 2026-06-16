@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+websockets
+curl_cffi
+beautifulsoup4
+httpx
+python-dotenv

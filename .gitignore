@@ -1,0 +1,14 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+firebase-applet-config.json
+logs/
+__pycache__/
+match_cache.json
+*.bat
+run_git.py

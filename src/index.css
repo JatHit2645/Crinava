@@ -1,0 +1,390 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&family=JetBrains+Mono:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+/* ================================================================
+   CELESTIAL ORGANIC — Design System Tokens
+   "Digital Sculpture" meets Live Cricket Intelligence
+   ================================================================ */
+
+@theme {
+  /* Ethereal Obsidian Palette */
+  --color-void: #0a0612;
+  --color-surface: #111415;
+  --color-surface-glass: rgba(255, 255, 255, 0.02);
+  --color-surface-elevated: #1e2021;
+  --color-on-surface: #fafafa;
+
+  /* Mercury Gold Accent — Primary interaction & highlight */
+  --color-mercury: #D4AF37;
+  --color-mercury-dim: #8b7322;
+  --color-mercury-glow: rgba(212, 175, 55, 0.15);
+  
+  /* Legacy aliases for existing components */
+  --color-primary: #D4AF37;
+  --color-primary-teal: #D4AF37;
+  --color-aurora-teal: #11EBCF;
+  --color-metallic-gold: #D4AF37;
+
+  /* Ethereal Iris — Secondary interaction */
+  --color-iris: #9d85ff;
+  --color-iris-dim: #6b5cb3;
+  --color-iris-glow: rgba(157, 133, 255, 0.15);
+
+  /* Raw Copper — Tertiary highlight */
+  --color-copper: #d48a67;
+
+  /* Structural */
+  --color-hairline: rgba(250, 250, 250, 0.08);
+  --color-outline: #948f96;
+
+  /* Typography Families */
+  --font-display: "Playfair Display", serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-headline: "Playfair Display", serif;
+  --font-body: "JetBrains Mono", monospace;
+}
+
+/* ================================================================
+   BASE LAYER
+   ================================================================ */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-void text-on-surface font-body overflow-x-hidden;
+    -webkit-tap-highlight-color: transparent;
+    cursor: none; /* Hide default cursor for Celestial Organic */
+  }
+
+  /* Noise Grain Overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: overlay;
+  }
+
+  /* Headlines use Playfair Display */
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+
+  h4, h5, h6 {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Selection */
+  ::selection {
+    background: var(--color-mercury);
+    color: var(--color-void);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.3);
+    border-radius: 10px;
+  }
+}
+
+/* ================================================================
+   UTILITY LAYER
+   ================================================================ */
+
+@layer utilities {
+
+  /* --- Typography Utilities --- */
+  .text-display {
+    font-family: var(--font-display);
+    font-size: clamp(64px, 10vw, 120px);
+    line-height: 0.92;
+    letter-spacing: -0.05em;
+    font-weight: 900;
+  }
+
+  .text-headline-lg {
+    font-family: var(--font-display);
+    font-size: clamp(42px, 5vw, 64px);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+  }
+
+  .text-meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0.05em;
+    font-weight: 300;
+  }
+
+  .text-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 16px;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  /* --- Borders --- */
+  .border-hairline {
+    border: 1px solid var(--color-hairline);
+  }
+
+  .border-mercury {
+    border: 1px solid var(--color-mercury);
+  }
+
+  /* --- Gradients --- */
+  .gradient-mercury-text {
+    background: linear-gradient(135deg, #f3e5ab, #D4AF37, #8b7322);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Legacy gradient aliases */
+  .brand-gradient {
+    background: linear-gradient(90deg, #D4AF37 0%, #fafafa 50%, #D4AF37 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gold-gradient-bg {
+    background: linear-gradient(135deg, #D4AF37 0%, #8b7322 100%);
+  }
+
+  .gold-glow {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+  }
+
+  .teal-glow {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
+  }
+
+  .premium-glow {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.08);
+  }
+
+  .premium-glow-gold {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+  }
+
+  /* --- Glass Surfaces --- */
+  .glass-obsidian {
+    background: rgba(10, 6, 18, 0.6);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    border: 1px solid var(--color-hairline);
+  }
+
+  .glass-surface {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--color-hairline);
+  }
+
+  /* --- Interactive States --- */
+  .interactive-plate {
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+
+  .interactive-glow:hover {
+    box-shadow: 0 0 0 1px var(--color-iris);
+  }
+
+  /* --- Animations --- */
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
+  }
+
+  .float-slow {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .animate-shimmer {
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite linear;
+  }
+
+  @keyframes pulse-mercury {
+    0%, 100% { box-shadow: 0 0 5px rgba(212, 175, 55, 0.3); }
+    50% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.6); }
+  }
+
+  .pulse-mercury {
+    animation: pulse-mercury 2s ease-in-out infinite;
+  }
+
+  /* Unveil (scroll-triggered reveal) */
+  .unveil {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(30px) scale(0.98);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 1s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .unveil.visible {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0) scale(1);
+  }
+
+  /* --- Material Symbols Override --- */
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+
+  /* --- Scrollbar Utility --- */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.2);
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(212, 175, 55, 0.4);
+  }
+
+  /* --- Active States (legacy) --- */
+  .active-gold {
+    color: #D4AF37 !important;
+  }
+
+  .active-gold .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1;
+  }
+
+  .suggestion-chip {
+    transition: all 0.2s ease;
+  }
+
+  /* --- Celestial Organic Kinetic Classes --- */
+  
+  /* Radar Pulse */
+  @keyframes radar-pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+  .radar-pulse::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid var(--color-mercury);
+    animation: radar-pulse 0.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .radar-pulse:hover::before {
+    opacity: 1;
+  }
+
+  /* Brutalist Entrance (Clip Reveal) */
+  .clip-reveal {
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+  }
+  .clip-reveal.visible {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* Glitch Enter */
+  @keyframes glitch-enter {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    40% { opacity: 0.5; }
+    60% { opacity: 0; }
+    80% { opacity: 1; }
+    100% { opacity: 1; }
+  }
+  .glitch-enter {
+    animation: glitch-enter 0.2s steps(2, end) forwards;
+  }
+
+  /* Artifact Resonance (Chromatic Displacement) */
+  .artifact-resonance {
+    position: relative;
+    overflow: hidden;
+  }
+  .artifact-resonance img {
+    transition: transform 0.1s cubic-bezier(0.23, 1, 0.32, 1), filter 0.1s;
+  }
+  .artifact-resonance:hover img {
+    transform: scale(1.05);
+    filter: drop-shadow(2px 0 0 red) drop-shadow(-2px 0 0 blue) contrast(1.1) brightness(1.2);
+  }
+  /* Raw Gold Veil on Hover */
+  .artifact-resonance::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-mercury);
+    mix-blend-mode: multiply;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .artifact-resonance:hover::after {
+    opacity: 0.15;
+  }
+  /* Proximity Glow */
+  .artifact-resonance::before {
+    content: "";
+    position: absolute;
+    inset: -50px;
+    background: radial-gradient(circle at center, rgba(255, 204, 51, 0.1) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+  .artifact-resonance:hover::before {
+    opacity: 1;
+  }
+}
