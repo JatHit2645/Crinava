@@ -1438,9 +1438,7 @@ class CrexMatchWorker:
                 f_headers = {
                     "Accept": "application/json, text/plain, */*",
                     "Content-Type": "application/json",
-                    "authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImV4cGlyZXNJbiI6IjM2NWQifQ"
-                                     ".eyJ0aW1lIjoxNjYwMDQ2NjIwMDAwfQ"
-                                     ".bTEmMWlR7hLRUHxPPq6-1TP7cuuW7m6sZ9jcdbYzLRA",
+                    "authorization": os.environ.get("CREX_AUTHORIZATION_TOKEN", ""),
                     "cc": "IN",
                     "Origin": "https://crex.com",
                     "Referer": "https://crex.com/",
@@ -1699,7 +1697,7 @@ class CrexMatchWorker:
                 except Exception:
                     pass
             if not api_key:
-                api_key = "JATHIT_CRINAVA_PRIVATE_ENGINE_AUTH"
+                api_key = ""
 
             # print(f"[WinPredictor Debug] [{self.crex_id}] Payload: {payload}")
             hf_url = "https://jathit2645-crinava-v15-api.hf.space/predict"
