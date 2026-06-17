@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "motion/react";
 import { Menu, X, User, Bell, Coins } from "lucide-react";
 
 interface PremiumHeaderProps {
@@ -22,7 +21,7 @@ export const PremiumHeader: React.FC<PremiumHeaderProps> = ({
   setIsMenuOpen,
 }) => {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
+    <header className="fixed top-0 inset-x-0 z-50 px-6 py-4">
       <div className="max-w-7xl mx-auto">
         <nav className="glass-card-aurora px-6 py-3 flex items-center justify-between">
           {/* Logo */}

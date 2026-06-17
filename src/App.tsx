@@ -6,7 +6,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { GoogleGenAI, Type } from "@google/genai";
 import {
-  Search,
   TrendingUp,
   ShieldCheck,
   ShieldAlert,
@@ -16,21 +15,15 @@ import {
   Trophy,
   Info,
   ChevronRight,
-  ChevronDown,
   Bell,
   UserCircle,
-  LayoutDashboard,
   PlusCircle,
   Gavel,
   User,
-  Camera,
   Waves,
   MessageSquare,
   BookOpen,
-  Target,
   Users,
-  Wallet,
-  Ticket,
   Brain,
   Infinity,
   Sparkles,
@@ -42,14 +35,9 @@ import {
   Menu,
   LogOut,
   BarChart3,
-  Shield,
-  Star,
   ArrowUpRight,
   Activity,
-  Newspaper,
   TrendingUp as TrendingUpIcon,
-  ChevronRight as ChevronRightIcon,
-  History,
   Home,
   Swords,
   ShoppingCart,
@@ -70,9 +58,7 @@ import {
   LineChart,
   Line,
 } from "recharts";
-import ReactMarkdown from "react-markdown";
 import { supabase } from "./lib/supabaseClient";
-import { MomentumGraph } from "./components/MomentumGraph";
 import { AuthModal } from "./components/AuthModal";
 import { UsernameModal } from "./components/UsernameModal";
 import { PredictionGame } from "./components/PredictionGame";
@@ -1705,7 +1691,7 @@ export default function App() {
         document.documentElement.scrollHeight -
         document.documentElement.clientHeight;
       const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
-      el.style.height = scrolled + "%";
+      el.style.height = `${scrolled}%`;
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -1818,10 +1804,10 @@ export default function App() {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "-100%", opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 150 }}
-              className="fixed top-0 left-0 bottom-0 w-[85vw] max-w-[420px] bg-[#020203] z-[101] shadow-[50px_0_100px_rgba(0,0,0,1)] flex flex-col overflow-hidden border-r border-white/5"
+              className="fixed inset-y-0 left-0 w-[85vw] max-w-[420px] bg-[#020203] z-[101] shadow-[50px_0_100px_rgba(0,0,0,1)] flex flex-col overflow-hidden border-r border-white/5"
             >
               {/* Massive Watermark */}
-              <div className="absolute top-0 bottom-0 right-0 w-1/2 overflow-hidden pointer-events-none select-none z-0">
+              <div className="absolute inset-y-0 right-0 w-1/2 overflow-hidden pointer-events-none select-none z-0">
                 <div className="absolute -right-[150px] top-[10%] text-[200px] font-black text-white/[0.015] -rotate-90 font-display leading-none whitespace-nowrap">
                   SYSTEM
                 </div>
@@ -2082,7 +2068,7 @@ export default function App() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-[85vw] max-w-sm bg-void border-l border-hairline z-[101] shadow-[-20px_0_60px_rgba(0,0,0,0.8)] flex flex-col"
+              className="fixed inset-y-0 right-0 w-[85vw] max-w-sm bg-void border-l border-hairline z-[101] shadow-[-20px_0_60px_rgba(0,0,0,0.8)] flex flex-col"
             >
               <div className="p-6 border-b border-hairline flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -4027,7 +4013,7 @@ export default function App() {
                       className="h-64 bg-[#111111] border border-white/5 rounded-3xl overflow-hidden relative group cursor-wait"
                     >
                       <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10" />
-                      <div className="absolute bottom-6 left-6 right-6 z-20 space-y-2">
+                      <div className="absolute bottom-6 inset-x-6 z-20 space-y-2">
                         <div className="w-20 h-2 bg-white/10 rounded-full overflow-hidden">
                           <div className="h-full bg-blue-400 w-1/3" />
                         </div>

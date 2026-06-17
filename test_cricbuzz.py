@@ -1,7 +1,10 @@
+"""Module docstring."""
+
 from stealth import stealth_session
 
 
 def test_fetch():
+    """Docstring for test_fetch."""
     url = "https://www.cricbuzz.com/cricket-match/live-scores"
     print(f"Attempting to fetch {url} using Shadow Protocol...")
     try:

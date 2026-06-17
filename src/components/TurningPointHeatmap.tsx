@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  TrendingUp,
-  X,
-  Zap,
-  Info,
-  ChevronRight,
-  ChevronLeft,
-} from "lucide-react";
+import { TrendingUp, X, Zap, Info } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface HeatmapData {
@@ -52,7 +45,7 @@ export const TurningPointHeatmap: React.FC<{ rawInfo: any }> = ({
       return;
     }
 
-    let deliveries: any[] = [];
+    const deliveries: any[] = [];
     if (inningData.overs) {
       inningData.overs.forEach((over: any) => {
         if (over.deliveries) {

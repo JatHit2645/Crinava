@@ -122,7 +122,7 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({
               <h2 className="text-3xl font-black text-fg-primary uppercase italic tracking-tighter">
                 Claim Your Identity
               </h2>
-              <p className="text-xs text-fg-muted font-bold uppercase tracking-widest text-[10px]">
+              <p className="text-fg-muted font-bold uppercase tracking-widest text-[10px]">
                 Choose a unique username to start your Crinava career.
               </p>
             </div>
@@ -152,7 +152,7 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({
                       setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ""))
                     }
                     placeholder="cricket_pro_99"
-                    className={`w-full bg-white/[0.03] border rounded-2xl py-5 pl-12 pr-12 text-fg-primary text-sm font-bold focus:outline-none transition-all ${
+                    className={`w-full bg-white/[0.03] border rounded-2xl py-5 px-12 text-fg-primary text-sm font-bold focus:outline-none transition-all${
                       isAvailable === true
                         ? "border-accent-default/50 focus:border-accent-default"
                         : isAvailable === false

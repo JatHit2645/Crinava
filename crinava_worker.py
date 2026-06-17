@@ -1,3 +1,5 @@
+"""Module docstring."""
+
 # CRINAVA_TELEMETRY_UPGRADE_REVISION_1
 import asyncio
 import os
@@ -28,6 +30,7 @@ class CrexMatchWorker:
     """
 
     def __init__(self, match_data, ai_api_key):
+        """Docstring for __init__."""
         self.match = match_data
         self.crex_id = match_data.get("match_id")
         self.raw_id = self.crex_id.replace("CREX_", "")
@@ -65,9 +68,11 @@ class CrexMatchWorker:
     # ------------------------------------------------------------------
 
     def _norm_pid(self, pid) -> str:
+        """Docstring for _norm_pid."""
         return str(pid).strip().upper() if pid is not None else ""
 
     def _looks_like_name(self, value) -> bool:
+        """Docstring for _looks_like_name."""
         value = str(value or "").strip()
         if not value:
             return False
@@ -78,6 +83,7 @@ class CrexMatchWorker:
         return bool(re.search(r"[A-Za-z]", value))
 
     def _add_player_mapping(self, pid, pname, source: str = "JSON") -> bool:
+        """Docstring for _add_player_mapping."""
         pid = self._norm_pid(pid)
         pname = str(pname or "").strip()
 
@@ -190,6 +196,7 @@ class CrexMatchWorker:
         return added
 
     def _log_new_player_total(self, source: str, added: int) -> None:
+        """Docstring for _log_new_player_total."""
         if added <= 0:
             return
 
@@ -208,12 +215,14 @@ class CrexMatchWorker:
             self._last_logged_map_size = total
 
     def _print_once(self, key: str, message: str) -> None:
+        """Docstring for _print_once."""
         if key in self._printed_log_keys:
             return
         self._printed_log_keys.add(key)
         print(message)
 
     def _clean_ai_text(self, text: str) -> str:
+        """Docstring for _clean_ai_text."""
         text = html_mod.unescape(str(text or "")).strip()
         text = re.sub(r"<[^>]+>", " ", text)
         text = re.sub(r"^\s*(Commentary|Stat Card)\s*:\s*", "", text, flags=re.I)
@@ -228,6 +237,7 @@ class CrexMatchWorker:
         return text.strip()
 
     def _remember_ai_opening(self, text: str) -> None:
+        """Docstring for _remember_ai_opening."""
         words = re.findall(r"[A-Za-z0-9']+", str(text or ""))
         if not words:
             return
@@ -239,6 +249,7 @@ class CrexMatchWorker:
             self.recent_ai_openings = self.recent_ai_openings[-8:]
 
     def _current_telemetry(self) -> dict:
+        """Docstring for _current_telemetry."""
         if isinstance(self.latest_scorecard_snapshot, dict):
             telemetry = self.latest_scorecard_snapshot.get("telemetry")
             if isinstance(telemetry, dict):
@@ -246,6 +257,7 @@ class CrexMatchWorker:
         return {}
 
     def _attach_live_context(self, packet: dict) -> dict:
+        """Docstring for _attach_live_context."""
         telemetry = self._current_telemetry()
         if telemetry:
             packet["telemetry"] = telemetry
@@ -261,6 +273,7 @@ class CrexMatchWorker:
         return packet
 
     def _clean_feed_text(self, raw_text) -> str:
+        """Docstring for _clean_feed_text."""
         text = str(raw_text or "")
         text = (
             text.replace("&l;", "<")
@@ -276,6 +289,7 @@ class CrexMatchWorker:
         return text.strip()
 
     def _feed_item_key(self, item: dict, raw_text: str) -> str:
+        """Docstring for _feed_item_key."""
         item_id = item.get("id")
         if item_id is not None:
             return f"feed:{self.crex_id}:{item_id}"
@@ -284,6 +298,7 @@ class CrexMatchWorker:
     def _classify_text_update(
         self, raw_text: str, item_id=None
     ) -> tuple[str, str, list[str]]:
+        """Docstring for _classify_text_update."""
         lower = raw_text.lower()
         suffix = (
             str(item_id)[-6:] if item_id is not None else str(abs(hash(raw_text)))[-6:]
@@ -336,6 +351,7 @@ class CrexMatchWorker:
         return f"UPDATE_INFO_{suffix}", "INFO", ["update"]
 
     def _extract_feed_payload(self, item: dict) -> tuple[str, str, str, list[str]]:
+        """Docstring for _extract_feed_payload."""
         item_type = item.get("type", "")
         if item_type == "b":
             c1 = self._clean_feed_text(item.get("c1", ""))
@@ -355,10 +371,12 @@ class CrexMatchWorker:
         return raw_text, over_ball, runs, flavor
 
     def _is_player_id_token(self, value) -> bool:
+        """Docstring for _is_player_id_token."""
         value = self._norm_pid(value)
         return bool(re.fullmatch(r"[A-Z0-9]{1,8}", value))
 
     def _add_token(self, ids: set[str], value) -> None:
+        """Docstring for _add_token."""
         value = self._norm_pid(value)
         if self._is_player_id_token(value):
             ids.add(value)
@@ -428,6 +446,7 @@ class CrexMatchWorker:
         return ids
 
     def _balls_to_overs(self, balls) -> str:
+        """Docstring for _balls_to_overs."""
         try:
             balls = int(float(str(balls or "0")))
             return f"{balls // 6}.{balls % 6}"
@@ -435,6 +454,7 @@ class CrexMatchWorker:
             return "-"
 
     def _parse_extras(self, raw) -> dict:
+        """Docstring for _parse_extras."""
         text = str(raw or "").strip()
         extras = {
             "total": 0,
@@ -487,6 +507,7 @@ class CrexMatchWorker:
         return extras
 
     def _score_from_innings(self, innings: dict) -> tuple[str, str, str]:
+        """Docstring for _score_from_innings."""
         score_text = str(innings.get("d") or "")
         m = re.search(r"(\d+)[/-](\d+)\(([\d.]+)", score_text)
         if m:
@@ -498,6 +519,7 @@ class CrexMatchWorker:
         )
 
     def _parse_sc4_scorecard(self, sc_data) -> dict:
+        """Docstring for _parse_sc4_scorecard."""
         innings_list = (
             sc_data
             if isinstance(sc_data, list)
@@ -657,6 +679,7 @@ class CrexMatchWorker:
         return {"innings": parsed_innings, "telemetry": telemetry, "extras": all_extras}
 
     def _derive_active_players(self, innings: list, active_ids: list[str]) -> dict:
+        """Docstring for _derive_active_players."""
         latest = innings[-1] if innings else {}
         batters = latest.get("batters", [])
         bowlers = latest.get("bowlers", [])
@@ -705,6 +728,7 @@ class CrexMatchWorker:
         }
 
     def _recent_ball_outcomes(self, limit: int = 6) -> list[str]:
+        """Docstring for _recent_ball_outcomes."""
         outcomes = []
         for item in self.feed_items:
             if isinstance(item, dict) and item.get("type") == "b":
@@ -716,6 +740,7 @@ class CrexMatchWorker:
         return list(reversed(outcomes))
 
     def _phase_from_score(self, score: str) -> str:
+        """Docstring for _phase_from_score."""
         m = re.search(r"\((\d+)(?:\.(\d+))?", str(score or ""))
         if not m:
             return "unknown phase"
@@ -730,6 +755,7 @@ class CrexMatchWorker:
         return "death overs"
 
     def _win_probability_value(self, win_data: dict | list | None = None):
+        """Docstring for _win_probability_value."""
         win_data = win_data if win_data is not None else self.last_win_predictor
         if isinstance(win_data, list) and win_data:
             win_data = win_data[0]
@@ -744,6 +770,7 @@ class CrexMatchWorker:
         return None
 
     def _should_inject_win_context(self) -> bool:
+        """Docstring for _should_inject_win_context."""
         current = self._win_probability_value()
         if current is None:
             return False
@@ -754,6 +781,7 @@ class CrexMatchWorker:
         return False
 
     def _build_ai_context(self, score: str = "") -> str:
+        """Docstring for _build_ai_context."""
         telemetry = (
             self.latest_scorecard_snapshot.get("telemetry", {})
             if isinstance(self.latest_scorecard_snapshot, dict)
@@ -799,6 +827,7 @@ class CrexMatchWorker:
         return "\n".join(lines)
 
     async def _fetch_player_names_for_ids(self, ids, source: str = "mapping") -> None:
+        """Docstring for _fetch_player_names_for_ids."""
         missing = sorted(
             {
                 self._norm_pid(pid)
@@ -851,11 +880,13 @@ class CrexMatchWorker:
     # ------------------------------------------------------------------
 
     async def fetch_mappings(self) -> None:
+        """Docstring for fetch_mappings."""
         base_url = self.match.get("url", "")
         if not base_url:
             base_url = f"https://crex.com/cricket-live-score/unknown-match-updates-{self.raw_id}"
 
         def _swap_teams(base: str) -> str:
+            """Docstring for _swap_teams."""
             crex_prefix = "https://crex.com/cricket-live-score/"
             if not base.startswith(crex_prefix):
                 return base
@@ -875,9 +906,11 @@ class CrexMatchWorker:
         def _info_url_from_live(url: str) -> str:
             # Crex exposes full squads on "...-119E", while live pages often use
             # "...-match-updates-119E". Both are needed.
+            """Docstring for _info_url_from_live."""
             return re.sub(r"-match-updates-(?=[A-Za-z0-9]+/?$)", "-", url.rstrip("/"))
 
         def _candidate_urls(url: str) -> list[tuple[str, str]]:
+            """Docstring for _candidate_urls."""
             raw_base = url.rstrip("/")
             info_base = _info_url_from_live(raw_base)
 
@@ -931,13 +964,11 @@ class CrexMatchWorker:
                     continue
 
                 html_text = resp.text.replace("\\/", "/")
-                page_added = 0
                 for full_slug, player_id in player_regex.findall(html_text):
                     name_slug = full_slug[: -(len(player_id) + 1)]
                     player_name = name_slug.replace("-", " ").title()
                     if self._add_player_mapping(player_id, player_name, "HTML"):
                         added += 1
-                        page_added += 1
 
             except Exception as e:
                 print(f"[Worker] HTML error [{self.crex_id}] {label}: {e}")
@@ -949,10 +980,12 @@ class CrexMatchWorker:
     # ------------------------------------------------------------------
 
     def _mine_sc4_for_players(self, sc4_data) -> None:
+        """Docstring for _mine_sc4_for_players."""
         added = self._mine_any_json_for_players(sc4_data, "SC4")
         self._log_new_player_total("SC4", added)
 
     def _mine_sv3_for_players(self, sv3_data: dict) -> None:
+        """Docstring for _mine_sv3_for_players."""
         added = self._mine_any_json_for_players(sv3_data, "SV3")
         self._log_new_player_total("SV3", added)
 
@@ -961,6 +994,7 @@ class CrexMatchWorker:
     # ------------------------------------------------------------------
 
     async def poll_scorecard(self) -> None:
+        """Docstring for poll_scorecard."""
         try:
             resp = await asyncio.to_thread(
                 self.session.request, "GET", self.scorecard_url, timeout=10
@@ -1007,6 +1041,7 @@ class CrexMatchWorker:
     # ------------------------------------------------------------------
 
     async def listen(self) -> None:
+        """Docstring for listen."""
         print(f"[Worker] Started polling: {self.match['title']} ({self.crex_id})")
         await self.fetch_mappings()
         await self.poll_scorecard()
@@ -1029,6 +1064,7 @@ class CrexMatchWorker:
     # ------------------------------------------------------------------
 
     async def poll_once(self) -> None:
+        """Docstring for poll_once."""
         try:
             resp = await asyncio.to_thread(
                 self.session.request, "GET", self.api_url, timeout=10
@@ -1209,39 +1245,6 @@ class CrexMatchWorker:
     # STAT CARDS
     # ------------------------------------------------------------------
 
-    def _check_stat_cards(self, feed_data: list) -> None:
-        import random
-        import html as html_mod
-
-        for item in reversed(feed_data):
-            if item.get("type") != "t":
-                continue
-            item_id = item.get("id", 0)
-            if item_id <= self.last_stat_id:
-                continue
-            self.last_stat_id = item_id
-            text = item.get("c", "")
-            if not text:
-                continue
-            clean = html_mod.unescape(re.sub(r"<.*?>", " ", text)).strip()
-            lower = clean.lower()
-            if len(clean) > 80 and any(c.isdigit() for c in clean):
-                if any(
-                    kw in lower
-                    for kw in [
-                        "instances",
-                        "most ",
-                        "fastest",
-                        "highest",
-                        "stats",
-                        "vs ",
-                        "partnership",
-                        "milestone",
-                    ]
-                ):
-                    if random.random() < 0.80:
-                        asyncio.create_task(self.process_stat_card(clean, item_id))
-
     async def process_crex_feed_items(
         self, feed_data: list, score_summary: str = ""
     ) -> None:
@@ -1342,6 +1345,7 @@ class CrexMatchWorker:
         score_summary: str,
         feed_id,
     ) -> None:
+        """Docstring for _refine_feed_packet."""
         try:
             async with _ai_semaphore:
                 commentary = await asyncio.wait_for(
@@ -1380,6 +1384,7 @@ class CrexMatchWorker:
     def _schedule_feed_rechecks(
         self, event_key: str, feed_id, over_ball: str, score_summary: str
     ) -> None:
+        """Docstring for _schedule_feed_rechecks."""
         if event_key in self.feed_recheck_tasks:
             return
         task = asyncio.create_task(
@@ -1388,11 +1393,13 @@ class CrexMatchWorker:
         self.feed_recheck_tasks[event_key] = task
 
         def _clean(_):
+            """Docstring for _clean."""
             self.feed_recheck_tasks.pop(event_key, None)
 
         task.add_done_callback(_clean)
 
     async def _fetch_ball_feeds(self) -> list:
+        """Docstring for _fetch_ball_feeds."""
         feeds_url = "https://content.crickapi.com/commentary/v3/getBallFeeds"
         f_payload = {"matchKey": self.raw_id, "lastDocId": None, "filters": {}}
         f_headers = {
@@ -1418,6 +1425,7 @@ class CrexMatchWorker:
     async def _recheck_feed_item(
         self, event_key: str, feed_id, over_ball: str, score_summary: str
     ) -> None:
+        """Docstring for _recheck_feed_item."""
         for _ in range(10):
             await asyncio.sleep(6)
             try:
@@ -1493,9 +1501,11 @@ class CrexMatchWorker:
     # ------------------------------------------------------------------
 
     def get_matched_commentary(self, over_ball: str) -> dict:
+        """Docstring for get_matched_commentary."""
         import html as html_mod
 
         def clean_html(raw_html):
+            """Docstring for clean_html."""
             if not raw_html:
                 return ""
             return html_mod.unescape(re.sub(r"<.*?>", "", raw_html)).strip()
@@ -1552,6 +1562,7 @@ class CrexMatchWorker:
     # ------------------------------------------------------------------
 
     def resolve_player_id(self, raw: str) -> str:
+        """Docstring for resolve_player_id."""
         if not raw:
             return raw
 
@@ -1564,6 +1575,7 @@ class CrexMatchWorker:
         return raw
 
     def get_current_players(self) -> tuple:
+        """Docstring for get_current_players."""
         for item in self.feed_items:
             if item.get("type") != "b" or not item.get("c1"):
                 continue
@@ -1586,6 +1598,7 @@ class CrexMatchWorker:
     # ------------------------------------------------------------------
 
     async def process_ball_update(self, ball_info: dict) -> None:
+        """Docstring for process_ball_update."""
         runs = str(ball_info.get("runs_scored", ""))
         flavor = []
         if "4" in runs:
@@ -1649,6 +1662,7 @@ class CrexMatchWorker:
         await self.broadcast_to_clients(packet)
 
         async def run_ai_and_update():
+            """Docstring for run_ai_and_update."""
             try:
                 await asyncio.sleep(8)
 
@@ -1751,6 +1765,7 @@ class CrexMatchWorker:
             self.running_tasks[over_ball] = task
 
             def _clean(t):
+                """Docstring for _clean."""
                 if self.running_tasks.get(over_ball) == t:
                     self.running_tasks.pop(over_ball, None)
 
@@ -1759,6 +1774,7 @@ class CrexMatchWorker:
     async def fetch_win_prediction(
         self, packet: dict, skip_api_call: bool = False
     ) -> dict:
+        """Docstring for fetch_win_prediction."""
         try:
             score_summary = packet.get("score", "")
             if not score_summary:
@@ -2003,6 +2019,7 @@ class CrexMatchWorker:
     # ------------------------------------------------------------------
 
     async def generate_ai_commentary(self, ball: dict) -> str:
+        """Docstring for generate_ai_commentary."""
         raw_comm = ball.get("commentary") or ""
 
         if not self.ai_api_key:
@@ -2112,6 +2129,7 @@ class CrexMatchWorker:
         runs: str,
         score: str,
     ) -> str:
+        """Docstring for generate_feed_commentary."""
         if not self.ai_api_key:
             return self._clean_ai_text(raw_text)
 
@@ -2191,6 +2209,7 @@ class CrexMatchWorker:
     # ------------------------------------------------------------------
 
     async def process_stat_card(self, raw_stat_text: str, item_id: int) -> None:
+        """Docstring for process_stat_card."""
         try:
             ai_stat_text = raw_stat_text
             if self.ai_api_key and "nvapi-" in self.ai_api_key:
@@ -2249,6 +2268,7 @@ class CrexMatchWorker:
     # ------------------------------------------------------------------
 
     async def broadcast_to_clients(self, packet: dict) -> None:
+        """Docstring for broadcast_to_clients."""
         from hub import match_hub
 
         if self.crex_id not in match_hub:
@@ -2287,6 +2307,7 @@ class HierarchyScraperWorker:
     """
 
     def __init__(self, match_data, ai_api_key):
+        """Docstring for __init__."""
         self.match = match_data
         self.match_id = match_data["match_id"]
         self.is_running = True
@@ -2296,6 +2317,7 @@ class HierarchyScraperWorker:
         self.session = reqs.Session(impersonate="chrome120")
 
     async def broadcast_to_clients(self, packet: dict) -> None:
+        """Docstring for broadcast_to_clients."""
         from hub import match_hub
 
         if self.match_id not in match_hub:
@@ -2311,6 +2333,7 @@ class HierarchyScraperWorker:
 
     async def listen(self) -> None:
         # stealth_session no longer imported locally
+        """Docstring for listen."""
         from bs4 import BeautifulSoup
 
         ALIASES = {"skr": "sk", "jer": "jsy", "sui": "swz", "phi": "phl"}
@@ -2329,7 +2352,7 @@ class HierarchyScraperWorker:
                         )
                         if r.status_code == 200:
                             soup = BeautifulSoup(r.text, "html.parser")
-                            for a in soup.find_all("a", href=True):
+                            for a in list(soup.find_all("a", href=True)):
                                 href = a["href"].lower()
                                 if (
                                     "cricket" in href
@@ -2359,7 +2382,7 @@ class HierarchyScraperWorker:
                             )
                             if r2.status_code == 200:
                                 soup = BeautifulSoup(r2.text, "html.parser")
-                                for a in soup.find_all("a", href=True):
+                                for a in list(soup.find_all("a", href=True)):
                                     href = a["href"].lower()
                                     if len(cb_teams) > 0 and all(
                                         t in href
@@ -2393,15 +2416,15 @@ class HierarchyScraperWorker:
                     )
                     if resp.status_code == 200:
                         soup = BeautifulSoup(resp.text, "html.parser")
-                        for s in soup(
+                        for s in list(soup(
                             ["script", "style", "header", "nav", "footer", "aside"]
-                        ):
+                        )):
                             s.decompose()
-                        for w in soup.find_all(
+                        for w in list(soup.find_all(
                             class_=re.compile(
                                 r"header|nav|ticker|widget|sidebar|menu|banner", re.I
                             )
-                        ):
+                        )):
                             w.decompose()
 
                         score_pat = re.compile(
@@ -2419,7 +2442,7 @@ class HierarchyScraperWorker:
                                 break
 
                         if not score_text:
-                            for c in soup.find_all(["div", "span", "h1", "h2"]):
+                            for c in list(soup.find_all(["div", "span", "h1", "h2"])):
                                 txt = c.get_text(separator=" ", strip=True)
                                 if score_pat.search(txt) and len(txt) < 60:
                                     score_text = txt

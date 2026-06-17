@@ -55,7 +55,7 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
       return;
     }
 
-    let deliveries: any[] = [];
+    const deliveries: any[] = [];
     if (inningData.overs) {
       inningData.overs.forEach((over: any) => {
         if (over.deliveries) {

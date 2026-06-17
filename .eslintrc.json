@@ -1,0 +1,33 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "react", "tailwindcss", "unused-imports"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:tailwindcss/recommended"
+  ],
+  "rules": {
+    "prefer-const": "error",
+    "radix": "error",
+    "no-else-return": "error",
+    "prefer-template": "error",
+    "no-plusplus": "off",
+    "tailwindcss/enforces-shorthand": "error",
+    "tailwindcss/no-contradicting-classname": "error",
+    "unused-imports/no-unused-imports": "error",
+    "react/react-in-jsx-scope": "off",
+    "react/no-unescaped-entities": "off",
+    "react/prop-types": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-explicit-any": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "tailwindcss": {
+      "config": "./tailwind.config.cjs"
+    }
+  }
+}

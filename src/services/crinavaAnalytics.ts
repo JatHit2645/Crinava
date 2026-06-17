@@ -75,7 +75,7 @@ export async function getExecutionGapData(matchId: number) {
   });
 
   return Object.entries(overData).map(([over, runs]) => ({
-    over_no: parseInt(over),
+    over_no: parseInt(over, 10),
     runs_total: runs,
   }));
 }

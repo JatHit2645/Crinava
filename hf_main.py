@@ -1,3 +1,5 @@
+"""Module docstring."""
+
 from fastapi import FastAPI
 import sqlite3
 import os
@@ -24,6 +26,7 @@ app.add_middleware(
 
 
 def get_db():
+    """Docstring for get_db."""
     conn = sqlite3.connect("crinava.db")
     # Attach the metadata database
     try:
@@ -36,11 +39,13 @@ def get_db():
 
 @app.get("/")
 def home():
+    """Docstring for home."""
     return {"status": "Crinava Engine Online (Hybrid Mode)"}
 
 
 @app.get("/series")
 def get_series():
+    """Docstring for get_series."""
     conn = get_db()
     cur = conn.cursor()
     # Pull series from the tiny meta table (much faster!)
@@ -60,6 +65,7 @@ def get_series():
 
 @app.get("/matches")
 def get_matches(event: str, season: str):
+    """Docstring for get_matches."""
     conn = get_db()
     cur = conn.cursor()
     try:
@@ -85,6 +91,7 @@ def get_matches(event: str, season: str):
 
 @app.get("/match/{match_id}")
 def get_match_details(match_id: str):
+    """Docstring for get_match_details."""
     conn = get_db()
     cur = conn.cursor()
 

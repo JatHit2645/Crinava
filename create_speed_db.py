@@ -1,3 +1,5 @@
+"""Module docstring."""
+
 import sqlite3
 import json
 import os
@@ -9,6 +11,7 @@ DB_NAME = "crinava.db"
 
 
 def build_db():
+    """Docstring for build_db."""
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
     # 1. Create the high-speed table with FULL DETAIL

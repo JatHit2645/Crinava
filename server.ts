@@ -62,6 +62,9 @@ let enrichmentState: EnrichmentState = {
 let stopEnrichmentRequested = false;
 let pauseEnrichmentRequested = false;
 
+const isStopRequested = () => stopEnrichmentRequested;
+const isPauseRequested = () => pauseEnrichmentRequested;
+
 const debates = [
   {
     id: "1",
@@ -403,19 +406,19 @@ async function startServer() {
         const batchSize = 20; // Reduced to prevent timeouts
         const concurrencyLimit = 4; // User requested concurrency
 
-        while (hasMore && !stopEnrichmentRequested) {
+        while (hasMore && !isStopRequested()) {
           console.log(
             `Enrichment: Loop iteration start. hasMore=${hasMore}, stopRequested=${stopEnrichmentRequested}`,
           );
           enrichmentState.lastMessage = "Starting batch fetch...";
 
           // Handle Pause
-          while (pauseEnrichmentRequested && !stopEnrichmentRequested) {
+          while (isPauseRequested() && !isStopRequested()) {
             enrichmentState.status = "paused";
             enrichmentState.lastMessage = "Enrichment paused by user.";
             await sleep(2000);
           }
-          if (stopEnrichmentRequested) break;
+          if (isStopRequested()) break;
 
           enrichmentState.status = "running";
           enrichmentState.lastMessage = `Fetching next batch... (Processed: ${enrichmentState.processedCount})`;
@@ -465,7 +468,7 @@ async function startServer() {
           const workers = Array(concurrencyLimit)
             .fill(null)
             .map(async () => {
-              while (queue.length > 0 && !stopEnrichmentRequested) {
+              while (queue.length > 0 && !isStopRequested()) {
                 const chunk = queue.shift();
                 if (!chunk) continue;
 
@@ -480,7 +483,7 @@ async function startServer() {
                 while (
                   !success &&
                   retryCount < maxRetries &&
-                  !stopEnrichmentRequested
+                  !isStopRequested()
                 ) {
                   try {
                     const playerList = chunk

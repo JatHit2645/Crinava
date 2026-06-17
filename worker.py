@@ -1,3 +1,5 @@
+"""Module docstring."""
+
 import json
 import time
 import re
@@ -13,6 +15,7 @@ class CrexMatchWorker:
     """
 
     def __init__(self, match_data, ai_api_key):
+        """Docstring for __init__."""
         self.match = match_data
         self.crex_id = match_data.get("crex_id").replace("CREX_", "")
         self.ai_api_key = ai_api_key

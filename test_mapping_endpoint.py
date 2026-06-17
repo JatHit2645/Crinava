@@ -1,3 +1,5 @@
+"""Module docstring."""
+
 import json
 import curl_cffi.requests as reqs
 

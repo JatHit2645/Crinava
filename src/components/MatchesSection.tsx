@@ -1,29 +1,22 @@
 // CRINAVA_TELEMETRY_UPGRADE_REVISION_1
 import React, { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
 import {
   Trophy,
   MapPin,
-  Calendar,
   ArrowLeft,
   Loader2,
   ChevronRight,
   Star,
   Info,
   Activity,
-  Coins,
   Search,
-  Filter,
   SlidersHorizontal,
-  ChevronDown,
-  Check,
   Zap,
   Gavel,
   BookOpen,
   Users,
   TrendingUp,
 } from "lucide-react";
-import { supabase } from "../lib/supabaseClient";
 import { VerdictTool } from "./VerdictTool";
 import { motion, AnimatePresence } from "motion/react";
 import { GoogleGenAI } from "@google/genai";
@@ -94,9 +87,9 @@ const parseScorecard = (rawInfo: any) => {
     let totalRuns = 0;
     let totalWickets = 0;
     let totalLegalBalls = 0;
-    let extras = { b: 0, lb: 0, w: 0, nb: 0, p: 0, total: 0 };
+    const extras = { b: 0, lb: 0, w: 0, nb: 0, p: 0, total: 0 };
 
-    let deliveries: any[] = [];
+    const deliveries: any[] = [];
     if (inning.overs) {
       inning.overs.forEach((over: any) => {
         if (over.deliveries) deliveries.push(...over.deliveries);
@@ -131,7 +124,7 @@ const parseScorecard = (rawInfo: any) => {
       const runsBatter = d.runs ? d.runs.batter || d.runs.batsman || 0 : 0;
       batters[batter].runs += runsBatter;
 
-      let isWide = d.extras && d.extras.wides;
+      const isWide = d.extras && d.extras.wides;
       if (!isWide) batters[batter].balls += 1;
       if (runsBatter === 4) batters[batter].fours += 1;
       if (runsBatter === 6) batters[batter].sixes += 1;
@@ -333,7 +326,7 @@ const TournamentsList: React.FC<{ onSelect: (t: Tournament) => void }> = ({
         const years: number[] = [];
         const allText = `${t.event_name} ${t.season} ${t.start_date || ""}`;
         const yearMatches = allText.match(/\b(19|20)\d{2}\b/g);
-        if (yearMatches) yearMatches.forEach((y) => years.push(parseInt(y)));
+        if (yearMatches) yearMatches.forEach((y) => years.push(parseInt(y, 10)));
 
         if (t.start_date) {
           const d = new Date(t.start_date);
@@ -419,7 +412,7 @@ const TournamentsList: React.FC<{ onSelect: (t: Tournament) => void }> = ({
         const yearMatch = (t.start_date || t.season || "")
           .toString()
           .match(/\b(19|20)\d{2}\b/);
-        if (yearMatch) year = parseInt(yearMatch[0]);
+        if (yearMatch) year = parseInt(yearMatch[0], 10);
         if (isNaN(year)) return true;
         return year >= yearRange[0] && year <= yearRange[1];
       });
@@ -624,7 +617,7 @@ const TournamentsList: React.FC<{ onSelect: (t: Tournament) => void }> = ({
                         max="2026"
                         value={yearRange[0]}
                         onChange={(e) => {
-                          const val = parseInt(e.target.value);
+                          const val = parseInt(e.target.value, 10);
                           setYearRange([
                             Math.min(val, yearRange[1]),
                             yearRange[1],
@@ -638,7 +631,7 @@ const TournamentsList: React.FC<{ onSelect: (t: Tournament) => void }> = ({
                         max="2026"
                         value={yearRange[1]}
                         onChange={(e) => {
-                          const val = parseInt(e.target.value);
+                          const val = parseInt(e.target.value, 10);
                           setYearRange([
                             yearRange[0],
                             Math.max(val, yearRange[0]),
@@ -2290,8 +2283,8 @@ const LiveMatchDetail: React.FC<{ match: LiveMatch; onBack: () => void }> = ({
 
         {[innings[activeScorecardInning]].filter(Boolean).map((inn: any) => {
           const iIdx = activeScorecardInning;
-          let rawBatters = inn.batters || inn.b || inn.batsmen || [];
-          let rawBowlers = inn.bowlers || inn.bo || inn.a || [];
+          const rawBatters = inn.batters || inn.b || inn.batsmen || [];
+          const rawBowlers = inn.bowlers || inn.bo || inn.a || [];
 
           const batters = rawBatters.map((bat: any) => {
             if (typeof bat === "string") {
@@ -2381,11 +2374,11 @@ const LiveMatchDetail: React.FC<{ match: LiveMatch; onBack: () => void }> = ({
                         <th className="text-left px-4 py-2 font-bold">
                           BATTER
                         </th>
-                        <th className="px-2 py-2 font-bold">R</th>
-                        <th className="px-2 py-2 font-bold">B</th>
-                        <th className="px-2 py-2 font-bold">4s</th>
-                        <th className="px-2 py-2 font-bold">6s</th>
-                        <th className="px-2 py-2 font-bold">SR</th>
+                        <th className="p-2 font-bold">R</th>
+                        <th className="p-2 font-bold">B</th>
+                        <th className="p-2 font-bold">4s</th>
+                        <th className="p-2 font-bold">6s</th>
+                        <th className="p-2 font-bold">SR</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -2429,19 +2422,19 @@ const LiveMatchDetail: React.FC<{ match: LiveMatch; onBack: () => void }> = ({
                               </div>
                             )}
                           </td>
-                          <td className="px-2 py-2 text-center text-white font-bold">
+                          <td className="p-2 text-center text-white font-bold">
                             {bat.r ?? "-"}
                           </td>
-                          <td className="px-2 py-2 text-center text-gray-400">
+                          <td className="p-2 text-center text-gray-400">
                             {bat.b ?? "-"}
                           </td>
-                          <td className="px-2 py-2 text-center text-metallic-gold">
+                          <td className="p-2 text-center text-metallic-gold">
                             {bat.f ?? "-"}
                           </td>
-                          <td className="px-2 py-2 text-center text-aurora-teal">
+                          <td className="p-2 text-center text-aurora-teal">
                             {bat.s ?? "-"}
                           </td>
-                          <td className="px-2 py-2 text-center text-gray-300">
+                          <td className="p-2 text-center text-gray-300">
                             {bat.sr ?? "-"}
                           </td>
                         </tr>
@@ -2458,11 +2451,11 @@ const LiveMatchDetail: React.FC<{ match: LiveMatch; onBack: () => void }> = ({
                         <th className="text-left px-4 py-2 font-bold">
                           BOWLER
                         </th>
-                        <th className="px-2 py-2 font-bold">O</th>
-                        <th className="px-2 py-2 font-bold">M</th>
-                        <th className="px-2 py-2 font-bold">R</th>
-                        <th className="px-2 py-2 font-bold">W</th>
-                        <th className="px-2 py-2 font-bold">ECON</th>
+                        <th className="p-2 font-bold">O</th>
+                        <th className="p-2 font-bold">M</th>
+                        <th className="p-2 font-bold">R</th>
+                        <th className="p-2 font-bold">W</th>
+                        <th className="p-2 font-bold">ECON</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -2474,19 +2467,19 @@ const LiveMatchDetail: React.FC<{ match: LiveMatch; onBack: () => void }> = ({
                           <td className="px-4 py-2 text-white font-semibold">
                             {resolveName(bwl.id || bwl.n)}
                           </td>
-                          <td className="px-2 py-2 text-center text-gray-400">
+                          <td className="p-2 text-center text-gray-400">
                             {bwl.o ?? "-"}
                           </td>
-                          <td className="px-2 py-2 text-center text-gray-400">
+                          <td className="p-2 text-center text-gray-400">
                             {bwl.m ?? "-"}
                           </td>
-                          <td className="px-2 py-2 text-center text-white font-bold">
+                          <td className="p-2 text-center text-white font-bold">
                             {bwl.r ?? "-"}
                           </td>
-                          <td className="px-2 py-2 text-center text-red-400 font-bold">
+                          <td className="p-2 text-center text-red-400 font-bold">
                             {bwl.w ?? "-"}
                           </td>
-                          <td className="px-2 py-2 text-center text-gray-300">
+                          <td className="p-2 text-center text-gray-300">
                             {bwl.e ?? "-"}
                           </td>
                         </tr>
@@ -2678,7 +2671,7 @@ const LiveMatchDetail: React.FC<{ match: LiveMatch; onBack: () => void }> = ({
               .slice()
               .reverse()
               .map((p, i) => {
-                const runs = parseInt(p.runs_scored) || 0;
+                const runs = parseInt(p.runs_scored, 10) || 0;
                 const isW = p.runs_scored?.toLowerCase().includes("w");
                 const barH = isW ? 90 : Math.max(8, (runs / 6) * 90);
                 const color = isW
@@ -2697,7 +2690,7 @@ const LiveMatchDetail: React.FC<{ match: LiveMatch; onBack: () => void }> = ({
                   >
                     <div
                       className={`w-3 rounded-t ${color}`}
-                      style={{ height: barH + "%" }}
+                      style={{ height: `${barH}%` }}
                     />
                     <span className="text-[7px] text-gray-600">
                       {p.over_ball}

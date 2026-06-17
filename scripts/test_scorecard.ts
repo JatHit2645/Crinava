@@ -38,9 +38,9 @@ const parseScorecard = (rawInfo: any) => {
     let totalRuns = 0;
     let totalWickets = 0;
     let totalLegalBalls = 0;
-    let extras = { b: 0, lb: 0, w: 0, nb: 0, p: 0, total: 0 };
+    const extras = { b: 0, lb: 0, w: 0, nb: 0, p: 0, total: 0 };
 
-    let deliveries: any[] = [];
+    const deliveries: any[] = [];
     if (inning.overs) {
       inning.overs.forEach((over: any) => {
         if (over.deliveries) deliveries.push(...over.deliveries);
@@ -75,7 +75,7 @@ const parseScorecard = (rawInfo: any) => {
       const runsBatter = d.runs ? d.runs.batter || d.runs.batsman || 0 : 0;
       batters[batter].runs += runsBatter;
 
-      let isWide = d.extras && d.extras.wides;
+      const isWide = d.extras && d.extras.wides;
       if (!isWide) batters[batter].balls += 1;
       if (runsBatter === 4) batters[batter].fours += 1;
       if (runsBatter === 6) batters[batter].sixes += 1;

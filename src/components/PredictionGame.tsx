@@ -1,27 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import {
-  Trophy,
-  MessageSquare,
-  User,
-  BarChart3,
-  Target,
-  ChevronRight,
-  X,
-  Lock,
-  Unlock,
-  Zap,
-  Shield,
-  Star,
-  AlertTriangle,
-  Clock,
-  LogOut,
-  Volume2,
-  VolumeX,
-  Copy,
-  Check,
-  ArrowLeft,
-} from "lucide-react";
+import { AlertTriangle, LogOut, Copy, ArrowLeft } from "lucide-react";
 
 const API_KEY = "$2a$10$zlgjKE7cSjNvtN/aj9L1HOIqi9HxqWmXzwVbc6rkPZBbqGt1sQNdG";
 const BIN_URL = "https://api.jsonbin.io/v3/b";
@@ -348,7 +327,9 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
     try {
       const saved = localStorage.getItem("ca26");
       if (saved) return JSON.parse(saved);
-    } catch (e) {}
+    } catch (e) {
+      // Ignore initial parsing errors
+    }
     return {
       room: "",
       bid: "",
@@ -446,17 +427,16 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
         });
         const j = await r.json();
         return j.metadata?.id;
-      } else {
-        await fetch(`${BIN_URL}/${currentState.bid}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Master-Key": API_KEY,
-          },
-          body: JSON.stringify(data),
-        });
-        return currentState.bid;
       }
+      await fetch(`${BIN_URL}/${currentState.bid}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Master-Key": API_KEY,
+        },
+        body: JSON.stringify(data),
+      });
+      return currentState.bid;
     } catch (e) {
       console.error(e);
       return currentState.bid;
@@ -481,7 +461,9 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
           p2prof: j.record.p2prof || {},
         }));
       }
-    } catch (e) {}
+    } catch (e) {
+      // Ignore load errors
+    }
   };
 
   useEffect(() => {
@@ -843,7 +825,7 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
                     pin: e.target.value.replace(/\D/g, ""),
                   })
                 }
-                className="w-full bg-white/[0.03] border border-border-default rounded-xl px-4 py-4 text-center text-2xl tracking-[1em] font-bold text-amber-500 focus:border-amber-500 outline-none transition-colors"
+                className="w-full bg-white/[0.03] border border-border-default rounded-xl p-4 text-center text-2xl tracking-[1em] font-bold text-amber-500 focus:border-amber-500 outline-none transition-colors"
                 placeholder="••••"
               />
               <div className="flex items-start gap-3 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">

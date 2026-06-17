@@ -1,5 +1,4 @@
 import { supabase } from "../lib/supabaseServer";
-import { aiClient } from "../lib/ai";
 import { calculateImpact } from "../lib/impactEngine";
 
 export interface VerdictResponse {
@@ -60,7 +59,9 @@ function extractJson(content: string | null): any {
     if (match) {
       try {
         return JSON.parse(match[0]);
-      } catch (e2) {}
+      } catch (e2) {
+        // Ignore parsing error
+      }
     }
     return {};
   }
@@ -85,7 +86,7 @@ async function callAIApi(messages: any[]): Promise<any> {
       .substring(0, rawBaseUrl.length - "/chat/completions".length)
       .replace(/\/+$/, "");
   }
-  const url = rawBaseUrl + "/chat/completions";
+  const url = `${rawBaseUrl}/chat/completions`;
 
   const response = await fetch(url, {
     method: "POST",
@@ -174,7 +175,7 @@ export async function generateVerdict(
               const lastName = name.split(" ").pop() || "";
 
               // Robust resolution: Try exact, then ilike full, then ilike last
-              let { data: players } = await supabase
+              const { data: players } = await supabase
                 .from("players")
                 .select(
                   "player_id, player_name, player_career_stats(matches_played)",

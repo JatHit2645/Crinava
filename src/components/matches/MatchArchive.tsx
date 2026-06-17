@@ -6,7 +6,6 @@ import {
   Trophy,
   ChevronRight,
   Search,
-  Filter,
   History,
 } from "lucide-react";
 

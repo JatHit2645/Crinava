@@ -1,3 +1,5 @@
+"""Module docstring."""
+
 from stealth import stealth_session
 
 endpoints = [

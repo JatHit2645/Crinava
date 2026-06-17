@@ -1,5 +1,7 @@
+"""Module docstring."""
+
 from curl_cffi import requests
-import random
+import secrets
 
 # Pool of desktop User-Agents
 USER_AGENTS = [
@@ -9,20 +11,28 @@ USER_AGENTS = [
 
 
 class ShadowSession:
+    """Docstring for ShadowSession class."""
+
     _instance = None
 
     def __new__(cls):
+        """Docstring for __new__."""
         if cls._instance is None:
             print("[System] Creating ShadowSession Singleton...")
             cls._instance = super(ShadowSession, cls).__new__(cls)
-            cls._instance.session = None
         return cls._instance
 
+    def __init__(self):
+        """Docstring for __init__."""
+        if not hasattr(self, "session"):
+            self.session = None
+
     def init_session(self):
+        """Docstring for init_session."""
         if self.session is None:
             print("[System] Initializing curl_cffi Session...")
             self.session = requests.Session(impersonate="chrome120")
-            self.user_agent = random.choice(USER_AGENTS)
+            self.user_agent = secrets.choice(USER_AGENTS)
             self.session.headers.update(
                 {
                     "User-Agent": self.user_agent,
@@ -33,15 +43,18 @@ class ShadowSession:
             )
 
     def get_headers(self):
+        """Docstring for get_headers."""
         self.init_session()
         return dict(self.session.headers)
 
     @property
     def cookies(self):
+        """Docstring for cookies."""
         self.init_session()
         return self.session.cookies
 
     def request(self, method, url, **kwargs):
+        """Docstring for request."""
         self.init_session()
         return self.session.request(method=method, url=url, **kwargs)
 

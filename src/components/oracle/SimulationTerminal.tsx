@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { Terminal, Cpu, Zap, Activity, Globe, Shield } from "lucide-react";
+import { Terminal, Cpu, Zap, Globe, Shield } from "lucide-react";
 
 export const SimulationTerminal: React.FC = () => {
   const [logs, setLogs] = useState<string[]>([]);

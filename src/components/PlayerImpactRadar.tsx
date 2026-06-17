@@ -8,7 +8,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import { Trophy, Users, ChevronDown } from "lucide-react";
+import { Trophy, ChevronDown } from "lucide-react";
 
 export const PlayerImpactRadar: React.FC<{
   rawInfo: any;
@@ -48,7 +48,7 @@ export const PlayerImpactRadar: React.FC<{
       return;
     }
 
-    let deliveries: any[] = [];
+    const deliveries: any[] = [];
     if (inningData.overs) {
       inningData.overs.forEach((over: any) => {
         if (over.deliveries) deliveries.push(...over.deliveries);
@@ -136,13 +136,13 @@ export const PlayerImpactRadar: React.FC<{
         {
           subject: "Boundary %",
           A: Math.min(100, boundaryPct * 2.5),
-          value: boundaryPct.toFixed(2) + "%",
+          value: `${boundaryPct.toFixed(2)}%`,
           fullMark: 100,
         },
         {
           subject: "Non-Dot %",
           A: Math.min(100, nonDotPct),
-          value: nonDotPct.toFixed(2) + "%",
+          value: `${nonDotPct.toFixed(2)}%`,
           fullMark: 100,
         },
         {
@@ -176,7 +176,7 @@ export const PlayerImpactRadar: React.FC<{
         {
           subject: "Dot Ball %",
           A: Math.min(100, dotBallPct * 1.5),
-          value: dotBallPct.toFixed(2) + "%",
+          value: `${dotBallPct.toFixed(2)}%`,
           fullMark: 100,
         },
         {

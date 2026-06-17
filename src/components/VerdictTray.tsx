@@ -12,7 +12,7 @@ export const VerdictTray: React.FC<VerdictTrayProps> = ({ onCompare }) => {
   if (selectedPlayerIds.length === 0) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-[#111111] border-t border-white/10 p-4 flex items-center justify-between z-50">
+    <div className="fixed bottom-0 inset-x-0 bg-[#111111] border-t border-white/10 p-4 flex items-center justify-between z-50">
       <div className="flex gap-2 overflow-x-auto">
         {selectedPlayerIds.map((id) => (
           <div

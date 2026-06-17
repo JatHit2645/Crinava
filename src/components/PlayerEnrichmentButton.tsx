@@ -186,7 +186,7 @@ export function PlayerEnrichmentButton() {
         {isRunning && (
           <button
             onClick={pauseEnrichment}
-            className="px-6 py-3 bg-accent-bright/20 text-accent-bright border border-accent/40 rounded-lg font-sans tracking-tight text-sm font-bold uppercase tracking-widest hover:bg-accent-bright/30 transition-all"
+            className="px-6 py-3 bg-accent-bright/20 text-accent-bright border border-accent/40 rounded-lg font-sans text-sm font-bold uppercase tracking-widest hover:bg-accent-bright/30 transition-all"
           >
             Pause
           </button>
@@ -195,7 +195,7 @@ export function PlayerEnrichmentButton() {
         {isPaused && (
           <button
             onClick={resumeEnrichment}
-            className="px-6 py-3 bg-accent/20 text-accent border border-accent/40 rounded-lg font-sans tracking-tight text-sm font-bold uppercase tracking-widest hover:bg-accent/30 transition-all"
+            className="px-6 py-3 bg-accent/20 text-accent border border-accent/40 rounded-lg font-sans text-sm font-bold uppercase tracking-widest hover:bg-accent/30 transition-all"
           >
             Resume
           </button>

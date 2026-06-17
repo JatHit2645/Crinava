@@ -20,6 +20,17 @@ export const RazorpayCheckout: React.FC<RazorpayCheckoutProps> = ({
         return;
       }
 
+      // Dynamically load Razorpay checkout
+      if (!(window as any).Razorpay) {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = "https://checkout.razorpay.com/v1/checkout.js";
+          script.onload = resolve;
+          script.onerror = reject;
+          document.body.appendChild(script);
+        });
+      }
+
       // 1. Create order
       const response = await fetch("/api/create-order", {
         method: "POST",

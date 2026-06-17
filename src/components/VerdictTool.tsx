@@ -4,12 +4,10 @@ import {
   Send,
   Loader2,
   AlertCircle,
-  TrendingUp,
   CheckCircle2,
   XCircle,
   BarChart3,
   Info,
-  User,
   Search,
   Settings2,
   History,
@@ -255,7 +253,7 @@ export const VerdictTool: React.FC<VerdictToolProps> = ({ scope, context }) => {
                       step="50"
                       value={minDataThreshold}
                       onChange={(e) =>
-                        setMinDataThreshold(parseInt(e.target.value))
+                        setMinDataThreshold(parseInt(e.target.value, 10))
                       }
                       className="w-20 accent-aurora-teal"
                     />

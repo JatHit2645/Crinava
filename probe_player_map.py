@@ -51,7 +51,7 @@ try:
     for k, v in sv.items():
         val_str = str(v)
         if len(val_str) > 200:
-            val_str = val_str[:200] + "..."
+            val_str = f"{val_str[:200]}..."
         print(f"  {k}: {val_str}")
 except Exception as e:
     print(f"Error: {e}")
@@ -108,7 +108,7 @@ try:
             for item in feeds[:5]:
                 print(f"  type={item.get('type')}, keys={list(item.keys())}")
                 # Print the 'c' or 'cc1' field if present
-                for field in ["c", "cc1", "cc2", "n", "pn", "playerName"]:
+                for field in ("c", "cc1", "cc2", "n", "pn", "playerName"):
                     if field in item:
                         print(f"    {field}: {str(item[field])[:200]}")
     else:
@@ -152,7 +152,7 @@ try:
         print("No __NEXT_DATA__ found")
 
     # Check __crexData
-    m2 = re.search(r"__crexData\s*=\s*({.*?})(?:;|\n)", html, re.DOTALL)
+    m2 = re.search(r"__crexData\s*=\s*({[^}]*})[;\n]", html)
     if m2:
         print(f"__crexData found: {m2.group(1)[:300]}")
     else:

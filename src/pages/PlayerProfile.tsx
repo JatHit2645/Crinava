@@ -3,7 +3,6 @@ import { supabase } from "../lib/supabaseClient";
 import { useVerdictStore } from "../store/verdictStore";
 import { ArrowLeft, Target, Zap } from "lucide-react";
 import { motion } from "motion/react";
-import { aggregateDeliveries } from "../lib/cricketUtils";
 
 interface PlayerProfileProps {
   playerId: string; // This is actually the player's name from the scorecard

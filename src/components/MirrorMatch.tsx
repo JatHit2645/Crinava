@@ -7,10 +7,9 @@ import {
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
-  Legend,
   ReferenceLine,
 } from "recharts";
-import { Zap, ChevronDown, Activity, MapPin } from "lucide-react";
+import { ChevronDown, Activity, MapPin } from "lucide-react";
 import { supabase } from "../lib/supabaseClient";
 
 export const MirrorMatch: React.FC<{
@@ -86,7 +85,7 @@ export const MirrorMatch: React.FC<{
             let matchTotalBalls = 0;
 
             inningsList.forEach((inningData: any) => {
-              let deliveries: any[] = [];
+              const deliveries: any[] = [];
               if (inningData.overs) {
                 inningData.overs.forEach((over: any) => {
                   if (over.deliveries)
@@ -222,7 +221,7 @@ export const MirrorMatch: React.FC<{
           <div className="relative">
             <select
               value={selectedOver}
-              onChange={(e) => setSelectedOver(parseInt(e.target.value))}
+              onChange={(e) => setSelectedOver(parseInt(e.target.value, 10))}
               className="appearance-none bg-black/40 border border-white/10 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 pr-8 rounded-lg outline-none focus:border-aurora-teal transition-all"
             >
               {overOptions.map((o) => (

@@ -1,3 +1,5 @@
+"""Module docstring."""
+
 # CRINAVA_TELEMETRY_UPGRADE_REVISION_1
 from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, StreamingResponse, JSONResponse
@@ -18,6 +20,7 @@ from hub import load_cache, save_cache, match_hub  # noqa: E402
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """Docstring for lifespan."""
     print("[System] Crinava Hub starting background services...")
     load_cache()
     # Start Discovery Engine in background
@@ -62,6 +65,7 @@ SECRET_KEY = os.environ.get("CRINAVA_SECRET", "crinava_ultra_secure_123")
 @app.middleware("http")
 async def verify_crinava_secret(request: Request, call_next):
     # Allow home page, all public API paths, CORS preflight OPTIONS, and diagnostic files
+    """Docstring for verify_crinava_secret."""
     public_prefixes = [
         "/",
         "/favicon.ico",
@@ -133,6 +137,7 @@ def _resolve_id(ext_id: str) -> str:
 
 @app.get("/")
 async def home():
+    """Docstring for home."""
     if os.path.exists("diagnostic.html"):
         return FileResponse("diagnostic.html")
 
@@ -281,6 +286,7 @@ async def stream_match(match_id: str):
 
     async def event_generator():
         # Create a private queue for this specific client
+        """Docstring for event_generator."""
         queue = asyncio.Queue()
         match_hub[resolved]["queues"].add(queue)
 

@@ -1,3 +1,5 @@
+"""Module docstring."""
+
 # CRINAVA_TELEMETRY_UPGRADE_REVISION_1
 import asyncio
 from stealth import stealth_session
@@ -9,6 +11,7 @@ class CrinavaDiscovery:
     """Handles Step 1 (Discovery) and Step 2 (Matching) of the 7-step plan."""
 
     def __init__(self):
+        """Docstring for __init__."""
         self.live_matches = []
         self.discovery_interval = 300  # 5 minutes
         self.jitter_max = 60  # 1 minute jitter
@@ -16,12 +19,14 @@ class CrinavaDiscovery:
         self._last_log_signatures = {}
 
     def _print_once(self, key: str, message: str) -> None:
+        """Docstring for _print_once."""
         if key in self._printed_log_keys:
             return
         self._printed_log_keys.add(key)
         print(message)
 
     def _print_on_change(self, key: str, signature, message: str) -> None:
+        """Docstring for _print_on_change."""
         if self._last_log_signatures.get(key) == signature:
             return
         self._last_log_signatures[key] = signature
@@ -43,6 +48,7 @@ class CrinavaDiscovery:
         results = {"Completed": [], "Upcoming": [], "Live": []}
 
         async def fetch_and_parse(state, url):
+            """Docstring for fetch_and_parse."""
             try:
                 self._print_once(
                     f"siphon:{state}:{url}",
@@ -158,7 +164,7 @@ class CrinavaDiscovery:
 
                 # Now use soup parser to refine the states precisely
                 soup = BeautifulSoup(response.text, "html.parser")
-                for link in soup.find_all("a"):
+                for link in list(soup.find_all("a")):
                     href = link.get("href", "")
                     if "cricket-live-score" not in href:
                         continue
@@ -307,6 +313,7 @@ class CrinavaDiscovery:
                             extended_crex_terms.add(ALIASES[term])
 
                     def clean_name(val):
+                        """Docstring for clean_name."""
                         val = re.sub(r"[^a-z0-9]", "", str(val or "").lower())
                         if val.endswith("women"):
                             val = val[:-5]

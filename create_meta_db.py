@@ -1,3 +1,5 @@
+"""Module docstring."""
+
 import sqlite3
 import json
 import os
@@ -9,6 +11,7 @@ DB_PATH = "meta.db"
 
 
 def create_meta_db():
+    """Docstring for create_meta_db."""
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute("DROP TABLE IF EXISTS matches")

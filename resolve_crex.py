@@ -1,3 +1,5 @@
+"""Module docstring."""
+
 import httpx
 
 target = "socket.crex.com"

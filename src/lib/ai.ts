@@ -1,5 +1,3 @@
-import OpenAI from "openai";
-
 console.log("ai.ts: Initializing AI client...");
 const apiKey = (process.env.NVIDIA_API_KEY || process.env.MISTRAL_API_KEY)
   ?.trim()

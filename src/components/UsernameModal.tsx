@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import {
-  User,
-  Check,
-  X,
-  Loader2,
-  Sparkles,
-  Calendar,
-  ChevronDown,
-} from "lucide-react";
+import { User, Check, X, Loader2, Sparkles, Calendar } from "lucide-react";
 import { supabase } from "../lib/supabaseClient";
 
 interface UsernameModalProps {
@@ -49,9 +41,9 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
     const parts = date.split("/");
     if (parts.length !== 3) return false;
 
-    const year = parseInt(parts[0]);
-    const month = parseInt(parts[1]);
-    const day = parseInt(parts[2]);
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10);
+    const day = parseInt(parts[2], 10);
 
     if (isNaN(year) || isNaN(month) || isNaN(day)) return false;
     if (year < 1950 || year > new Date().getFullYear()) return false;
@@ -69,8 +61,8 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
 
     let formatted = "";
     if (value.length > 0) formatted += value.slice(0, 4);
-    if (value.length > 4) formatted += "/" + value.slice(4, 6);
-    if (value.length > 6) formatted += "/" + value.slice(6, 8);
+    if (value.length > 4) formatted += `/${value.slice(4, 6)}`;
+    if (value.length > 6) formatted += `/${value.slice(6, 8)}`;
 
     setDob(formatted);
   };
@@ -192,7 +184,7 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
                 <Sparkles className="text-accent-default" size={24} />
                 Choose Identity
               </h2>
-              <p className="text-xs text-fg-muted font-bold uppercase tracking-widest text-[10px]">
+              <p className="text-fg-muted font-bold uppercase tracking-widest text-[10px]">
                 Every legend needs a name. What's yours?
               </p>
             </div>
@@ -214,7 +206,7 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
                       setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ""))
                     }
                     placeholder="cricket_legend_1"
-                    className={`w-full bg-white/[0.03] border rounded-2xl py-4 pl-12 pr-12 text-fg-primary text-xs font-bold focus:outline-none transition-all ${
+                    className={`w-full bg-white/[0.03] border rounded-2xl py-4 px-12 text-fg-primary text-xs font-bold focus:outline-none transition-all${
                       isAvailable === true
                         ? "border-accent-default/50 focus:border-accent-default"
                         : isAvailable === false
