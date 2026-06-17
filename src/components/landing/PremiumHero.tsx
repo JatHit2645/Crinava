@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Play, ArrowRight, Shield, Zap, Globe } from 'lucide-react';
+import React from "react";
+import { motion } from "motion/react";
+import { Play, ArrowRight, Shield, Zap, Globe } from "lucide-react";
 
 interface PremiumHeroProps {
   onGetStarted: () => void;
@@ -43,8 +43,9 @@ export const PremiumHero: React.FC<PremiumHeroProps> = ({ onGetStarted }) => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="max-w-2xl text-lg md:text-xl text-white/60 leading-relaxed mb-12"
           >
-            The world's most advanced AI-driven cricket analytics platform. 
-            Harnessing Monte Carlo simulations and real-time telemetry to predict the unpredictable.
+            The world's most advanced AI-driven cricket analytics platform.
+            Harnessing Monte Carlo simulations and real-time telemetry to
+            predict the unpredictable.
           </motion.p>
 
           {/* Actions */}
@@ -77,19 +78,27 @@ export const PremiumHero: React.FC<PremiumHeroProps> = ({ onGetStarted }) => {
           >
             <div className="flex items-center gap-3">
               <Shield className="w-6 h-6" />
-              <span className="text-xs font-bold tracking-widest uppercase">Encrypted</span>
+              <span className="text-xs font-bold tracking-widest uppercase">
+                Encrypted
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <Zap className="w-6 h-6" />
-              <span className="text-xs font-bold tracking-widest uppercase">Real-time</span>
+              <span className="text-xs font-bold tracking-widest uppercase">
+                Real-time
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <Globe className="w-6 h-6" />
-              <span className="text-xs font-bold tracking-widest uppercase">Global Data</span>
+              <span className="text-xs font-bold tracking-widest uppercase">
+                Global Data
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-6 h-6 border-2 border-white rounded-sm"></div>
-              <span className="text-xs font-bold tracking-widest uppercase">Verified</span>
+              <span className="text-xs font-bold tracking-widest uppercase">
+                Verified
+              </span>
             </div>
           </motion.div>
         </div>

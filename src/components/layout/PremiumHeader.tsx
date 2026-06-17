@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Menu, X, User, Bell, Coins } from 'lucide-react';
+import React from "react";
+import { motion } from "motion/react";
+import { Menu, X, User, Bell, Coins } from "lucide-react";
 
 interface PremiumHeaderProps {
   user: any;
@@ -19,7 +19,7 @@ export const PremiumHeader: React.FC<PremiumHeaderProps> = ({
   onProfileClick,
   onNotificationsClick,
   isMenuOpen,
-  setIsMenuOpen
+  setIsMenuOpen,
 }) => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
@@ -30,12 +30,14 @@ export const PremiumHeader: React.FC<PremiumHeaderProps> = ({
             <div className="w-10 h-10 rounded-xl bg-gradient-aurora flex items-center justify-center shadow-aurora group-hover:scale-110 transition-transform duration-500">
               <span className="text-void font-bold text-xl">C</span>
             </div>
-            <span className="text-xl font-bold tracking-tighter text-gradient-white">CRINAVA</span>
+            <span className="text-xl font-bold tracking-tighter text-gradient-white">
+              CRINAVA
+            </span>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {['Oracle', 'Matches', 'Strategy', 'Community'].map((item) => (
+            {["Oracle", "Matches", "Strategy", "Community"].map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
@@ -52,7 +54,9 @@ export const PremiumHeader: React.FC<PremiumHeaderProps> = ({
               <>
                 <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-imperial/10 border border-imperial/20">
                   <Coins className="w-4 h-4 text-imperial" />
-                  <span className="text-sm font-bold text-imperial">{coins}</span>
+                  <span className="text-sm font-bold text-imperial">
+                    {coins}
+                  </span>
                 </div>
                 <button
                   onClick={onNotificationsClick}
@@ -69,19 +73,20 @@ export const PremiumHeader: React.FC<PremiumHeaderProps> = ({
                 </button>
               </>
             ) : (
-              <button
-                onClick={onAuthClick}
-                className="btn-primary py-2.5 px-6"
-              >
+              <button onClick={onAuthClick} className="btn-primary py-2.5 px-6">
                 Get Started
               </button>
             )}
-            
+
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden p-2.5 rounded-xl bg-white/5 border border-white/10"
             >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </button>
           </div>
         </nav>

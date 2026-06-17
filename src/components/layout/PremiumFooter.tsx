@@ -1,6 +1,15 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Twitter, Github, Linkedin, Mail, ArrowRight, Shield, Zap, Globe } from 'lucide-react';
+import React from "react";
+import { motion } from "motion/react";
+import {
+  Twitter,
+  Github,
+  Linkedin,
+  Mail,
+  ArrowRight,
+  Shield,
+  Zap,
+  Globe,
+} from "lucide-react";
 
 export const PremiumFooter: React.FC = () => {
   return (
@@ -17,10 +26,12 @@ export const PremiumFooter: React.FC = () => {
               <div className="w-10 h-10 rounded-xl bg-gradient-aurora flex items-center justify-center shadow-aurora group-hover:scale-110 transition-transform duration-500">
                 <span className="text-void font-bold text-xl">C</span>
               </div>
-              <span className="text-xl font-bold tracking-tighter text-gradient-white">CRINAVA</span>
+              <span className="text-xl font-bold tracking-tighter text-gradient-white">
+                CRINAVA
+              </span>
             </div>
             <p className="text-white/40 text-sm leading-relaxed">
-              The world's most advanced AI-driven cricket analytics platform. 
+              The world's most advanced AI-driven cricket analytics platform.
               Precision intelligence for the modern game.
             </p>
             <div className="flex items-center gap-4">
@@ -37,11 +48,22 @@ export const PremiumFooter: React.FC = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white font-bold mb-8 uppercase tracking-widest text-xs">Platform</h4>
+            <h4 className="text-white font-bold mb-8 uppercase tracking-widest text-xs">
+              Platform
+            </h4>
             <ul className="flex flex-col gap-4">
-              {['Oracle Engine', 'Match Center', 'Strategy Hub', 'Community', 'Leaderboard'].map((item) => (
+              {[
+                "Oracle Engine",
+                "Match Center",
+                "Strategy Hub",
+                "Community",
+                "Leaderboard",
+              ].map((item) => (
                 <li key={item}>
-                  <a href={`#${item.toLowerCase().replace(' ', '-')}`} className="text-white/40 text-sm hover:text-aurora transition-colors flex items-center gap-2 group">
+                  <a
+                    href={`#${item.toLowerCase().replace(" ", "-")}`}
+                    className="text-white/40 text-sm hover:text-aurora transition-colors flex items-center gap-2 group"
+                  >
                     <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                     {item}
                   </a>
@@ -52,11 +74,22 @@ export const PremiumFooter: React.FC = () => {
 
           {/* Resources */}
           <div>
-            <h4 className="text-white font-bold mb-8 uppercase tracking-widest text-xs">Resources</h4>
+            <h4 className="text-white font-bold mb-8 uppercase tracking-widest text-xs">
+              Resources
+            </h4>
             <ul className="flex flex-col gap-4">
-              {['Documentation', 'API Access', 'Case Studies', 'Research Papers', 'Help Center'].map((item) => (
+              {[
+                "Documentation",
+                "API Access",
+                "Case Studies",
+                "Research Papers",
+                "Help Center",
+              ].map((item) => (
                 <li key={item}>
-                  <a href={`#${item.toLowerCase().replace(' ', '-')}`} className="text-white/40 text-sm hover:text-aurora transition-colors flex items-center gap-2 group">
+                  <a
+                    href={`#${item.toLowerCase().replace(" ", "-")}`}
+                    className="text-white/40 text-sm hover:text-aurora transition-colors flex items-center gap-2 group"
+                  >
                     <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                     {item}
                   </a>
@@ -67,9 +100,12 @@ export const PremiumFooter: React.FC = () => {
 
           {/* Newsletter */}
           <div>
-            <h4 className="text-white font-bold mb-8 uppercase tracking-widest text-xs">Stay Updated</h4>
+            <h4 className="text-white font-bold mb-8 uppercase tracking-widest text-xs">
+              Stay Updated
+            </h4>
             <p className="text-white/40 text-sm mb-6 leading-relaxed">
-              Get the latest insights and simulation reports delivered to your inbox.
+              Get the latest insights and simulation reports delivered to your
+              inbox.
             </p>
             <div className="relative group">
               <input
@@ -90,11 +126,17 @@ export const PremiumFooter: React.FC = () => {
             © 2026 CRINAVA INTELLIGENCE. ALL RIGHTS RESERVED.
           </div>
           <div className="flex items-center gap-8">
-            {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
-              <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} className="text-white/40 text-xs hover:text-aurora transition-colors">
-                {item}
-              </a>
-            ))}
+            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(
+              (item) => (
+                <a
+                  key={item}
+                  href={`#${item.toLowerCase().replace(" ", "-")}`}
+                  className="text-white/40 text-xs hover:text-aurora transition-colors"
+                >
+                  {item}
+                </a>
+              ),
+            )}
           </div>
           <div className="flex items-center gap-3 opacity-40">
             <Shield className="w-4 h-4" />

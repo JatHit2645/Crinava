@@ -1,26 +1,26 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Quote, Star } from 'lucide-react';
+import React from "react";
+import { motion } from "motion/react";
+import { Quote, Star } from "lucide-react";
 
 const testimonials = [
   {
     name: "Alex Thompson",
     role: "Professional Analyst",
     text: "Crinava's Oracle Engine has completely transformed how we approach match strategy. The precision is simply unmatched.",
-    avatar: "https://picsum.photos/seed/alex/100/100"
+    avatar: "https://picsum.photos/seed/alex/100/100",
   },
   {
     name: "Sarah Chen",
     role: "Strategy Consultant",
     text: "The Monte Carlo simulations provide a level of depth that I haven't seen in any other platform. A true game-changer.",
-    avatar: "https://picsum.photos/seed/sarah/100/100"
+    avatar: "https://picsum.photos/seed/sarah/100/100",
   },
   {
     name: "Marcus Wright",
     role: "Performance Coach",
     text: "Momentum Flow analysis gives us insights into player psychology that were previously invisible. Essential for modern cricket.",
-    avatar: "https://picsum.photos/seed/marcus/100/100"
-  }
+    avatar: "https://picsum.photos/seed/marcus/100/100",
+  },
 ];
 
 export const TestimonialsSection: React.FC = () => {
@@ -34,7 +34,7 @@ export const TestimonialsSection: React.FC = () => {
             <span className="text-gradient-aurora">THE ELITE.</span>
           </h2>
           <p className="text-white/50 text-lg leading-relaxed max-w-2xl mx-auto">
-            Join thousands of analysts and strategists who are already using 
+            Join thousands of analysts and strategists who are already using
             Crinava to gain a competitive edge.
           </p>
         </div>
@@ -52,10 +52,13 @@ export const TestimonialsSection: React.FC = () => {
               <div className="absolute top-8 right-8 text-aurora/20 group-hover:text-aurora/40 transition-colors">
                 <Quote className="w-12 h-12" />
               </div>
-              
+
               <div className="flex gap-1 mb-6">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-imperial text-imperial" />
+                  <Star
+                    key={i}
+                    className="w-4 h-4 fill-imperial text-imperial"
+                  />
                 ))}
               </div>
 
@@ -65,11 +68,20 @@ export const TestimonialsSection: React.FC = () => {
 
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-aurora/20 group-hover:border-aurora transition-colors">
-                  <img src={testimonial.avatar} alt={testimonial.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img
+                    src={testimonial.avatar}
+                    alt={testimonial.name}
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
                 </div>
                 <div>
-                  <div className="font-bold text-white group-hover:text-aurora transition-colors">{testimonial.name}</div>
-                  <div className="text-xs font-bold tracking-widest uppercase text-white/40">{testimonial.role}</div>
+                  <div className="font-bold text-white group-hover:text-aurora transition-colors">
+                    {testimonial.name}
+                  </div>
+                  <div className="text-xs font-bold tracking-widest uppercase text-white/40">
+                    {testimonial.role}
+                  </div>
                 </div>
               </div>
             </motion.div>

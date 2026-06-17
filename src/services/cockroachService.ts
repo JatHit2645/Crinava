@@ -1,7 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 
 // Get the URL from env or fallback to the current one
-const ENGINE_URL = process.env.CRINAVA_ENGINE_URL || "https://jathit2645-crinava-engine.hf.space";
+const ENGINE_URL =
+  process.env.CRINAVA_ENGINE_URL ||
+  "https://jathit2645-crinava-engine.hf.space";
 
 export const getSeriesList = async () => {
   try {
@@ -11,7 +13,7 @@ export const getSeriesList = async () => {
       event_name: s.event_name,
       season: s.season,
       match_count: s.match_count,
-      match_type: s.match_type || 'T20'
+      match_type: s.match_type || "T20",
     }));
   } catch (error) {
     console.error("Engine fetch error:", error);
@@ -21,9 +23,11 @@ export const getSeriesList = async () => {
 
 export const getMatchesBySeries = async (eventName: string, season: string) => {
   try {
-    console.log(`🚀 Engine Request: /matches?event=${eventName}&season=${season}`);
+    console.log(
+      `🚀 Engine Request: /matches?event=${eventName}&season=${season}`,
+    );
     const response = await axios.get(`${ENGINE_URL}/matches`, {
-      params: { event: eventName, season: season }
+      params: { event: eventName, season: season },
     });
     return response.data;
   } catch (error) {

@@ -1,5 +1,5 @@
-import 'dotenv/config';
-import pg from 'pg';
+import "dotenv/config";
+import pg from "pg";
 const { Pool } = pg;
 
 async function testWebsiteQuery() {
@@ -7,12 +7,12 @@ async function testWebsiteQuery() {
 
   const pool = new Pool({
     connectionString: process.env.COCKROACH_URL,
-    ssl: { rejectUnauthorized: false }
+    ssl: { rejectUnauthorized: false },
   });
 
   try {
     const client = await pool.connect();
-    
+
     // The exact query from cockroachService.ts
     const query = `
       SELECT 
@@ -31,16 +31,23 @@ async function testWebsiteQuery() {
 
     console.log("📡 Sending query to CockroachDB...");
     const res = await client.query(query);
-    
+
     if (res.rows.length > 0) {
-        console.log("✅ SUCCESS! Found Series Data:");
-        console.table(res.rows);
+      console.log("✅ SUCCESS! Found Series Data:");
+      console.table(res.rows);
     } else {
-        console.log("⚠️ Query returned 0 rows! (Is event_name actually populated?)");
-        const check = await client.query("SELECT event_name FROM match_deliveries_v3 WHERE event_name IS NOT NULL LIMIT 1");
-        console.log("Check for populated event_name:", check.rows.length > 0 ? "Found one!" : "STILL ALL NULL!");
+      console.log(
+        "⚠️ Query returned 0 rows! (Is event_name actually populated?)",
+      );
+      const check = await client.query(
+        "SELECT event_name FROM match_deliveries_v3 WHERE event_name IS NOT NULL LIMIT 1",
+      );
+      console.log(
+        "Check for populated event_name:",
+        check.rows.length > 0 ? "Found one!" : "STILL ALL NULL!",
+      );
     }
-    
+
     client.release();
     process.exit(0);
   } catch (err: any) {

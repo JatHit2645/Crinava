@@ -1,10 +1,10 @@
 # CRINAVA_TELEMETRY_UPGRADE_REVISION_1
 import asyncio
 import os
-import json
 import time
 import re
 import html as html_mod
+
 # import removed
 import httpx
 import curl_cffi.requests as reqs
@@ -15,8 +15,7 @@ _ai_semaphore = asyncio.Semaphore(5)
 
 
 class CrexMatchWorker:
-    """
-    Polls the Crex JSON API for real-time ball-by-ball updates.
+    """Polls the Crex JSON API for real-time ball-by-ball updates.
 
     Player mapping strategy:
       1. HTML scrape of Crex scorecard/playing11/match-info pages
@@ -93,21 +92,47 @@ class CrexMatchWorker:
         return False
 
     def _mine_any_json_for_players(self, obj, source: str = "JSON") -> int:
-        """
-        Recursively mine player id -> name from any nested Crex/CrickAPI payload.
-        This catches structures missed by fixed sections like innings['batsmen'].
+        """Recursively mine player id -> name from any nested Crex/CrickAPI
+        payload.
+
+        This catches structures missed by fixed sections like
+        innings['batsmen'].
         """
         id_keys = {
-            "id", "pid", "pId", "playerId", "player_id",
-            "f_key", "fkey", "pFkey", "pfkey",
-            "batsmanId", "bowlerId", "strikerId", "nonStrikerId",
-            "batId", "bowlId", "fielderId",
+            "id",
+            "pid",
+            "pId",
+            "playerId",
+            "player_id",
+            "f_key",
+            "fkey",
+            "pFkey",
+            "pfkey",
+            "batsmanId",
+            "bowlerId",
+            "strikerId",
+            "nonStrikerId",
+            "batId",
+            "bowlId",
+            "fielderId",
         }
         name_keys = {
-            "name", "fullName", "playerName", "shortName", "displayName",
-            "display_name", "batName", "bowlName", "batsmanName",
-            "bowlerName", "strikerName", "nonStrikerName", "fielderName",
-            "pName", "p_name", "n",
+            "name",
+            "fullName",
+            "playerName",
+            "shortName",
+            "displayName",
+            "display_name",
+            "batName",
+            "bowlName",
+            "batsmanName",
+            "bowlerName",
+            "strikerName",
+            "nonStrikerName",
+            "fielderName",
+            "pName",
+            "p_name",
+            "n",
         }
 
         added = 0
@@ -150,7 +175,9 @@ class CrexMatchWorker:
             ]
             for pid_key, name_key in paired_keys:
                 if pid_key in obj and name_key in obj:
-                    if self._add_player_mapping(obj.get(pid_key), obj.get(name_key), source):
+                    if self._add_player_mapping(
+                        obj.get(pid_key), obj.get(name_key), source
+                    ):
                         added += 1
 
             for value in obj.values():
@@ -174,7 +201,9 @@ class CrexMatchWorker:
                     print(f"  {pid} -> {pname}")
             else:
                 diff = total - self._last_logged_map_size
-                print(f"[Worker] [{self.crex_id}] +{diff} new via {source} (total {total})")
+                print(
+                    f"[Worker] [{self.crex_id}] +{diff} new via {source} (total {total})"
+                )
 
             self._last_logged_map_size = total
 
@@ -203,7 +232,9 @@ class CrexMatchWorker:
         if not words:
             return
         opening = " ".join(words[:5]).lower()
-        if opening and (not self.recent_ai_openings or self.recent_ai_openings[-1] != opening):
+        if opening and (
+            not self.recent_ai_openings or self.recent_ai_openings[-1] != opening
+        ):
             self.recent_ai_openings.append(opening)
             self.recent_ai_openings = self.recent_ai_openings[-8:]
 
@@ -218,7 +249,10 @@ class CrexMatchWorker:
         telemetry = self._current_telemetry()
         if telemetry:
             packet["telemetry"] = telemetry
-        if isinstance(self.latest_scorecard_snapshot, dict) and self.latest_scorecard_snapshot:
+        if (
+            isinstance(self.latest_scorecard_snapshot, dict)
+            and self.latest_scorecard_snapshot
+        ):
             packet["scorecard_cache"] = {
                 "data": self.latest_scorecard_snapshot.get("innings", []),
                 "telemetry": telemetry,
@@ -247,20 +281,57 @@ class CrexMatchWorker:
             return f"feed:{self.crex_id}:{item_id}"
         return f"feed:{self.crex_id}:{item.get('type')}:{item.get('o')}:{raw_text[:80]}"
 
-    def _classify_text_update(self, raw_text: str, item_id=None) -> tuple[str, str, list[str]]:
+    def _classify_text_update(
+        self, raw_text: str, item_id=None
+    ) -> tuple[str, str, list[str]]:
         lower = raw_text.lower()
-        suffix = str(item_id)[-6:] if item_id is not None else str(abs(hash(raw_text)))[-6:]
+        suffix = (
+            str(item_id)[-6:] if item_id is not None else str(abs(hash(raw_text)))[-6:]
+        )
         if any(word in lower for word in ["toss", "opt to", "elected to", "choose to"]):
             return f"UPDATE_TOSS_{suffix}", "INFO", ["toss"]
-        if any(word in lower for word in ["strategic timeout", "drinks", "timeout", "innings break", "break"]):
+        if any(
+            word in lower
+            for word in [
+                "strategic timeout",
+                "drinks",
+                "timeout",
+                "innings break",
+                "break",
+            ]
+        ):
             return f"UPDATE_BREAK_{suffix}", "INFO", ["break"]
-        if any(word in lower for word in ["rain", "covers", "delay", "inspection", "wet outfield"]):
+        if any(
+            word in lower
+            for word in ["rain", "covers", "delay", "inspection", "wet outfield"]
+        ):
             return f"UPDATE_RAIN_{suffix}", "INFO", ["weather"]
-        if any(word in lower for word in ["post-match", "presentation", "potm", "player of the match", "captain):", "(captain)"]):
+        if any(
+            word in lower
+            for word in [
+                "post-match",
+                "presentation",
+                "potm",
+                "player of the match",
+                "captain):",
+                "(captain)",
+            ]
+        ):
             return f"UPDATE_PRESENTATION_{suffix}", "INFO", ["quote"]
         if any(word in lower for word in ["wicket", "dismissed", "gone", "out!"]):
             return f"UPDATE_WICKET_{suffix}", "INFO", ["wicket"]
-        if any(word in lower for word in ["stat", "most ", "fastest", "highest", "milestone", "partnership", "instances"]):
+        if any(
+            word in lower
+            for word in [
+                "stat",
+                "most ",
+                "fastest",
+                "highest",
+                "milestone",
+                "partnership",
+                "instances",
+            ]
+        ):
             return f"UPDATE_STAT_{suffix}", "STAT", ["stat"]
         return f"UPDATE_INFO_{suffix}", "INFO", ["update"]
 
@@ -270,9 +341,16 @@ class CrexMatchWorker:
             c1 = self._clean_feed_text(item.get("c1", ""))
             c2 = self._clean_feed_text(item.get("c2", ""))
             raw_text = f"{c1} - {c2}" if c1 and c2 else (c2 or c1)
-            return raw_text, str(item.get("o") or "BALL"), str(item.get("b") or item.get("r") or ""), ["ball"]
+            return (
+                raw_text,
+                str(item.get("o") or "BALL"),
+                str(item.get("b") or item.get("r") or ""),
+                ["ball"],
+            )
 
-        raw_text = self._clean_feed_text(item.get("c") or item.get("c1") or item.get("c2") or "")
+        raw_text = self._clean_feed_text(
+            item.get("c") or item.get("c1") or item.get("c2") or ""
+        )
         over_ball, runs, flavor = self._classify_text_update(raw_text, item.get("id"))
         return raw_text, over_ball, runs, flavor
 
@@ -286,11 +364,13 @@ class CrexMatchWorker:
             ids.add(value)
 
     def _extract_sc4_player_ids(self, sc4_data) -> set[str]:
-        """
-        getSC4 is compressed. It contains every scorecard player ID, but not
-        player names. Crex frontend translates these IDs by calling
-        oc.crickapi.com/mapping/getHomeMapData. This extractor collects only
-        ID positions, avoiding score/runs/balls fields as much as possible.
+        """GetSC4 is compressed.
+
+        It contains every scorecard player ID, but not player names.
+        Crex frontend translates these IDs by calling
+        oc.crickapi.com/mapping/getHomeMapData. This extractor collects
+        only ID positions, avoiding score/runs/balls fields as much as
+        possible.
         """
         ids: set[str] = set()
         if isinstance(sc4_data, list):
@@ -340,7 +420,9 @@ class CrexMatchWorker:
             # Impact-player style: "M-7_3.650_2/F-2X_1.5VO_4"
             raw_impact = innings.get("im")
             if raw_impact:
-                for token in re.findall(r"(?:^|[-./])([A-Za-z0-9]{1,8})_", str(raw_impact)):
+                for token in re.findall(
+                    r"(?:^|[-./])([A-Za-z0-9]{1,8})_", str(raw_impact)
+                ):
                     self._add_token(ids, token)
 
         return ids
@@ -354,7 +436,14 @@ class CrexMatchWorker:
 
     def _parse_extras(self, raw) -> dict:
         text = str(raw or "").strip()
-        extras = {"total": 0, "byes": 0, "legByes": 0, "wides": 0, "noBalls": 0, "penalty": 0}
+        extras = {
+            "total": 0,
+            "byes": 0,
+            "legByes": 0,
+            "wides": 0,
+            "noBalls": 0,
+            "penalty": 0,
+        }
         if not text:
             return extras
 
@@ -364,14 +453,16 @@ class CrexMatchWorker:
             flags=re.I,
         )
         if detailed:
-            extras.update({
-                "total": int(detailed.group(1)),
-                "byes": int(detailed.group(2)),
-                "legByes": int(detailed.group(3)),
-                "wides": int(detailed.group(4)),
-                "noBalls": int(detailed.group(5)),
-                "penalty": int(detailed.group(6) or 0),
-            })
+            extras.update(
+                {
+                    "total": int(detailed.group(1)),
+                    "byes": int(detailed.group(2)),
+                    "legByes": int(detailed.group(3)),
+                    "wides": int(detailed.group(4)),
+                    "noBalls": int(detailed.group(5)),
+                    "penalty": int(detailed.group(6) or 0),
+                }
+            )
             return extras
 
         parts = [p for p in re.split(r"[./|,\s]+", text) if p != ""]
@@ -381,7 +472,13 @@ class CrexMatchWorker:
             extras["wides"] = int(parts[2])
             extras["noBalls"] = int(parts[3])
             extras["penalty"] = int(parts[4]) if len(parts) > 4 else 0
-            extras["total"] = extras["byes"] + extras["legByes"] + extras["wides"] + extras["noBalls"] + extras["penalty"]
+            extras["total"] = (
+                extras["byes"]
+                + extras["legByes"]
+                + extras["wides"]
+                + extras["noBalls"]
+                + extras["penalty"]
+            )
             return extras
 
         first_number = re.search(r"\d+", text)
@@ -394,10 +491,20 @@ class CrexMatchWorker:
         m = re.search(r"(\d+)[/-](\d+)\(([\d.]+)", score_text)
         if m:
             return m.group(1), m.group(2), m.group(3)
-        return str(innings.get("r", "-")), str(innings.get("w", "-")), self._balls_to_overs(str(innings.get("o", "0")))
+        return (
+            str(innings.get("r", "-")),
+            str(innings.get("w", "-")),
+            self._balls_to_overs(str(innings.get("o", "0"))),
+        )
 
     def _parse_sc4_scorecard(self, sc_data) -> dict:
-        innings_list = sc_data if isinstance(sc_data, list) else sc_data.get("innings", []) if isinstance(sc_data, dict) else []
+        innings_list = (
+            sc_data
+            if isinstance(sc_data, list)
+            else sc_data.get("innings", [])
+            if isinstance(sc_data, dict)
+            else []
+        )
         parsed_innings = []
         all_extras = []
         dismissal_timeline = []
@@ -428,20 +535,26 @@ class CrexMatchWorker:
                 if not parts:
                     continue
                 pid = self._norm_pid(parts[0])
-                if not re.match(r'^[a-zA-Z0-9_-]+$', pid):
+                if not re.match(r"^[a-zA-Z0-9_-]+$", pid):
                     continue
-                runs_scored = parts[1].split('/')[0] if len(parts) > 1 else "0"
-                balls = parts[2].split('/')[0] if len(parts) > 2 else "0"
-                fours = parts[3].split('/')[0] if len(parts) > 3 else "0"
-                sixes = parts[4].split('/')[0] if len(parts) > 4 else "0"
+                runs_scored = parts[1].split("/")[0] if len(parts) > 1 else "0"
+                balls = parts[2].split("/")[0] if len(parts) > 2 else "0"
+                fours = parts[3].split("/")[0] if len(parts) > 3 else "0"
+                sixes = parts[4].split("/")[0] if len(parts) > 4 else "0"
                 try:
-                    strike_rate = f"{(float(runs_scored) / float(balls)) * 100:.1f}" if float(balls) > 0 else "0.0"
+                    strike_rate = (
+                        f"{(float(runs_scored) / float(balls)) * 100:.1f}"
+                        if float(balls) > 0
+                        else "0.0"
+                    )
                 except Exception:
                     strike_rate = "-"
-                
+
                 dismissal_type = parts[6] if len(parts) > 6 else ""
                 wicket_bowler = self._norm_pid(parts[8]) if len(parts) > 8 else ""
-                wicket_fielder = self._norm_pid(parts[9].split("/")[0]) if len(parts) > 9 else ""
+                wicket_fielder = (
+                    self._norm_pid(parts[9].split("/")[0]) if len(parts) > 9 else ""
+                )
                 batter = {
                     "id": pid,
                     "n": self.player_map.get(pid, pid),
@@ -463,54 +576,64 @@ class CrexMatchWorker:
                         "bowler_id": wicket_bowler,
                         "bowler": self.player_map.get(wicket_bowler, wicket_bowler),
                         "fielder_id": wicket_fielder,
-                        "fielder": self.player_map.get(wicket_fielder, wicket_fielder) if wicket_fielder else "",
+                        "fielder": self.player_map.get(wicket_fielder, wicket_fielder)
+                        if wicket_fielder
+                        else "",
                     }
                     parsed_inn["dismissal_timeline"].append(dismissal)
                     dismissal_timeline.append(dismissal)
 
-            for row in (inn.get("a") or inn.get("bo") or []):
+            for row in inn.get("a") or inn.get("bo") or []:
                 parts = str(row).split(".")
                 if not parts:
                     continue
                 pid = self._norm_pid(parts[0])
-                if not re.match(r'^[a-zA-Z0-9_-]+$', pid):
+                if not re.match(r"^[a-zA-Z0-9_-]+$", pid):
                     continue
-                runs_conceded = parts[1].split('/')[0] if len(parts) > 1 else "0"
-                balls_bowled = parts[2].split('/')[0] if len(parts) > 2 else "0"
-                maidens = parts[3].split('/')[0] if len(parts) > 3 else "0"
+                runs_conceded = parts[1].split("/")[0] if len(parts) > 1 else "0"
+                balls_bowled = parts[2].split("/")[0] if len(parts) > 2 else "0"
+                maidens = parts[3].split("/")[0] if len(parts) > 3 else "0"
                 wickets_taken = parts[4] if len(parts) > 4 else "0"
                 try:
-                    economy = f"{float(runs_conceded) / (float(balls_bowled) / 6):.1f}" if float(balls_bowled) > 0 else "0.0"
+                    economy = (
+                        f"{float(runs_conceded) / (float(balls_bowled) / 6):.1f}"
+                        if float(balls_bowled) > 0
+                        else "0.0"
+                    )
                 except Exception:
                     economy = "-"
-                parsed_inn["bowlers"].append({
-                    "id": pid,
-                    "n": self.player_map.get(pid, pid),
-                    "o": self._balls_to_overs(balls_bowled),
-                    "balls": balls_bowled,
-                    "m": maidens,
-                    "r": runs_conceded,
-                    "w": wickets_taken,
-                    "e": economy,
-                })
+                parsed_inn["bowlers"].append(
+                    {
+                        "id": pid,
+                        "n": self.player_map.get(pid, pid),
+                        "o": self._balls_to_overs(balls_bowled),
+                        "balls": balls_bowled,
+                        "m": maidens,
+                        "r": runs_conceded,
+                        "w": wickets_taken,
+                        "e": economy,
+                    }
+                )
 
             for row in inn.get("p", []) or []:
                 parts = str(row).split(".")
                 if len(parts) >= 8:
                     p1 = self._norm_pid(parts[0])
                     p2 = self._norm_pid(parts[3])
-                    parsed_inn["partnerships"].append({
-                        "p1_id": p1,
-                        "p1": self.player_map.get(p1, p1),
-                        "p1_runs": parts[1],
-                        "p1_balls": parts[2],
-                        "p2_id": p2,
-                        "p2": self.player_map.get(p2, p2),
-                        "p2_runs": parts[4],
-                        "p2_balls": parts[5],
-                        "runs": parts[6],
-                        "balls": parts[7],
-                    })
+                    parsed_inn["partnerships"].append(
+                        {
+                            "p1_id": p1,
+                            "p1": self.player_map.get(p1, p1),
+                            "p1_runs": parts[1],
+                            "p1_balls": parts[2],
+                            "p2_id": p2,
+                            "p2": self.player_map.get(p2, p2),
+                            "p2_runs": parts[4],
+                            "p2_balls": parts[5],
+                            "runs": parts[6],
+                            "balls": parts[7],
+                        }
+                    )
 
             for raw in [inn.get("x"), inn.get("i")]:
                 if raw:
@@ -539,15 +662,17 @@ class CrexMatchWorker:
         bowlers = latest.get("bowlers", [])
 
         # Find batters who are not out
-        not_out_batters = [b for b in batters if not b.get("wicket_bowler") and b.get("r") != "-"]
-        
+        not_out_batters = [
+            b for b in batters if not b.get("wicket_bowler") and b.get("r") != "-"
+        ]
+
         striker = None
         non_striker = None
         if len(not_out_batters) > 0:
             striker = not_out_batters[-1]
         if len(not_out_batters) > 1:
             non_striker = not_out_batters[-2]
-        
+
         # Fallback
         if not striker and batters:
             striker = batters[-1]
@@ -557,7 +682,10 @@ class CrexMatchWorker:
         current_bowler_id = ""
         for item in self.feed_items:
             if isinstance(item, dict) and item.get("type") == "b" and item.get("c1"):
-                m = re.search(r"([A-Za-z0-9][A-Za-z0-9\s'.-]{1,35})\s+to\s+", self._clean_feed_text(item.get("c1")))
+                m = re.search(
+                    r"([A-Za-z0-9][A-Za-z0-9\s'.-]{1,35})\s+to\s+",
+                    self._clean_feed_text(item.get("c1")),
+                )
                 if m:
                     name_or_id = m.group(1).strip()
                     current_bowler_id = self._norm_pid(name_or_id)
@@ -626,7 +754,11 @@ class CrexMatchWorker:
         return False
 
     def _build_ai_context(self, score: str = "") -> str:
-        telemetry = self.latest_scorecard_snapshot.get("telemetry", {}) if isinstance(self.latest_scorecard_snapshot, dict) else {}
+        telemetry = (
+            self.latest_scorecard_snapshot.get("telemetry", {})
+            if isinstance(self.latest_scorecard_snapshot, dict)
+            else {}
+        )
         striker = telemetry.get("striker") or {}
         non_striker = telemetry.get("non_striker") or {}
         bowler = telemetry.get("bowler") or {}
@@ -638,11 +770,17 @@ class CrexMatchWorker:
             f"Recent balls: {recent_balls or 'not enough data yet'}.",
         ]
         if striker:
-            lines.append(f"Striker: {striker.get('n')} {striker.get('r')} off {striker.get('b')} balls, SR {striker.get('sr')}.")
+            lines.append(
+                f"Striker: {striker.get('n')} {striker.get('r')} off {striker.get('b')} balls, SR {striker.get('sr')}."
+            )
         if non_striker:
-            lines.append(f"Non-striker: {non_striker.get('n')} {non_striker.get('r')} off {non_striker.get('b')} balls.")
+            lines.append(
+                f"Non-striker: {non_striker.get('n')} {non_striker.get('r')} off {non_striker.get('b')} balls."
+            )
         if bowler:
-            lines.append(f"Bowler spell: {bowler.get('n')} {bowler.get('o')}-{bowler.get('m')}-{bowler.get('r')}-{bowler.get('w')}, economy {bowler.get('e')}.")
+            lines.append(
+                f"Bowler spell: {bowler.get('n')} {bowler.get('o')}-{bowler.get('m')}-{bowler.get('r')}-{bowler.get('w')}, economy {bowler.get('e')}."
+            )
         if extras and extras.get("total"):
             lines.append(
                 "Extras: "
@@ -655,15 +793,20 @@ class CrexMatchWorker:
             bowl_team = win.get("bowling_team") or win.get("teamB") or "bowling side"
             win_value = self._win_probability_value(win)
             if win_value is not None:
-                lines.append(f"Momentum alert: {bat_team} win probability is now {win_value:.1f}% against {bowl_team}.")
+                lines.append(
+                    f"Momentum alert: {bat_team} win probability is now {win_value:.1f}% against {bowl_team}."
+                )
         return "\n".join(lines)
 
     async def _fetch_player_names_for_ids(self, ids, source: str = "mapping") -> None:
-        missing = sorted({
-            self._norm_pid(pid)
-            for pid in ids
-            if self._is_player_id_token(pid) and self._norm_pid(pid) not in self.player_map
-        })
+        missing = sorted(
+            {
+                self._norm_pid(pid)
+                for pid in ids
+                if self._is_player_id_token(pid)
+                and self._norm_pid(pid) not in self.player_map
+            }
+        )
         if not missing:
             return
 
@@ -677,7 +820,7 @@ class CrexMatchWorker:
         }
 
         for idx in range(0, len(missing), 80):
-            chunk = missing[idx:idx + 80]
+            chunk = missing[idx : idx + 80]
             payload = {"p": chunk, "t": [], "s": [], "u": [], "v": [], "lc": "en"}
             try:
                 resp = await asyncio.to_thread(
@@ -716,17 +859,17 @@ class CrexMatchWorker:
             crex_prefix = "https://crex.com/cricket-live-score/"
             if not base.startswith(crex_prefix):
                 return base
-            slug = base[len(crex_prefix):]
+            slug = base[len(crex_prefix) :]
             vs_idx = slug.find("-vs-")
             if vs_idx == -1:
                 return base
             team1 = slug[:vs_idx]
-            rest = slug[vs_idx + 4:]
+            rest = slug[vs_idx + 4 :]
             m = re.search(r"-(\d)", rest)
             if not m:
                 return base
-            team2 = rest[:m.start()]
-            remainder = rest[m.start():]
+            team2 = rest[: m.start()]
+            remainder = rest[m.start() :]
             return f"{crex_prefix}{team2}-vs-{team1}{remainder}"
 
         def _info_url_from_live(url: str) -> str:
@@ -774,7 +917,7 @@ class CrexMatchWorker:
         urls_to_fetch = _candidate_urls(base_url)
 
         player_regex = re.compile(
-            r'(?:/|\\/)player(?:/|\\/)((?:[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*)-([A-Za-z0-9]{1,8}))(?=[^a-zA-Z0-9]|$)'
+            r"(?:/|\\/)player(?:/|\\/)((?:[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*)-([A-Za-z0-9]{1,8}))(?=[^a-zA-Z0-9]|$)"
         )
 
         added = 0
@@ -790,7 +933,7 @@ class CrexMatchWorker:
                 html_text = resp.text.replace("\\/", "/")
                 page_added = 0
                 for full_slug, player_id in player_regex.findall(html_text):
-                    name_slug = full_slug[:-(len(player_id) + 1)]
+                    name_slug = full_slug[: -(len(player_id) + 1)]
                     player_name = name_slug.replace("-", " ").title()
                     if self._add_player_mapping(player_id, player_name, "HTML"):
                         added += 1
@@ -829,13 +972,14 @@ class CrexMatchWorker:
             self._mine_sc4_for_players(sc_data)
             sc4_ids = self._extract_sc4_player_ids(sc_data)
             await self._fetch_player_names_for_ids(sc4_ids, "SC4-map")
-            
+
             parsed = self._parse_sc4_scorecard(sc_data)
             parsed_innings = parsed["innings"]
             telemetry = parsed["telemetry"]
             self.latest_scorecard_snapshot = parsed
 
             from hub import match_hub
+
             if self.crex_id not in match_hub:
                 match_hub[self.crex_id] = {"history": [], "queues": set()}
 
@@ -902,10 +1046,21 @@ class CrexMatchWorker:
             k_text = str(data.get("k", ""))
 
             # 1. Completed check: banner indicators or API codes
-            is_completed = (
-                any(phrase in b_text for phrase in ["won by", "won the series", "tied", "drawn", "abandoned", "no result", "complete", "won the match", "victory", "win"])
-                or st in ["2", "4"]
-            )
+            is_completed = any(
+                phrase in b_text
+                for phrase in [
+                    "won by",
+                    "won the series",
+                    "tied",
+                    "drawn",
+                    "abandoned",
+                    "no result",
+                    "complete",
+                    "won the match",
+                    "victory",
+                    "win",
+                ]
+            ) or st in ["2", "4"]
 
             # 2. Upcoming check: no scores, or explicit indicators
             is_upcoming = (
@@ -925,20 +1080,28 @@ class CrexMatchWorker:
                 determined_state = "Live"
 
             from hub import match_hub
+
             if self.crex_id in match_hub:
                 match_hub[self.crex_id]["state"] = determined_state
 
             if determined_state == "Completed":
-                print(f"[Worker] Match finished [{self.crex_id}] determined state=Completed (st={st}, B={b_text})")
+                print(
+                    f"[Worker] Match finished [{self.crex_id}] determined state=Completed (st={st}, B={b_text})"
+                )
                 if self.crex_id in match_hub:
-                    match_hub[self.crex_id]["completed_at"] = match_hub[self.crex_id].get("completed_at") or time.time()
+                    match_hub[self.crex_id]["completed_at"] = (
+                        match_hub[self.crex_id].get("completed_at") or time.time()
+                    )
                     match_hub[self.crex_id]["title"] = self.match.get("title")
                     match_hub[self.crex_id]["source"] = self.match.get("source", "crex")
                     try:
                         from hub import save_cache
+
                         save_cache()
                     except Exception as cache_error:
-                        print(f"[Cache] Completed save failed for {self.crex_id}: {cache_error}")
+                        print(
+                            f"[Cache] Completed save failed for {self.crex_id}: {cache_error}"
+                        )
                 self.is_running = False
 
             self._mine_sv3_for_players(data)
@@ -962,9 +1125,12 @@ class CrexMatchWorker:
                     "Referer": "https://crex.com/",
                 }
                 resp_feeds = await asyncio.to_thread(
-                    reqs.post, feeds_url,
-                    json=f_payload, headers=f_headers,
-                    impersonate="chrome120", timeout=5
+                    reqs.post,
+                    feeds_url,
+                    json=f_payload,
+                    headers=f_headers,
+                    impersonate="chrome120",
+                    timeout=5,
                 )
                 if resp_feeds.status_code == 200:
                     feed_data = resp_feeds.json()
@@ -992,6 +1158,7 @@ class CrexMatchWorker:
                         "commentary": "Match Status Update",
                     }
                     from hub import match_hub
+
                     if self.crex_id not in match_hub:
                         match_hub[self.crex_id] = {"history": [], "queues": set()}
                     match_hub[self.crex_id]["history"].append(packet)
@@ -1004,8 +1171,10 @@ class CrexMatchWorker:
                 return
 
             latest_ball = balls[-1]
-            match_over = re.search(r'\(([\d\.]+)', current_score_str)
-            display_over = match_over.group(1) if match_over else f"{over_num}.{len(balls)}"
+            match_over = re.search(r"\(([\d\.]+)", current_score_str)
+            display_over = (
+                match_over.group(1) if match_over else f"{over_num}.{len(balls)}"
+            )
             ball_index = len(balls)
             ball_key = f"{display_over}_{ball_index}_{latest_ball.get('u')}"
 
@@ -1023,7 +1192,7 @@ class CrexMatchWorker:
 
                 self._print_once(
                     f"new-ball:{score_summary}:{display_over}",
-                    f"[Worker] New Ball [{self.crex_id}] {display_over} -> {latest_ball.get('u')}"
+                    f"[Worker] New Ball [{self.crex_id}] {display_over} -> {latest_ball.get('u')}",
                 )
                 ball_info = {
                     "over_ball": display_over,
@@ -1043,6 +1212,7 @@ class CrexMatchWorker:
     def _check_stat_cards(self, feed_data: list) -> None:
         import random
         import html as html_mod
+
         for item in reversed(feed_data):
             if item.get("type") != "t":
                 continue
@@ -1053,26 +1223,37 @@ class CrexMatchWorker:
             text = item.get("c", "")
             if not text:
                 continue
-            clean = html_mod.unescape(re.sub(r'<.*?>', ' ', text)).strip()
+            clean = html_mod.unescape(re.sub(r"<.*?>", " ", text)).strip()
             lower = clean.lower()
             if len(clean) > 80 and any(c.isdigit() for c in clean):
-                if any(kw in lower for kw in ["instances", "most ", "fastest",
-                                               "highest", "stats", "vs ",
-                                               "partnership", "milestone"]):
+                if any(
+                    kw in lower
+                    for kw in [
+                        "instances",
+                        "most ",
+                        "fastest",
+                        "highest",
+                        "stats",
+                        "vs ",
+                        "partnership",
+                        "milestone",
+                    ]
+                ):
                     if random.random() < 0.80:
                         asyncio.create_task(self.process_stat_card(clean, item_id))
 
-    async def process_crex_feed_items(self, feed_data: list, score_summary: str = "") -> None:
-        """
-        Broadcast every new Crex commentary feed item once: ball notes, text
-        updates, toss notes, milestones, interviews, innings breaks and stats.
-        """
+    async def process_crex_feed_items(
+        self, feed_data: list, score_summary: str = ""
+    ) -> None:
+        """Broadcast every new Crex commentary feed item once: ball notes, text
+        updates, toss notes, milestones, interviews, innings breaks and
+        stats."""
         if not isinstance(feed_data, list):
             return
 
         is_startup = len(self.seen_feed_ids) == 0
         reversed_items = []
-        
+
         for item in reversed(feed_data):
             if not isinstance(item, dict):
                 continue
@@ -1084,7 +1265,9 @@ class CrexMatchWorker:
                 continue
             reversed_items.append((item, raw_text, event_key, over_ball, runs, flavor))
 
-        for idx, (item, raw_text, event_key, over_ball, runs, flavor) in enumerate(reversed_items):
+        for idx, (item, raw_text, event_key, over_ball, runs, flavor) in enumerate(
+            reversed_items
+        ):
             self.seen_feed_ids.add(event_key)
             self.feed_raw_by_key[event_key] = raw_text
             item_type = item.get("type", "")
@@ -1105,15 +1288,15 @@ class CrexMatchWorker:
             if item_type == "b":
                 # Only hit the API for the very latest unseen ball in the startup batch
                 is_last_unseen_ball = not any(
-                    future_item[0].get("type") == "b" 
-                    for future_item in reversed_items[idx + 1:]
+                    future_item[0].get("type") == "b"
+                    for future_item in reversed_items[idx + 1 :]
                 )
                 skip_api = not is_last_unseen_ball
-                
+
                 try:
                     win_data = await asyncio.wait_for(
-                        self.fetch_win_prediction(packet, skip_api_call=skip_api), 
-                        timeout=3.0
+                        self.fetch_win_prediction(packet, skip_api_call=skip_api),
+                        timeout=3.0,
                     )
                     if win_data:
                         if isinstance(win_data, list) and len(win_data) > 0:
@@ -1128,8 +1311,8 @@ class CrexMatchWorker:
 
             if self.ai_api_key:
                 is_last_unseen_ball = not any(
-                    future_item[0].get("type") == "b" 
-                    for future_item in reversed_items[idx + 1:]
+                    future_item[0].get("type") == "b"
+                    for future_item in reversed_items[idx + 1 :]
                 )
                 if not is_startup or is_last_unseen_ball:
                     asyncio.create_task(
@@ -1145,7 +1328,9 @@ class CrexMatchWorker:
                     )
 
             if item_type == "b":
-                self._schedule_feed_rechecks(event_key, item.get("id"), over_ball, score_summary)
+                self._schedule_feed_rechecks(
+                    event_key, item.get("id"), over_ball, score_summary
+                )
 
     async def _refine_feed_packet(
         self,
@@ -1173,7 +1358,9 @@ class CrexMatchWorker:
             self._remember_ai_opening(packet["commentary"])
             if item_type == "b":
                 try:
-                    win_data = await asyncio.wait_for(self.fetch_win_prediction(packet), timeout=3.0)
+                    win_data = await asyncio.wait_for(
+                        self.fetch_win_prediction(packet), timeout=3.0
+                    )
                     if win_data:
                         if isinstance(win_data, list) and len(win_data) > 0:
                             packet["win_predictor"] = win_data[0]
@@ -1190,10 +1377,14 @@ class CrexMatchWorker:
         except Exception as e:
             print(f"[AI Feed Error] [{self.crex_id}]: {e}")
 
-    def _schedule_feed_rechecks(self, event_key: str, feed_id, over_ball: str, score_summary: str) -> None:
+    def _schedule_feed_rechecks(
+        self, event_key: str, feed_id, over_ball: str, score_summary: str
+    ) -> None:
         if event_key in self.feed_recheck_tasks:
             return
-        task = asyncio.create_task(self._recheck_feed_item(event_key, feed_id, over_ball, score_summary))
+        task = asyncio.create_task(
+            self._recheck_feed_item(event_key, feed_id, over_ball, score_summary)
+        )
         self.feed_recheck_tasks[event_key] = task
 
         def _clean(_):
@@ -1224,7 +1415,9 @@ class CrexMatchWorker:
             return resp.json()
         return []
 
-    async def _recheck_feed_item(self, event_key: str, feed_id, over_ball: str, score_summary: str) -> None:
+    async def _recheck_feed_item(
+        self, event_key: str, feed_id, over_ball: str, score_summary: str
+    ) -> None:
         for _ in range(10):
             await asyncio.sleep(6)
             try:
@@ -1241,13 +1434,19 @@ class CrexMatchWorker:
                     if feed_id is not None and item.get("id") == feed_id:
                         matched_item = item
                         break
-                    if feed_id is None and item.get("type") == "b" and str(item.get("o")) == str(over_ball):
+                    if (
+                        feed_id is None
+                        and item.get("type") == "b"
+                        and str(item.get("o")) == str(over_ball)
+                    ):
                         matched_item = item
                         break
                 if not matched_item:
                     continue
 
-                raw_text, updated_over, runs, flavor = self._extract_feed_payload(matched_item)
+                raw_text, updated_over, runs, flavor = self._extract_feed_payload(
+                    matched_item
+                )
                 if not raw_text or raw_text == self.feed_raw_by_key.get(event_key):
                     continue
 
@@ -1267,12 +1466,24 @@ class CrexMatchWorker:
                 if matched_item.get("type") == "b":
                     win_data = await self.fetch_win_prediction(packet)
                     if win_data:
-                        packet["win_predictor"] = win_data[0] if isinstance(win_data, list) and win_data else win_data
+                        packet["win_predictor"] = (
+                            win_data[0]
+                            if isinstance(win_data, list) and win_data
+                            else win_data
+                        )
                 self.logger.log_ball(packet)
                 await self.broadcast_to_clients(packet)
                 if self.ai_api_key:
                     asyncio.create_task(
-                        self._refine_feed_packet(packet, raw_text, matched_item.get("type", ""), updated_over, runs, score_summary, feed_id)
+                        self._refine_feed_packet(
+                            packet,
+                            raw_text,
+                            matched_item.get("type", ""),
+                            updated_over,
+                            runs,
+                            score_summary,
+                            feed_id,
+                        )
                     )
             except Exception as e:
                 print(f"[Feed Recheck Error] [{self.crex_id}] {event_key}: {e}")
@@ -1287,7 +1498,7 @@ class CrexMatchWorker:
         def clean_html(raw_html):
             if not raw_html:
                 return ""
-            return html_mod.unescape(re.sub(r'<.*?>', '', raw_html)).strip()
+            return html_mod.unescape(re.sub(r"<.*?>", "", raw_html)).strip()
 
         search_over = str(over_ball)
 
@@ -1296,7 +1507,9 @@ class CrexMatchWorker:
                 major = int(search_over.split(".")[0])
                 prev_prefix = str(major - 1) + "."
                 for item in self.feed_items:
-                    if item.get("type") == "b" and str(item.get("o", "")).startswith(prev_prefix):
+                    if item.get("type") == "b" and str(item.get("o", "")).startswith(
+                        prev_prefix
+                    ):
                         search_over = str(item.get("o"))
                         break
                 else:
@@ -1326,7 +1539,11 @@ class CrexMatchWorker:
             if matching_t:
                 extra = clean_html(matching_t.get("c", ""))
                 if extra:
-                    raw_commentary = (raw_commentary + " " + extra).strip() if raw_commentary else extra
+                    raw_commentary = (
+                        (raw_commentary + " " + extra).strip()
+                        if raw_commentary
+                        else extra
+                    )
 
         return {"text": raw_commentary, "runs": exact_runs}
 
@@ -1353,7 +1570,7 @@ class CrexMatchWorker:
             c1 = item.get("c1", "")
             m = re.search(
                 r"([A-Za-z0-9][A-Za-z0-9\s'\.\-]{1,35})\s+to\s+([A-Za-z0-9][A-Za-z0-9\s'\.\-]{1,35})",
-                c1
+                c1,
             )
             if not m:
                 continue
@@ -1417,7 +1634,9 @@ class CrexMatchWorker:
 
         # Fetch win prediction instantly and update the initial packet before broadcasting
         try:
-            win_data = await asyncio.wait_for(self.fetch_win_prediction(packet), timeout=3.0)
+            win_data = await asyncio.wait_for(
+                self.fetch_win_prediction(packet), timeout=3.0
+            )
             if win_data:
                 if isinstance(win_data, list) and len(win_data) > 0:
                     packet["win_predictor"] = win_data[0]
@@ -1445,13 +1664,18 @@ class CrexMatchWorker:
                 }
                 try:
                     r2 = await asyncio.to_thread(
-                        reqs.post, feeds_url,
-                        json=f_payload, headers=f_headers,
-                        impersonate="chrome120", timeout=5
+                        reqs.post,
+                        feeds_url,
+                        json=f_payload,
+                        headers=f_headers,
+                        impersonate="chrome120",
+                        timeout=5,
                     )
                     if r2.status_code == 200 and isinstance(r2.json(), list):
                         self.feed_items = r2.json()
-                        added = self._mine_any_json_for_players(self.feed_items, "feeds")
+                        added = self._mine_any_json_for_players(
+                            self.feed_items, "feeds"
+                        )
                         self._log_new_player_total("feeds", added)
                         await self.process_crex_feed_items(
                             self.feed_items,
@@ -1480,7 +1704,9 @@ class CrexMatchWorker:
 
                 # Fetch updated win prediction to account for final processed ball states/runs/wickets
                 try:
-                    win_data = await asyncio.wait_for(self.fetch_win_prediction(packet), timeout=3.0)
+                    win_data = await asyncio.wait_for(
+                        self.fetch_win_prediction(packet), timeout=3.0
+                    )
                     if win_data:
                         if isinstance(win_data, list) and len(win_data) > 0:
                             packet["win_predictor"] = win_data[0]
@@ -1503,6 +1729,7 @@ class CrexMatchWorker:
                 self.logger.log_ball(packet)
 
                 from hub import match_hub
+
                 if self.crex_id in match_hub:
                     for i, p in enumerate(match_hub[self.crex_id].get("history", [])):
                         if p.get("over_ball") == packet["over_ball"]:
@@ -1526,34 +1753,41 @@ class CrexMatchWorker:
             def _clean(t):
                 if self.running_tasks.get(over_ball) == t:
                     self.running_tasks.pop(over_ball, None)
+
             task.add_done_callback(_clean)
 
-    async def fetch_win_prediction(self, packet: dict, skip_api_call: bool = False) -> dict:
+    async def fetch_win_prediction(
+        self, packet: dict, skip_api_call: bool = False
+    ) -> dict:
         try:
             score_summary = packet.get("score", "")
             if not score_summary:
                 return {}
-            
+
             # Extract active score (e.g. from "142/4 | 134/2" or "142-4")
             parts = [s.strip() for s in score_summary.split("|")]
             active_score = parts[-1] if parts else ""
-            
+
             m_score = re.search(r"(\d+)(?:[/-](\d+))?", active_score)
             if not m_score:
                 return {}
-                
+
             cumulative_runs = int(m_score.group(1))
-            cumulative_wkts = int(m_score.group(2)) if m_score.group(2) else (10 if "all out" in active_score.lower() else 0)
-            
+            cumulative_wkts = (
+                int(m_score.group(2))
+                if m_score.group(2)
+                else (10 if "all out" in active_score.lower() else 0)
+            )
+
             over_ball = packet.get("over_ball", "0.0")
             over_no, ball_no = 0, 0
             try:
                 if "." in str(over_ball):
                     over_no = int(str(over_ball).split(".")[0])
                     ball_no = int(str(over_ball).split(".")[1])
-            except:
+            except Exception:
                 pass
-                
+
             legal_balls_bowled = over_no * 6 + ball_no
             innings_no = len(parts)
             target = 0
@@ -1563,24 +1797,33 @@ class CrexMatchWorker:
                 if m1:
                     target = int(m1.group(1)) + 1
                     runs_needed = max(0, target - cumulative_runs)
-                    
+
             title_lower = self.match.get("title", "").lower()
-            if any(kw in title_lower for kw in ["odi", "50 overs", "list a", "one day"]):
+            if any(
+                kw in title_lower for kw in ["odi", "50 overs", "list a", "one day"]
+            ):
                 match_format = "ODI"
                 total_innings_balls = 300
-            elif any(kw in title_lower for kw in ["t10", "10 overs", "t-10", "10-over", "ten-ten"]):
+            elif any(
+                kw in title_lower
+                for kw in ["t10", "10 overs", "t-10", "10-over", "ten-ten"]
+            ):
                 match_format = "T10"
                 total_innings_balls = 60
             else:
                 match_format = "T20"
                 total_innings_balls = 120
-                
+
             balls_remaining = max(0, total_innings_balls - legal_balls_bowled)
             wickets_left = max(0, 10 - cumulative_wkts)
-            
+
             rrr = (runs_needed / balls_remaining) * 6 if balls_remaining > 0 else 0.0
-            crr = (cumulative_runs / legal_balls_bowled) * 6 if legal_balls_bowled > 0 else 0.0
-            
+            crr = (
+                (cumulative_runs / legal_balls_bowled) * 6
+                if legal_balls_bowled > 0
+                else 0.0
+            )
+
             roll6_runs = 0
             roll6_wkts = 0
             legal_count = 0
@@ -1591,8 +1834,10 @@ class CrexMatchWorker:
                         roll6_wkts += 1
                     try:
                         digits = re.search(r"\d+", runs)
-                        if digits: roll6_runs += int(digits.group(0))
-                    except: pass
+                        if digits:
+                            roll6_runs += int(digits.group(0))
+                    except Exception:
+                        pass
                     if "wd" not in runs.lower() and "nb" not in runs.lower():
                         legal_count += 1
                     if legal_count >= 6:
@@ -1618,8 +1863,9 @@ class CrexMatchWorker:
 
             batting_team = t2_name if innings_no > 1 else t1_name
             bowling_team = t1_name if innings_no > 1 else t2_name
-            
+
             from hub import match_hub
+
             sc = match_hub.get(self.crex_id, {}).get("scorecard", {}).get("data")
             if sc:
                 innings_list = sc if isinstance(sc, list) else sc.get("innings", [])
@@ -1633,14 +1879,16 @@ class CrexMatchWorker:
                         # Attempt to resolve bowling team from the other innings
                         if innings_no == 1 and len(innings_list) > 1:
                             bowling_id = innings_list[1].get("tn")
-                            if bowling_id: 
+                            if bowling_id:
                                 r2 = self.player_map.get(bowling_id, bowling_id)
-                                if r2 and r2 != bowling_id: bowling_team = r2
+                                if r2 and r2 != bowling_id:
+                                    bowling_team = r2
                         elif innings_no > 1:
                             bowling_id = innings_list[innings_no - 2].get("tn")
-                            if bowling_id: 
+                            if bowling_id:
                                 r2 = self.player_map.get(bowling_id, bowling_id)
-                                if r2 and r2 != bowling_id: bowling_team = r2
+                                if r2 and r2 != bowling_id:
+                                    bowling_team = r2
 
             ball_state = {
                 "format": match_format,
@@ -1664,15 +1912,22 @@ class CrexMatchWorker:
                 "partnership_runs": 0,
                 "partnership_wickets": 0,
                 "true_runs": 0,
-                "is_wicket": 1 if "wicket" in packet.get("flavor", []) else 0
+                "is_wicket": 1 if "wicket" in packet.get("flavor", []) else 0,
             }
 
             # Innings transition handling
-            if self.ball_states_history and self.ball_states_history[-1]["innings_no"] != innings_no:
+            if (
+                self.ball_states_history
+                and self.ball_states_history[-1]["innings_no"] != innings_no
+            ):
                 self.ball_states_history = []
 
             # Avoid duplicates of the same over_ball in sequential history
-            if not self.ball_states_history or self.ball_states_history[-1]["over_no"] != over_no or self.ball_states_history[-1]["ball_no"] != ball_no:
+            if (
+                not self.ball_states_history
+                or self.ball_states_history[-1]["over_no"] != over_no
+                or self.ball_states_history[-1]["ball_no"] != ball_no
+            ):
                 self.ball_states_history.append(ball_state)
                 if len(self.ball_states_history) > 18:
                     self.ball_states_history.pop(0)
@@ -1683,8 +1938,9 @@ class CrexMatchWorker:
                 return {}
 
             payload = self.ball_states_history
-            
+
             import os
+
             api_key = os.environ.get("AI_API_KEY")
             if not api_key:
                 try:
@@ -1692,7 +1948,12 @@ class CrexMatchWorker:
                         with open(".env", "r") as f:
                             for line in f:
                                 if line.strip().startswith("AI_API_KEY="):
-                                    api_key = line.split("=", 1)[1].strip().strip('"').strip("'")
+                                    api_key = (
+                                        line.split("=", 1)[1]
+                                        .strip()
+                                        .strip('"')
+                                        .strip("'")
+                                    )
                                     break
                 except Exception:
                     pass
@@ -1702,9 +1963,11 @@ class CrexMatchWorker:
             # print(f"[WinPredictor Debug] [{self.crex_id}] Payload: {payload}")
             hf_url = "https://jathit2645-crinava-v15-api.hf.space/predict"
             headers = {"X-API-Key": api_key}
-            
+
             async with httpx.AsyncClient() as client:
-                resp = await client.post(hf_url, json=payload, headers=headers, timeout=5.0)
+                resp = await client.post(
+                    hf_url, json=payload, headers=headers, timeout=5.0
+                )
                 if resp.status_code == 200:
                     data = resp.json()
                     if isinstance(data, dict):
@@ -1728,7 +1991,9 @@ class CrexMatchWorker:
                     # print(f"[WinPredictor Debug] [{self.crex_id}] Success: {data}")
                     return data
                 else:
-                    print(f"[WinPredictor HTTP Error] {resp.status_code} - {resp.text[:100]}")
+                    print(
+                        f"[WinPredictor HTTP Error] {resp.status_code} - {resp.text[:100]}"
+                    )
         except Exception as e:
             print(f"[WinPredictor Extraction Error] {e}")
         return {}
@@ -1741,7 +2006,10 @@ class CrexMatchWorker:
         raw_comm = ball.get("commentary") or ""
 
         if not self.ai_api_key:
-            return raw_comm or f"Over {ball.get('over_ball')}: Score is {ball.get('score')}."
+            return (
+                raw_comm
+                or f"Over {ball.get('over_ball')}: Score is {ball.get('score')}."
+            )
 
         is_nvidia = "nvapi-" in self.ai_api_key
 
@@ -1750,7 +2018,7 @@ class CrexMatchWorker:
         header = raw_comm.split(" - ")[0] if " - " in raw_comm else raw_comm
         m = re.search(
             r"([A-Za-z0-9][A-Za-z0-9\s'\.\-]{1,35})\s+to\s+([A-Za-z0-9][A-Za-z0-9\s'\.\-]{1,35})",
-            header
+            header,
         )
         if m:
             bowler_name = self.resolve_player_id(m.group(1).strip())
@@ -1798,7 +2066,10 @@ class CrexMatchWorker:
 
         if is_nvidia:
             url = "https://integrate.api.nvidia.com/v1/chat/completions"
-            headers = {"Authorization": f"Bearer {self.ai_api_key}", "Content-Type": "application/json"}
+            headers = {
+                "Authorization": f"Bearer {self.ai_api_key}",
+                "Content-Type": "application/json",
+            }
             payload = {
                 "model": "google/gemma-2-2b-it",
                 "messages": [{"role": "user", "content": prompt}],
@@ -1812,11 +2083,15 @@ class CrexMatchWorker:
 
         try:
             async with httpx.AsyncClient() as client:
-                response = await client.post(url, headers=headers, json=payload, timeout=10)
+                response = await client.post(
+                    url, headers=headers, json=payload, timeout=10
+                )
                 result = response.json()
                 if is_nvidia:
                     if "choices" in result:
-                        return self._clean_ai_text(result["choices"][0]["message"]["content"])
+                        return self._clean_ai_text(
+                            result["choices"][0]["message"]["content"]
+                        )
                     print(f"[AI Error] NVIDIA response: {result}")
                 else:
                     if isinstance(result, list) and result:
@@ -1871,7 +2146,10 @@ class CrexMatchWorker:
 
         if is_nvidia:
             url = "https://integrate.api.nvidia.com/v1/chat/completions"
-            headers = {"Authorization": f"Bearer {self.ai_api_key}", "Content-Type": "application/json"}
+            headers = {
+                "Authorization": f"Bearer {self.ai_api_key}",
+                "Content-Type": "application/json",
+            }
             payload = {
                 "model": "google/gemma-2-2b-it",
                 "messages": [{"role": "user", "content": prompt}],
@@ -1885,16 +2163,22 @@ class CrexMatchWorker:
 
         try:
             async with httpx.AsyncClient() as client:
-                response = await client.post(url, headers=headers, json=payload, timeout=10)
+                response = await client.post(
+                    url, headers=headers, json=payload, timeout=10
+                )
                 result = response.json()
                 if is_nvidia:
                     if "choices" in result:
-                        return self._clean_ai_text(result["choices"][0]["message"]["content"])
+                        return self._clean_ai_text(
+                            result["choices"][0]["message"]["content"]
+                        )
                     print(f"[AI Error] NVIDIA feed response: {result}")
                 else:
                     if isinstance(result, list) and result:
                         return self._clean_ai_text(
-                            result[0].get("generated_text", "").split("Refined commentary:")[-1]
+                            result[0]
+                            .get("generated_text", "")
+                            .split("Refined commentary:")[-1]
                         )
                     print(f"[AI Error] HF feed response: {result}")
         except Exception as e:
@@ -1922,7 +2206,10 @@ class CrexMatchWorker:
                     "Stat Card:"
                 )
                 url = "https://integrate.api.nvidia.com/v1/chat/completions"
-                headers = {"Authorization": f"Bearer {self.ai_api_key}", "Content-Type": "application/json"}
+                headers = {
+                    "Authorization": f"Bearer {self.ai_api_key}",
+                    "Content-Type": "application/json",
+                }
                 payload = {
                     "model": "google/gemma-2-2b-it",
                     "messages": [{"role": "user", "content": prompt}],
@@ -1930,7 +2217,9 @@ class CrexMatchWorker:
                     "max_tokens": 150,
                 }
                 async with httpx.AsyncClient() as client:
-                    r = await client.post(url, json=payload, headers=headers, timeout=10.0)
+                    r = await client.post(
+                        url, json=payload, headers=headers, timeout=10.0
+                    )
                     if r.status_code == 200:
                         ai_stat_text = self._clean_ai_text(
                             r.json()["choices"][0]["message"]["content"]
@@ -1961,6 +2250,7 @@ class CrexMatchWorker:
 
     async def broadcast_to_clients(self, packet: dict) -> None:
         from hub import match_hub
+
         if self.crex_id not in match_hub:
             match_hub[self.crex_id] = {"history": [], "queues": set()}
 
@@ -1991,7 +2281,10 @@ class CrexMatchWorker:
 
 
 class HierarchyScraperWorker:
-    """NDTV Sports -> Sportzwiki fallback scraper. No Cricbuzz."""
+    """NDTV Sports -> Sportzwiki fallback scraper.
+
+    No Cricbuzz.
+    """
 
     def __init__(self, match_data, ai_api_key):
         self.match = match_data
@@ -2004,6 +2297,7 @@ class HierarchyScraperWorker:
 
     async def broadcast_to_clients(self, packet: dict) -> None:
         from hub import match_hub
+
         if self.match_id not in match_hub:
             match_hub[self.match_id] = {"history": [], "queues": set()}
 
@@ -2029,17 +2323,26 @@ class HierarchyScraperWorker:
                     try:
                         r = await asyncio.to_thread(
                             self.session.request,
-                            "GET", "https://sports.ndtv.com/cricket/live-scores", timeout=15
+                            "GET",
+                            "https://sports.ndtv.com/cricket/live-scores",
+                            timeout=15,
                         )
                         if r.status_code == 200:
                             soup = BeautifulSoup(r.text, "html.parser")
                             for a in soup.find_all("a", href=True):
                                 href = a["href"].lower()
-                                if "cricket" in href and len(cb_teams) > 0 and all(
-                                    t in href or (t in ALIASES and ALIASES[t] in href) for t in cb_teams
+                                if (
+                                    "cricket" in href
+                                    and len(cb_teams) > 0
+                                    and all(
+                                        t in href
+                                        or (t in ALIASES and ALIASES[t] in href)
+                                        for t in cb_teams
+                                    )
                                 ):
                                     self.target_url = (
-                                        href if href.startswith("http")
+                                        href
+                                        if href.startswith("http")
                                         else "https://sports.ndtv.com" + href
                                     )
                                     break
@@ -2050,17 +2353,22 @@ class HierarchyScraperWorker:
                         try:
                             r2 = await asyncio.to_thread(
                                 self.session.request,
-                                "GET", "https://sportzwiki.com/live-cricket-score", timeout=15
+                                "GET",
+                                "https://sportzwiki.com/live-cricket-score",
+                                timeout=15,
                             )
                             if r2.status_code == 200:
                                 soup = BeautifulSoup(r2.text, "html.parser")
                                 for a in soup.find_all("a", href=True):
                                     href = a["href"].lower()
                                     if len(cb_teams) > 0 and all(
-                                        t in href or (t in ALIASES and ALIASES[t] in href) for t in cb_teams
+                                        t in href
+                                        or (t in ALIASES and ALIASES[t] in href)
+                                        for t in cb_teams
                                     ):
                                         self.target_url = (
-                                            href if href.startswith("http")
+                                            href
+                                            if href.startswith("http")
                                             else "https://sportzwiki.com" + href
                                         )
                                         break
@@ -2071,7 +2379,9 @@ class HierarchyScraperWorker:
                         a, b = cb_teams
                         sa = re.sub(r"[^a-z0-9]", "-", a)
                         sb = re.sub(r"[^a-z0-9]", "-", b)
-                        self.target_url = f"https://sports.ndtv.com/cricket/{sa}-vs-{sb}"
+                        self.target_url = (
+                            f"https://sports.ndtv.com/cricket/{sa}-vs-{sb}"
+                        )
 
                     if self.target_url and not self._url_found_logged:
                         print(f"[Hierarchy] [{self.match_id}] URL: {self.target_url}")
@@ -2083,10 +2393,14 @@ class HierarchyScraperWorker:
                     )
                     if resp.status_code == 200:
                         soup = BeautifulSoup(resp.text, "html.parser")
-                        for s in soup(["script", "style", "header", "nav", "footer", "aside"]):
+                        for s in soup(
+                            ["script", "style", "header", "nav", "footer", "aside"]
+                        ):
                             s.decompose()
                         for w in soup.find_all(
-                            class_=re.compile(r"header|nav|ticker|widget|sidebar|menu|banner", re.I)
+                            class_=re.compile(
+                                r"header|nav|ticker|widget|sidebar|menu|banner", re.I
+                            )
                         ):
                             w.decompose()
 
@@ -2097,7 +2411,7 @@ class HierarchyScraperWorker:
 
                         for c in soup.find_all(
                             ["div", "span", "h1", "h2"],
-                            class_=re.compile(r"score|scr|match|bat|inn|total", re.I)
+                            class_=re.compile(r"score|scr|match|bat|inn|total", re.I),
                         ):
                             txt = c.get_text(separator=" ", strip=True)
                             if score_pat.search(txt) and len(txt) < 60:
@@ -2112,7 +2426,9 @@ class HierarchyScraperWorker:
                                     break
 
                         if score_text:
-                            om = re.search(r"(\d+\.\d+)\s*(?:Ov|overs)", resp.text, re.IGNORECASE)
+                            om = re.search(
+                                r"(\d+\.\d+)\s*(?:Ov|overs)", resp.text, re.IGNORECASE
+                            )
                             over_text = om.group(1) if om else "Live"
                             ball_key = f"{over_text}_{score_text}"
                             if ball_key != self.last_ball:

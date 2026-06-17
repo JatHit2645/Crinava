@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { X, ArrowRight, User, Bell, Coins } from 'lucide-react';
+import React from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { X, ArrowRight, User, Bell, Coins } from "lucide-react";
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -19,16 +19,16 @@ export const MobileNav: React.FC<MobileNavProps> = ({
   coins,
   onAuthClick,
   onProfileClick,
-  onNotificationsClick
+  onNotificationsClick,
 }) => {
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0, x: '100%' }}
+          initial={{ opacity: 0, x: "100%" }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: '100%' }}
-          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+          exit={{ opacity: 0, x: "100%" }}
+          transition={{ type: "spring", damping: 25, stiffness: 200 }}
           className="fixed inset-0 z-[100] bg-void/95 backdrop-blur-heavy p-8 flex flex-col"
         >
           {/* Header */}
@@ -37,7 +37,9 @@ export const MobileNav: React.FC<MobileNavProps> = ({
               <div className="w-10 h-10 rounded-xl bg-gradient-aurora flex items-center justify-center shadow-aurora">
                 <span className="text-void font-bold text-xl">C</span>
               </div>
-              <span className="text-xl font-bold tracking-tighter text-gradient-white">CRINAVA</span>
+              <span className="text-xl font-bold tracking-tighter text-gradient-white">
+                CRINAVA
+              </span>
             </div>
             <button
               onClick={onClose}
@@ -55,7 +57,9 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                   <User className="w-6 h-6" />
                 </div>
                 <div>
-                  <div className="font-bold text-white">{user.email?.split('@')[0]}</div>
+                  <div className="font-bold text-white">
+                    {user.email?.split("@")[0]}
+                  </div>
                   <div className="flex items-center gap-2 text-xs font-bold text-imperial uppercase tracking-widest">
                     <Coins className="w-3 h-3" />
                     {coins} Coins
@@ -77,7 +81,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
 
           {/* Navigation Links */}
           <div className="flex flex-col gap-6 mb-12">
-            {['Oracle', 'Matches', 'Strategy', 'Community'].map((item) => (
+            {["Oracle", "Matches", "Strategy", "Community"].map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}

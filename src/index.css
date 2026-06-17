@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&family=JetBrains+Mono:wght@300;400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&family=JetBrains+Mono:wght@300;400;500&display=swap");
 @import "tailwindcss";
 
 /* ================================================================
@@ -15,15 +15,15 @@
   --color-on-surface: #fafafa;
 
   /* Mercury Gold Accent — Primary interaction & highlight */
-  --color-mercury: #D4AF37;
+  --color-mercury: #d4af37;
   --color-mercury-dim: #8b7322;
   --color-mercury-glow: rgba(212, 175, 55, 0.15);
-  
+
   /* Legacy aliases for existing components */
-  --color-primary: #D4AF37;
-  --color-primary-teal: #D4AF37;
-  --color-aurora-teal: #11EBCF;
-  --color-metallic-gold: #D4AF37;
+  --color-primary: #d4af37;
+  --color-primary-teal: #d4af37;
+  --color-aurora-teal: #11ebcf;
+  --color-metallic-gold: #d4af37;
 
   /* Ethereal Iris — Secondary interaction */
   --color-iris: #9d85ff;
@@ -75,14 +75,18 @@
   }
 
   /* Headlines use Playfair Display */
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     font-family: var(--font-display);
     font-weight: 900;
     letter-spacing: -0.03em;
     text-transform: uppercase;
   }
 
-  h4, h5, h6 {
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-mono);
     font-weight: 500;
     letter-spacing: 0.1em;
@@ -112,7 +116,6 @@
    ================================================================ */
 
 @layer utilities {
-
   /* --- Typography Utilities --- */
   .text-display {
     font-family: var(--font-display);
@@ -158,7 +161,7 @@
 
   /* --- Gradients --- */
   .gradient-mercury-text {
-    background: linear-gradient(135deg, #f3e5ab, #D4AF37, #8b7322);
+    background: linear-gradient(135deg, #f3e5ab, #d4af37, #8b7322);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -166,14 +169,14 @@
 
   /* Legacy gradient aliases */
   .brand-gradient {
-    background: linear-gradient(90deg, #D4AF37 0%, #fafafa 50%, #D4AF37 100%);
+    background: linear-gradient(90deg, #d4af37 0%, #fafafa 50%, #d4af37 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .gold-gradient-bg {
-    background: linear-gradient(135deg, #D4AF37 0%, #8b7322 100%);
+    background: linear-gradient(135deg, #d4af37 0%, #8b7322 100%);
   }
 
   .gold-glow {
@@ -219,9 +222,15 @@
 
   /* --- Animations --- */
   @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); }
-    100% { transform: translateY(0px); }
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
   }
 
   .float-slow {
@@ -229,8 +238,12 @@
   }
 
   @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
   }
 
   .animate-shimmer {
@@ -239,8 +252,13 @@
   }
 
   @keyframes pulse-mercury {
-    0%, 100% { box-shadow: 0 0 5px rgba(212, 175, 55, 0.3); }
-    50% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.6); }
+    0%,
+    100% {
+      box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+    }
   }
 
   .pulse-mercury {
@@ -252,9 +270,10 @@
     opacity: 0;
     filter: blur(8px);
     transform: translateY(30px) scale(0.98);
-    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
-                filter 1s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    transition:
+      opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+      filter 1s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 1s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .unveil.visible {
@@ -265,7 +284,11 @@
 
   /* --- Material Symbols Override --- */
   .material-symbols-outlined {
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    font-variation-settings:
+      "FILL" 0,
+      "wght" 400,
+      "GRAD" 0,
+      "opsz" 24;
   }
 
   /* --- Scrollbar Utility --- */
@@ -289,11 +312,11 @@
 
   /* --- Active States (legacy) --- */
   .active-gold {
-    color: #D4AF37 !important;
+    color: #d4af37 !important;
   }
 
   .active-gold .material-symbols-outlined {
-    font-variation-settings: 'FILL' 1;
+    font-variation-settings: "FILL" 1;
   }
 
   .suggestion-chip {
@@ -301,11 +324,17 @@
   }
 
   /* --- Celestial Organic Kinetic Classes --- */
-  
+
   /* Radar Pulse */
   @keyframes radar-pulse {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(2.5); opacity: 0; }
+    0% {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(2.5);
+      opacity: 0;
+    }
   }
   .radar-pulse::before {
     content: "";
@@ -327,7 +356,10 @@
     clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
     transform: translateY(20px);
     opacity: 0;
-    transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+    transition:
+      clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.8s ease;
   }
   .clip-reveal.visible {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
@@ -337,12 +369,24 @@
 
   /* Glitch Enter */
   @keyframes glitch-enter {
-    0% { opacity: 0; }
-    20% { opacity: 1; }
-    40% { opacity: 0.5; }
-    60% { opacity: 0; }
-    80% { opacity: 1; }
-    100% { opacity: 1; }
+    0% {
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    40% {
+      opacity: 0.5;
+    }
+    60% {
+      opacity: 0;
+    }
+    80% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
   }
   .glitch-enter {
     animation: glitch-enter 0.2s steps(2, end) forwards;
@@ -354,11 +398,14 @@
     overflow: hidden;
   }
   .artifact-resonance img {
-    transition: transform 0.1s cubic-bezier(0.23, 1, 0.32, 1), filter 0.1s;
+    transition:
+      transform 0.1s cubic-bezier(0.23, 1, 0.32, 1),
+      filter 0.1s;
   }
   .artifact-resonance:hover img {
     transform: scale(1.05);
-    filter: drop-shadow(2px 0 0 red) drop-shadow(-2px 0 0 blue) contrast(1.1) brightness(1.2);
+    filter: drop-shadow(2px 0 0 red) drop-shadow(-2px 0 0 blue) contrast(1.1)
+      brightness(1.2);
   }
   /* Raw Gold Veil on Hover */
   .artifact-resonance::after {
@@ -379,7 +426,11 @@
     content: "";
     position: absolute;
     inset: -50px;
-    background: radial-gradient(circle at center, rgba(255, 204, 51, 0.1) 0%, transparent 60%);
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 204, 51, 0.1) 0%,
+      transparent 60%
+    );
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: -1;

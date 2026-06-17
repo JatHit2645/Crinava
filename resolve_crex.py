@@ -1,5 +1,4 @@
 import httpx
-import json
 
 target = "socket.crex.com"
 url = f"https://dns.google/resolve?name={target}"

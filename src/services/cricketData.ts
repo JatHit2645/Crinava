@@ -1,10 +1,11 @@
 // CRINAVA_TELEMETRY_UPGRADE_REVISION_1
-import { supabase } from '../lib/supabaseClient';
-import { Database } from '../types/database';
+import { supabase } from "../lib/supabaseClient";
+import { Database } from "../types/database";
 
-export type Delivery = Database['public']['Tables']['deliveries']['Row'];
-export type Match = Database['public']['Tables']['matches']['Row'];
-export type PlayerStats = Database['public']['Tables']['player_stats_summary']['Row'];
+export type Delivery = Database["public"]["Tables"]["deliveries"]["Row"];
+export type Match = Database["public"]["Tables"]["matches"]["Row"];
+export type PlayerStats =
+  Database["public"]["Tables"]["player_stats_summary"]["Row"];
 
 export interface LiveExtras {
   total: number;
@@ -76,12 +77,12 @@ export const CricketDataService = {
    */
   async getDeliveriesForMatch(matchId: number): Promise<Delivery[]> {
     const { data, error } = await supabase
-      .from('deliveries')
-      .select('*')
-      .eq('match_id', matchId)
-      .order('innings_no', { ascending: true })
-      .order('over_no', { ascending: true })
-      .order('ball_no', { ascending: true });
+      .from("deliveries")
+      .select("*")
+      .eq("match_id", matchId)
+      .order("innings_no", { ascending: true })
+      .order("over_no", { ascending: true })
+      .order("ball_no", { ascending: true });
 
     if (error) {
       console.error(`Error fetching deliveries for match ${matchId}:`, error);
@@ -95,9 +96,9 @@ export const CricketDataService = {
    */
   async getMatch(matchId: number): Promise<Match | null> {
     const { data, error } = await supabase
-      .from('matches')
-      .select('*')
-      .eq('match_id', matchId)
+      .from("matches")
+      .select("*")
+      .eq("match_id", matchId)
       .single();
 
     if (error) {
@@ -112,13 +113,13 @@ export const CricketDataService = {
    */
   async getRecentMatches(limit = 10): Promise<Match[]> {
     const { data, error } = await supabase
-      .from('matches')
-      .select('*')
-      .order('match_date', { ascending: false })
+      .from("matches")
+      .select("*")
+      .order("match_date", { ascending: false })
       .limit(limit);
 
     if (error) {
-      console.error('Error fetching recent matches:', error);
+      console.error("Error fetching recent matches:", error);
       return [];
     }
     return data || [];
@@ -129,9 +130,9 @@ export const CricketDataService = {
    */
   async getPlayerStatsSummary(playerId: string): Promise<PlayerStats | null> {
     const { data, error } = await supabase
-      .from('player_stats_summary')
-      .select('*')
-      .eq('player_id', playerId)
+      .from("player_stats_summary")
+      .select("*")
+      .eq("player_id", playerId)
       .single();
 
     if (error) {
@@ -144,18 +145,21 @@ export const CricketDataService = {
   /**
    * Get volume stats (total runs, boundaries, etc) for a player
    */
-  async getPlayerVolumeStats(playerId: string, matchType = 'T20') {
+  async getPlayerVolumeStats(playerId: string, matchType = "T20") {
     const { data, error } = await supabase
-      .from('player_volume_stats')
-      .select('*')
-      .eq('player_id', playerId)
-      .eq('match_type', matchType)
+      .from("player_volume_stats")
+      .select("*")
+      .eq("player_id", playerId)
+      .eq("match_type", matchType)
       .single();
 
     if (error) {
-      console.error(`Error fetching volume stats for player ${playerId}:`, error);
+      console.error(
+        `Error fetching volume stats for player ${playerId}:`,
+        error,
+      );
       return null;
     }
     return data;
-  }
+  },
 };

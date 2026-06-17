@@ -1,12 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { ScatterChart, Scatter, XAxis, YAxis, ZAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell, ReferenceLine } from "recharts";
+import {
+  ScatterChart,
+  Scatter,
+  XAxis,
+  YAxis,
+  ZAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+  Cell,
+  ReferenceLine,
+} from "recharts";
 import { Zap } from "lucide-react";
 
 interface ImpactEvent {
   over_no: number;
   ball_no: number;
   impactScore: number;
-  type: 'wicket' | 'boundary' | 'dot' | 'normal';
+  type: "wicket" | "boundary" | "dot" | "normal";
   desc: string;
   batter: string;
   bowler: string;
@@ -21,7 +32,7 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
 
   useEffect(() => {
     setLoading(true);
-    
+
     if (!rawInfo || !rawInfo.innings) {
       setData([]);
       setLoading(false);
@@ -32,7 +43,9 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
     if (Array.isArray(rawInfo.innings)) {
       inningsList = rawInfo.innings;
     } else {
-      inningsList = Object.values(rawInfo.innings).map((inn: any) => Object.values(inn)[0]);
+      inningsList = Object.values(rawInfo.innings).map(
+        (inn: any) => Object.values(inn)[0],
+      );
     }
 
     const inningData = inningsList[activeInning];
@@ -61,41 +74,45 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
           currentOver = overNo;
           currentBall = 1;
         }
-        deliveries.push({ ...dObj[key], over_no: overNo, ball_no: currentBall });
+        deliveries.push({
+          ...dObj[key],
+          over_no: overNo,
+          ball_no: currentBall,
+        });
         currentBall++;
       });
     }
 
     const formattedData: ImpactEvent[] = [];
-    
+
     deliveries.forEach((d: any) => {
       const runs = d.runs ? d.runs.total || 0 : 0;
       const isWicket = d.wickets && d.wickets.length > 0;
-      const batter = d.batter || d.batsman || 'Unknown';
-      const bowler = d.bowler || 'Unknown';
-      
+      const batter = d.batter || d.batsman || "Unknown";
+      const bowler = d.bowler || "Unknown";
+
       let impactScore = runs;
-      let type: 'wicket' | 'boundary' | 'dot' | 'normal' = 'normal';
+      let type: "wicket" | "boundary" | "dot" | "normal" = "normal";
       let desc = `${runs} runs`;
       let z = runs * 20 + 20;
 
       if (isWicket) {
         impactScore = -5; // Negative impact for batting team, positive for bowling
-        type = 'wicket';
+        type = "wicket";
         desc = `Wicket! (${d.wickets[0].kind})`;
         z = 200;
       } else if (runs >= 4) {
-        type = 'boundary';
+        type = "boundary";
         desc = runs === 6 ? `SIX!` : `FOUR!`;
         z = runs === 6 ? 150 : 100;
       } else if (runs === 0 && !d.extras) {
-        type = 'dot';
+        type = "dot";
         desc = `Dot ball`;
         z = 30;
       }
 
       formattedData.push({
-        over_no: d.over_no + (d.ball_no / 10),
+        over_no: d.over_no + d.ball_no / 10,
         ball_no: d.ball_no,
         impactScore,
         type,
@@ -103,7 +120,7 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
         batter,
         bowler,
         runs,
-        z
+        z,
       });
     });
 
@@ -116,11 +133,19 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
       const data = payload[0].payload;
       return (
         <div className="bg-[#111] border border-[#333] p-3 rounded-lg shadow-xl z-50">
-          <p className="text-white font-bold mb-1">Over {Math.floor(data.over_no)}.{data.ball_no}</p>
-          <p className="text-aurora-teal text-sm font-black mb-2">{data.desc}</p>
+          <p className="text-white font-bold mb-1">
+            Over {Math.floor(data.over_no)}.{data.ball_no}
+          </p>
+          <p className="text-aurora-teal text-sm font-black mb-2">
+            {data.desc}
+          </p>
           <div className="text-xs text-gray-400 space-y-1">
-            <p><span className="text-gray-500">Batter:</span> {data.batter}</p>
-            <p><span className="text-gray-500">Bowler:</span> {data.bowler}</p>
+            <p>
+              <span className="text-gray-500">Batter:</span> {data.batter}
+            </p>
+            <p>
+              <span className="text-gray-500">Bowler:</span> {data.bowler}
+            </p>
           </div>
         </div>
       );
@@ -128,7 +153,8 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
     return null;
   };
 
-  if (loading) return <div className="text-white">Analyzing Ball Impacts...</div>;
+  if (loading)
+    return <div className="text-white">Analyzing Ball Impacts...</div>;
 
   return (
     <div className="bg-[#1a1a1a] p-6 rounded-xl border border-white/10 relative overflow-hidden group h-full">
@@ -142,20 +168,21 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
             <Zap size={20} className="text-aurora-teal" /> Ball-by-Ball Impact
           </h2>
           <p className="text-gray-500 text-xs mt-1">
-            Visualizing the impact of every delivery (Runs scored vs Wickets lost).
+            Visualizing the impact of every delivery (Runs scored vs Wickets
+            lost).
           </p>
         </div>
 
         <div className="flex items-center gap-2 bg-black/40 p-1 rounded-lg border border-white/10">
-          <button 
+          <button
             onClick={() => setActiveInning(0)}
-            className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded transition-colors ${activeInning === 0 ? 'text-aurora-teal bg-aurora-teal/10' : 'text-gray-500 hover:text-white'}`}
+            className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded transition-colors ${activeInning === 0 ? "text-aurora-teal bg-aurora-teal/10" : "text-gray-500 hover:text-white"}`}
           >
             Inning 1
           </button>
-          <button 
+          <button
             onClick={() => setActiveInning(1)}
-            className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded transition-colors ${activeInning === 1 ? 'text-aurora-teal bg-aurora-teal/10' : 'text-gray-500 hover:text-white'}`}
+            className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded transition-colors ${activeInning === 1 ? "text-aurora-teal bg-aurora-teal/10" : "text-gray-500 hover:text-white"}`}
           >
             Inning 2
           </button>
@@ -169,35 +196,44 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
           </div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: -20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
-              <XAxis 
-                type="number"
-                dataKey="over_no" 
-                stroke="#444" 
-                tick={{fill: '#666', fontSize: 10}}
-                tickFormatter={(val) => `Ov ${Math.floor(val)}`}
-                domain={['dataMin', 'dataMax']}
+            <ScatterChart
+              margin={{ top: 20, right: 20, bottom: 20, left: -20 }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#ffffff05"
+                vertical={false}
               />
-              <YAxis 
+              <XAxis
+                type="number"
+                dataKey="over_no"
+                stroke="#444"
+                tick={{ fill: "#666", fontSize: 10 }}
+                tickFormatter={(val) => `Ov ${Math.floor(val)}`}
+                domain={["dataMin", "dataMax"]}
+              />
+              <YAxis
                 type="number"
                 dataKey="impactScore"
-                stroke="#444" 
-                tick={{fill: '#666', fontSize: 10}}
+                stroke="#444"
+                tick={{ fill: "#666", fontSize: 10 }}
                 domain={[-6, 8]}
                 hide
               />
               <ZAxis type="number" dataKey="z" range={[20, 200]} />
-              <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: '3 3' }} />
+              <Tooltip
+                content={<CustomTooltip />}
+                cursor={{ strokeDasharray: "3 3" }}
+              />
               <ReferenceLine y={0} stroke="#444" />
               <Scatter data={data}>
                 {data.map((entry, index) => {
-                  let color = '#444';
-                  if (entry.type === 'wicket') color = '#FF4444';
-                  else if (entry.type === 'boundary') color = '#11EBCF';
-                  else if (entry.type === 'dot') color = '#FFD700';
-                  else if (entry.runs > 0) color = '#ffffff80';
-                  
+                  let color = "#444";
+                  if (entry.type === "wicket") color = "#FF4444";
+                  else if (entry.type === "boundary") color = "#11EBCF";
+                  else if (entry.type === "dot") color = "#FFD700";
+                  else if (entry.runs > 0) color = "#ffffff80";
+
                   return <Cell key={`cell-${index}`} fill={color} />;
                 })}
               </Scatter>
@@ -208,18 +244,40 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
 
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="p-4 bg-aurora-teal/5 rounded-xl border border-aurora-teal/20">
-          <h4 className="text-aurora-teal font-black uppercase tracking-widest text-[10px] mb-2">Legend</h4>
+          <h4 className="text-aurora-teal font-black uppercase tracking-widest text-[10px] mb-2">
+            Legend
+          </h4>
           <div className="flex flex-wrap gap-4 text-xs text-gray-300">
-            <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-[#FF4444]"></div> Wickets (-5)</div>
-            <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-[#11EBCF]"></div> Boundaries</div>
-            <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-[#ffffff80]"></div> Runs (1-3)</div>
-            <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-[#FFD700]"></div> Dot Balls (0)</div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-[#FF4444]"></div> Wickets
+              (-5)
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-[#11EBCF]"></div>{" "}
+              Boundaries
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-[#ffffff80]"></div> Runs
+              (1-3)
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-[#FFD700]"></div> Dot
+              Balls (0)
+            </div>
           </div>
         </div>
         <div className="p-4 bg-metallic-gold/5 rounded-xl border border-metallic-gold/20">
-          <h4 className="text-metallic-gold font-black uppercase tracking-widest text-[10px] mb-2">Why it matters</h4>
+          <h4 className="text-metallic-gold font-black uppercase tracking-widest text-[10px] mb-2">
+            Why it matters
+          </h4>
           <p className="text-xs text-gray-300 leading-relaxed">
-            This scatter chart provides a clear view of the <span className="text-metallic-gold font-bold uppercase">Flow of Runs and Wickets</span>. Bubbles above the line represent runs scored, while bubbles below the line (red) represent wickets lost. The size of the bubble indicates the magnitude of the impact.
+            This scatter chart provides a clear view of the{" "}
+            <span className="text-metallic-gold font-bold uppercase">
+              Flow of Runs and Wickets
+            </span>
+            . Bubbles above the line represent runs scored, while bubbles below
+            the line (red) represent wickets lost. The size of the bubble
+            indicates the magnitude of the impact.
           </p>
         </div>
       </div>

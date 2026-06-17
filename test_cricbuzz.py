@@ -1,5 +1,5 @@
 from stealth import stealth_session
-import sys
+
 
 def test_fetch():
     url = "https://www.cricbuzz.com/cricket-match/live-scores"
@@ -14,6 +14,7 @@ def test_fetch():
             print("Failed to fetch.")
     except Exception as e:
         print(f"Error: {e}")
+
 
 if __name__ == "__main__":
     test_fetch()

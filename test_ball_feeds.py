@@ -1,6 +1,5 @@
 import sys
 import os
-import json
 
 # Add current dir to path to import stealth
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -24,10 +23,12 @@ payload = {"matchId": match_id}
 headers = {
     "Content-Type": "application/json",
     "Origin": "https://crex.com",
-    "Referer": "https://crex.com/"
+    "Referer": "https://crex.com/",
 }
 try:
-    resp = stealth_session.request("POST", post_url, json=payload, headers=headers, timeout=10)
+    resp = stealth_session.request(
+        "POST", post_url, json=payload, headers=headers, timeout=10
+    )
     print(f"Status Code: {resp.status_code}")
     print(f"Headers: {dict(resp.headers)}")
     print(f"Body: {resp.text[:1000]}")
@@ -37,7 +38,9 @@ except Exception as e:
 print("\n--- TESTING POST REQUEST WITH key (goscorer format) ---")
 payload = {"key": match_id}
 try:
-    resp = stealth_session.request("POST", post_url, json=payload, headers=headers, timeout=10)
+    resp = stealth_session.request(
+        "POST", post_url, json=payload, headers=headers, timeout=10
+    )
     print(f"Status Code: {resp.status_code}")
     print(f"Body: {resp.text[:1000]}")
 except Exception as e:

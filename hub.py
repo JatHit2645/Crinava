@@ -8,6 +8,7 @@ match_hub = {}
 
 CACHE_FILE = "match_cache.json"
 
+
 def load_cache():
     """Loads previous match data from disk into RAM (runs on startup)"""
     if os.path.exists(CACHE_FILE):
@@ -24,11 +25,14 @@ def load_cache():
                         "title": match_data.get("title"),
                         "source": match_data.get("source"),
                         "queues": set(),
-                        "worker": None
+                        "worker": None,
                     }
-            print(f"[Cache] Successfully loaded {len(data)} matches into memory from {CACHE_FILE}.")
+            print(
+                f"[Cache] Successfully loaded {len(data)} matches into memory from {CACHE_FILE}."
+            )
         except Exception as e:
             print(f"[Cache] Error loading cache: {e}")
+
 
 def save_cache():
     """Saves current RAM match data to disk (runs on shutdown)"""
@@ -42,10 +46,12 @@ def save_cache():
                 "telemetry": data.get("telemetry", {}),
                 "completed_at": data.get("completed_at"),
                 "title": data.get("title"),
-                "source": data.get("source")
+                "source": data.get("source"),
             }
         with open(CACHE_FILE, "w") as f:
             json.dump(cache_data, f)
-        print(f"[Cache] Successfully saved {len(cache_data)} matches to disk ({CACHE_FILE}).")
+        print(
+            f"[Cache] Successfully saved {len(cache_data)} matches to disk ({CACHE_FILE})."
+        )
     except Exception as e:
         print(f"[Cache] Error saving cache: {e}")

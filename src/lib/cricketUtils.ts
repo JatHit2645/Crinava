@@ -15,7 +15,11 @@ export interface PlayerStats {
   overs: string;
 }
 
-export function aggregateDeliveries(deliveries: any[], playerId: string | number, playerName: string): PlayerStats {
+export function aggregateDeliveries(
+  deliveries: any[],
+  playerId: string | number,
+  playerName: string,
+): PlayerStats {
   let runs = 0;
   let ballsFaced = 0;
   let fours = 0;
@@ -42,14 +46,22 @@ export function aggregateDeliveries(deliveries: any[], playerId: string | number
     if (String(d.bowler_id) === String(playerId)) {
       const isWide = d.runs_extras > 0 && !d.wicket_kind; // Simplified wide check
       const isNoBall = false; // Simplified
-      
+
       if (!isWide && !isNoBall) {
         ballsBowled += 1;
       }
-      
+
       runsConceded += (d.runs_batter || 0) + (d.runs_extras || 0);
-      
-      if (d.wicket_kind && !['run out', 'retired hurt', 'obstructing the field', 'retired out'].includes(d.wicket_kind)) {
+
+      if (
+        d.wicket_kind &&
+        ![
+          "run out",
+          "retired hurt",
+          "obstructing the field",
+          "retired out",
+        ].includes(d.wicket_kind)
+      ) {
         wickets += 1;
       }
     }
@@ -68,9 +80,11 @@ export function aggregateDeliveries(deliveries: any[], playerId: string | number
     runsConceded,
     ballsBowled,
     average: dismissals > 0 ? (runs / dismissals).toFixed(2) : runs.toFixed(2),
-    strikeRate: ballsFaced > 0 ? ((runs / ballsFaced) * 100).toFixed(2) : '0.00',
-    economy: ballsBowled > 0 ? (runsConceded / (ballsBowled / 6)).toFixed(2) : '0.00',
-    bowlingAverage: wickets > 0 ? (runsConceded / wickets).toFixed(2) : 'N/A',
-    overs
+    strikeRate:
+      ballsFaced > 0 ? ((runs / ballsFaced) * 100).toFixed(2) : "0.00",
+    economy:
+      ballsBowled > 0 ? (runsConceded / (ballsBowled / 6)).toFixed(2) : "0.00",
+    bowlingAverage: wickets > 0 ? (runsConceded / wickets).toFixed(2) : "N/A",
+    overs,
   };
 }

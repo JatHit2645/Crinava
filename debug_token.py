@@ -21,7 +21,9 @@ if "socketToken" in response.text:
     print("SUCCESS: socketToken found in text!")
     match = re.search(r'socketToken":"([^"]+)"', response.text)
     raw_token = match.group(1)
-    masked_token = raw_token[:5] + "..." + raw_token[-5:] if len(raw_token) > 10 else "..."
+    masked_token = (
+        raw_token[:5] + "..." + raw_token[-5:] if len(raw_token) > 10 else "..."
+    )
     print(f"Extracted: {masked_token}")
 else:
     print("FAILURE: socketToken NOT found.")

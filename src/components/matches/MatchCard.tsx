@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Activity, TrendingUp, Zap, Clock, MapPin } from 'lucide-react';
+import React from "react";
+import { motion } from "motion/react";
+import { Activity, TrendingUp, Zap, Clock, MapPin } from "lucide-react";
 
 interface MatchCardProps {
   match: any;
@@ -23,7 +23,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, onPredict }) => {
         <div className="badge-live">Live Telemetry</div>
         <div className="flex items-center gap-2 text-xs font-bold text-white/40 uppercase tracking-widest">
           <Clock className="w-3 h-3" />
-          {match.status === 'LIVE' ? 'In Progress' : 'Upcoming'}
+          {match.status === "LIVE" ? "In Progress" : "Upcoming"}
         </div>
       </div>
 
@@ -31,7 +31,9 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, onPredict }) => {
       <div className="flex items-center justify-between gap-8 mb-10">
         <div className="flex-1 text-center">
           <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-500">
-            <span className="text-2xl font-bold text-white">{match.team1_short}</span>
+            <span className="text-2xl font-bold text-white">
+              {match.team1_short}
+            </span>
           </div>
           <div className="font-bold text-white text-lg">{match.team1}</div>
         </div>
@@ -45,7 +47,9 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, onPredict }) => {
 
         <div className="flex-1 text-center">
           <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-500">
-            <span className="text-2xl font-bold text-white">{match.team2_short}</span>
+            <span className="text-2xl font-bold text-white">
+              {match.team2_short}
+            </span>
           </div>
           <div className="font-bold text-white text-lg">{match.team2}</div>
         </div>
@@ -59,7 +63,9 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, onPredict }) => {
             Win Probability
           </div>
           <div className="text-xl font-mono font-bold text-white">
-            {match.win_prob_1}% <span className="text-xs text-white/40">vs</span> {match.win_prob_2}%
+            {match.win_prob_1}%{" "}
+            <span className="text-xs text-white/40">vs</span> {match.win_prob_2}
+            %
           </div>
         </div>
         <div className="p-4 rounded-xl bg-white/3 border border-white/5 flex flex-col gap-1">
@@ -68,7 +74,8 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, onPredict }) => {
             Momentum
           </div>
           <div className="text-xl font-mono font-bold text-white">
-            {match.momentum}% <span className="text-xs text-white/40">Shift</span>
+            {match.momentum}%{" "}
+            <span className="text-xs text-white/40">Shift</span>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabaseClient";
 
 export function useUserSubscription() {
   const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null);
@@ -8,7 +8,9 @@ export function useUserSubscription() {
   useEffect(() => {
     const checkSubscription = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
         if (!user) {
           setIsSubscribed(false);
           setIsLoading(false);
@@ -16,15 +18,15 @@ export function useUserSubscription() {
         }
 
         const { data, error } = await supabase
-          .from('profiles')
-          .select('is_subscribed')
-          .eq('id', user.id)
+          .from("profiles")
+          .select("is_subscribed")
+          .eq("id", user.id)
           .single();
 
         if (error) throw error;
         setIsSubscribed(data?.is_subscribed || false);
       } catch (err) {
-        console.error('Error checking subscription:', err);
+        console.error("Error checking subscription:", err);
         setIsSubscribed(false);
       } finally {
         setIsLoading(false);

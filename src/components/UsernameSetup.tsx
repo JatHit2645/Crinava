@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { User, Check, X, Loader2, Sparkles, ArrowRight } from 'lucide-react';
-import { supabase } from '../lib/supabaseClient';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { User, Check, X, Loader2, Sparkles, ArrowRight } from "lucide-react";
+import { supabase } from "../lib/supabaseClient";
 
 interface UsernameSetupProps {
   isOpen: boolean;
   onComplete: (username: string) => void;
 }
 
-export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete }) => {
-  const [username, setUsername] = useState('');
+export const UsernameSetup: React.FC<UsernameSetupProps> = ({
+  isOpen,
+  onComplete,
+}) => {
+  const [username, setUsername] = useState("");
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
   const [checking, setChecking] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -32,16 +35,16 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete
       setChecking(true);
       try {
         const { data, error } = await supabase
-          .from('usernames')
-          .select('id')
-          .eq('id', lowerUsername)
+          .from("usernames")
+          .select("id")
+          .eq("id", lowerUsername)
           .maybeSingle();
-        
+
         const available = !data;
         cache.current.set(lowerUsername, available);
         setIsAvailable(available);
       } catch (err) {
-        console.error('Error checking username availability:', err);
+        console.error("Error checking username availability:", err);
       } finally {
         setChecking(false);
       }
@@ -59,43 +62,43 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete
     setError(null);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('No user found');
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
 
       const userId = user.id;
       const lowerUsername = username.toLowerCase();
 
       // 1. Create username mapping
       const { error: usernameError } = await supabase
-        .from('usernames')
+        .from("usernames")
         .insert({ id: lowerUsername, uid: userId });
-      
+
       if (usernameError) throw usernameError;
 
       // 2. Create/Update profile
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .upsert({
-          id: userId,
-          email: user.email,
-          username: username,
-          cricket_iq: 100,
-          crinava_coins: 500,
-          career_path: 'Rookie',
-          expertise_badge: 'Novice',
-          professional_comparison: {
-            match: 'Unranked',
-            similarity: 0
-          },
-          updated_at: new Date().toISOString()
-        });
+      const { error: profileError } = await supabase.from("profiles").upsert({
+        id: userId,
+        email: user.email,
+        username: username,
+        cricket_iq: 100,
+        crinava_coins: 500,
+        career_path: "Rookie",
+        expertise_badge: "Novice",
+        professional_comparison: {
+          match: "Unranked",
+          similarity: 0,
+        },
+        updated_at: new Date().toISOString(),
+      });
 
       if (profileError) throw profileError;
 
       onComplete(username);
     } catch (err: any) {
-      console.error('Failed to set username:', err);
-      setError(err.message || 'Failed to set username. Please try again.');
+      console.error("Failed to set username:", err);
+      setError(err.message || "Failed to set username. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -126,31 +129,45 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete
 
             {error && (
               <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl">
-                <p className="text-[10px] text-red-500 font-black uppercase tracking-widest text-center">{error}</p>
+                <p className="text-[10px] text-red-500 font-black uppercase tracking-widest text-center">
+                  {error}
+                </p>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[10px] text-fg-muted font-black uppercase tracking-widest ml-1">Username</label>
+                <label className="text-[10px] text-fg-muted font-black uppercase tracking-widest ml-1">
+                  Username
+                </label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-fg-muted" size={18} />
+                  <User
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-fg-muted"
+                    size={18}
+                  />
                   <input
                     type="text"
                     value={username}
-                    onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ''))}
+                    onChange={(e) =>
+                      setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ""))
+                    }
                     placeholder="cricket_pro_99"
                     className={`w-full bg-white/[0.03] border rounded-2xl py-5 pl-12 pr-12 text-fg-primary text-sm font-bold focus:outline-none transition-all ${
-                      isAvailable === true ? 'border-accent-default/50 focus:border-accent-default' : 
-                      isAvailable === false ? 'border-red-500/50 focus:border-red-500' : 
-                      'border-border-default focus:border-accent-default/30'
+                      isAvailable === true
+                        ? "border-accent-default/50 focus:border-accent-default"
+                        : isAvailable === false
+                          ? "border-red-500/50 focus:border-red-500"
+                          : "border-border-default focus:border-accent-default/30"
                     }`}
                     maxLength={20}
                     required
                   />
                   <div className="absolute right-4 top-1/2 -translate-y-1/2">
                     {checking ? (
-                      <Loader2 className="animate-spin text-fg-muted" size={18} />
+                      <Loader2
+                        className="animate-spin text-fg-muted"
+                        size={18}
+                      />
                     ) : isAvailable === true ? (
                       <Check className="text-accent-default" size={18} />
                     ) : isAvailable === false ? (
@@ -159,14 +176,20 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete
                   </div>
                 </div>
                 <div className="flex justify-between px-1">
-                  <p className={`text-[9px] font-black uppercase tracking-widest ${
-                    isAvailable === true ? 'text-accent-default' : 
-                    isAvailable === false ? 'text-red-500' : 
-                    'text-fg-muted'
-                  }`}>
-                    {isAvailable === true ? 'Username Available' : 
-                     isAvailable === false ? 'Username Taken' : 
-                     'Min. 3 characters'}
+                  <p
+                    className={`text-[9px] font-black uppercase tracking-widest ${
+                      isAvailable === true
+                        ? "text-accent-default"
+                        : isAvailable === false
+                          ? "text-red-500"
+                          : "text-fg-muted"
+                    }`}
+                  >
+                    {isAvailable === true
+                      ? "Username Available"
+                      : isAvailable === false
+                        ? "Username Taken"
+                        : "Min. 3 characters"}
                   </p>
                   <p className="text-[9px] text-fg-muted font-black uppercase tracking-widest">
                     {username.length}/20
@@ -184,7 +207,10 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete
                 ) : (
                   <>
                     Initialize Profile
-                    <ArrowRight className="group-hover:translate-x-1 transition-transform" size={18} />
+                    <ArrowRight
+                      className="group-hover:translate-x-1 transition-transform"
+                      size={18}
+                    />
                   </>
                 )}
               </button>
@@ -192,7 +218,8 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({ isOpen, onComplete
 
             <div className="pt-4 text-center">
               <p className="text-[8px] text-fg-muted font-black uppercase tracking-widest leading-relaxed">
-                Your username is permanent and will be used across all Crinava features, including leaderboards and debates.
+                Your username is permanent and will be used across all Crinava
+                features, including leaderboards and debates.
               </p>
             </div>
           </div>

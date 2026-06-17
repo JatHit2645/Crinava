@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function PlayerEnrichmentButton() {
   const [status, setStatus] = useState<any>(null);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [remainingTime, setRemainingTime] = useState<string | null>(null);
 
   const [showDebug, setShowDebug] = useState(false);
@@ -11,7 +11,7 @@ export function PlayerEnrichmentButton() {
   useEffect(() => {
     const fetchStatus = async () => {
       try {
-        const res = await fetch('/api/enrich-status');
+        const res = await fetch("/api/enrich-status");
         if (res.ok) {
           const contentType = res.headers.get("content-type");
           if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -24,22 +24,34 @@ export function PlayerEnrichmentButton() {
             if (text.includes("<title>Starting Server...</title>")) {
               setMessage("Server is starting up. Please wait...");
             } else {
-              console.error("Status fetch failed: Expected JSON, got", contentType, text.substring(0, 200));
-              setMessage(`Server returned non-JSON response (${contentType}). Check logs.`);
+              console.error(
+                "Status fetch failed: Expected JSON, got",
+                contentType,
+                text.substring(0, 200),
+              );
+              setMessage(
+                `Server returned non-JSON response (${contentType}). Check logs.`,
+              );
             }
           }
         } else {
           const text = await res.text();
-          console.error("Status fetch failed with status:", res.status, text.substring(0, 200));
+          console.error(
+            "Status fetch failed with status:",
+            res.status,
+            text.substring(0, 200),
+          );
           if (res.status >= 500) {
-            setMessage("Server error (5xx). It might be crashing or restarting.");
+            setMessage(
+              "Server error (5xx). It might be crashing or restarting.",
+            );
           } else {
             setMessage(`HTTP Error ${res.status}: ${text.substring(0, 50)}`);
           }
         }
       } catch (err: any) {
         console.error("Status fetch failed:", err);
-        setMessage(`Connection error: ${err.message || 'Failed to fetch'}`);
+        setMessage(`Connection error: ${err.message || "Failed to fetch"}`);
       }
     };
 
@@ -50,7 +62,7 @@ export function PlayerEnrichmentButton() {
 
   // Calculate remaining time
   useEffect(() => {
-    if (status?.status === 'running' && status.startTime) {
+    if (status?.status === "running" && status.startTime) {
       if (status.processedCount > 0) {
         const elapsed = (Date.now() - status.startTime) / 1000;
         const rate = status.processedCount / elapsed;
@@ -61,7 +73,7 @@ export function PlayerEnrichmentButton() {
       } else {
         setRemainingTime("Calculating...");
       }
-    } else if (status?.status === 'paused') {
+    } else if (status?.status === "paused") {
       setRemainingTime("Paused");
     } else {
       setRemainingTime(null);
@@ -70,10 +82,10 @@ export function PlayerEnrichmentButton() {
 
   const startEnrichment = async () => {
     try {
-      setMessage('Requesting enrichment start...');
-      const res = await fetch('/api/enrich-start', { method: 'POST' });
+      setMessage("Requesting enrichment start...");
+      const res = await fetch("/api/enrich-start", { method: "POST" });
       const data = await res.json();
-      setMessage(data.message || 'Enrichment started');
+      setMessage(data.message || "Enrichment started");
     } catch (error: any) {
       setMessage(`Error: ${error?.message || String(error)}`);
     }
@@ -81,8 +93,8 @@ export function PlayerEnrichmentButton() {
 
   const pauseEnrichment = async () => {
     try {
-      await fetch('/api/enrich-pause', { method: 'POST' });
-      setMessage('Pause requested...');
+      await fetch("/api/enrich-pause", { method: "POST" });
+      setMessage("Pause requested...");
     } catch (error: any) {
       setMessage(`Error: ${error?.message || String(error)}`);
     }
@@ -90,8 +102,8 @@ export function PlayerEnrichmentButton() {
 
   const resumeEnrichment = async () => {
     try {
-      await fetch('/api/enrich-resume', { method: 'POST' });
-      setMessage('Resume requested...');
+      await fetch("/api/enrich-resume", { method: "POST" });
+      setMessage("Resume requested...");
     } catch (error: any) {
       setMessage(`Error: ${error?.message || String(error)}`);
     }
@@ -99,8 +111,8 @@ export function PlayerEnrichmentButton() {
 
   const stopEnrichment = async () => {
     try {
-      await fetch('/api/enrich-stop', { method: 'POST' });
-      setMessage('Stop requested...');
+      await fetch("/api/enrich-stop", { method: "POST" });
+      setMessage("Stop requested...");
     } catch (error: any) {
       setMessage(`Error: ${error?.message || String(error)}`);
     }
@@ -108,8 +120,8 @@ export function PlayerEnrichmentButton() {
 
   const forceReset = async () => {
     try {
-      await fetch('/api/enrich-force-reset', { method: 'POST' });
-      setMessage('Force reset successful.');
+      await fetch("/api/enrich-force-reset", { method: "POST" });
+      setMessage("Force reset successful.");
     } catch (error: any) {
       setMessage(`Error: ${error?.message || String(error)}`);
     }
@@ -118,10 +130,12 @@ export function PlayerEnrichmentButton() {
   const debugConnection = async () => {
     try {
       setMessage("Checking connection...");
-      const res = await fetch('/api/debug-connection');
+      const res = await fetch("/api/debug-connection");
       const data = await res.json();
       if (!data.hasUrl || !data.hasKey) {
-        setMessage("CRITICAL: Supabase keys are missing in server environment.");
+        setMessage(
+          "CRITICAL: Supabase keys are missing in server environment.",
+        );
       } else {
         setMessage(`Supabase OK. Using ${data.activeKeyType}.`);
       }
@@ -133,12 +147,12 @@ export function PlayerEnrichmentButton() {
   const debugSchema = async () => {
     try {
       setMessage("Checking schema...");
-      const res = await fetch('/api/debug-schema');
+      const res = await fetch("/api/debug-schema");
       const data = await res.json();
       if (data.error) {
         setMessage(`Schema Error: ${data.error}`);
       } else {
-        setMessage(`Columns: ${data.columns?.join(', ')}`);
+        setMessage(`Columns: ${data.columns?.join(", ")}`);
         console.log("Schema Sample:", data.sample);
       }
     } catch (err: any) {
@@ -146,25 +160,29 @@ export function PlayerEnrichmentButton() {
     }
   };
 
-  const isRunning = status?.status === 'running';
-  const isPaused = status?.status === 'paused';
-  const isIdle = status?.status === 'idle' || status?.status === 'completed' || status?.status === 'error';
+  const isRunning = status?.status === "running";
+  const isPaused = status?.status === "paused";
+  const isIdle =
+    status?.status === "idle" ||
+    status?.status === "completed" ||
+    status?.status === "error";
 
-  const lastHeartbeatStr = status?.lastHeartbeat ? new Date(status.lastHeartbeat).toLocaleTimeString() : 'N/A';
-  const isHeartbeatHealthy = status?.lastHeartbeat ? (Date.now() - status.lastHeartbeat < 60000) : false;
+  const lastHeartbeatStr = status?.lastHeartbeat
+    ? new Date(status.lastHeartbeat).toLocaleTimeString()
+    : "N/A";
+  const isHeartbeatHealthy = status?.lastHeartbeat
+    ? Date.now() - status.lastHeartbeat < 60000
+    : false;
 
   return (
     <div className="p-6 bg-surface backdrop-blur-md border border-border-default rounded-2xl shadow-card space-y-6">
       <div className="flex flex-wrap gap-3">
         {isIdle && (
-          <button
-            onClick={startEnrichment}
-            className="btn-primary"
-          >
+          <button onClick={startEnrichment} className="btn-primary">
             Start Player Enrichment
           </button>
         )}
-        
+
         {isRunning && (
           <button
             onClick={pauseEnrichment}
@@ -184,14 +202,11 @@ export function PlayerEnrichmentButton() {
         )}
 
         {(isRunning || isPaused) && (
-          <button
-            onClick={stopEnrichment}
-            className="btn-danger"
-          >
+          <button onClick={stopEnrichment} className="btn-danger">
             Stop
           </button>
         )}
-        
+
         <button
           onClick={startEnrichment}
           className="px-4 py-2 bg-surface-hover border border-border-default text-foreground-muted rounded-lg hover:text-foreground transition-all text-[10px] font-black uppercase tracking-widest"
@@ -222,25 +237,39 @@ export function PlayerEnrichmentButton() {
           Debug Schema
         </button>
       </div>
-      
+
       {message && (
         <div className="p-4 bg-background-base/50 border border-border-default rounded-xl text-xs font-mono text-foreground-muted break-words">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <div className={`w-1.5 h-1.5 rounded-full ${isRunning ? 'bg-accent animate-pulse' : 'bg-cmd-text-muted'}`} />
-              <span className="text-[10px] font-black uppercase tracking-widest text-accent">System Message</span>
+              <div
+                className={`w-1.5 h-1.5 rounded-full ${isRunning ? "bg-accent animate-pulse" : "bg-cmd-text-muted"}`}
+              />
+              <span className="text-[10px] font-black uppercase tracking-widest text-accent">
+                System Message
+              </span>
             </div>
-            <button 
+            <button
               onClick={() => setShowDebug(!showDebug)}
               className="text-[8px] font-black uppercase tracking-widest text-foreground-subtle hover:text-foreground transition-all"
             >
-              {showDebug ? '[Hide Debug]' : '[Show Debug]'}
+              {showDebug ? "[Hide Debug]" : "[Show Debug]"}
             </button>
             {status?.lastHeartbeat && (
               <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-tighter">
-                <span className="text-foreground-subtle">Server Heartbeat:</span>
-                <span className={isHeartbeatHealthy ? 'text-accent' : 'text-status-error'}>{lastHeartbeatStr}</span>
-                <div className={`w-1 h-1 rounded-full ${isHeartbeatHealthy ? 'bg-accent' : 'bg-status-error'} ${isHeartbeatHealthy ? 'animate-ping' : ''}`} />
+                <span className="text-foreground-subtle">
+                  Server Heartbeat:
+                </span>
+                <span
+                  className={
+                    isHeartbeatHealthy ? "text-accent" : "text-status-error"
+                  }
+                >
+                  {lastHeartbeatStr}
+                </span>
+                <div
+                  className={`w-1 h-1 rounded-full ${isHeartbeatHealthy ? "bg-accent" : "bg-status-error"} ${isHeartbeatHealthy ? "animate-ping" : ""}`}
+                />
               </div>
             )}
           </div>
@@ -252,28 +281,50 @@ export function PlayerEnrichmentButton() {
           )}
           {status?.lastPlayerName && (
             <div className="mt-2 pt-2 border-t border-border-default/50 text-foreground">
-              <span className="text-accent-bright font-bold">Last Processed:</span> {status.lastPlayerName} <span className="text-foreground-subtle">({status.lastStyles})</span>
+              <span className="text-accent-bright font-bold">
+                Last Processed:
+              </span>{" "}
+              {status.lastPlayerName}{" "}
+              <span className="text-foreground-subtle">
+                ({status.lastStyles})
+              </span>
             </div>
           )}
         </div>
       )}
-      
+
       {status && (status.processedCount > 0 || isRunning || isPaused) && (
         <div className="space-y-3">
           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
             <div className="flex flex-col">
-              <span className="text-foreground-muted">Processed: <span className="text-foreground">{status.processedCount}</span></span>
-              <span className="text-foreground-subtle">Remaining: <span className="text-accent-bright">{Math.max(0, status.totalCount - status.processedCount)}</span></span>
+              <span className="text-foreground-muted">
+                Processed:{" "}
+                <span className="text-foreground">{status.processedCount}</span>
+              </span>
+              <span className="text-foreground-subtle">
+                Remaining:{" "}
+                <span className="text-accent-bright">
+                  {Math.max(0, status.totalCount - status.processedCount)}
+                </span>
+              </span>
             </div>
             <div className="text-right">
-              <span className="text-accent-bright block">{remainingTime && `Est. remaining: ${remainingTime}`}</span>
-              <span className="text-foreground-subtle text-[8px]">{isRunning ? 'Processing batches in parallel...' : 'Process paused'}</span>
+              <span className="text-accent-bright block">
+                {remainingTime && `Est. remaining: ${remainingTime}`}
+              </span>
+              <span className="text-foreground-subtle text-[8px]">
+                {isRunning
+                  ? "Processing batches in parallel..."
+                  : "Process paused"}
+              </span>
             </div>
           </div>
           <div className="w-full bg-surface-hover border border-border-default rounded-full h-2 overflow-hidden">
-            <div 
-              className="bg-gradient-to-r from-cmd-cyan to-cmd-yellow h-full transition-all duration-500 shadow-glow" 
-              style={{ width: `${Math.min(100, (status.processedCount / (status.totalCount || 1)) * 100)}%` }}
+            <div
+              className="bg-gradient-to-r from-cmd-cyan to-cmd-yellow h-full transition-all duration-500 shadow-glow"
+              style={{
+                width: `${Math.min(100, (status.processedCount / (status.totalCount || 1)) * 100)}%`,
+              }}
             ></div>
           </div>
         </div>

@@ -1,6 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, MapPin, Trophy, ChevronRight, Search, Filter, History } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Calendar,
+  MapPin,
+  Trophy,
+  ChevronRight,
+  Search,
+  Filter,
+  History,
+} from "lucide-react";
 
 interface Match {
   match_id: string;
@@ -14,22 +22,23 @@ interface Match {
 export const MatchArchive: React.FC = () => {
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    fetch('/api/matches/archive?limit=50')
-      .then(res => res.json())
-      .then(data => {
+    fetch("/api/matches/archive?limit=50")
+      .then((res) => res.json())
+      .then((data) => {
         setMatches(data);
         setLoading(false);
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   }, []);
 
-  const filteredMatches = matches.filter(m => 
-    m.match_id.includes(searchQuery) || 
-    m.venue.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    m.city.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredMatches = matches.filter(
+    (m) =>
+      m.match_id.includes(searchQuery) ||
+      m.venue.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      m.city.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
@@ -42,12 +51,14 @@ export const MatchArchive: React.FC = () => {
               <History className="text-indigo-400" />
               Match Archive
             </h1>
-            <p className="text-slate-400 mt-2">Browse through 21,665 historical matches in our database.</p>
+            <p className="text-slate-400 mt-2">
+              Browse through 21,665 historical matches in our database.
+            </p>
           </div>
-          
+
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4" />
-            <input 
+            <input
               type="text"
               placeholder="Search by ID, Venue or City..."
               className="bg-slate-800 border border-slate-700 rounded-full py-2 pl-10 pr-4 focus:ring-2 focus:ring-indigo-500 outline-none w-64"
@@ -78,7 +89,7 @@ export const MatchArchive: React.FC = () => {
                   <div className="absolute top-0 right-0 p-3 bg-indigo-500/10 rounded-bl-xl text-xs font-mono text-indigo-400">
                     ID: {match.match_id}
                   </div>
-                  
+
                   <div className="flex items-start gap-4">
                     <div className="bg-indigo-500/20 p-3 rounded-lg">
                       <Trophy className="w-6 h-6 text-indigo-400" />
@@ -101,12 +112,15 @@ export const MatchArchive: React.FC = () => {
                             {match.match_type.toUpperCase()}
                           </div>
                           <span className="text-slate-500">•</span>
-                          <span>{Number(match.ball_count).toLocaleString()} Deliveries</span>
+                          <span>
+                            {Number(match.ball_count).toLocaleString()}{" "}
+                            Deliveries
+                          </span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="mt-6 flex items-center justify-between pt-4 border-t border-slate-700/50">
                     <span className="text-xs text-slate-500 font-mono italic">
                       Source: Crinava Master DB

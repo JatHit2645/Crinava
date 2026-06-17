@@ -1,5 +1,13 @@
-import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import React from "react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine,
+} from "recharts";
 
 interface MomentumData {
   over: number;
@@ -14,23 +22,31 @@ export const MomentumGraph: React.FC<{ data: MomentumData[] }> = ({ data }) => {
         <AreaChart data={data}>
           <defs>
             <linearGradient id="colorMomentum" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#00FFFF" stopOpacity={0.3}/>
-              <stop offset="95%" stopColor="#00FFFF" stopOpacity={0}/>
+              <stop offset="5%" stopColor="#00FFFF" stopOpacity={0.3} />
+              <stop offset="95%" stopColor="#00FFFF" stopOpacity={0} />
             </linearGradient>
           </defs>
           <XAxis dataKey="over" hide />
           <YAxis domain={[-100, 100]} hide />
-          <Tooltip 
-            contentStyle={{ backgroundColor: '#050505', border: '1px solid #333', borderRadius: '12px' }}
-            itemStyle={{ color: '#00FFFF', fontSize: '10px', fontWeight: 'bold' }}
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "#050505",
+              border: "1px solid #333",
+              borderRadius: "12px",
+            }}
+            itemStyle={{
+              color: "#00FFFF",
+              fontSize: "10px",
+              fontWeight: "bold",
+            }}
           />
           <ReferenceLine y={0} stroke="#444" strokeDasharray="3 3" />
-          <Area 
-            type="monotone" 
-            dataKey="score" 
-            stroke="#00FFFF" 
-            fillOpacity={1} 
-            fill="url(#colorMomentum)" 
+          <Area
+            type="monotone"
+            dataKey="score"
+            stroke="#00FFFF"
+            fillOpacity={1}
+            fill="url(#colorMomentum)"
             strokeWidth={3}
           />
         </AreaChart>

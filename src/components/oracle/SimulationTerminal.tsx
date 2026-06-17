@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
-import { Terminal, Cpu, Zap, Activity, Globe, Shield } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { motion } from "motion/react";
+import { Terminal, Cpu, Zap, Activity, Globe, Shield } from "lucide-react";
 
 export const SimulationTerminal: React.FC = () => {
   const [logs, setLogs] = useState<string[]>([]);
@@ -14,16 +14,16 @@ export const SimulationTerminal: React.FC = () => {
     "> Running Monte Carlo simulation (10,000 iterations)...",
     "> Calculating momentum flow: 64.2% shift detected...",
     "> Optimizing Smart XI for current scenario...",
-    "> Simulation complete. Accuracy: 94.2%."
+    "> Simulation complete. Accuracy: 94.2%.",
   ];
 
   useEffect(() => {
     let currentLog = 0;
     const logInterval = setInterval(() => {
       if (currentLog < simulationLogs.length) {
-        setLogs(prev => [...prev, simulationLogs[currentLog]]);
+        setLogs((prev) => [...prev, simulationLogs[currentLog]]);
         currentLog++;
-        setProgress(prev => Math.min(prev + 12.5, 100));
+        setProgress((prev) => Math.min(prev + 12.5, 100));
       } else {
         clearInterval(logInterval);
       }
@@ -43,24 +43,49 @@ export const SimulationTerminal: React.FC = () => {
               <span className="text-gradient-aurora">ORACLE ENGINE.</span>
             </h2>
             <p className="text-white/50 text-lg leading-relaxed mb-12">
-              Watch the engine process millions of data points in real-time. 
-              Our proprietary algorithms analyze everything from wind speed to 
+              Watch the engine process millions of data points in real-time. Our
+              proprietary algorithms analyze everything from wind speed to
               player psychology to give you the ultimate edge.
             </p>
 
             <div className="space-y-6">
               {[
-                { icon: <Cpu className="w-5 h-5" />, label: "Neural Processing", value: "Active" },
-                { icon: <Zap className="w-5 h-5" />, label: "Latency", value: "14ms" },
-                { icon: <Globe className="w-5 h-5" />, label: "Global Nodes", value: "128" },
-                { icon: <Shield className="w-5 h-5" />, label: "Data Integrity", value: "99.9%" }
+                {
+                  icon: <Cpu className="w-5 h-5" />,
+                  label: "Neural Processing",
+                  value: "Active",
+                },
+                {
+                  icon: <Zap className="w-5 h-5" />,
+                  label: "Latency",
+                  value: "14ms",
+                },
+                {
+                  icon: <Globe className="w-5 h-5" />,
+                  label: "Global Nodes",
+                  value: "128",
+                },
+                {
+                  icon: <Shield className="w-5 h-5" />,
+                  label: "Data Integrity",
+                  value: "99.9%",
+                },
               ].map((stat, idx) => (
-                <div key={idx} className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:border-aurora/30 transition-colors group">
+                <div
+                  key={idx}
+                  className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:border-aurora/30 transition-colors group"
+                >
                   <div className="flex items-center gap-4">
-                    <div className="text-aurora group-hover:scale-110 transition-transform">{stat.icon}</div>
-                    <span className="text-sm font-bold tracking-widest uppercase text-white/60">{stat.label}</span>
+                    <div className="text-aurora group-hover:scale-110 transition-transform">
+                      {stat.icon}
+                    </div>
+                    <span className="text-sm font-bold tracking-widest uppercase text-white/60">
+                      {stat.label}
+                    </span>
                   </div>
-                  <span className="text-sm font-mono font-bold text-aurora">{stat.value}</span>
+                  <span className="text-sm font-mono font-bold text-aurora">
+                    {stat.value}
+                  </span>
                 </div>
               ))}
             </div>
@@ -90,7 +115,11 @@ export const SimulationTerminal: React.FC = () => {
                       key={idx}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className={log.includes("complete") ? "text-aurora font-bold" : "text-white/60"}
+                      className={
+                        log.includes("complete")
+                          ? "text-aurora font-bold"
+                          : "text-white/60"
+                      }
                     >
                       {log}
                     </motion.div>
