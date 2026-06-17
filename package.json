@@ -59,6 +59,9 @@
     "path-to-regexp": "^0.1.13",
     "picomatch": "^4.0.4",
     "postcss": "^8.5.10",
-    "protobufjs": "^7.6.3"
+    "protobufjs": "^7.6.3",
+    "qs": "^6.15.2",
+    "react-router": "^7.15.1",
+    "ws": "^8.21.0"
   }
 }
