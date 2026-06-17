@@ -328,7 +328,7 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
       const saved = localStorage.getItem("ca26");
       if (saved) return JSON.parse(saved);
     } catch (e) {
-      // Ignore initial parsing errors
+      console.debug("Parsing error ignored", e);
     }
     return {
       room: "",
@@ -462,7 +462,7 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
         }));
       }
     } catch (e) {
-      // Ignore load errors
+      console.debug("Load error ignored", e);
     }
   };
 

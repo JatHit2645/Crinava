@@ -23,6 +23,7 @@ async function listTables() {
     "player_stats",
   ];
 
+  /* eslint-disable no-await-in-loop */
   for (const table of tables) {
     const { error } = await supabase.from(table).select("*").limit(1);
     if (error) {

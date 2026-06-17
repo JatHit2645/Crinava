@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 
 interface RazorpayCheckoutProps {
@@ -10,13 +10,16 @@ export const RazorpayCheckout: React.FC<RazorpayCheckoutProps> = ({
   amount,
   onSuccess,
 }) => {
+  const [message, setMessage] = useState<string | null>(null);
+
   const handlePayment = async () => {
+    setMessage(null);
     try {
       const {
         data: { user },
       } = await supabase.auth.getUser();
       if (!user) {
-        alert("Please login to subscribe");
+        setMessage("Please login to subscribe");
         return;
       }
 
@@ -61,10 +64,10 @@ export const RazorpayCheckout: React.FC<RazorpayCheckoutProps> = ({
           });
 
           if (verifyResponse.ok) {
-            alert("Payment successful!");
+            setMessage("Payment successful!");
             onSuccess();
           } else {
-            alert("Payment verification failed");
+            setMessage("Payment verification failed");
           }
         },
         prefill: {
@@ -76,16 +79,19 @@ export const RazorpayCheckout: React.FC<RazorpayCheckoutProps> = ({
       razor.open();
     } catch (error) {
       console.error("Payment error:", error);
-      alert("Payment failed");
+      setMessage("Payment failed");
     }
   };
 
   return (
-    <button
-      onClick={handlePayment}
-      className="bg-cmd-cyan text-white px-4 py-2 rounded-lg"
-    >
-      Subscribe for ₹{amount}
-    </button>
+    <div className="flex flex-col items-center gap-2">
+      <button
+        onClick={handlePayment}
+        className="bg-cmd-cyan text-white px-4 py-2 rounded-lg"
+      >
+        Subscribe for ₹{amount}
+      </button>
+      {message && <p className="text-xs font-bold text-red-500">{message}</p>}
+    </div>
   );
 };

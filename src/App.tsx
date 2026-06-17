@@ -2392,7 +2392,7 @@ export default function App() {
                           </div>
                         </ArtifactCard>
                         {/* Geometric Shadow */}
-                        <div className="absolute inset-0 bg-void border border-hairline transform translate-x-8 translate-y-8 -z-10" />
+                        <div className="absolute inset-0 bg-void border border-hairline translate-x-8 translate-y-8 -z-10" />
                       </div>
                     </div>
 
@@ -3382,7 +3382,7 @@ export default function App() {
                         Run 1,000,000 iterations based on real-time toss,
                         weather, and pitch telemetry.
                       </p>
-                      {true ? (
+                      {session ? (
                         <div className="space-y-4">
                           <input
                             type="text"

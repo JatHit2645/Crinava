@@ -7,13 +7,24 @@ import time
 import re
 import html as html_mod
 
-# import removed
 import httpx
 import curl_cffi.requests as reqs
 from logger import BallLogger
 
 # Global semaphore: max 5 concurrent AI calls across ALL workers
 _ai_semaphore = asyncio.Semaphore(5)
+
+# -- String constants to avoid duplication --
+_NVIDIA_CHAT_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
+_NVIDIA_MODEL = "google/gemma-2-2b-it"
+_HTML_PARSER = "html.parser"
+_CONTENT_TYPE_JSON = "application/json"
+_ACCEPT_HEADER = "application/json, text/plain, */*"
+_CREX_ORIGIN = "https://crex.com"
+_CREX_REFERER = "https://crex.com/"
+_BALL_FEEDS_URL = "https://content.crickapi.com/commentary/v3/getBallFeeds"
+_DEFAULT_BOWLER = "the bowler"
+_DEFAULT_BATSMAN = "the batsman"
 
 
 class CrexMatchWorker:
@@ -180,11 +191,10 @@ class CrexMatchWorker:
                 ("id", "n"),
             ]
             for pid_key, name_key in paired_keys:
-                if pid_key in obj and name_key in obj:
-                    if self._add_player_mapping(
-                        obj.get(pid_key), obj.get(name_key), source
-                    ):
-                        added += 1
+                if pid_key in obj and name_key in obj and self._add_player_mapping(
+                    obj.get(pid_key), obj.get(name_key), source
+                ):
+                    added += 1
 
             for value in obj.values():
                 added += self._mine_any_json_for_players(value, source)
@@ -842,10 +852,10 @@ class CrexMatchWorker:
         total_added = 0
         mapping_url = "https://oc.crickapi.com/mapping/getHomeMapData"
         headers = {
-            "Accept": "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-            "Origin": "https://crex.com",
-            "Referer": "https://crex.com/",
+            "Accept": _ACCEPT_HEADER,
+            "Content-Type": _CONTENT_TYPE_JSON,
+            "Origin": _CREX_ORIGIN,
+            "Referer": _CREX_REFERER,
         }
 
         for idx in range(0, len(missing), 80):
@@ -1096,7 +1106,7 @@ class CrexMatchWorker:
                     "victory",
                     "win",
                 ]
-            ) or st in ["2", "4"]
+            ) or st in {"2", "4"}
 
             # 2. Upcoming check: no scores, or explicit indicators
             is_upcoming = (
@@ -1150,15 +1160,15 @@ class CrexMatchWorker:
             commentary = data.get("C", "")
 
             try:
-                feeds_url = "https://content.crickapi.com/commentary/v3/getBallFeeds"
+                feeds_url = _BALL_FEEDS_URL
                 f_payload = {"matchKey": self.raw_id, "lastDocId": None, "filters": {}}
                 f_headers = {
-                    "Accept": "application/json, text/plain, */*",
-                    "Content-Type": "application/json",
+                    "Accept": _ACCEPT_HEADER,
+                    "Content-Type": _CONTENT_TYPE_JSON,
                     "authorization": os.environ.get("CREX_AUTHORIZATION_TOKEN", ""),
                     "cc": "IN",
-                    "Origin": "https://crex.com",
-                    "Referer": "https://crex.com/",
+                    "Origin": _CREX_ORIGIN,
+                    "Referer": _CREX_REFERER,
                 }
                 resp_feeds = await asyncio.to_thread(
                     reqs.post,
@@ -1588,10 +1598,14 @@ class CrexMatchWorker:
                 continue
             bowler = self.resolve_player_id(m.group(1).strip())
             batsman = self.resolve_player_id(m.group(2).strip())
-            if "overs" not in bowler.lower() and len(bowler) <= 35:
-                if "overs" not in batsman.lower() and len(batsman) <= 35:
-                    return bowler, batsman
-        return "the bowler", "the batsman"
+            if (
+                "overs" not in bowler.lower()
+                and len(bowler) <= 35
+                and "overs" not in batsman.lower()
+                and len(batsman) <= 35
+            ):
+                return bowler, batsman
+        return _DEFAULT_BOWLER, _DEFAULT_BATSMAN
 
     # ------------------------------------------------------------------
     # BALL PROCESSING
@@ -2006,10 +2020,9 @@ class CrexMatchWorker:
                         self.last_win_predictor = dict(data[0])
                     # print(f"[WinPredictor Debug] [{self.crex_id}] Success: {data}")
                     return data
-                else:
-                    print(
-                        f"[WinPredictor HTTP Error] {resp.status_code} - {resp.text[:100]}"
-                    )
+                print(
+                    f"[WinPredictor HTTP Error] {resp.status_code} - {resp.text[:100]}"
+                )
         except Exception as e:
             print(f"[WinPredictor Extraction Error] {e}")
         return {}
@@ -2082,13 +2095,13 @@ class CrexMatchWorker:
         )
 
         if is_nvidia:
-            url = "https://integrate.api.nvidia.com/v1/chat/completions"
+            url = _NVIDIA_CHAT_URL
             headers = {
                 "Authorization": f"Bearer {self.ai_api_key}",
-                "Content-Type": "application/json",
+                "Content-Type": _CONTENT_TYPE_JSON,
             }
             payload = {
-                "model": "google/gemma-2-2b-it",
+                "model": _NVIDIA_MODEL,
                 "messages": [{"role": "user", "content": prompt}],
                 "temperature": 0.7,
                 "max_tokens": 256,
@@ -2163,13 +2176,13 @@ class CrexMatchWorker:
         )
 
         if is_nvidia:
-            url = "https://integrate.api.nvidia.com/v1/chat/completions"
+            url = _NVIDIA_CHAT_URL
             headers = {
                 "Authorization": f"Bearer {self.ai_api_key}",
-                "Content-Type": "application/json",
+                "Content-Type": _CONTENT_TYPE_JSON,
             }
             payload = {
-                "model": "google/gemma-2-2b-it",
+                "model": _NVIDIA_MODEL,
                 "messages": [{"role": "user", "content": prompt}],
                 "temperature": 0.82,
                 "max_tokens": 220,
@@ -2224,13 +2237,13 @@ class CrexMatchWorker:
                     "- Sound like a premium cricket broadcast graphic, not an AI assistant.\n\n"
                     "Stat Card:"
                 )
-                url = "https://integrate.api.nvidia.com/v1/chat/completions"
+                url = _NVIDIA_CHAT_URL
                 headers = {
                     "Authorization": f"Bearer {self.ai_api_key}",
-                    "Content-Type": "application/json",
+                    "Content-Type": _CONTENT_TYPE_JSON,
                 }
                 payload = {
-                    "model": "google/gemma-2-2b-it",
+                    "model": _NVIDIA_MODEL,
                     "messages": [{"role": "user", "content": prompt}],
                     "temperature": 0.6,
                     "max_tokens": 150,
@@ -2351,7 +2364,7 @@ class HierarchyScraperWorker:
                             timeout=15,
                         )
                         if r.status_code == 200:
-                            soup = BeautifulSoup(r.text, "html.parser")
+                            soup = BeautifulSoup(r.text, _HTML_PARSER)
                             for a in list(soup.find_all("a", href=True)):
                                 href = a["href"].lower()
                                 if (
@@ -2381,7 +2394,7 @@ class HierarchyScraperWorker:
                                 timeout=15,
                             )
                             if r2.status_code == 200:
-                                soup = BeautifulSoup(r2.text, "html.parser")
+                                soup = BeautifulSoup(r2.text, _HTML_PARSER)
                                 for a in list(soup.find_all("a", href=True)):
                                     href = a["href"].lower()
                                     if len(cb_teams) > 0 and all(
@@ -2415,7 +2428,7 @@ class HierarchyScraperWorker:
                         self.session.request, "GET", self.target_url, timeout=15
                     )
                     if resp.status_code == 200:
-                        soup = BeautifulSoup(resp.text, "html.parser")
+                        soup = BeautifulSoup(resp.text, _HTML_PARSER)
                         for s in list(soup(
                             ["script", "style", "header", "nav", "footer", "aside"]
                         )):

@@ -29,6 +29,7 @@ export const MatchArchive: React.FC = () => {
       .then((data) => {
         setMatches(data);
         setLoading(false);
+        return data;
       })
       .catch((err) => console.error(err));
   }, []);

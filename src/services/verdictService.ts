@@ -25,6 +25,7 @@ async function fetchFullData(
   let to = 999;
   let hasMore = true;
 
+  /* eslint-disable no-await-in-loop */
   while (hasMore) {
     const { data, error } = await dbQuery.range(from, to);
 
@@ -60,7 +61,7 @@ function extractJson(content: string | null): any {
       try {
         return JSON.parse(match[0]);
       } catch (e2) {
-        // Ignore parsing error
+        console.debug("JSON parsing failed", e2);
       }
     }
     return {};
@@ -143,10 +144,9 @@ export async function generateVerdict(
   ]);
 
   const scopeResult = extractJson(scopeResponse.choices[0].message.content);
-  const aggregatedStats: any[] = [];
-  const fetchedData: any[] = [];
 
   if (scopeResult.queries) {
+    /* eslint-disable no-await-in-loop */
     for (const q of scopeResult.queries) {
       console.log(
         `Verdict Engine - Processing query for ${q.table} with select: ${q.select}`,

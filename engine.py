@@ -144,23 +144,22 @@ class CrinavaDiscovery:
                 )
                 matches = re.findall(pattern, response.text)
                 for slug, mid in matches:
-                    if mid not in crex_map:
-                        if "-vs-" in slug:
-                            parts = slug.split("-vs-")
-                            t1_n = parts[0].replace("-", " ").strip().lower()
-                            t2_n = parts[1].split("-")[0].strip().lower()
-                            display_slug = slug.split("-match-updates-")[0]
-                            pretty_title = display_slug.replace("-", " ").title()
+                    if mid not in crex_map and "-vs-" in slug:
+                        parts = slug.split("-vs-")
+                        t1_n = parts[0].replace("-", " ").strip().lower()
+                        t2_n = parts[1].split("-")[0].strip().lower()
+                        display_slug = slug.split("-match-updates-")[0]
+                        pretty_title = display_slug.replace("-", " ").title()
 
-                            crex_map[mid] = {
-                                "t1_n": t1_n,
-                                "t1_sn": t1_n,
-                                "t2_n": t2_n,
-                                "t2_sn": t2_n,
-                                "title": pretty_title,
-                                "slug": slug,
-                                "state": default_state,  # Start with URL default
-                            }
+                        crex_map[mid] = {
+                            "t1_n": t1_n,
+                            "t1_sn": t1_n,
+                            "t2_n": t2_n,
+                            "t2_sn": t2_n,
+                            "title": pretty_title,
+                            "slug": slug,
+                            "state": default_state,  # Start with URL default
+                        }
 
                 # Now use soup parser to refine the states precisely
                 soup = BeautifulSoup(response.text, "html.parser")

@@ -369,10 +369,12 @@ async function startServer() {
 
     // --- Data Enrichment API ---
     // --- Player Enrichment Background Worker ---
-    const sleep = (ms: number) =>
-      new Promise((resolve) => setTimeout(resolve, ms));
+    const sleep = (ms: number) => {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    };
 
-    async function runEnrichmentBackground() {
+    /* eslint-disable no-await-in-loop */
+    const runEnrichmentBackground = async () => {
       if (enrichmentState.status === "running") return;
 
       enrichmentState.status = "running";
@@ -427,12 +429,12 @@ async function startServer() {
           try {
             players = (await Promise.race([
               getPlayersToEnrich(),
-              new Promise((_, reject) =>
+              new Promise((_, reject) => {
                 setTimeout(
                   () => reject(new Error("Supabase query timed out after 45s")),
                   45000,
-                ),
-              ),
+                );
+              }),
             ])) as any[];
           } catch (fetchErr: any) {
             console.error("Enrichment: Batch fetch failed:", fetchErr);
@@ -584,7 +586,7 @@ async function startServer() {
                       );
                       await Promise.race([
                         upsertPlayerStyles(validUpdateData),
-                        new Promise((_, reject) =>
+                        new Promise((_, reject) => {
                           setTimeout(
                             () =>
                               reject(
@@ -593,8 +595,8 @@ async function startServer() {
                                 ),
                               ),
                             30000,
-                          ),
-                        ),
+                          );
+                        }),
                       ]);
                       console.log(`Enrichment: Upsert completed`);
                     }

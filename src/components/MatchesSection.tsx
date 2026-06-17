@@ -1386,7 +1386,7 @@ const MatchDetail: React.FC<{ matchId: number; onBack: () => void }> = ({
               className="text-metallic-gold hover:text-white transition-colors p-1"
             >
               <ChevronRight
-                className={`transform transition-transform ${showTop5 ? "rotate-90" : ""}`}
+                className={`transition-transform ${showTop5 ? "rotate-90" : ""}`}
                 size={20}
               />
             </button>
@@ -1907,7 +1907,7 @@ const LiveMatchesList: React.FC<{ onSelect: (m: LiveMatch) => void }> = ({
           placeholder="Search matches by team, league, or title..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-11 pr-4 py-3 bg-[#111111] border border-white/10 rounded-2xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-aurora-teal/40 focus:ring-1 focus:ring-aurora-teal/20 transition-all font-medium"
+          className="w-full pl-11 pr-4 py-3 bg-[#111111] border border-white/10 rounded-2xl text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-aurora-teal/40 focus:ring-1 focus:ring-aurora-teal/20 transition-all font-medium"
         />
       </div>
 

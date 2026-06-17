@@ -220,11 +220,14 @@ async def list_matches():
             }
         )
 
-    match_list.sort(
-        key=lambda x: (
-            0 if x["state"] == "Live" else 1 if x["state"] == "Upcoming" else 2
-        )
-    )
+    def _sort_key(x: dict) -> int:
+        if x["state"] == "Live":
+            return 0
+        if x["state"] == "Upcoming":
+            return 1
+        return 2
+
+    match_list.sort(key=_sort_key)
     return match_list
 
 
