@@ -1207,9 +1207,7 @@ class CrexMatchWorker:
         f_headers = {
             "Accept": "application/json, text/plain, */*",
             "Content-Type": "application/json",
-            "authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImV4cGlyZXNJbiI6IjM2NWQifQ"
-                             ".eyJ0aW1lIjoxNjYwMDQ2NjIwMDAwfQ"
-                             ".bTEmMWlR7hLRUHxPPq6-1TP7cuuW7m6sZ9jcdbYzLRA",
+            "authorization": os.environ.get("CREX_AUTHORIZATION_TOKEN", ""),
             "cc": "IN",
             "Origin": "https://crex.com",
             "Referer": "https://crex.com/",

@@ -317,4 +317,6 @@ async def orchestrator():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=7860)
+    import os
+    host = os.environ.get("HOST", "127.0.0.1")
+    uvicorn.run(app, host=host, port=7860)
