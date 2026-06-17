@@ -12,3 +12,6 @@ __pycache__/
 match_cache.json
 *.bat
 run_git.py
+.ruff_cache/
+results.txt
+parse_report.py
