@@ -49,7 +49,13 @@ import {
   Newspaper,
   TrendingUp as TrendingUpIcon,
   ChevronRight as ChevronRightIcon,
-  History
+  History,
+  Home,
+  Swords,
+  ShoppingCart,
+  Library,
+  MessageCircle,
+  Gift
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
@@ -90,46 +96,21 @@ const StarfieldCanvas = () => {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    // Mouse and scroll tracking for parallax
-    let mouseX = width / 2;
-    let scrollY = window.scrollY;
+    // Static Stars
+    type Star = { x: number, y: number, size: number, alpha: number, speed: number };
+    const stars: Star[] = Array.from({ length: 300 }).map(() => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: Math.random() * 1.5 + 0.5,
+      alpha: Math.random(),
+      speed: (Math.random() * 0.02) + 0.005
+    }));
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-    };
-    
-    const handleScroll = () => {
-      scrollY = window.scrollY;
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('scroll', handleScroll);
-
-    // 3 Layers of stars
-    type Star = { x: number, y: number, size: number, color: string, baseAlpha: number, layer: number, twinklePhase: number, twinkleSpeed: number };
-    const stars: Star[] = [];
-    
-    // Layer 1 (Deep)
-    for (let i = 0; i < 400; i++) {
-      stars.push({ x: Math.random() * width, y: Math.random() * height, size: 1, color: '#ffffff', baseAlpha: 0.2, layer: 1, twinklePhase: 0, twinkleSpeed: 0 });
-    }
-    // Layer 2 (Mid)
-    for (let i = 0; i < 100; i++) {
-      stars.push({ x: Math.random() * width, y: Math.random() * height, size: 1.5, color: '#ffffff', baseAlpha: 0.5, layer: 2, twinklePhase: 0, twinkleSpeed: 0 });
-    }
-    // Layer 3 (Shallow)
-    for (let i = 0; i < 30; i++) {
-      stars.push({ 
-        x: Math.random() * width, 
-        y: Math.random() * height, 
-        size: 2, 
-        color: '#d4af37', 
-        baseAlpha: 1.0, 
-        layer: 3, 
-        twinklePhase: Math.random() * Math.PI * 2, 
-        twinkleSpeed: (Math.random() * 0.02) + 0.005 
-      });
-    }
+    // Shooting Stars
+    type ShootingStar = { x: number, y: number, len: number, speed: number, size: number, wait: number, active: boolean };
+    const shootingStars: ShootingStar[] = Array.from({ length: 4 }).map(() => ({
+      x: 0, y: 0, len: 0, speed: 0, size: 0, wait: Math.random() * 200, active: false
+    }));
 
     const handleResize = () => {
       width = canvas.width = window.innerWidth;
@@ -139,37 +120,53 @@ const StarfieldCanvas = () => {
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
-
-      // Center offset for parallax
-      const centerX = width / 2;
-      const mouseOffsetX = mouseX - centerX;
-
-      stars.forEach((star) => {
-        // Drift upward based on scroll
-        const scrollOffset = scrollY * (star.layer * 0.1); // Adjust speed per layer
+      
+      // Draw static stars
+      stars.forEach(star => {
+        star.alpha += star.speed;
+        if (star.alpha > 1 || star.alpha < 0) star.speed *= -1;
         
-        // Counter-movement mouse parallax
-        const parallaxFactor = star.layer === 1 ? 0.02 : (star.layer === 2 ? 0.04 : 0.06);
-        const parallaxOffsetX = mouseOffsetX * parallaxFactor;
-
-        let renderX = star.x - parallaxOffsetX;
-        let renderY = star.y - scrollOffset;
-
-        // Wrap around logic
-        renderX = ((renderX % width) + width) % width;
-        renderY = ((renderY % height) + height) % height;
-
-        let alpha = star.baseAlpha;
-        if (star.layer === 3) {
-          star.twinklePhase += star.twinkleSpeed;
-          alpha = 0.2 + (Math.sin(star.twinklePhase) * 0.5 + 0.5) * 0.8; // oscillates 0.2 to 1.0
-        }
-
-        ctx.globalAlpha = alpha;
-        ctx.fillStyle = star.color;
+        ctx.globalAlpha = Math.abs(star.alpha) * 0.8;
+        ctx.fillStyle = '#ffffff';
         ctx.beginPath();
-        ctx.arc(renderX, renderY, star.size, 0, Math.PI * 2);
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         ctx.fill();
+      });
+
+      // Draw shooting stars
+      ctx.globalAlpha = 1;
+      shootingStars.forEach(ss => {
+        if (!ss.active) {
+          ss.wait--;
+          if (ss.wait <= 0) {
+            ss.active = true;
+            ss.x = Math.random() * width * 1.5; // Start further right to cross screen
+            ss.y = -50;
+            ss.len = Math.random() * 100 + 40;
+            ss.speed = Math.random() * 15 + 10;
+            ss.size = Math.random() * 1.5 + 0.5;
+          }
+        } else {
+          ss.x -= ss.speed;
+          ss.y += ss.speed;
+          
+          const grad = ctx.createLinearGradient(ss.x, ss.y, ss.x + ss.len, ss.y - ss.len);
+          grad.addColorStop(0, `rgba(255, 255, 255, 0.8)`);
+          grad.addColorStop(1, `rgba(255, 255, 255, 0)`);
+          
+          ctx.beginPath();
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = ss.size;
+          ctx.lineCap = "round";
+          ctx.moveTo(ss.x, ss.y);
+          ctx.lineTo(ss.x + ss.len, ss.y - ss.len);
+          ctx.stroke();
+
+          if (ss.x < -ss.len || ss.y > height + ss.len) {
+            ss.active = false;
+            ss.wait = Math.random() * 300 + 100;
+          }
+        }
       });
 
       animationFrameId = requestAnimationFrame(draw);
@@ -178,8 +175,6 @@ const StarfieldCanvas = () => {
     draw();
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
     };
@@ -188,7 +183,7 @@ const StarfieldCanvas = () => {
   return (
     <canvas 
       ref={canvasRef} 
-      className="fixed inset-0 pointer-events-none z-[-2] opacity-80 mix-blend-screen"
+      className="fixed inset-0 pointer-events-none z-[-2] mix-blend-screen"
     />
   );
 };
@@ -941,6 +936,25 @@ export default function App() {
   };
 
   useEffect(() => {
+    // Real-time Notification Bell Logic
+    const deliveriesSub = supabase
+      .channel('public:deliveries')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'deliveries' }, (payload) => {
+        const d = payload.new;
+        if (d.runs_batter === 4 || d.runs_batter === 6) {
+          addNotification('Live Boundary!', `${d.striker} smashed a ${d.runs_batter} off ${d.bowler}!`);
+        } else if (d.player_dismissed) {
+          addNotification('WICKET!', `${d.player_dismissed} was dismissed by ${d.bowler} (${d.dismissal_kind})!`);
+        }
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(deliveriesSub);
+    };
+  }, []);
+
+  useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session ? { user: session.user } : null);
       if (!session) {
@@ -1364,8 +1378,6 @@ export default function App() {
     <div className="min-h-screen bg-transparent text-on-surface font-body selection:bg-mercury selection:text-void overflow-x-hidden relative">
       {/* Volumetric Atmospheric Fog */}
       <div className="fixed inset-0 pointer-events-none z-[-3]" style={{background: 'linear-gradient(to bottom left, rgba(212, 175, 55, 0.03) 0%, transparent 100%)'}} />
-      {/* Primary Solar Light Source (Sun) */}
-      <div className="fixed top-0 right-0 w-[800px] h-[800px] pointer-events-none z-[-3] translate-x-1/4 -translate-y-1/4 rounded-full" style={{background: 'radial-gradient(circle, rgba(255, 204, 51, 0.15) 0%, transparent 80%)', animation: 'pulse-mercury 10s ease-in-out infinite'}} />
       
       {/* Celestial Organic Ambient Effects */}
       <StarfieldCanvas />
@@ -1421,176 +1433,175 @@ export default function App() {
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
             />
             <motion.div 
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 left-0 bottom-0 w-[85vw] max-w-sm bg-void border-r border-hairline z-[101] shadow-[20px_0_60px_rgba(0,0,0,0.8)] flex flex-col"
+              initial={{ x: '-100%', opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '-100%', opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 150 }}
+              className="fixed top-0 left-0 bottom-0 w-[85vw] max-w-[420px] bg-[#020203] z-[101] shadow-[50px_0_100px_rgba(0,0,0,1)] flex flex-col overflow-hidden border-r border-white/5"
             >
-              <div className="p-6 border-b border-hairline flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 border border-mercury/30 flex items-center justify-center">
-                    <div className="w-2 h-2 bg-mercury rounded-full pulse-mercury" />
-                  </div>
-                  <span className="text-lg font-display font-black tracking-[-0.04em] gradient-mercury-text">CRINAVA</span>
+              {/* Massive Watermark */}
+              <div className="absolute top-0 bottom-0 right-0 w-1/2 overflow-hidden pointer-events-none select-none z-0">
+                <div className="absolute -right-[150px] top-[10%] text-[200px] font-black text-white/[0.015] -rotate-90 font-display leading-none whitespace-nowrap">
+                  SYSTEM
                 </div>
-                <button onClick={() => setShowSideMenu(false)} className="p-2 text-[#948f96] hover:text-mercury transition-colors duration-500">
-                  <X size={20} />
+              </div>
+
+              {/* Minimal Header */}
+              <div className="p-8 pb-4 flex items-center justify-between relative z-10 shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-white flex items-center justify-center rounded-[4px]">
+                    <span className="text-[#020203] font-display font-black text-xl tracking-tighter">C</span>
+                  </div>
+                  <span className="text-white text-xs font-black tracking-[0.3em] uppercase opacity-40">Command_Deck</span>
+                </div>
+                <button 
+                  onClick={() => setShowSideMenu(false)} 
+                  className="p-2 rounded-full hover:bg-white/5 text-gray-500 hover:text-white transition-all active:scale-95"
+                >
+                  <X size={24} strokeWidth={1.5} />
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
-                {/* User Identity & Status */}
-                <div className="space-y-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-2xl bg-metallic-gold/10 flex items-center justify-center border border-metallic-gold/20 overflow-hidden">
+              <div className="flex-1 overflow-y-auto custom-scrollbar px-8 pb-8 relative z-10 flex flex-col gap-10">
+                
+                {/* Profile Identity Block */}
+                <div className="flex items-center gap-6">
+                  <div className="relative w-20 h-20 shrink-0">
+                    <div className="absolute inset-0 border-2 border-aurora-teal/30 rounded-full animate-pulse" />
+                    <div className="absolute inset-[4px] border border-aurora-teal/50 rounded-full border-t-aurora-teal rotate-45" />
+                    <div className="absolute inset-[8px] bg-[#111113] rounded-full overflow-hidden flex items-center justify-center">
                       {profile?.photoURL ? (
-                        <img src={profile.photoURL} alt="Profile" className="w-full h-full object-cover" />
+                        <img src={profile.photoURL} alt="Profile" className="w-full h-full object-cover grayscale opacity-80" />
                       ) : (
-                        <UserCircle size={40} className="text-metallic-gold" />
+                        <UserCircle size={40} className="text-aurora-teal/50" />
                       )}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[15px] font-black text-white truncate tracking-tight">
-                        {profile?.username || (session ? profile?.email?.split('@')[0] : 'Guest User')}
-                      </p>
-                      <div className="flex items-center gap-1.5 mt-1">
-                        <div className={`w-1.5 h-1.5 rounded-full ${session ? 'bg-aurora-teal animate-pulse' : 'bg-gray-600'}`} />
-                        <p className="text-[9px] font-black text-metallic-gold uppercase tracking-[0.2em]">{profile?.expertise_badge || 'Elite Member'}</p>
-                      </div>
-                    </div>
                   </div>
-
-                  {!session && (
-                    <button 
-                      onClick={() => { setShowAuthModal(true); setShowSideMenu(false); }}
-                      className="w-full py-2.5 rounded-xl bg-metallic-gold/10 border border-metallic-gold/30 text-metallic-gold text-[9px] font-black uppercase tracking-[0.2em] hover:bg-metallic-gold hover:text-black transition-all"
-                    >
-                      Sign In to Sync Progress
-                    </button>
-                  )}
-
-                  {/* Core Performance Stats */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center">
-                      <div className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Crinava Coins</div>
-                      <div className="text-[13px] font-black text-white flex items-center justify-center gap-1.5">
-                        {coinBalance}
-                        <CoinIcon size={14} noShadow />
-                      </div>
-                    </div>
-                    <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center">
-                      <div className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Cricket IQ</div>
-                      <div className="text-[13px] font-black text-white">{cricketIQ}</div>
-                    </div>
-                  </div>
-
-                  {/* Career Progression */}
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center px-1">
-                        <div className="flex items-center gap-1">
-                          <span className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Career Path</span>
-                          <button onClick={() => setShowCareerInfo(true)} className="text-gray-600 hover:text-aurora-teal transition-colors">
-                            <Info size={10} />
-                          </button>
-                        </div>
-                        <span className="text-[8px] font-black text-aurora-teal uppercase tracking-widest">{profile?.career_path || 'Rookie'}</span>
-                      </div>
-                      <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-gradient-to-r from-aurora-teal to-metallic-gold"
-                          style={{ width: `${session ? Math.min((cricketIQ / 7500) * 100, 100) : 5}%` }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* AI Pro Comparison */}
-                    <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Trophy size={14} className="text-metallic-gold" />
-                          <span className="text-[9px] font-black text-white uppercase tracking-widest">Professional Match</span>
-                        </div>
-                        <button onClick={() => setShowProInfo(true)} className="text-gray-600 hover:text-aurora-teal transition-colors">
-                          <Info size={10} />
-                        </button>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
-                            <User size={16} className="text-gray-500" />
-                          </div>
-                          <div className="text-left">
-                            <p className="text-[9px] font-black text-white uppercase tracking-tight">{profile?.professional_comparison?.match || 'Virat Kohli'}</p>
-                            <p className="text-[7px] font-bold text-gray-500 uppercase tracking-widest">92% Similarity</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-[10px] font-black text-aurora-teal uppercase tracking-tighter">Top 1%</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Achievements & Badges */}
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between px-1">
-                        <div className="flex items-center gap-2">
-                          <Award size={14} className="text-metallic-gold" />
-                          <span className="text-[9px] font-black text-white uppercase tracking-widest">Badges Section</span>
-                        </div>
-                        <button 
-                          onClick={() => { setShowBadgesModal(true); setShowSideMenu(false); }}
-                          className="text-[8px] font-black text-aurora-teal uppercase tracking-widest hover:text-white transition-colors"
-                        >
-                          View All
-                        </button>
-                      </div>
-                      <div className="grid grid-cols-4 gap-2">
-                        {badges.slice(0, 4).map((badge) => (
-                          <div 
-                            key={badge.id}
-                            className={`aspect-square rounded-xl flex items-center justify-center text-lg border transition-all ${badge.progress === 100 ? 'bg-metallic-gold/10 border-metallic-gold/30' : 'bg-white/5 border-white/10 opacity-40'}`}
-                            title={badge.name}
-                          >
-                            {badge.icon}
-                          </div>
-                        ))}
-                      </div>
+                  <div className="flex flex-col justify-center min-w-0">
+                    <h2 className="text-2xl font-black text-white uppercase tracking-tighter leading-none mb-2 truncate">
+                      {profile?.username || (session ? profile?.email?.split('@')[0] : 'GUEST_UXR')}
+                    </h2>
+                    <div className="inline-flex items-center gap-2">
+                      <div className="w-2 h-2 bg-aurora-teal rounded-full shadow-[0_0_8px_rgba(46,213,115,1)]" />
+                      <span className="text-[10px] font-black text-aurora-teal uppercase tracking-[0.2em] truncate">
+                        {profile?.expertise_badge || 'Initiate Status'}
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Quick Access Menu */}
-                <div className="space-y-2">
-                  <p className="text-[9px] font-black text-gray-600 uppercase tracking-[0.3em] px-4 mb-4">Quick Access Menu</p>
+                {/* Cyberpunk Grid Stats */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-[#0a0a0c] border border-white/5 p-4 rounded-xl relative group overflow-hidden">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-metallic-gold/10 blur-xl group-hover:bg-metallic-gold/20 transition-all" />
+                    <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] mb-4">Core Balance</p>
+                    <div className="flex items-end gap-1.5">
+                      <span className="text-3xl font-black text-white font-display leading-none">{coinBalance}</span>
+                      <span className="text-[10px] font-black text-metallic-gold mb-1">CRN</span>
+                    </div>
+                  </div>
+                  <div className="bg-[#0a0a0c] border border-white/5 p-4 rounded-xl relative group overflow-hidden">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-aurora-teal/10 blur-xl group-hover:bg-aurora-teal/20 transition-all" />
+                    <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] mb-4">Intelligence</p>
+                    <div className="flex items-end gap-1.5">
+                      <span className="text-3xl font-black text-white font-display leading-none">{cricketIQ}</span>
+                      <span className="text-[10px] font-black text-aurora-teal mb-1">IQ</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Massive Typographic Menu */}
+                <div className="flex flex-col -mx-4">
                   {[
-                    { icon: <LayoutDashboard size={18} />, label: 'Dashboard', tab: 'home' },
-                    { icon: <Wallet size={18} />, label: 'Wallet & Store', tab: 'store' },
-                    { icon: <Target size={18} />, label: 'My Predictions', tab: 'prediction' },
-                    { icon: <Ticket size={18} />, label: 'Raffle Tickets', tab: 'raffle' },
-                  ].map((item, i) => (
-                    <button 
-                      key={i}
-                      onClick={() => { setActiveTab(item.tab as AppTab); setShowSideMenu(false); }}
-                      className={`w-full flex items-center gap-4 px-4 py-4 text-[11px] font-black uppercase tracking-[0.15em] rounded-2xl transition-all group ${activeTab === item.tab ? 'bg-white/10 text-white' : 'text-gray-500 hover:bg-white/[0.03] hover:text-white'}`}
+                    { id: 'home', label: 'DASHBOARD', num: '01' },
+                    { id: 'store', label: 'THE STORE', num: '02' },
+                    { id: 'prediction', label: 'PREDICTIONS', num: '03' },
+                    { id: 'raffle', label: 'RAFFLE ROOM', num: '04' },
+                  ].map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => { setActiveTab(item.id as AppTab); setShowSideMenu(false); }}
+                      className="group relative flex items-center justify-between px-4 py-5 overflow-hidden"
                     >
-                      <span className={`${activeTab === item.tab ? 'text-aurora-teal' : 'text-gray-600 group-hover:text-aurora-teal'} transition-colors`}>{item.icon}</span>
-                      {item.label}
+                      <div className="absolute inset-0 bg-white/[0.02] scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-300" />
+                      <div className="flex items-center gap-6 relative z-10">
+                        <span className={`text-[10px] font-black font-mono transition-colors duration-300 ${activeTab === item.id ? 'text-aurora-teal' : 'text-gray-600'}`}>{item.num}</span>
+                        <span className={`text-2xl font-black tracking-widest transition-colors duration-300 ${activeTab === item.id ? 'text-white' : 'text-gray-500 group-hover:text-white'}`}>
+                          {item.label}
+                        </span>
+                      </div>
+                      <ArrowUpRight size={24} className={`relative z-10 transition-all duration-300 ${activeTab === item.id ? 'text-aurora-teal rotate-45' : 'text-gray-700 group-hover:text-white group-hover:rotate-45'}`} />
                     </button>
                   ))}
                 </div>
+
+                {/* Neural Match Profile */}
+                <div className="bg-[#0a0a0c] border border-white/5 rounded-xl p-5 relative overflow-hidden group">
+                  <div className="absolute right-0 bottom-0 opacity-10 group-hover:opacity-20 transition-opacity translate-x-4 translate-y-4">
+                    <User size={120} />
+                  </div>
+                  <div className="relative z-10">
+                    <div className="flex justify-between items-center mb-6">
+                      <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em]">Neural Pro Match</p>
+                      <Info size={14} className="text-gray-600 hover:text-white cursor-pointer transition-colors" onClick={() => setShowProInfo(true)} />
+                    </div>
+                    <h3 className="text-2xl font-black text-white tracking-tight mb-4">{profile?.professional_comparison?.match || 'Virat Kohli'}</h3>
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-aurora-teal/10 border border-aurora-teal/20 rounded-sm">
+                      <div className="w-1.5 h-1.5 bg-aurora-teal rounded-full animate-pulse" />
+                      <span className="text-[9px] font-black text-aurora-teal uppercase tracking-[0.2em]">92% DNA MATCH</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Minimal Badges & Career Row */}
+                <div className="flex gap-4">
+                  <div className="flex-1 bg-[#0a0a0c] border border-white/5 rounded-xl p-4">
+                    <div className="flex justify-between items-end mb-4">
+                      <span className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em]">Career Path</span>
+                      <span className="text-[9px] font-black text-white uppercase tracking-widest">{profile?.career_path || 'Rookie'}</span>
+                    </div>
+                    <div className="h-1 bg-white/5 w-full rounded-full overflow-hidden">
+                      <div className="h-full bg-metallic-gold" style={{ width: `${session ? Math.min((cricketIQ / 7500) * 100, 100) : 5}%` }} />
+                    </div>
+                  </div>
+                  
+                  <div className="flex-1 bg-[#0a0a0c] border border-white/5 rounded-xl p-4 flex flex-col justify-between">
+                    <div className="flex justify-between items-end mb-2">
+                      <span className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em]">Honor Core</span>
+                      <button onClick={() => { setShowBadgesModal(true); setShowSideMenu(false); }} className="text-[9px] font-black text-aurora-teal hover:text-white uppercase tracking-widest transition-colors">All</button>
+                    </div>
+                    <div className="flex gap-1.5">
+                      {badges.slice(0, 3).map(b => (
+                        <div key={b.id} title={b.name} className={`w-8 h-8 rounded-[4px] flex items-center justify-center text-xs border ${b.progress === 100 ? 'bg-metallic-gold/10 border-metallic-gold/30 text-metallic-gold' : 'bg-white/5 border-white/5 text-gray-600 grayscale'}`}>
+                          {b.icon}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
-              {/* Account Security */}
-              {session && (
-                <div className="p-6 border-t border-white/5">
+              {/* Secure Footer */}
+              {session ? (
+                <div className="p-8 pt-4 relative z-10 shrink-0">
                   <button 
                     onClick={() => { supabase.auth.signOut(); setShowSideMenu(false); }}
-                    className="w-full flex items-center gap-4 px-4 py-4 text-[11px] font-black text-red-400/80 uppercase tracking-[0.15em] hover:bg-red-500/10 hover:text-red-400 rounded-2xl transition-all group"
+                    className="flex items-center gap-3 text-gray-500 hover:text-red-500 transition-colors group"
                   >
-                    <LogOut size={18} className="group-hover:-translate-x-1 transition-transform" />
-                    Sign Out
+                    <div className="w-8 h-8 rounded-full border border-gray-800 flex items-center justify-center group-hover:border-red-500/50 group-hover:bg-red-500/10 transition-colors">
+                      <LogOut size={12} className="group-hover:-translate-x-0.5 transition-transform" />
+                    </div>
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em]">Terminate Session</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="p-8 pt-4 relative z-10 shrink-0">
+                  <button 
+                    onClick={() => { setShowAuthModal(true); setShowSideMenu(false); }}
+                    className="w-full py-4 bg-white text-black font-black text-[10px] uppercase tracking-[0.2em] rounded-xl hover:bg-gray-200 transition-colors"
+                  >
+                    Authenticate
                   </button>
                 </div>
               )}
@@ -3175,12 +3186,12 @@ export default function App() {
             { id: 'smartxi', label: 'Smart XI', icon: Sparkles },
             { id: 'stories', label: 'Stories', icon: BookOpen }
           ] : [
-            { id: 'home', label: 'Home', icon: LayoutDashboard },
-            { id: 'matches', label: 'Matches', icon: TrendingUp },
-            { id: 'raffle', label: 'Raffle', icon: Ticket },
-            { id: 'store', label: 'Store', icon: Wallet },
-            { id: 'blog', label: 'Blog', icon: Newspaper },
-            { id: 'debate', label: 'Debate', icon: MessageSquare }
+            { id: 'home', label: 'Home', icon: Home },
+            { id: 'matches', label: 'Matches', icon: Swords },
+            { id: 'raffle', label: 'Raffle', icon: Gift },
+            { id: 'store', label: 'Store', icon: ShoppingCart },
+            { id: 'blog', label: 'Blog', icon: Library },
+            { id: 'debate', label: 'Debate', icon: MessageCircle }
           ]).map((tab) => (
             <button 
               key={tab.id}

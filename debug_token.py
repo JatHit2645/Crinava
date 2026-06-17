@@ -13,11 +13,15 @@ print(response.text[:500])
 tokens = re.findall(r'"[a-zA-Z0-9_\-]{20,}"', response.text)
 print(f"Found {len(tokens)} potential tokens.")
 for t in tokens[:10]:
-    print(f"Token?: {t}")
+    # Mask token to avoid logging sensitive data in plaintext
+    masked_t = t[:5] + "..." + t[-5:] if len(t) > 10 else "..."
+    print(f"Token?: {masked_t}")
 
 if "socketToken" in response.text:
     print("SUCCESS: socketToken found in text!")
     match = re.search(r'socketToken":"([^"]+)"', response.text)
-    print(f"Extracted: {match.group(1)}")
+    raw_token = match.group(1)
+    masked_token = raw_token[:5] + "..." + raw_token[-5:] if len(raw_token) > 10 else "..."
+    print(f"Extracted: {masked_token}")
 else:
     print("FAILURE: socketToken NOT found.")

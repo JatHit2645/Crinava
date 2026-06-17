@@ -38,7 +38,8 @@ async def probe():
     headers = {"X-API-Key": api_key}
     
     print(f"Sending payload: {payload}")
-    print(f"Using X-API-Key: {api_key}")
+    masked_key = api_key[:4] + "..." + api_key[-4:] if len(api_key) > 8 else "..."
+    print(f"Using X-API-Key: {masked_key}")
     
     async with httpx.AsyncClient() as client:
         resp = await client.post(hf_url, json=payload, headers=headers, timeout=10.0)
