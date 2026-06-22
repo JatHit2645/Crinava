@@ -10,6 +10,18 @@ import {
   Globe,
 } from "lucide-react";
 
+const FooterLinkItem = ({ item }: { item: string }) => (
+  <li>
+    <a
+      href={`#${item.toLowerCase().replace(" ", "-")}`}
+      className="text-white/40 text-sm hover:text-aurora transition-colors flex items-center gap-2 group"
+    >
+      <ArrowRight className="size-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+      {item}
+    </a>
+  </li>
+);
+
 export const PremiumFooter: React.FC = () => {
   return (
     <footer className="relative pt-24 pb-12 px-6 overflow-hidden">
@@ -58,15 +70,7 @@ export const PremiumFooter: React.FC = () => {
                 "Community",
                 "Leaderboard",
               ].map((item) => (
-                <li key={item}>
-                  <a
-                    href={`#${item.toLowerCase().replace(" ", "-")}`}
-                    className="text-white/40 text-sm hover:text-aurora transition-colors flex items-center gap-2 group"
-                  >
-                    <ArrowRight className="size-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                    {item}
-                  </a>
-                </li>
+                <FooterLinkItem key={item} item={item} />
               ))}
             </ul>
           </div>
@@ -84,15 +88,7 @@ export const PremiumFooter: React.FC = () => {
                 "Research Papers",
                 "Help Center",
               ].map((item) => (
-                <li key={item}>
-                  <a
-                    href={`#${item.toLowerCase().replace(" ", "-")}`}
-                    className="text-white/40 text-sm hover:text-aurora transition-colors flex items-center gap-2 group"
-                  >
-                    <ArrowRight className="size-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                    {item}
-                  </a>
-                </li>
+                <FooterLinkItem key={item} item={item} />
               ))}
             </ul>
           </div>

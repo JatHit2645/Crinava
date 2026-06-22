@@ -1155,27 +1155,8 @@ class CrexMatchWorker:
             commentary = data.get("C", "")
 
             try:
-                feeds_url = _BALL_FEEDS_URL
-                f_payload = {"matchKey": self.raw_id, "lastDocId": None, "filters": {}}
-                f_headers = {
-                    "Accept": _ACCEPT_HEADER,
-                    "Content-Type": _CONTENT_TYPE_JSON,
-                    "authorization": os.environ.get("CREX_AUTHORIZATION_TOKEN", ""),
-                    "cc": "IN",
-                    "Origin": _CREX_ORIGIN,
-                    "Referer": _CREX_REFERER,
-                }
-                resp_feeds = await asyncio.to_thread(
-                    reqs.post,
-                    feeds_url,
-                    json=f_payload,
-                    headers=f_headers,
-                    impersonate="chrome120",
-                    timeout=5,
-                )
-                if resp_feeds.status_code == 200:
-                    feed_data = resp_feeds.json()
-                    if isinstance(feed_data, list):
+                feed_data = await self._fetch_ball_feeds()
+                if feed_data:
                         self.feed_items = feed_data
                         added = self._mine_any_json_for_players(feed_data, "feeds")
                         self._log_new_player_total("feeds", added)
@@ -1366,17 +1347,7 @@ class CrexMatchWorker:
             packet["commentary"] = self._clean_ai_text(commentary)
             self._remember_ai_opening(packet["commentary"])
             if item_type == "b":
-                try:
-                    win_data = await asyncio.wait_for(
-                        self.fetch_win_prediction(packet), timeout=3.0
-                    )
-                    if win_data:
-                        if isinstance(win_data, list) and len(win_data) > 0:
-                            packet["win_predictor"] = win_data[0]
-                        elif isinstance(win_data, dict):
-                            packet["win_predictor"] = win_data
-                except Exception:
-                    pass
+                await self._apply_win_prediction(packet)
             self._attach_live_context(packet)
             packet["timestamp"] = time.time()
             self.logger.log_ball(packet)
@@ -1673,28 +1644,10 @@ class CrexMatchWorker:
             """Docstring for run_ai_and_update."""
             try:
                 await asyncio.sleep(8)
-
-                feeds_url = _BALL_FEEDS_URL
-                f_payload = {"matchKey": self.raw_id, "lastDocId": None, "filters": {}}
-                f_headers = {
-                    "Accept": _ACCEPT_HEADER,
-                    "Content-Type": _CONTENT_TYPE_JSON,
-                    "authorization": os.environ.get("CREX_AUTHORIZATION_TOKEN", ""),
-                    "cc": "IN",
-                    "Origin": _CREX_ORIGIN,
-                    "Referer": _CREX_REFERER,
-                }
                 try:
-                    r2 = await asyncio.to_thread(
-                        reqs.post,
-                        feeds_url,
-                        json=f_payload,
-                        headers=f_headers,
-                        impersonate="chrome120",
-                        timeout=5,
-                    )
-                    if r2.status_code == 200 and isinstance(r2.json(), list):
-                        self.feed_items = r2.json()
+                    feed_data = await self._fetch_ball_feeds()
+                    if feed_data:
+                        self.feed_items = feed_data
                         added = self._mine_any_json_for_players(
                             self.feed_items, "feeds"
                         )
@@ -1725,17 +1678,7 @@ class CrexMatchWorker:
                 ball_info["commentary"] = updated_comm
 
                 # Fetch updated win prediction to account for final processed ball states/runs/wickets
-                try:
-                    win_data = await asyncio.wait_for(
-                        self.fetch_win_prediction(packet), timeout=3.0
-                    )
-                    if win_data:
-                        if isinstance(win_data, list) and len(win_data) > 0:
-                            packet["win_predictor"] = win_data[0]
-                        elif isinstance(win_data, dict):
-                            packet["win_predictor"] = win_data
-                except Exception:
-                    pass
+                await self._apply_win_prediction(packet)
 
                 try:
                     async with _ai_semaphore:
@@ -2021,6 +1964,57 @@ class CrexMatchWorker:
     # AI COMMENTARY
     # ------------------------------------------------------------------
 
+    async def _call_ai_api(self, prompt: str, temperature: float = 0.7, max_tokens: int = 256) -> str | None:
+        """Call NVIDIA or HuggingFace AI API."""
+        is_nvidia = "nvapi-" in self.ai_api_key
+        if is_nvidia:
+            url = _NVIDIA_CHAT_URL
+            headers = {
+                "Authorization": f"Bearer {self.ai_api_key}",
+                "Content-Type": _CONTENT_TYPE_JSON,
+            }
+            payload = {
+                "model": _NVIDIA_MODEL,
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": temperature,
+                "max_tokens": max_tokens,
+            }
+        else:
+            url = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2"
+            headers = {"Authorization": f"Bearer {self.ai_api_key}"}
+            payload = {"inputs": prompt}
+
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.post(url, headers=headers, json=payload, timeout=10)
+                result = response.json()
+                if is_nvidia:
+                    if "choices" in result:
+                        return self._clean_ai_text(result["choices"][0]["message"]["content"])
+                    print(f"[AI Error] NVIDIA response: {result}")
+                else:
+                    if isinstance(result, list) and result:
+                        text = result[0].get("generated_text", "")
+                        return self._clean_ai_text(text.split("Commentary:")[-1] if "Commentary:" in text else text)
+                    print(f"[AI Error] HF response: {result}")
+        except Exception as e:
+            print(f"[AI Error] [{self.crex_id}]: {e}")
+        return None
+
+    async def _apply_win_prediction(self, packet: dict) -> None:
+        """Docstring for _apply_win_prediction."""
+        try:
+            win_data = await asyncio.wait_for(
+                self.fetch_win_prediction(packet), timeout=3.0
+            )
+            if win_data:
+                if isinstance(win_data, list) and len(win_data) > 0:
+                    packet["win_predictor"] = win_data[0]
+                elif isinstance(win_data, dict):
+                    packet["win_predictor"] = win_data
+        except Exception:
+            pass
+
     async def generate_ai_commentary(self, ball: dict) -> str:
         """Docstring for generate_ai_commentary."""
         raw_comm = ball.get("commentary") or ""
@@ -2084,43 +2078,9 @@ class CrexMatchWorker:
             "Commentary:"
         )
 
-        if is_nvidia:
-            url = _NVIDIA_CHAT_URL
-            headers = {
-                "Authorization": f"Bearer {self.ai_api_key}",
-                "Content-Type": _CONTENT_TYPE_JSON,
-            }
-            payload = {
-                "model": _NVIDIA_MODEL,
-                "messages": [{"role": "user", "content": prompt}],
-                "temperature": 0.7,
-                "max_tokens": 256,
-            }
-        else:
-            url = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2"
-            headers = {"Authorization": f"Bearer {self.ai_api_key}"}
-            payload = {"inputs": prompt}
-
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.post(
-                    url, headers=headers, json=payload, timeout=10
-                )
-                result = response.json()
-                if is_nvidia:
-                    if "choices" in result:
-                        return self._clean_ai_text(
-                            result["choices"][0]["message"]["content"]
-                        )
-                    print(f"[AI Error] NVIDIA response: {result}")
-                else:
-                    if isinstance(result, list) and result:
-                        return self._clean_ai_text(
-                            result[0].get("generated_text", "").split("Commentary:")[-1]
-                        )
-                    print(f"[AI Error] HF response: {result}")
-        except Exception as e:
-            print(f"[AI Error] [{self.crex_id}]: {e}")
+        ai_result = await self._call_ai_api(prompt, temperature=0.7, max_tokens=256)
+        if ai_result:
+            return ai_result
 
         return f"Ball {ball.get('over_ball')} | {ball.get('runs_scored')} | {raw_comm}"
 

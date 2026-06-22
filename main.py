@@ -38,19 +38,11 @@ async def lifespan(api_app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 # Step 8: Enable CORS for Website Integration
-allowed_origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
-env_origins = os.environ.get("ALLOWED_ORIGINS")
-if env_origins:
-    allowed_origins.extend([origin.strip() for origin in env_origins.split(",")])
+from cors_config import get_allowed_origins
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=get_allowed_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

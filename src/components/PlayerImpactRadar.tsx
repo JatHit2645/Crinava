@@ -9,6 +9,27 @@ import {
   Tooltip,
 } from "recharts";
 import { Trophy, ChevronDown } from "lucide-react";
+import { extractInningData } from "../utils/matchParser";
+import { InningSelector } from "./shared/InningSelector";
+
+const ImpactRadarChart = ({ data, color, name }: { data: any[], color: string, name: string }) => (
+  <ResponsiveContainer width="100%" height="100%">
+    <RadarChart cx="50%" cy="50%" outerRadius="55%" data={data}>
+      <PolarGrid stroke="#333" />
+      <PolarAngleAxis
+        dataKey="subject"
+        tick={{ fill: "#999", fontSize: 10, fontWeight: "bold" }}
+        tickSize={20}
+      />
+      <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+      <Radar name={name} dataKey="A" stroke={color} fill={color} fillOpacity={0.4} />
+      <Tooltip
+        contentStyle={{ backgroundColor: "#111", border: "1px solid #333", borderRadius: "12px" }}
+        itemStyle={{ color: "#11EBCF", fontSize: "10px", fontWeight: "bold" }}
+      />
+    </RadarChart>
+  </ResponsiveContainer>
+);
 
 export const PlayerImpactRadar: React.FC<{
   rawInfo: any;
@@ -24,40 +45,12 @@ export const PlayerImpactRadar: React.FC<{
   useEffect(() => {
     setLoading(true);
 
-    if (!rawInfo || !rawInfo.innings) {
+    const deliveries = extractInningData(rawInfo, activeInning);
+    if (!deliveries.length) {
       setBattingData([]);
       setBowlingData([]);
       setLoading(false);
       return;
-    }
-
-    let inningsList = [];
-    if (Array.isArray(rawInfo.innings)) {
-      inningsList = rawInfo.innings;
-    } else {
-      inningsList = Object.values(rawInfo.innings).map(
-        (inn: any) => Object.values(inn)[0],
-      );
-    }
-
-    const inningData = inningsList[activeInning];
-    if (!inningData) {
-      setBattingData([]);
-      setBowlingData([]);
-      setLoading(false);
-      return;
-    }
-
-    const deliveries: any[] = [];
-    if (inningData.overs) {
-      inningData.overs.forEach((over: any) => {
-        if (over.deliveries) deliveries.push(...over.deliveries);
-      });
-    } else if (inningData.deliveries) {
-      inningData.deliveries.forEach((dObj: any) => {
-        const [key] = Object.keys(dObj);
-        deliveries.push(dObj[key]);
-      });
     }
 
     let runsScored = 0;
@@ -233,20 +226,7 @@ export const PlayerImpactRadar: React.FC<{
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2 bg-black/40 p-1 rounded-lg border border-white/10">
-            <button
-              onClick={() => setActiveInning(0)}
-              className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded transition-colors ${activeInning === 0 ? "text-aurora-teal bg-aurora-teal/10" : "text-gray-500 hover:text-white"}`}
-            >
-              Inning 1
-            </button>
-            <button
-              onClick={() => setActiveInning(1)}
-              className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded transition-colors ${activeInning === 1 ? "text-aurora-teal bg-aurora-teal/10" : "text-gray-500 hover:text-white"}`}
-            >
-              Inning 2
-            </button>
-          </div>
+          <InningSelector activeInning={activeInning} setActiveInning={setActiveInning} />
 
           {allPlayers.length > 0 && (
             <div className="relative">
@@ -288,35 +268,7 @@ export const PlayerImpactRadar: React.FC<{
                 <h3 className="text-aurora-teal font-black uppercase tracking-widest text-xs mb-2">
                   Batting
                 </h3>
-                <ResponsiveContainer width="100%" height="100%">
-                  <RadarChart
-                    cx="50%"
-                    cy="50%"
-                    outerRadius="55%"
-                    data={battingData}
-                  >
-                    <PolarGrid stroke="#333" />
-                    <PolarAngleAxis
-                      dataKey="subject"
-                      tick={{ fill: "#999", fontSize: 10, fontWeight: "bold" }}
-                      tickSize={20}
-                    />
-                    <PolarRadiusAxis
-                      angle={30}
-                      domain={[0, 100]}
-                      tick={false}
-                      axisLine={false}
-                    />
-                    <Radar
-                      name={selectedPlayer}
-                      dataKey="A"
-                      stroke="#11EBCF"
-                      fill="#11EBCF"
-                      fillOpacity={0.4}
-                    />
-                    <Tooltip content={<CustomTooltip />} />
-                  </RadarChart>
-                </ResponsiveContainer>
+                <ImpactRadarChart data={battingData} color="#11EBCF" name={selectedPlayer} />
               </div>
             )}
             {bowlingData.length > 0 && (
@@ -324,35 +276,7 @@ export const PlayerImpactRadar: React.FC<{
                 <h3 className="text-metallic-gold font-black uppercase tracking-widest text-xs mb-2">
                   Bowling
                 </h3>
-                <ResponsiveContainer width="100%" height="100%">
-                  <RadarChart
-                    cx="50%"
-                    cy="50%"
-                    outerRadius="55%"
-                    data={bowlingData}
-                  >
-                    <PolarGrid stroke="#333" />
-                    <PolarAngleAxis
-                      dataKey="subject"
-                      tick={{ fill: "#999", fontSize: 10, fontWeight: "bold" }}
-                      tickSize={20}
-                    />
-                    <PolarRadiusAxis
-                      angle={30}
-                      domain={[0, 100]}
-                      tick={false}
-                      axisLine={false}
-                    />
-                    <Radar
-                      name={selectedPlayer}
-                      dataKey="A"
-                      stroke="#FFD700"
-                      fill="#FFD700"
-                      fillOpacity={0.4}
-                    />
-                    <Tooltip content={<CustomTooltip />} />
-                  </RadarChart>
-                </ResponsiveContainer>
+                <ImpactRadarChart data={bowlingData} color="#FFD700" name={selectedPlayer} />
               </div>
             )}
           </div>

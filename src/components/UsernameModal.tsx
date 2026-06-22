@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { User, Check, X, Loader2, Sparkles, Calendar } from "lucide-react";
 import { supabase } from "../lib/supabaseClient";
+import { useUsernameCheck } from "../hooks/useUsernameCheck";
 
 interface UsernameModalProps {
   isOpen: boolean;
@@ -21,12 +22,10 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
   const [username, setUsername] = useState("");
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
-  const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
+  const { isAvailable, checking } = useUsernameCheck(username);
   const [isDobValid, setIsDobValid] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
-  const [checking, setChecking] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const cache = React.useRef(new Map<string, boolean>());
 
   const isLeapYear = (year: number) =>
     (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
@@ -75,40 +74,7 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
     }
   }, [dob]);
 
-  useEffect(() => {
-    if (username.length < 3) {
-      setIsAvailable(null);
-      return;
-    }
 
-    const checkAvailability = async () => {
-      const lowerUsername = username.toLowerCase();
-      if (cache.current.has(lowerUsername)) {
-        setIsAvailable(cache.current.get(lowerUsername)!);
-        return;
-      }
-
-      setChecking(true);
-      try {
-        const { data, error } = await supabase
-          .from("usernames")
-          .select("id")
-          .eq("id", lowerUsername)
-          .maybeSingle();
-
-        const available = !data;
-        cache.current.set(lowerUsername, available);
-        setIsAvailable(available);
-      } catch (err) {
-        console.error("Error checking username availability", err);
-      } finally {
-        setChecking(false);
-      }
-    };
-
-    const timeoutId = setTimeout(checkAvailability, 500);
-    return () => clearTimeout(timeoutId);
-  }, [username]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

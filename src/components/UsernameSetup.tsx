@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { User, Check, X, Loader2, Sparkles, ArrowRight } from "lucide-react";
 import { supabase } from "../lib/supabaseClient";
+import { useUsernameCheck } from "../hooks/useUsernameCheck";
 
 interface UsernameSetupProps {
   isOpen: boolean;
@@ -13,46 +14,7 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({
   onComplete,
 }) => {
   const [username, setUsername] = useState("");
-  const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
-  const [checking, setChecking] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const cache = React.useRef(new Map<string, boolean>());
-
-  useEffect(() => {
-    if (username.length < 3) {
-      setIsAvailable(null);
-      return;
-    }
-
-    const checkAvailability = async () => {
-      const lowerUsername = username.toLowerCase();
-      if (cache.current.has(lowerUsername)) {
-        setIsAvailable(cache.current.get(lowerUsername)!);
-        return;
-      }
-
-      setChecking(true);
-      try {
-        const { data, error } = await supabase
-          .from("usernames")
-          .select("id")
-          .eq("id", lowerUsername)
-          .maybeSingle();
-
-        const available = !data;
-        cache.current.set(lowerUsername, available);
-        setIsAvailable(available);
-      } catch (err) {
-        console.error("Error checking username availability:", err);
-      } finally {
-        setChecking(false);
-      }
-    };
-
-    const timeoutId = setTimeout(checkAvailability, 500);
-    return () => clearTimeout(timeoutId);
-  }, [username]);
+  const { isAvailable, checking } = useUsernameCheck(username);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -12,6 +12,8 @@ import {
   ReferenceLine,
 } from "recharts";
 import { Zap } from "lucide-react";
+import { parseInningDeliveries } from "../utils/matchParser";
+import { InningSelector } from "./shared/InningSelector";
 
 interface ImpactEvent {
   over_no: number;
@@ -33,95 +35,39 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
   useEffect(() => {
     setLoading(true);
 
-    if (!rawInfo || !rawInfo.innings) {
-      setData([]);
-      setLoading(false);
-      return;
-    }
-
-    let inningsList = [];
-    if (Array.isArray(rawInfo.innings)) {
-      inningsList = rawInfo.innings;
-    } else {
-      inningsList = Object.values(rawInfo.innings).map(
-        (inn: any) => Object.values(inn)[0],
-      );
-    }
-
-    const inningData = inningsList[activeInning];
-    if (!inningData) {
-      setData([]);
-      setLoading(false);
-      return;
-    }
-
-    const deliveries: any[] = [];
-    if (inningData.overs) {
-      inningData.overs.forEach((over: any) => {
-        if (over.deliveries) {
-          over.deliveries.forEach((d: any, idx: number) => {
-            deliveries.push({ ...d, over_no: over.over + 1, ball_no: idx + 1 });
-          });
-        }
-      });
-    } else if (inningData.deliveries) {
-      let currentOver = 1;
-      let currentBall = 1;
-      inningData.deliveries.forEach((dObj: any) => {
-        const key = Object.keys(dObj)[0];
-        const overNo = Math.floor(parseFloat(key)) + 1;
-        if (overNo !== currentOver) {
-          currentOver = overNo;
-          currentBall = 1;
-        }
-        deliveries.push({
-          ...dObj[key],
-          over_no: overNo,
-          ball_no: currentBall,
-        });
-        currentBall += 1;
-      });
-    }
-
-    const formattedData: ImpactEvent[] = [];
-
-    deliveries.forEach((d: any) => {
-      const runs = d.runs ? d.runs.total || 0 : 0;
-      const isWicket = d.wickets && d.wickets.length > 0;
-      const batter = d.batter || d.batsman || "Unknown";
-      const bowler = d.bowler || "Unknown";
-
-      let impactScore = runs;
+    const rawDeliveries = parseInningDeliveries(rawInfo, activeInning);
+    const formattedData: ImpactEvent[] = rawDeliveries.map((d) => {
       let type: "wicket" | "boundary" | "dot" | "normal" = "normal";
-      let desc = `${runs} runs`;
-      let z = runs * 20 + 20;
+      let desc = `${d.runs} runs`;
+      let z = d.runs * 20 + 20;
+      let impactScore = d.runs;
 
-      if (isWicket) {
+      if (d.isWicket) {
         impactScore = -5; // Negative impact for batting team, positive for bowling
         type = "wicket";
-        desc = `Wicket! (${d.wickets[0].kind})`;
+        desc = `Wicket! (${d.wicket_kind})`;
         z = 200;
-      } else if (runs >= 4) {
+      } else if (d.runs >= 4) {
         type = "boundary";
-        desc = runs === 6 ? `SIX!` : `FOUR!`;
-        z = runs === 6 ? 150 : 100;
-      } else if (runs === 0 && !d.extras) {
+        desc = d.runs === 6 ? `SIX!` : `FOUR!`;
+        z = d.runs === 6 ? 150 : 100;
+      } else if (d.runs === 0 && d.impactScore === 2) { // Dot ball logic
         type = "dot";
         desc = `Dot ball`;
         z = 30;
       }
 
-      formattedData.push({
+      return {
         over_no: d.over_no + d.ball_no / 10,
         ball_no: d.ball_no,
         impactScore,
         type,
         desc,
-        batter,
-        bowler,
-        runs,
+        batter: d.batter,
+        bowler: d.bowler,
+        runs: d.runs,
         z,
-      });
+      };
     });
 
     setData(formattedData);
@@ -173,20 +119,7 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 bg-black/40 p-1 rounded-lg border border-white/10">
-          <button
-            onClick={() => setActiveInning(0)}
-            className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded transition-colors ${activeInning === 0 ? "text-aurora-teal bg-aurora-teal/10" : "text-gray-500 hover:text-white"}`}
-          >
-            Inning 1
-          </button>
-          <button
-            onClick={() => setActiveInning(1)}
-            className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded transition-colors ${activeInning === 1 ? "text-aurora-teal bg-aurora-teal/10" : "text-gray-500 hover:text-white"}`}
-          >
-            Inning 2
-          </button>
-        </div>
+        <InningSelector activeInning={activeInning} setActiveInning={setActiveInning} />
       </div>
 
       <div className="h-[350px] w-full">

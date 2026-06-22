@@ -58,6 +58,22 @@ interface VerdictResult {
 
 const COLORS = ["#00C9B7", "#FFD700", "#FF4D4D", "#A855F7", "#3B82F6"];
 
+const PlayerSelect = ({ label, value, onChange, options }: { label: string, value: string, onChange: (val: string) => void, options: { id: string, name: string }[] }) => (
+  <div className="space-y-1.5">
+    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">{label}</label>
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-aurora-teal/50"
+    >
+      <option value="">Select Player</option>
+      {options.map((p) => (
+        <option key={p.id} value={p.name}>{p.name}</option>
+      ))}
+    </select>
+  </div>
+);
+
 export const VerdictTool: React.FC<VerdictToolProps> = ({ scope, context }) => {
   const [activeSubTab, setActiveSubTab] = useState<"ask" | "know">("ask");
   const [query, setQuery] = useState("");
@@ -262,40 +278,8 @@ export const VerdictTool: React.FC<VerdictToolProps> = ({ scope, context }) => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">
-                    Player A
-                  </label>
-                  <select
-                    value={playerA}
-                    onChange={(e) => setPlayerA(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-aurora-teal/50"
-                  >
-                    <option value="">Select Player</option>
-                    {allPlayers.map((p) => (
-                      <option key={p.id} value={p.name}>
-                        {p.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">
-                    Player B
-                  </label>
-                  <select
-                    value={playerB}
-                    onChange={(e) => setPlayerB(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-aurora-teal/50"
-                  >
-                    <option value="">Select Player</option>
-                    {allPlayers.map((p) => (
-                      <option key={p.id} value={p.name}>
-                        {p.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <PlayerSelect label="Player A" value={playerA} onChange={setPlayerA} options={allPlayers} />
+                <PlayerSelect label="Player B" value={playerB} onChange={setPlayerB} options={allPlayers} />
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">
                     Format

@@ -10,8 +10,8 @@ import {
   ReferenceLine,
 } from "recharts";
 import { Waves } from "lucide-react";
-
-interface MomentumPoint {
+import { parseInningDeliveries } from "../utils/matchParser";
+import { InningSelector } from "./shared/InningSelector";
   over: number;
   pressure: number;
   isTurningPoint?: boolean;
@@ -25,58 +25,15 @@ export const MomentumMap: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
   useEffect(() => {
     setLoading(true);
 
-    if (!rawInfo || !rawInfo.innings) {
-      setData([]);
-      setLoading(false);
-      return;
-    }
-
-    let inningsList = [];
-    if (Array.isArray(rawInfo.innings)) {
-      inningsList = rawInfo.innings;
-    } else {
-      inningsList = Object.values(rawInfo.innings).map(
-        (inn: any) => Object.values(inn)[0],
-      );
-    }
-
-    const inningData = inningsList[activeInning];
-    if (!inningData) {
-      setData([]);
-      setLoading(false);
-      return;
-    }
-
-    const deliveries: any[] = [];
-    if (inningData.overs) {
-      inningData.overs.forEach((over: any) => {
-        if (over.deliveries)
-          deliveries.push(
-            ...over.deliveries.map((d: any) => ({
-              ...d,
-              over_no: over.over + 1,
-            })),
-          );
-      });
-    } else if (inningData.deliveries) {
-      inningData.deliveries.forEach((dObj: any) => {
-        const [key] = Object.keys(dObj);
-        const overNo = Math.floor(parseFloat(key)) + 1;
-        deliveries.push({ ...dObj[key], over_no: overNo });
-      });
-    }
-
+    const rawDeliveries = parseInningDeliveries(rawInfo, activeInning);
     const overData: Record<number, { runs: number; wickets: number }> = {};
     let maxOver = 0;
 
-    deliveries.forEach((d: any) => {
+    rawDeliveries.forEach((d) => {
       const over = d.over_no;
-      const runs = d.runs ? d.runs.total || 0 : 0;
-      const wickets = d.wickets ? d.wickets.length : 0;
-
       if (!overData[over]) overData[over] = { runs: 0, wickets: 0 };
-      overData[over].runs += runs;
-      overData[over].wickets += wickets;
+      overData[over].runs += d.runs;
+      overData[over].wickets += d.isWicket ? 1 : 0;
       if (over > maxOver) maxOver = over;
     });
 
@@ -140,20 +97,7 @@ export const MomentumMap: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 bg-black/40 p-1 rounded-lg border border-white/10">
-          <button
-            onClick={() => setActiveInning(0)}
-            className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded transition-colors ${activeInning === 0 ? "text-aurora-teal bg-aurora-teal/10" : "text-gray-500 hover:text-white"}`}
-          >
-            Inning 1
-          </button>
-          <button
-            onClick={() => setActiveInning(1)}
-            className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded transition-colors ${activeInning === 1 ? "text-aurora-teal bg-aurora-teal/10" : "text-gray-500 hover:text-white"}`}
-          >
-            Inning 2
-          </button>
-        </div>
+        <InningSelector activeInning={activeInning} setActiveInning={setActiveInning} />
       </div>
 
       <div className="h-[350px] w-full">

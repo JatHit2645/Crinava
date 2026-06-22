@@ -4,6 +4,17 @@ import { useVerdictStore } from "../store/verdictStore";
 import { ArrowLeft, Target, Zap } from "lucide-react";
 import { motion } from "motion/react";
 
+const StatBox = ({ label, value }: { label: string, value: string | number | undefined }) => (
+  <div className="bg-white/5 p-4 rounded-xl">
+    <div className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">
+      {label}
+    </div>
+    <div className="text-3xl font-black text-white">
+      {value}
+    </div>
+  </div>
+);
+
 interface PlayerProfileProps {
   playerId: string; // This is actually the player's name from the scorecard
   onBack: () => void;
@@ -248,38 +259,10 @@ export const PlayerProfile: React.FC<PlayerProfileProps> = ({
             </h2>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white/5 p-4 rounded-xl">
-              <div className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">
-                Total Runs
-              </div>
-              <div className="text-3xl font-black text-white">
-                {stats?.runs}
-              </div>
-            </div>
-            <div className="bg-white/5 p-4 rounded-xl">
-              <div className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">
-                Strike Rate
-              </div>
-              <div className="text-3xl font-black text-white">
-                {stats?.strikeRate}
-              </div>
-            </div>
-            <div className="bg-white/5 p-4 rounded-xl">
-              <div className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">
-                Average
-              </div>
-              <div className="text-3xl font-black text-white">
-                {stats?.average}
-              </div>
-            </div>
-            <div className="bg-white/5 p-4 rounded-xl">
-              <div className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">
-                Balls Faced
-              </div>
-              <div className="text-3xl font-black text-white">
-                {stats?.ballsFaced}
-              </div>
-            </div>
+            <StatBox label="Total Runs" value={stats?.runs} />
+            <StatBox label="Strike Rate" value={stats?.strikeRate} />
+            <StatBox label="Average" value={stats?.average} />
+            <StatBox label="Balls Faced" value={stats?.ballsFaced} />
           </div>
         </div>
 
@@ -292,38 +275,10 @@ export const PlayerProfile: React.FC<PlayerProfileProps> = ({
             </h2>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white/5 p-4 rounded-xl">
-              <div className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">
-                Wickets
-              </div>
-              <div className="text-3xl font-black text-white">
-                {stats?.wickets}
-              </div>
-            </div>
-            <div className="bg-white/5 p-4 rounded-xl">
-              <div className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">
-                Economy
-              </div>
-              <div className="text-3xl font-black text-white">
-                {stats?.economy}
-              </div>
-            </div>
-            <div className="bg-white/5 p-4 rounded-xl">
-              <div className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">
-                Average
-              </div>
-              <div className="text-3xl font-black text-white">
-                {stats?.bowlingAverage}
-              </div>
-            </div>
-            <div className="bg-white/5 p-4 rounded-xl">
-              <div className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">
-                Overs
-              </div>
-              <div className="text-3xl font-black text-white">
-                {stats?.overs}
-              </div>
-            </div>
+            <StatBox label="Wickets" value={stats?.wickets} />
+            <StatBox label="Economy" value={stats?.economy} />
+            <StatBox label="Average" value={stats?.bowlingAverage} />
+            <StatBox label="Overs" value={stats?.overs} />
           </div>
         </div>
       </div>

@@ -380,6 +380,16 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
     );
   };
 
+  const getBaseState = (overrides: Partial<GameState>): GameState => ({
+    ...st,
+    preds: {},
+    results: {},
+    p1prof: {},
+    p2prof: {},
+    myProf: { player: null, emoji: "😎", pin: "" },
+    ...overrides,
+  });
+
   const showToast = (msg: string) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(""), 3000);
@@ -479,19 +489,13 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
       return;
     }
     setLoading("CREATING ROOM");
-    const newSt: GameState = {
-      ...st,
+    const newSt: GameState = getBaseState({
       p1: p1Input,
       p2: p2Input,
       room: genCode(),
       me: "p1",
       bid: "",
-      preds: {},
-      results: {},
-      p1prof: {},
-      p2prof: {},
-      myProf: { player: null, emoji: "😎", pin: "" },
-    };
+    });
     const bid = await syncSave(newSt);
     newSt.bid = bid;
     saveSt(newSt);
@@ -517,8 +521,7 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
       const j = await r.json();
       if (!j.record) throw new Error();
       const d = j.record;
-      const newSt: GameState = {
-        ...st,
+      const newSt: GameState = getBaseState({
         room: roomName,
         bid: binId,
         me: "p2",
@@ -528,8 +531,7 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
         results: d.results || {},
         p1prof: d.p1prof || {},
         p2prof: d.p2prof || {},
-        myProf: { player: null, emoji: "😎", pin: "" },
-      };
+      });
       saveSt(newSt);
       setLoading("");
       setView("onboard");
