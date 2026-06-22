@@ -147,6 +147,33 @@ async def home():
     }
 
 
+def _determine_match_state(mid: str, default_state: str) -> str:
+    state = default_state
+    if mid in match_hub:
+        if match_hub[mid].get("state") == "Completed":
+            state = match_hub[mid]["state"]
+        else:
+            history = match_hub[mid].get("history", [])
+            if history:
+                last = history[-1]
+                score = str(last.get("score", "")).lower()
+                comm = str(last.get("commentary", "")).lower()
+                if (
+                    "won by" in score
+                    or "won by" in comm
+                    or "result" in score
+                    or "match tied" in score
+                ):
+                    state = "Completed"
+                elif (
+                    "yet to begin" in comm
+                    or "upcoming" in comm
+                    or "match not started" in score
+                ):
+                    state = "Upcoming"
+    return state
+
+
 @app.get("/matches")
 async def list_matches():
     """Returns a directory of all live matches currently being tracked."""
@@ -165,28 +192,7 @@ async def list_matches():
                     continue
 
             state = match.get("state", "Live")
-            if mid in match_hub:
-                if match_hub[mid].get("state") == "Completed":
-                    state = match_hub[mid]["state"]
-                else:
-                    history = match_hub[mid].get("history", [])
-                    if history:
-                        last = history[-1]
-                        score = str(last.get("score", "")).lower()
-                        comm = str(last.get("commentary", "")).lower()
-                        if (
-                            "won by" in score
-                            or "won by" in comm
-                            or "result" in score
-                            or "match tied" in score
-                        ):
-                            state = "Completed"
-                        elif (
-                            "yet to begin" in comm
-                            or "upcoming" in comm
-                            or "match not started" in score
-                        ):
-                            state = "Upcoming"
+            state = _determine_match_state(mid, state)
 
             match_list.append(
                 {

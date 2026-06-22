@@ -683,33 +683,24 @@ class CrexMatchWorker:
         }
         return {"innings": parsed_innings, "telemetry": telemetry, "extras": all_extras}
 
-    def _derive_active_players(self, innings: list, active_ids: list[str]) -> dict:
-        """Docstring for _derive_active_players."""
-        latest = innings[-1] if innings else {}
-        batters = latest.get("batters", [])
-        bowlers = latest.get("bowlers", [])
-
-        # Find batters who are not out
+    def _derive_batters(self, batters: list) -> tuple:
         not_out_batters = [
             b for b in batters if not b.get("wicket_bowler") and b.get("r") != "-"
         ]
+        striker = not_out_batters[-1] if len(not_out_batters) > 0 else None
+        non_striker = not_out_batters[-2] if len(not_out_batters) > 1 else None
 
-        striker = None
-        non_striker = None
-        if len(not_out_batters) > 0:
-            striker = not_out_batters[-1]
-        if len(not_out_batters) > 1:
-            non_striker = not_out_batters[-2]
-
-        # Fallback
         if not striker and batters:
             striker = batters[-1]
         if not non_striker and len(batters) > 1:
             non_striker = batters[-2]
+        return striker, non_striker
 
+    def _derive_bowler(self, bowlers: list) -> dict:
         current_bowler_id = ""
         for item in self.feed_items:
             if isinstance(item, dict) and item.get("type") == "b" and item.get("c1"):
+                import re
                 m = re.search(
                     r"([A-Za-z0-9][A-Za-z0-9\s'.-]{1,35})\s+to\s+",
                     self._clean_feed_text(item.get("c1")),
@@ -725,6 +716,16 @@ class CrexMatchWorker:
         bowler = next(filter(lambda b: b.get("id") == current_bowler_id, bowlers), None)
         if not bowler and bowlers:
             bowler = bowlers[-1]
+        return bowler
+
+    def _derive_active_players(self, innings: list, active_ids: list[str]) -> dict:
+        """Docstring for _derive_active_players."""
+        latest = innings[-1] if innings else {}
+        batters = latest.get("batters", [])
+        bowlers = latest.get("bowlers", [])
+
+        striker, non_striker = self._derive_batters(batters)
+        bowler = self._derive_bowler(bowlers)
 
         return {
             "striker": striker,

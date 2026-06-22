@@ -10,6 +10,41 @@ JSON_DIR = "./all_matches_json"
 DB_NAME = "crinava.db"
 
 
+def process_match_file(filename, json_dir):
+    """Process a single match JSON file and yield delivery records."""
+    import os
+    import json
+    
+    try:
+        with open(os.path.join(json_dir, filename), "r") as f:
+            data = json.load(f)
+            mid = filename.split(".")[0]
+            info = data.get("info", {})
+            event = info.get("event", {}).get("name") or info.get("series_name", "Unknown")
+            season = str(info.get("season", "Unknown"))
+            date = info.get("dates", [""])[0]
+            venue = info.get("venue", "Unknown")
+            city = info.get("city", "Unknown")
+            m_type = info.get("match_type", "T20")
+
+            for inning in data.get("innings", []):
+                inn_no = 1 if inning.get("team") == info.get("teams", [None, None])[0] else 2
+                for over in inning.get("overs", []):
+                    o_no = over.get("over")
+                    for b_no, delivery in enumerate(over.get("deliveries", []), 1):
+                        runs = delivery.get("runs", {})
+                        wicket = delivery.get("wicket", {})
+                        yield (
+                            mid, event, season, date, venue, city, m_type,
+                            inn_no, o_no, b_no,
+                            delivery.get("batter"), delivery.get("bowler"),
+                            runs.get("batter", 0), runs.get("extras", 0), runs.get("total", 0),
+                            wicket.get("player_out"), wicket.get("kind")
+                        )
+    except Exception:
+        pass
+
+
 def build_db():
     """Docstring for build_db."""
     conn = sqlite3.connect(DB_NAME)
@@ -46,52 +81,8 @@ def build_db():
     batch = []
 
     for filename in tqdm(all_files, desc="Processing Matches"):
-        try:
-            with open(os.path.join(JSON_DIR, filename), "r") as f:
-                data = json.load(f)
-                mid = filename.split(".")[0]
-                info = data.get("info", {})
-                event = info.get("event", {}).get("name") or info.get(
-                    "series_name", "Unknown"
-                )
-                season = str(info.get("season", "Unknown"))
-                date = info.get("dates", [""])[0]
-                venue = info.get("venue", "Unknown")
-                city = info.get("city", "Unknown")
-                m_type = info.get("match_type", "T20")
-
-                for inning in data.get("innings", []):
-                    inn_no = (
-                        1
-                        if inning.get("team") == info.get("teams", [None, None])[0]
-                        else 2
-                    )
-                    for over in inning.get("overs", []):
-                        o_no = over.get("over")
-                        for b_no, delivery in enumerate(over.get("deliveries", []), 1):
-                            runs = delivery.get("runs", {})
-                            wicket = delivery.get("wicket", {})
-                            batch.append(
-                                (
-                                    mid,
-                                    event,
-                                    season,
-                                    date,
-                                    venue,
-                                    city,
-                                    m_type,
-                                    inn_no,
-                                    o_no,
-                                    b_no,
-                                    delivery.get("batter"),
-                                    delivery.get("bowler"),
-                                    runs.get("batter", 0),
-                                    runs.get("extras", 0),
-                                    runs.get("total", 0),
-                                    wicket.get("player_out"),
-                                    wicket.get("kind"),
-                                )
-                            )
+        for record in process_match_file(filename, JSON_DIR):
+            batch.append(record)
 
             if len(batch) > 100000:
                 cur.executemany(
@@ -100,8 +91,6 @@ def build_db():
                 )
                 batch = []
                 conn.commit()
-        except Exception:
-            continue
 
     if batch:
         cur.executemany(
