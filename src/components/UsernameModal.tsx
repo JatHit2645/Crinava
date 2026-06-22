@@ -11,6 +11,18 @@ interface UsernameModalProps {
   onClose: () => void;
 }
 
+/**
+ * Modal for claiming a username by validating availability, date of birth, and gender, then creating the user profile.
+ * @example
+ * UsernameModal({ isOpen: true, uid: "user_123", email: "user@example.com", onComplete: (username) => console.log(username), onClose: () => {} })
+ * "cricket_legend_1"
+ * @param {boolean} isOpen - Controls whether the modal is visible.
+ * @param {string} uid - Unique user identifier used to create the profile.
+ * @param {string} email - Email address to store in the created profile.
+ * @param {(username: string) => void} onComplete - Callback invoked after successful profile creation.
+ * @param {() => void} onClose - Callback invoked when the modal should be closed.
+ * @returns {JSX.Element | null} The rendered modal UI, or null when the modal is closed.
+ **/
 export const UsernameModal: React.FC<UsernameModalProps> = ({
   isOpen,
   uid,
@@ -37,6 +49,14 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
     return 31;
   };
 
+  /**
+   * Validates whether a date string is in YYYY/MM/DD format and represents a real calendar date.
+   * @example
+   * isValidDate("2024/02/29")
+   * true
+   * @param {string} date - Date string to validate in YYYY/MM/DD format.
+   * @returns {boolean} True if the date is valid; otherwise, false.
+   **/
   const validateDOB = (date: string) => {
     const parts = date.split("/");
     if (parts.length !== 3) return false;
@@ -81,6 +101,14 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
       return;
     }
 
+    /**
+     * Checks whether the current username is available, using a cached result when possible.
+     * @example
+     * checkUsernameAvailability()
+     * true
+     * @param {void} - This function takes no arguments.
+     * @returns {Promise<void>} Updates availability state and cache; does not return a value.
+     **/
     const checkAvailability = async () => {
       const lowerUsername = username.toLowerCase();
       if (cache.current.has(lowerUsername)) {
@@ -110,6 +138,14 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
     return () => clearTimeout(timeoutId);
   }, [username]);
 
+  /**
+   * Handles username submission by validating availability and profile fields, then creates the username mapping and user profile in Supabase.
+   * @example
+   * sync(event)
+   * void
+   * @param {React.FormEvent} e - Form submission event.
+   * @returns {Promise<void>} Resolves when the username and profile are created or an error is handled.
+   **/
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isAvailable || !isDobValid || loading) return;

@@ -11,6 +11,20 @@ interface PremiumHeaderProps {
   setIsMenuOpen: (open: boolean) => void;
 }
 
+/**
+ * Renders a premium fixed header with logo, desktop navigation, authentication actions, and a mobile menu toggle.
+ * @example
+ * PremiumHeader({ user, coins, onAuthClick, onProfileClick, onNotificationsClick, isMenuOpen, setIsMenuOpen })
+ * <header>...</header>
+ * @param {{object|null}} user - Authenticated user object; when null, the auth button is shown instead of user actions.
+ * @param {{number}} coins - The user's coin balance displayed in the header when authenticated.
+ * @param {{Function}} onAuthClick - Callback invoked when the "Get Started" authentication button is clicked.
+ * @param {{Function}} onProfileClick - Callback invoked when the profile button is clicked.
+ * @param {{Function}} onNotificationsClick - Callback invoked when the notifications button is clicked.
+ * @param {{boolean}} isMenuOpen - Controls whether the mobile menu is currently open.
+ * @param {{Function}} setIsMenuOpen - State setter used to toggle the mobile menu open/closed.
+ * @returns {JSX.Element} The rendered premium header component.
+ **/
 export const PremiumHeader: React.FC<PremiumHeaderProps> = ({
   user,
   coins,

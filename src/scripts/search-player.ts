@@ -9,6 +9,13 @@ const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
 
 const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
 
+/**
+ * Searches for a player by name in the players table and logs the results.
+ * @example
+ * searchPlayer()
+ * [{ player_name: "DA Warner", ... }]
+ * @returns {Promise<void>} A promise that resolves after the search completes and results are logged.
+ **/
 async function searchPlayer() {
   const name = "DA Warner";
   console.log(`Searching for "${name}"...`);

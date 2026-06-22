@@ -29,6 +29,16 @@ export interface CricketBallEvent {
   wickets_in_hand: number;
 }
 
+/**
+ * Calculates the ball-by-ball momentum score and the next exponential-smoothing impact value for a cricket event.
+ * @example
+ * calculateBallByBallMomentum(event, previous_es_impact, "T20")
+ * { score: 72.5, next_es_impact: 3.14 }
+ * @param {CricketBallEvent} event - The current ball event to evaluate.
+ * @param {number} previous_es_impact - The previous exponential-smoothing impact value.
+ * @param {"T20" | "ODI" | "TEST"} format - The match format used to select momentum configuration.
+ * @returns {{ score: number; next_es_impact: number }} An object containing the normalized momentum score and the updated exponential-smoothing impact.
+ */
 export function calculateBallByBallMomentum(
   event: CricketBallEvent,
   previous_es_impact: number,

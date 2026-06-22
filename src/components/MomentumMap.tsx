@@ -17,6 +17,14 @@ interface MomentumPoint {
   isTurningPoint?: boolean;
 }
 
+/**
+* Analyzes match innings data to generate and display a momentum pressure chart with turning points.
+* @example
+* MomentumMap(rawInfo)
+* JSX element rendering a momentum analysis panel or a loading state
+* @param {{rawInfo: any}} rawInfo - Match data containing innings, overs, and deliveries used to compute pressure waves.
+* @returns {JSX.Element} A React component that renders a momentum map visualization for the selected inning.
+**/
 export const MomentumMap: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
   const [data, setData] = useState<MomentumPoint[]>([]);
   const [activeInning, setActiveInning] = useState<number>(0);

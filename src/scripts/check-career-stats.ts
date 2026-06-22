@@ -9,6 +9,13 @@ const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
 
 const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
 
+/**
+ * Checks and logs career stats for a specific player ID from the database.
+ * @example
+ * checkCareerStats()
+ * undefined
+ * @returns {Promise<void>} Resolves when the career stats query has been completed and logged.
+ **/
 async function checkCareerStats() {
   const playerId = "dcce6f09";
   console.log(`Checking career stats for "${playerId}"...`);

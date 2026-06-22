@@ -14,6 +14,13 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+/**
+* Checks the players table by logging a sample of players and the total player count.
+* @example
+* checkPlayers()
+* undefined
+* @returns {Promise<void>} Resolves after logging player data or errors to the console.
+**/
 async function checkPlayers() {
   console.log("Checking players table...");
   const { data: players, error } = await supabase

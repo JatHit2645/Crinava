@@ -15,6 +15,16 @@ export interface PlayerStats {
   overs: string;
 }
 
+/**
+ * Aggregates batting and bowling statistics for a player from a list of deliveries.
+ * @example
+ * aggregateDeliveries(deliveries, playerId, playerName)
+ * { name: "Player Name", runs: 25, ballsFaced: 18, fours: 3, sixes: 1, dismissals: 1, wickets: 2, runsConceded: 20, ballsBowled: 24, average: "25.00", strikeRate: "138.89", economy: "5.00", bowlingAverage: "10.00", overs: "4.0" }
+ * @param {any[]} deliveries - Array of delivery objects containing batting and bowling event data.
+ * @param {string | number} playerId - Unique identifier of the player to aggregate statistics for.
+ * @param {string} playerName - Name of the player to include in the returned stats.
+ * @returns {PlayerStats} Aggregated player statistics including batting and bowling metrics.
+ **/
 export function aggregateDeliveries(
   deliveries: any[],
   playerId: string | number,

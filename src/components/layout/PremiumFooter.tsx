@@ -10,6 +10,13 @@ import {
   Globe,
 } from "lucide-react";
 
+/**
+ * Renders a premium, multi-column footer with brand info, navigation links, newsletter signup, and legal links.
+ * @example
+ * PremiumFooter()
+ * <footer>...</footer>
+ * @returns {JSX.Element} The footer UI element.
+ **/
 export const PremiumFooter: React.FC = () => {
   return (
     <footer className="relative pt-24 pb-12 px-6 overflow-hidden">

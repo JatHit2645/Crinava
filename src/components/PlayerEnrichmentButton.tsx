@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
 
+/**
+ * Renders a control panel for starting, pausing, resuming, stopping, and debugging the player enrichment process while polling and displaying live progress/status.
+ * @example
+ * PlayerEnrichmentButton()
+ * <div>...</div>
+ * @returns {JSX.Element} The Player Enrichment control UI component.
+ */
 export function PlayerEnrichmentButton() {
   const [status, setStatus] = useState<any>(null);
   const [message, setMessage] = useState("");
@@ -9,6 +16,13 @@ export function PlayerEnrichmentButton() {
 
   // Polling for status
   useEffect(() => {
+    /**
+     * Fetches the enrichment status from the server and updates the UI with the latest status or error message.
+     * @example
+     * sync()
+     * undefined
+     * @returns {Promise<void>} A promise that resolves once the status request has completed and the UI has been updated.
+     */
     const fetchStatus = async () => {
       try {
         const res = await fetch("/api/enrich-status");
@@ -127,6 +141,13 @@ export function PlayerEnrichmentButton() {
     }
   };
 
+  /**
+   * Checks the server debug connection and updates the status message based on Supabase configuration.
+   * @example
+   * sync()
+   * void
+   * @returns {Promise<void>} A promise that resolves when the connection check and status update are complete.
+   **/
   const debugConnection = async () => {
     try {
       setMessage("Checking connection...");
@@ -144,6 +165,13 @@ export function PlayerEnrichmentButton() {
     }
   };
 
+  /**
+   * Checks the schema endpoint, updates the UI message with schema information, and logs a sample response.
+   * @example
+   * sync()
+   * "Columns: id, name, created_at"
+   * @returns {Promise<void>} A promise that resolves after the schema check completes and the message is updated.
+   **/
   const debugSchema = async () => {
     try {
       setMessage("Checking schema...");

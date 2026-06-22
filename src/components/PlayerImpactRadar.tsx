@@ -14,6 +14,16 @@ export const PlayerImpactRadar: React.FC<{
   rawInfo: any;
   playerId: string;
   allPlayers?: string[];
+/**
+ * Renders a player impact radar chart for batting and bowling performance across innings.
+ * @example
+ * PlayerImpactRadar({ rawInfo, playerId: "P123", allPlayers: ["P123", "P456"] })
+ * <PlayerImpactRadar />
+ * @param {Object} rawInfo - Match data containing innings, overs, deliveries, and related score details.
+ * @param {string} playerId - Initial player identifier to analyze.
+ * @param {Array<string>} allPlayers - List of selectable player identifiers.
+ * @returns {JSX.Element} A React component displaying radar charts, inning selection, and player impact summaries.
+ **/
 }> = ({ rawInfo, playerId: initialPlayerId, allPlayers = [] }) => {
   const [battingData, setBattingData] = useState<any[]>([]);
   const [bowlingData, setBowlingData] = useState<any[]>([]);
@@ -199,6 +209,15 @@ export const PlayerImpactRadar: React.FC<{
     setLoading(false);
   }, [selectedPlayer, rawInfo, activeInning]);
 
+  /**
+  * Renders a custom tooltip for the player impact radar chart when a data point is active.
+  * @example
+  * CustomTooltip({ active: true, payload: [{ payload: { subject: "Passing", value: 85 } }] })
+  * <div>Passing 85</div>
+  * @param {{any}} active - Indicates whether the tooltip should be shown.
+  * @param {{any}} payload - Chart payload containing the active data point information.
+  * @returns {{JSX.Element | null}} Tooltip markup when active data is available, otherwise null.
+  **/
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (

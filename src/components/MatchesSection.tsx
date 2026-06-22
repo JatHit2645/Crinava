@@ -57,6 +57,23 @@ interface MatchData {
 }
 
 // --- Helper to parse Cricsheet JSON into a readable scorecard ---
+/**
+* Parses match innings data and returns structured team batting, bowling, extras, and dismissal summaries.
+* @example
+* parseMatchInfo(rawInfo)
+* [{
+*   team: "Team A",
+*   totalRuns: 150,
+*   totalWickets: 8,
+*   overs: "20.0",
+*   batters: [],
+*   bowlers: [],
+*   extras: { b: 0, lb: 0, w: 0, nb: 0, p: 0, total: 0 },
+*   didNotBat: []
+* }]
+* @param {any} rawInfo - Raw match info object or JSON string containing innings data.
+* @returns {Array} Array of innings summaries for each team.
+**/
 const parseScorecard = (rawInfo: any) => {
   if (typeof rawInfo === "string") {
     try {
@@ -250,6 +267,14 @@ const parseScorecard = (rawInfo: any) => {
 };
 
 // --- Helper to calculate Match MVP from reconstructed scorecard ---
+/**
+ * Calculates and ranks players by total impact score from match scorecard innings data.
+ * @example
+ * scorecard([{ batters: [{ name: "Player A", runs: 30, sixes: 2, balls: 20 }], bowlers: [{ name: "Player B", wickets: 2, dots: 10, runs: 24 }] }])
+ * [{ player_name: "Player A", total_impact_score: 33 }, { player_name: "Player B", total_impact_score: 45 }]
+ * @param {any[]} scorecard - Array of inning objects containing batter and bowler statistics.
+ * @returns {Array<{ player_name: string, total_impact_score: number }>} Sorted array of players with their computed impact scores in descending order.
+ **/
 const calculateFallbackMvp = (scorecard: any[]) => {
   const players: Record<string, any> = {};
   scorecard.forEach((inning) => {
@@ -271,6 +296,14 @@ const calculateFallbackMvp = (scorecard: any[]) => {
   );
 };
 
+/**
+ * Displays a searchable, sortable, and filterable list of tournament series and calls a selection handler when a series is clicked.
+ * @example
+ * MatchesSection({ onSelect: (tournament) => console.log(tournament) })
+ * <Tournament /> selection list rendered with filters applied
+ * @param {{ onSelect: (tournament: Tournament) => void }} props - Component props containing the callback invoked when a tournament series is selected.
+ * @returns {JSX.Element} The rendered tournaments and series section UI.
+ **/
 const TournamentsList: React.FC<{ onSelect: (t: Tournament) => void }> = ({
   onSelect,
 }) => {
@@ -292,6 +325,13 @@ const TournamentsList: React.FC<{ onSelect: (t: Tournament) => void }> = ({
 
   // Fetch all series once on mount
   useEffect(() => {
+    /**
+     * Fetches series data from the API, updates loading and error state, and stores the results.
+     * @example
+     * sync()
+     * undefined
+     * @returns {Promise<void>} Resolves when the series data has been fetched and state has been updated.
+     */
     const fetchAllSeries = async () => {
       setLoading(true);
       setError(null);
@@ -321,7 +361,29 @@ const TournamentsList: React.FC<{ onSelect: (t: Tournament) => void }> = ({
 
   // Filter and sort client-side
   useEffect(() => {
+    /**
+     * Filters and sorts tournament series based on search, league, gender, format, and year range criteria, then updates the displayed list.
+     * @example
+     * applyTournamentFiltersAndSort()
+     * undefined
+     * @param {Tournament[]} allSeries - List of tournament series to filter and sort.
+     * @param {string} searchQuery - Search text used to match tournament event names.
+     * @param {boolean} leaguesOnly - Whether to restrict results to league-style tournaments.
+     * @param {"all"|"female"|"male"} genderFilter - Gender filter to apply to tournament names.
+     * @param {string} formatFilter - Match format filter to apply.
+     * @param {[number, number]} yearRange - Inclusive year range used to keep tournaments within bounds.
+     * @param {"newest"|"oldest"|"name_asc"|"name_desc"} sortBy - Sorting mode for the filtered tournaments.
+     * @returns {void} Does not return a value; updates the tournaments state with the filtered and sorted results.
+     **/
     const filterAndSort = () => {
+      /**
+      * Determines a tournament date string by extracting and comparing year values from tournament data.
+      * @example
+      * getTournamentDate(t)
+      * "2024-12-31"
+      * @param {Tournament} t - Tournament object containing event name, season, and optional start date.
+      * @returns {string} A resolved date string based on the latest year found, the start date, or a fallback date.
+      **/
       const getSortDate = (t: Tournament) => {
         const years: number[] = [];
         const allText = `${t.event_name} ${t.season} ${t.start_date || ""}`;
@@ -750,6 +812,16 @@ const TournamentMatchesList: React.FC<{
   tournament: Tournament;
   onBack: () => void;
   onSelectMatch: (id: number) => void;
+/**
+* Renders a tournament matches dashboard with tabs for matches, stats, verdicts, AI insights, and tournament leaders.
+* @example
+* MatchesSection({ tournament, onBack, onSelectMatch })
+* <MatchesSection />
+* @param {{object}} tournament - Tournament details including event name and season used to fetch and display data.
+* @param {{function}} onBack - Callback invoked to navigate back from the current view.
+* @param {{function}} onSelectMatch - Callback invoked when a match is selected from the matches list.
+* @returns {{JSX.Element}} A React component that displays tournament matches, statistics, verdicts, and generated insights.
+**/
 }> = ({ tournament, onBack, onSelectMatch }) => {
   const [matches, setMatches] = useState<MatchData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -783,6 +855,13 @@ const TournamentMatchesList: React.FC<{
   const [aiLoading, setAiLoading] = useState(false);
 
   useEffect(() => {
+    /**
+    * Fetches matches for the current tournament, maps the response into match data, and updates loading state.
+    * @example
+    * sync()
+    * undefined
+    * @returns {Promise<void>} Resolves when matches are fetched and state is updated.
+    **/
     const fetchMatches = async () => {
       setLoading(true);
       try {
@@ -821,6 +900,14 @@ const TournamentMatchesList: React.FC<{
   // Lazy load stats only when the stats tab is active
   useEffect(() => {
     if (activeTab === "stats" && !stats && matches.length > 0) {
+      /**
+       * Sets the stats loading state, logs a server-side stats request, and initializes stats with empty arrays.
+       * @example
+       * sync()
+       * undefined
+       * @param {void} undefined - This function does not accept any arguments.
+       * @returns {void} This function does not return a value.
+       */
       const fetchStats = async () => {
         setStatsLoading(true);
         try {
@@ -859,6 +946,13 @@ const TournamentMatchesList: React.FC<{
       ["predict", "playingXI", "stories"].includes(activeTab) &&
       !aiContent[activeTab]
     ) {
+      /**
+       * Generates AI-powered tournament insights for the currently active tab and stores the result in state.
+       * @example
+       * sync()
+       * "Predict the outcome and key trends for the tournament..."
+       * @returns {Promise<void>} Resolves when the AI content has been fetched and state has been updated.
+       */
       const fetchAiContent = async () => {
         setAiLoading(true);
         try {
@@ -903,6 +997,16 @@ const TournamentMatchesList: React.FC<{
       </div>
     );
 
+  /**
+   * Renders a ranked list of match items with an optional value formatter.
+   * @example
+   * renderMatchList(list, valueKey, formatFn)
+   * <div>...</div>
+   * @param {any[]} list - Array of items to display in the list.
+   * @param {string} valueKey - Key used to read the displayed value from each item.
+   * @param {(p: any) => string | number} [formatFn] - Optional formatter applied to each item value before rendering.
+   * @returns {JSX.Element} A JSX element containing the formatted list or a fallback message when the list is empty.
+   **/
   const renderStatList = (
     list: any[],
     valueKey: string,
@@ -1186,6 +1290,13 @@ const MatchDetail: React.FC<{ matchId: number; onBack: () => void }> = ({
   }, [matchId]);
 
   useEffect(() => {
+    /**
+     * Fetches match details, reconstructs match and scorecard data from deliveries, and updates component state.
+     * @example
+     * sync()
+     * undefined
+     * @returns {Promise<void>} A promise that resolves when match data has been loaded and state has been updated.
+     **/
     const fetchMatchData = async () => {
       setLoading(true);
       try {
@@ -1801,6 +1912,14 @@ const getApiBaseUrl = () => {
   return "https://jathit2645-crinava-live-engine.hf.space";
 };
 
+/**
+* Renders a live matches section with search, state filtering, polling-based data refresh, and match selection handling.
+* @example
+* MatchesSection({ onSelect: handleSelect })
+* <MatchesSection onSelect={handleSelect} />
+* @param {{(match: LiveMatch) => void}} onSelect - Callback invoked when a match card is clicked.
+* @returns {JSX.Element} A JSX element displaying loading, error, empty, or filtered match results.
+**/
 const LiveMatchesList: React.FC<{ onSelect: (m: LiveMatch) => void }> = ({
   onSelect,
 }) => {
@@ -1811,6 +1930,13 @@ const LiveMatchesList: React.FC<{ onSelect: (m: LiveMatch) => void }> = ({
   const [stateFilter, setStateFilter] = useState<string>("all");
 
   useEffect(() => {
+    /**
+    * Fetches live matches from the API and updates the component state.
+    * @example
+    * sync()
+    * void
+    * @returns {void} No return value.
+    **/
     const fetchLive = async () => {
       try {
         setError(null);
@@ -2024,6 +2150,14 @@ const LiveMatchDetail: React.FC<{ match: LiveMatch; onBack: () => void }> = ({
     let eventSource: EventSource | null = null;
     let pollInterval: any = null;
 
+    /**
+     * Processes incoming live match packets and updates score, telemetry, win prediction, and history state.
+     * @example
+     * handlePacket(packet)
+     * undefined
+     * @param {LivePacket} packet - Incoming live packet containing score, telemetry, scorecard cache, and win predictor data.
+     * @returns {void} No return value.
+     **/
     const addPacket = (packet: LivePacket) => {
       // Handle scorecard type packets from SSE
       if (packet.type === "scorecard") {
@@ -2112,7 +2246,22 @@ const LiveMatchDetail: React.FC<{ match: LiveMatch; onBack: () => void }> = ({
       });
     };
 
+    /**
+    * Fetches match history packets and starts periodic synchronization of live score updates.
+    * @example
+    * syncMatchHistory(match)
+    * "Waiting for first ball..."
+    * @param {object} match - Match object containing the match_id used to load history.
+    * @returns {void} No value is returned; the function triggers side effects such as state updates and polling.
+    **/
     const startPollingFallback = () => {
+      /**
+       * Synchronizes match history from the server and updates the current score or error state.
+       * @example
+       * sync()
+       * undefined
+       * @returns {void} No value is returned.
+      **/
       const sync = async () => {
         try {
           const resp = await fetch(`${base}/history/${match.match_id}`);
@@ -2171,6 +2320,13 @@ const LiveMatchDetail: React.FC<{ match: LiveMatch; onBack: () => void }> = ({
   // Poll scorecard every 10 seconds
   useEffect(() => {
     const base = getApiBaseUrl();
+    /**
+    * Fetches the scorecard data for the current match and updates state with the latest scorecard and telemetry.
+    * @example
+    * sync()
+    * undefined
+    * @returns {Promise<void>} Resolves when the scorecard fetch and any state updates are complete.
+    **/
     const fetchScorecard = async () => {
       try {
         const resp = await fetch(`${base}/scorecard/${match.match_id}`);
@@ -2195,6 +2351,18 @@ const LiveMatchDetail: React.FC<{ match: LiveMatch; onBack: () => void }> = ({
     winHistory.length > 0 ? winHistory[winHistory.length - 1] : null;
 
   // Helper: render scorecard from backend data
+  /**
+   * Renders the live scorecard panel for a match, including current players, innings tabs, batting and bowling tables, extras, partnerships, and dismissals.
+   * @example
+   * MatchesSection({ scorecardData, latestTelemetry, match, activeScorecardInning, setActiveScorecardInning })
+   * <ScorecardPanel />
+   * @param {{object}} scorecardData - Scorecard payload containing innings data, player mapping, telemetry, and extras.
+   * @param {{object}} latestTelemetry - Most recent live telemetry used as a fallback for active players and extras.
+   * @param {{object}} match - Match metadata used to resolve fallback team names.
+   * @param {{number}} activeScorecardInning - Index of the currently selected innings.
+   * @param {{function}} setActiveScorecardInning - State updater used to switch the active innings tab.
+   * @returns {JSX.Element} A JSX scorecard view, loading state, or fetching state depending on available data.
+   **/
   const renderScorecard = () => {
     if (!scorecardData)
       return (
@@ -2540,6 +2708,14 @@ const LiveMatchDetail: React.FC<{ match: LiveMatch; onBack: () => void }> = ({
   };
 
   // SVG Win % Momentum Graph
+  /**
+   * Renders a cricket win-probability trend graph and per-ball run-flow visualization.
+   * @example
+   * renderMatchMomentumChart()
+   * <div>...</div>
+   * @param {Array} winHistory - Array of win probability data points for teams A and B over time.
+   * @returns {JSX.Element|null} A JSX element containing the charts, or a placeholder message when insufficient data is available.
+   **/
   const renderGraph = () => {
     if (winHistory.length < 2)
       return (
@@ -2878,6 +3054,14 @@ const LiveMatchDetail: React.FC<{ match: LiveMatch; onBack: () => void }> = ({
   );
 };
 
+/**
+ * Renders a matches section with live/archived tournament navigation and detail views.
+ * @example
+ * MatchesSection({ onBackToHome: () => console.log("Back to home") })
+ * undefined
+ * @param {{ onBackToHome?: () => void }} props - Component props containing an optional callback to return to the home view.
+ * @returns {JSX.Element} The matches section UI with selectable lists and detail panels.
+ **/
 export const MatchesSection: React.FC<{ onBackToHome?: () => void }> = ({
   onBackToHome,
 }) => {
@@ -2892,6 +3076,14 @@ export const MatchesSection: React.FC<{ onBackToHome?: () => void }> = ({
     null,
   );
 
+  /**
+   * Navigates back to the previous view or triggers the home callback depending on the current view.
+   * @example
+   * handleBack()
+   * undefined
+   * @param {void} - This function does not accept any arguments.
+   * @returns {void} Does not return a value.
+   */
   const handleBack = () => {
     if (view === "live_detail") {
       setView("tournaments");

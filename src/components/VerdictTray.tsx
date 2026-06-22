@@ -6,6 +6,14 @@ interface VerdictTrayProps {
   onCompare?: () => void;
 }
 
+/**
+ * Renders a bottom-fixed tray showing selected players and a compare action.
+ * @example
+ * VerdictTray(onCompare)
+ * null
+ * @param {() => void} onCompare - Callback invoked when the Compare button is clicked.
+ * @returns {JSX.Element | null} The verdict tray UI, or null when no players are selected.
+ */
 export const VerdictTray: React.FC<VerdictTrayProps> = ({ onCompare }) => {
   const { selectedPlayerIds, removePlayer } = useVerdictStore();
 

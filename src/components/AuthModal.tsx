@@ -9,6 +9,13 @@ interface AuthModalProps {
   session: any;
 }
 
+/**
+ * Renders a Google sign-in icon as an SVG element.
+ * @example
+ * GoogleIcon()
+ * <svg>...</svg>
+ * @returns {JSX.Element} The Google icon SVG markup.
+ **/
 const GoogleLogo = () => (
   <svg
     width="18"
@@ -36,6 +43,16 @@ const GoogleLogo = () => (
   </svg>
 );
 
+/**
+ * Renders an authentication modal that supports Google sign-in and email magic link sign-in.
+ * @example
+ * AuthModal({ isOpen: true, onClose: () => {}, session: null })
+ * undefined
+ * @param {{boolean}} isOpen - Controls whether the modal is visible.
+ * @param {{() => void}} onClose - Callback invoked to close the modal.
+ * @param {{any}} session - Current authenticated session; closes the modal when present.
+ * @returns {{JSX.Element | null}} The authentication modal UI, or null when closed.
+ **/
 export const AuthModal: React.FC<AuthModalProps> = ({
   isOpen,
   onClose,
@@ -70,6 +87,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     return "Login failed. Please try again.";
   };
 
+  /**
+  * Initiates Google OAuth sign-in through Supabase and handles loading, error, and modal close state.
+  * @example
+  * sync()
+  * void
+  * @returns {Promise<void>} A promise that resolves after the sign-in attempt completes.
+  **/
   const handleGoogleSignIn = async () => {
     setLoading(true);
     setError(null);
@@ -89,6 +113,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
   };
 
+  /**
+   * Handles email sign-in via Supabase OTP, sets loading and error states, and stores the email on success.
+   * @example
+   * sync(event)
+   * void
+   * @param {React.FormEvent} e - The form submission event to prevent default behavior.
+   * @returns {void} No return value.
+   **/
   const handleMagicLink = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;

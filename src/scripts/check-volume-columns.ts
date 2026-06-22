@@ -9,6 +9,13 @@ const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
 
 const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
 
+/**
+* Checks the `player_volume_stats` table and logs available column names or confirms common column existence.
+* @example
+* checkVolumeColumns()
+* undefined
+* @returns {Promise<void>} Resolves when the column check and logging are complete.
+**/
 async function checkVolumeColumns() {
   console.log("Checking player_volume_stats columns...");
   // We'll try to get one row even if empty to see columns? No, if empty it won't show.

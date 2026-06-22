@@ -9,6 +9,15 @@ interface PlayerProfileProps {
   onBack: () => void;
 }
 
+/**
+ * Fetches and displays a cricket player's career statistics, with verdict selection controls and fallback aggregation when precomputed stats are unavailable.
+ * @example
+ * PlayerProfile({ playerId: "Virat Kohli", onBack: () => {} })
+ * <PlayerProfile />
+ * @param {{string}} playerId - Player name used to look up the player record and load career statistics.
+ * @param {{Function}} onBack - Callback invoked when the back button is clicked.
+ * @returns {{JSX.Element}} The rendered player profile UI.
+ **/
 export const PlayerProfile: React.FC<PlayerProfileProps> = ({
   playerId,
   onBack,
@@ -19,6 +28,14 @@ export const PlayerProfile: React.FC<PlayerProfileProps> = ({
   const isAdded = selectedPlayerIds.includes(playerId);
 
   useEffect(() => {
+    /**
+    * Fetches and sets a player's profile and career stats from Supabase, with a delivery-level fallback if precomputed stats are unavailable.
+    * @example
+    * sync()
+    * undefined
+    * @param {void} void - This function takes no arguments.
+    * @returns {Promise<void>} A promise that resolves when player stats loading has completed.
+    **/
     const fetchStats = async () => {
       setLoading(true);
       try {
