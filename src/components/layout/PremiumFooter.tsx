@@ -22,6 +22,13 @@ const FooterLinkItem = ({ item }: { item: string }) => (
   </li>
 );
 
+/**
+ * Renders a premium footer with branding, platform and resource links, social icons, newsletter signup, and legal links.
+ * @example
+ * PremiumFooter()
+ * <footer>...</footer>
+ * @returns {JSX.Element} The footer section for the page layout.
+ **/
 export const PremiumFooter: React.FC = () => {
   return (
     <footer className="relative pt-24 pb-12 px-6 overflow-hidden">

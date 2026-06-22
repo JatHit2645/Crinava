@@ -6,6 +6,14 @@ interface PremiumHeroProps {
   onGetStarted: () => void;
 }
 
+/**
+ * Renders a premium hero section for the landing page with animated branding, call-to-action buttons, and trust indicators.
+ * @example
+ * onGetStarted()
+ * undefined
+ * @param {Function} onGetStarted - Callback invoked when the primary "Launch Oracle Engine" button is clicked.
+ * @returns {JSX.Element} The rendered landing page hero section.
+ */
 export const PremiumHero: React.FC<PremiumHeroProps> = ({ onGetStarted }) => {
   return (
     <section className="relative pt-40 pb-24 px-6 overflow-hidden">

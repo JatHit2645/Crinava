@@ -9,6 +9,15 @@ export interface HeatmapData {
   isWicket: boolean;
 }
 
+/**
+* Extracts delivery-level data for a specific inning from raw match information.
+* @example
+* extractInningData(rawInfo, activeInning)
+* [{ over_no: 1, ball_no: 1, ... }, { over_no: 1, ball_no: 2, ... }]
+* @param {any} rawInfo - Raw match info object containing innings data.
+* @param {number} activeInning - Zero-based index of the inning to extract.
+* @returns {any[]} Return an array of normalized delivery objects for the selected inning, or an empty array if unavailable.
+**/
 export function extractInningData(rawInfo: any, activeInning: number): any[] {
   if (!rawInfo || !rawInfo.innings) {
     return [];
@@ -58,6 +67,15 @@ export function extractInningData(rawInfo: any, activeInning: number): any[] {
   return deliveries;
 }
 
+/**
+ * Parses raw inning delivery data into heatmap-friendly delivery summaries for an active inning.
+ * @example
+ * parseInningDeliveries(rawInfo, 1)
+ * [{ over_no: 1, ball_no: 1, impactScore: 2, wicket_kind: null, runs: 0, batter: "Unknown", bowler: "Unknown", isWicket: false }]
+ * @param {any} rawInfo - Raw match information containing inning delivery data.
+ * @param {number} activeInning - The inning number to extract and parse.
+ * @returns {HeatmapData[]} Array of parsed delivery objects with scoring and wicket details.
+ **/
 export function parseInningDeliveries(rawInfo: any, activeInning: number): HeatmapData[] {
   const deliveries = extractInningData(rawInfo, activeInning);
 

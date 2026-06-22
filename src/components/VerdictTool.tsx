@@ -58,6 +58,14 @@ interface VerdictResult {
 
 const COLORS = ["#00C9B7", "#FFD700", "#FF4D4D", "#A855F7", "#3B82F6"];
 
+/**
+ * Renders a labeled select dropdown for choosing a player and propagating the selected value.
+ * @example
+ * SelectField({ label: 'Player', value: 'Alice', onChange: (val) => console.log(val), options: [{ id: '1', name: 'Alice' }] })
+ * <select>...</select>
+ * @param {{label: string, value: string, onChange: (val: string) => void, options: { id: string, name: string }[]}} props - Props used to configure the label, current value, change handler, and selectable options.
+ * @returns {JSX.Element} A JSX element containing a label and a styled HTML select input.
+ */
 const PlayerSelect = ({ label, value, onChange, options }: { label: string, value: string, onChange: (val: string) => void, options: { id: string, name: string }[] }) => (
   <div className="space-y-1.5">
     <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">{label}</label>
@@ -98,6 +106,13 @@ export const VerdictTool: React.FC<VerdictToolProps> = ({ scope, context }) => {
   );
 
   useEffect(() => {
+    /**
+    * Fetches up to 100 players from Supabase, sorts them by name, and updates the player list state.
+    * @example
+    * sync()
+    * undefined
+    * @returns {Promise<void>} A promise that resolves after the players have been fetched and state is updated.
+    **/
     const fetchPlayers = async () => {
       const { data } = await supabase
         .from("players")
@@ -129,6 +144,14 @@ export const VerdictTool: React.FC<VerdictToolProps> = ({ scope, context }) => {
     localStorage.setItem("recent_verdicts", JSON.stringify(updated));
   };
 
+  /**
+  * Handles the form submission for generating a verdict by sending the current query and context to the server.
+  * @example
+  * sync(event)
+  * void
+  * @param {React.FormEvent} e - The form submit event.
+  * @returns {Promise<void>} A promise that resolves when the verdict request completes.
+  **/
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim()) return;

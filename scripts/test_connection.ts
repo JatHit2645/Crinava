@@ -2,6 +2,13 @@ import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 import { CricketDataService } from "../src/services/cricketData";
 
+/**
+ * Tests the Supabase connection by attempting to fetch recent cricket matches and logging the result.
+ * @example
+ * testConnection()
+ * undefined
+ * @returns {Promise<void>} A promise that resolves when the connection test completes.
+ */
 async function testConnection() {
   console.log("Testing Supabase Connection...");
   try {

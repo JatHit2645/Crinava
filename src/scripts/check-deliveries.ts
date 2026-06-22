@@ -9,6 +9,13 @@ const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
 
 const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
 
+/**
+* Checks deliveries associated with a specific player ID and logs the query results.
+* @example
+* checkDeliveries()
+* undefined
+* @returns {Promise<void>} A promise that resolves when the deliveries lookup and logging complete.
+**/
 async function checkDeliveries() {
   const playerId = "dcce6f09";
   console.log(`Checking deliveries for "${playerId}"...`);

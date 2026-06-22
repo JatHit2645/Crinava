@@ -9,6 +9,14 @@ const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
 
 const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
 
+/**
+* Fetches a single match record from Supabase and logs basic scorecard information for inspection.
+* @example
+* checkMatchScorecard()
+* undefined
+* @param {void} - This function does not accept any arguments.
+* @returns {Promise<void>} Resolves when the match data is logged, or returns early if an error occurs.
+**/
 async function checkMatchScorecard() {
   const { data: match, error } = await supabase
     .from("matches")

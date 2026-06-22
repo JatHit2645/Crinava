@@ -12,6 +12,18 @@ interface UsernameModalProps {
   onClose: () => void;
 }
 
+/**
+ * Modal for creating and validating a unique username, date of birth, and gender before saving the user profile.
+ * @example
+ * UsernameModal({ isOpen, uid, email, onComplete, onClose })
+ * undefined
+ * @param {{boolean}} isOpen - Controls whether the modal is displayed.
+ * @param {{string}} uid - Unique user identifier used to store the profile.
+ * @param {{string}} email - User email address saved in the profile.
+ * @param {{function}} onComplete - Callback invoked after successful profile creation with the chosen username.
+ * @param {{function}} onClose - Callback invoked when the modal is dismissed.
+ * @returns {{JSX.Element|null}} The rendered modal UI when open, otherwise null.
+ **/
 export const UsernameModal: React.FC<UsernameModalProps> = ({
   isOpen,
   uid,
@@ -36,6 +48,14 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
     return 31;
   };
 
+  /**
+   * Validates whether a date string is in YYYY/MM/DD format and represents a real calendar date.
+   * @example
+   * isValidDate("2024/02/29")
+   * true
+   * @param {string} date - Date string to validate in YYYY/MM/DD format.
+   * @returns {boolean} True if the date is valid; otherwise, false.
+   **/
   const validateDOB = (date: string) => {
     const parts = date.split("/");
     if (parts.length !== 3) return false;
@@ -76,6 +96,14 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
 
 
 
+  /**
+   * Handles username submission by validating availability and profile fields, then creates the username mapping and user profile in Supabase.
+   * @example
+   * sync(event)
+   * void
+   * @param {React.FormEvent} e - Form submission event.
+   * @returns {Promise<void>} Resolves when the username and profile are created or an error is handled.
+   **/
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isAvailable || !isDobValid || loading) return;

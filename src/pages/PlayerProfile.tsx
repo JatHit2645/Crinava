@@ -20,6 +20,16 @@ interface PlayerProfileProps {
   onBack: () => void;
 }
 
+/**
+ * Displays a player's career profile, fetching stats from Supabase and allowing the player to be added or removed from the verdict list.
+ * @example
+ * PlayerProfile({ playerId: "Virat Kohli", onBack: () => {} })
+ * <player profile view>
+ * @param {object} props - Component props.
+ * @param {string} props.playerId - Player name used to look up and display career statistics.
+ * @param {function} props.onBack - Callback invoked when the back button is clicked.
+ * @returns {JSX.Element} The rendered player profile UI, or a loading spinner while stats are being fetched.
+ **/
 export const PlayerProfile: React.FC<PlayerProfileProps> = ({
   playerId,
   onBack,
@@ -30,6 +40,14 @@ export const PlayerProfile: React.FC<PlayerProfileProps> = ({
   const isAdded = selectedPlayerIds.includes(playerId);
 
   useEffect(() => {
+    /**
+    * Fetches and sets a player's profile and career stats from Supabase, with a delivery-level fallback if precomputed stats are unavailable.
+    * @example
+    * sync()
+    * undefined
+    * @param {void} void - This function takes no arguments.
+    * @returns {Promise<void>} A promise that resolves when player stats loading has completed.
+    **/
     const fetchStats = async () => {
       setLoading(true);
       try {

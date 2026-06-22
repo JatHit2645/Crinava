@@ -5,6 +5,14 @@ import { InningSelector } from "./shared/InningSelector";
 
 import { parseInningDeliveries, HeatmapData } from "../utils/matchParser";
 
+/**
+ * Renders an interactive ball-by-ball impact heatmap for a selected inning.
+ * @example
+ * TurningPointHeatmap({ rawInfo })
+ * <TurningPointHeatmap rawInfo={matchData} />
+ * @param {{rawInfo: any}} rawInfo - Raw match information used to generate inning deliveries and heatmap cells.
+ * @returns {JSX.Element} A heatmap UI showing delivery impact, with inning selection and detailed ball analysis modal.
+ **/
 export const TurningPointHeatmap: React.FC<{ rawInfo: any }> = ({
   rawInfo,
 }) => {

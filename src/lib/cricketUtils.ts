@@ -15,6 +15,16 @@ export interface PlayerStats {
   overs: string;
 }
 
+/**
+ * Aggregates batting and bowling statistics for a player from a list of delivery records.
+ * @example
+ * aggregateDeliveries(deliveries, playerId, playerName)
+ * { name: "Player Name", runs: 45, ballsFaced: 30, fours: 4, sixes: 1, dismissals: 1, wickets: 2, runsConceded: 28, ballsBowled: 24, average: "45.00", strikeRate: "150.00", economy: "7.00", bowlingAverage: "14.00", overs: "4.0" }
+ * @param {any[]} deliveries - List of delivery objects to process for batting and bowling stats.
+ * @param {string | number} playerId - Unique identifier of the player to match against delivery records.
+ * @param {string} playerName - Display name of the player to include in the returned stats.
+ * @returns {PlayerStats} Aggregated player statistics including batting, bowling, and rate metrics.
+ **/
 export function aggregateDeliveries(
   deliveries: any[],
   playerId: string | number,
@@ -41,6 +51,14 @@ export function aggregateDeliveries(
     }
   };
 
+  /**
+  * Updates bowling statistics for a delivery by filtering on bowler ID and aggregating balls, runs, and wickets.
+  * @example
+  * updateBowlingStats(d)
+  * undefined
+  * @param {any} d - Delivery object containing bowler, runs, extras, and wicket information.
+  * @returns {void} No return value.
+  **/
   const processBowling = (d: any) => {
     if (String(d.bowler_id) !== String(playerId)) return;
     const isWide = d.runs_extras > 0 && !d.wicket_kind;

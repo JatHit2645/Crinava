@@ -684,6 +684,11 @@ class CrexMatchWorker:
         return {"innings": parsed_innings, "telemetry": telemetry, "extras": all_extras}
 
     def _derive_batters(self, batters: list) -> tuple:
+        """Derive the striker and non-striker from a list of batter records.
+        Parameters:
+            - batters (list): List of batter dictionaries containing batting and dismissal data.
+        Returns:
+            - tuple: A pair of dictionaries representing the striker and non-striker, or None values when unavailable."""
         not_out_batters = [
             b for b in batters if not b.get("wicket_bowler") and b.get("r") != "-"
         ]
@@ -697,6 +702,11 @@ class CrexMatchWorker:
         return striker, non_striker
 
     def _derive_bowler(self, bowlers: list) -> dict:
+        """Derive the current bowler from feed items and a list of bowlers.
+        Parameters:
+            - bowlers (list): List of bowler dictionaries to search for a matching bowler ID.
+        Returns:
+            - dict: The matched bowler dictionary, or the last bowler in the list if no match is found."""
         current_bowler_id = ""
         for item in self.feed_items:
             if isinstance(item, dict) and item.get("type") == "b" and item.get("c1"):

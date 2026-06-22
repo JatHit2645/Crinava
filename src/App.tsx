@@ -69,6 +69,14 @@ import { PlayerProfile } from "./pages/PlayerProfile";
 
 // --- Celestial Organic Elements ---
 
+/**
+ * Renders a full-screen animated canvas background with twinkling stars and occasional shooting stars.
+ * @example
+ * StarFieldBackground()
+ * <canvas ... />
+ * @param {void} No arguments.
+ * @returns {JSX.Element} A fixed, full-screen canvas element used as a decorative animated background.
+ **/
 const StarfieldCanvas = () => {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
@@ -124,6 +132,13 @@ const StarfieldCanvas = () => {
     };
     window.addEventListener("resize", handleResize);
 
+    /**
+    * Animates a starry background with twinkling static stars and intermittent shooting stars.
+    * @example
+    * draw()
+    * undefined
+    * @returns {void} Starts the animation loop and draws the next frame.
+    **/
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
@@ -199,6 +214,13 @@ const StarfieldCanvas = () => {
   );
 };
 
+/**
+ * Renders a custom animated cursor with a glowing torch effect, trailing ring, and ink-like particles that react to mouse movement and hover targets.
+ * @example
+ * CustomCursor()
+ * null
+ * @returns {JSX.Element | null} The custom cursor overlay elements, or null when the cursor is not visible.
+ **/
 const CelestialCursor = () => {
   const [position, setPosition] = React.useState({ x: 0, y: 0 });
   const [trail, setTrail] = React.useState({ x: 0, y: 0 });
@@ -215,6 +237,14 @@ const CelestialCursor = () => {
     let currentX = position.x;
     let currentY = position.y;
 
+    /**
+    * Updates cursor position, visibility, hover state, and ink particle trail on mouse movement.
+    * @example
+    * handleMouseMove(e)
+    * undefined
+    * @param {MouseEvent} e - Mouse event containing the current pointer position and target element.
+    * @returns {void} This function does not return a value.
+    **/
     const handleMouseMove = (e: MouseEvent) => {
       currentX = e.clientX;
       currentY = e.clientY;
@@ -248,6 +278,13 @@ const CelestialCursor = () => {
     window.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseleave", handleMouseLeave);
 
+    /**
+    * Updates and animates the ink trail position and particle rendering on the canvas.
+    * @example
+    * updateTrail()
+    * void
+    * @returns {void} No return value.
+    **/
     const updateTrail = () => {
       setTrail((prev) => {
         const dx = currentX - prev.x;
@@ -332,6 +369,14 @@ const CelestialCursor = () => {
   );
 };
 
+/**
+ * Renders a 3D-tilting interactive card that rotates based on mouse movement.
+ * @example
+ * ArtifactResonance({ children: <div>Content</div>, onClick: () => console.log("clicked"), className: "custom" })
+ * <div>Content</div>
+ * @param {{children: React.ReactNode, onClick?: () => void, className?: string}} props - Component props including content, click handler, and optional CSS classes.
+ * @returns {JSX.Element} A styled div element that applies a perspective rotation effect and displays the provided children.
+ **/
 const ArtifactCard = ({
   children,
   onClick,
@@ -344,6 +389,14 @@ const ArtifactCard = ({
   const cardRef = React.useRef<HTMLDivElement>(null);
   const [rotation, setRotation] = React.useState({ x: 0, y: 0 });
 
+  /**
+  * Handles mouse movement over the card to calculate and set a tilt rotation based on cursor position.
+  * @example
+  * handleMouseMove(event)
+  * void
+  * @param {React.MouseEvent<HTMLDivElement>} e - Mouse event triggered by moving over the card element.
+  * @returns {void} Updates the card rotation state based on the cursor position.
+  **/
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
@@ -401,6 +454,16 @@ type AppTab =
   | "stories"
   | "player-profile";
 
+/**
+ * Renders a circular metallic gold icon badge with an infinity symbol and optional shadow.
+ * @example
+ * MetallicInfinityBadge({ size: 24, className: "my-class", noShadow: false })
+ * <div>...</div>
+ * @param {{number}} size - The width and height of the badge in pixels.
+ * @param {{string}} className - Additional CSS classes to apply to the outer container.
+ * @param {{boolean}} noShadow - Whether to disable the drop shadow around the badge.
+ * @returns {{JSX.Element}} A styled circular badge component.
+ **/
 const CoinIcon = ({
   size = 24,
   className = "",
@@ -507,6 +570,14 @@ interface MomentumPoint {
   isTurningPoint?: boolean;
 }
 
+/**
+* Generates a short AI-powered cricket blog post with a title, content, category, read time, and current date.
+* @example
+* generateBlogPost("India vs Australia Test analysis")
+* { title: "…", content: "…", category: "…", readTime: "…", date: "23 Jun 2026", isAI: true }
+* @param {string} topic - The cricket topic to generate the blog post about.
+* @returns {Promise<BlogPost>} A promise that resolves to the generated blog post object.
+**/
 async function generateBlogPost(topic: string): Promise<BlogPost> {
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
@@ -584,6 +655,14 @@ const apiKey =
   process.env.GEMINI_API_KEY || "AIzaSyByjeGftpfWRfOy79WR6-hFimBSyTqTfqI";
 const ai = new GoogleGenAI({ apiKey });
 
+/**
+* Analyzes a cricket-related claim using AI and returns a structured verdict with supporting statistics and nuance.
+* @example
+* getCricketVerdict("Virat Kohli averages over 50 in ODIs")
+* Promise resolving to a VerdictData object containing verdict, confidence, stats, and context.
+* @param {string} claim - Cricket claim to analyze and verify.
+* @returns {Promise<VerdictData>} Promise resolving to a verdict object with analysis results.
+**/
 async function getCricketVerdict(claim: string): Promise<VerdictData> {
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
@@ -651,6 +730,13 @@ async function getCricketVerdict(claim: string): Promise<VerdictData> {
   return JSON.parse(response.text || "{}");
 }
 
+/**
+ * Fetches the current live cricket scores worldwide and returns a list of match details.
+ * @example
+ * getLiveScores()
+ * [{ teams: ["Team A", "Team B"], score: "150/3", status: "Live", venue: "Stadium Name", format: "ODI", series: "Series Name", isLive: true }]
+ * @returns {Promise<MatchData[]>} A promise that resolves to an array of live match data objects, or an empty array if fetching fails.
+ **/
 async function getLiveScores(): Promise<MatchData[]> {
   const prompt =
     "Get the current cricket matches worldwide. Return a list of matches with teams, score, status, venue, format, and series name.";
@@ -713,6 +799,14 @@ async function getLiveScores(): Promise<MatchData[]> {
   }
 }
 
+/**
+ * Runs an AI-powered match simulation to predict the most probable winner using current match conditions.
+ * @example
+ * runMatchSimulation("India vs Australia")
+ * Promise<{ match: string, winner: string, probability: number, factors: { toss: string, weather: string, pitch: string, wind: string, humidity: string }, simulationDetails: string }>
+ * @param {string} match - The match description or fixture to simulate.
+ * @returns {Promise<PredictionResult>} A promise that resolves to the predicted match result and simulation details.
+ */
 async function runMatchSimulation(match: string): Promise<PredictionResult> {
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
@@ -754,6 +848,15 @@ async function runMatchSimulation(match: string): Promise<PredictionResult> {
 
 // --- Components ---
 
+/**
+ * Renders a verdict analysis card with status, confidence, statistics, and supporting context.
+ * @example
+ * VerdictResults({ data, onBack })
+ * <div>Analysis view rendered with verdict details</div>
+ * @param {Object} data - Verdict data used to display the claim, status, confidence, and statistics.
+ * @param {() => void} onBack - Callback invoked when the user clicks the back button.
+ * @returns {JSX.Element} The rendered verdict results view.
+ **/
 const VerdictCard = ({
   data,
   onBack,
@@ -761,6 +864,14 @@ const VerdictCard = ({
   data: VerdictData;
   onBack: () => void;
 }) => {
+  /**
+   * Maps a verdict status to a corresponding Tailwind text color class.
+   * @example
+   * getVerdictTextClass("TRUE")
+   * "text-mercury"
+   * @param {VerdictStatus} status - The verdict status to convert into a CSS class.
+   * @returns {string | undefined} The Tailwind text color class for the given status, or undefined if no match is found.
+   */
   const getStatusColor = (status: VerdictStatus) => {
     switch (status) {
       case "TRUE":
@@ -774,6 +885,14 @@ const VerdictCard = ({
     }
   };
 
+  /**
+   * Returns a status-specific shield icon component styled with the corresponding color.
+   * @example
+   * getStatusIcon("TRUE")
+   * <ShieldCheck className="size-8 text-green-500" />
+   * @param {VerdictStatus} status - The verdict status used to determine which icon to render.
+   * @returns {JSX.Element | undefined} The shield icon element for the given status, or undefined if no match is found.
+   */
   const getStatusIcon = (status: VerdictStatus) => {
     const color = getStatusColor(status);
     switch (status) {
@@ -1098,6 +1217,14 @@ export default function App() {
 
   useEffect(() => {
     if (activeDebateChat) {
+      /**
+       * Fetches the latest messages for the active debate chat and updates the message state.
+       * @example
+       * sync()
+       * void
+       * @param {void} None - This function takes no arguments.
+       * @returns {Promise<void>} A promise that resolves after the debate messages are fetched and state is updated.
+       **/
       const fetchMessages = async () => {
         try {
           const response = await fetch(
@@ -1124,6 +1251,14 @@ export default function App() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [debateMessages]);
 
+  /**
+   * Sends a new message to the active debate chat and appends the server-created message on success.
+   * @example
+   * sync("I agree with this point.")
+   * undefined
+   * @param {string} text - The message text to send to the current debate chat.
+   * @returns {void} No return value.
+   **/
   const sendDebateMessage = async (text: string) => {
     if (!activeDebateChat || !text.trim()) return;
     const debate = debates.find((d) => d.id === activeDebateChat);
@@ -1211,6 +1346,13 @@ export default function App() {
     if (session?.user) {
       setIsProfileLoading(true);
       // Real-time profile sync
+      /**
+       * Syncs the current user's profile from Supabase and updates UI state accordingly.
+       * @example
+       * sync()
+       * undefined
+       * @returns {Promise<void>} Resolves after the profile data is loaded and state is updated.
+       **/
       const fetchProfile = async () => {
         const { data, error } = await supabase
           .from("profiles")
@@ -1253,6 +1395,15 @@ export default function App() {
     }
   }, [profile]);
 
+  /**
+  * Synchronizes local and remote profile state for cricket IQ and coin balance updates.
+  * @example
+  * sync(1200, 500)
+  * undefined
+  * @param {number} [newIQ] - Optional new cricket IQ value to persist.
+  * @param {number} [newCoins] - Optional new coin balance value to persist.
+  * @returns {Promise<void>} Resolves when the sync operation completes.
+  **/
   const updateProfileStats = async (newIQ?: number, newCoins?: number) => {
     // Local state updates first
     if (newIQ !== undefined) setCricketIQ(newIQ);
@@ -1295,6 +1446,13 @@ export default function App() {
   const [debates, setDebates] = useState<Debate[]>([]);
 
   useEffect(() => {
+    /**
+    * Fetches debate data from the API and updates the debates state.
+    * @example
+    * sync()
+    * undefined
+    * @returns {Promise<void>} A promise that resolves after the fetch attempt completes.
+    **/
     const fetchDebates = async () => {
       console.log("Fetching debates...");
       try {
@@ -1329,6 +1487,14 @@ export default function App() {
   const [vertexResult, setVertexResult] = useState<any>(null);
   const [isSimulating, setIsSimulating] = useState(false);
 
+  /**
+   * Runs a Monte Carlo-based AI simulation for a given match name and updates the UI with the results.
+   * @example
+   * sync("Lakers vs Celtics")
+   * undefined
+   * @param {string} matchName - The name of the match to simulate.
+   * @returns {void} No return value.
+   **/
   const runVertexSimulation = async (matchName: string) => {
     if (!matchName) return;
     setIsSimulating(true);
@@ -1391,6 +1557,14 @@ export default function App() {
   } | null>(null);
 
   useEffect(() => {
+    /**
+     * Fetches career trajectory data for the selected player and updates state.
+     * @example
+     * sync()
+     * undefined
+     * @param {void} None - This function does not accept any arguments.
+     * @returns {Promise<void>} A promise that resolves after the API request completes and state is updated.
+     **/
     const fetchCareer = async () => {
       if (!careerPlayer) return;
       try {
@@ -1491,6 +1665,14 @@ export default function App() {
     },
   ];
 
+  /**
+   * Adds a player to the selected Smart XI if the XI is not full and the player is not already selected.
+   * @example
+   * addPlayerToSmartXI(player)
+   * undefined
+   * @param {Player} player - The player to add to the Smart XI.
+   * @returns {void} Does not return a value.
+   **/
   const handleAddToXI = (player: Player) => {
     /*
     if (!session) {
@@ -1515,6 +1697,14 @@ export default function App() {
     return Math.min(99, Math.round(avg + selectedSmartXI.length * 2));
   };
 
+  /**
+   * Purchases one or more raffle tickets, updates coin balance, and generates ticket codes.
+   * @example
+   * purchaseRaffleTickets(3)
+   * undefined
+   * @param {number} qty - Number of raffle tickets to purchase.
+   * @returns {void} No return value.
+   **/
   const handleBuyTicket = (qty: number = 1) => {
     /*
     if (!session) {
@@ -1546,6 +1736,13 @@ export default function App() {
     setRaffleQuantity(1);
   };
 
+  /**
+   * Generates a new AI blog post, prepends it to the current list, and updates profile stats.
+   * @example
+   * sync()
+   * undefined
+   * @returns {Promise<void>} A promise that resolves after the post generation flow completes, or after an error is handled.
+   **/
   const handleGenerateBlog = async () => {
     /*
     if (!session) {
@@ -1565,6 +1762,14 @@ export default function App() {
     }
   };
 
+  /**
+  * Fetches momentum map data for a given match ID and updates related UI state.
+  * @example
+  * sync("match_123")
+  * void
+  * @param {string} match - Match identifier used to request momentum map data.
+  * @returns {Promise<void>} Resolves when the request completes and state is updated, if successful.
+  **/
   const generateMomentumData = async (match: string) => {
     /*
     if (!session) {
@@ -1589,6 +1794,16 @@ export default function App() {
     }
   };
 
+  /**
+  * Submits a vote for a debate, updates the debate state, and increments profile stats on success.
+  * @example
+  * sync("debate123", "for", "I agree with this position because...")
+  * undefined
+  * @param {string} debateId - The ID of the debate to vote on.
+  * @param {"for" | "against"} side - The vote side to cast.
+  * @param {string} reasoning - The user's reasoning for the vote.
+  * @returns {Promise<void>} A promise that resolves when the vote submission and state update complete.
+  **/
   const handleVote = async (
     debateId: string,
     side: "for" | "against",
@@ -1629,6 +1844,14 @@ export default function App() {
     setLoading(false);
   };
 
+  /**
+   * Simulates a cricket match prediction request, updates progress state, and stores the returned result.
+   * @example
+   * sync("IND vs AUS")
+   * { prediction: "India wins", confidence: 0.87 }
+   * @param {string} matchName - The match name or identifier to simulate.
+   * @returns {Promise<void>} A promise that resolves after the simulation completes or fails.
+   **/
   const handleSimulate = async (matchName: string) => {
     // Temporarily disabled for testing
     /*
@@ -1697,6 +1920,14 @@ export default function App() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  /**
+   * Performs a cricket verdict lookup for the provided text or current query, updating loading, error, and verdict state.
+   * @example
+   * sync("Will India win the match?")
+   * undefined
+   * @param {string} text - Optional search text to use instead of the current query.
+   * @returns {Promise<void>} A promise that resolves after the verdict request completes and state is updated.
+   **/
   const handleSearch = async (text?: string) => {
     const searchQuery = text || query;
     if (!searchQuery.trim()) return;

@@ -1,6 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 
+/**
+ * Replaces matched text in a file and writes the file back only if changes were made.
+ * @example
+ * replaceInFile('example.txt', [{ search: /foo/g, replace: 'bar' }])
+ * undefined
+ * @param {string} filePath - Path to the file that will be read and potentially updated.
+ * @param {Array<{search: string|RegExp, replace: string}>} replacements - List of search and replace pairs to apply to the file content.
+ * @returns {void} Returns nothing.
+ **/
 function replaceInFile(filePath, replacements) {
   if (!fs.existsSync(filePath)) return;
   let content = fs.readFileSync(filePath, 'utf-8');

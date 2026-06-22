@@ -47,6 +47,13 @@ const features = [
   },
 ];
 
+/**
+ * Renders the landing page features section showcasing core capabilities and feature cards.
+ * @example
+ * FeaturesSection()
+ * <section>...</section>
+ * @returns {JSX.Element} The rendered features section component.
+ */
 export const FeaturesSection: React.FC = () => {
   return (
     <section id="oracle" className="py-24 px-6 relative">

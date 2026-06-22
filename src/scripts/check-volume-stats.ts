@@ -9,6 +9,13 @@ const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
 
 const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
 
+/**
+ * Checks and logs a sample record from the player_volume_stats table.
+ * @example
+ * checkVolumeStats()
+ * undefined
+ * @returns {Promise<void>} A promise that resolves after logging the table sample or an error.
+ */
 async function checkVolumeStats() {
   console.log("Checking player_volume_stats...");
   const { data, error } = await supabase

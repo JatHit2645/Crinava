@@ -27,6 +27,14 @@ interface ImpactEvent {
   z: number;
 }
 
+/**
+* Renders a ball-by-ball impact scatter chart for a selected inning, visualizing runs, wickets, dot balls, and boundaries with interactive tooltips.
+* @example
+* BallByBallImpact({ rawInfo: matchData })
+* <div>Ball-by-ball impact visualization</div>
+* @param {{ rawInfo: any }} rawInfo - Raw match/inning data used to parse deliveries and build the chart.
+* @returns {JSX.Element} A React component that displays a scatter chart of delivery impact or a loading/empty state.
+**/
 export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
   const [data, setData] = useState<ImpactEvent[]>([]);
   const [activeInning, setActiveInning] = useState(0);
@@ -74,6 +82,14 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
     setLoading(false);
   }, [rawInfo, activeInning]);
 
+  /**
+   * Renders a custom cricket ball-by-ball tooltip when active payload data is available.
+   * @example
+   * BallByBallImpactTooltip({ active: true, payload: [{ payload: { over_no: 12.3, ball_no: 4, desc: "Four runs", batter: "Player A", bowler: "Player B" } }] })
+   * <div>Tooltip content or null</div>
+   * @param {{ active: boolean, payload: any[] }} data - Tooltip state and payload array from the chart library.
+   * @returns {JSX.Element | null} A styled tooltip element displaying over, description, batter, and bowler details, or null when inactive.
+   **/
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
