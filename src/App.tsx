@@ -143,7 +143,7 @@ const StarfieldCanvas = () => {
       ctx.globalAlpha = 1;
       shootingStars.forEach((ss) => {
         if (!ss.active) {
-          ss.wait--;
+          ss.wait -= 1;
           if (ss.wait <= 0) {
             ss.active = true;
             ss.x = Math.random() * width * 1.5; // Start further right to cross screen
@@ -1536,7 +1536,7 @@ export default function App() {
       const chars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
       let result = "";
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < 12; i += 1) {
         result += chars.charAt(Math.floor(Math.random() * chars.length));
       }
       return result;

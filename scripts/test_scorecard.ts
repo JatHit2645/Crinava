@@ -47,7 +47,7 @@ const parseScorecard = (rawInfo: any) => {
       });
     } else if (inning.deliveries) {
       inning.deliveries.forEach((dObj: any) => {
-        const key = Object.keys(dObj)[0];
+        const [key] = Object.keys(dObj);
         deliveries.push(dObj[key]);
       });
     }
@@ -212,7 +212,7 @@ async function testScorecard() {
   }
 
   if (data && data.length > 0) {
-    const rawInfo = data[0].raw_info;
+    const [{ raw_info: rawInfo }] = data;
     console.log("Testing rawInfo type:", typeof rawInfo);
     try {
       const result = parseScorecard(rawInfo);

@@ -161,7 +161,7 @@ export async function generateVerdict(
         for (const [key, filter] of Object.entries(q.filters)) {
           const filterEntries = Object.entries(filter as any);
           if (filterEntries.length === 0) continue;
-          const [op, val] = filterEntries[0];
+          const [[op, val]] = filterEntries;
 
           if (
             q.table === "deliveries" &&
@@ -284,8 +284,7 @@ export async function generateVerdict(
   let mathConfidence = 0;
 
   if (aggregatedStats.length === 2) {
-    const p1 = aggregatedStats[0];
-    const p2 = aggregatedStats[1];
+    const [p1, p2] = aggregatedStats;
 
     if (p1.normalizedScore > p2.normalizedScore + 2) {
       mathVerdict = `${p1.name} is mathematically superior.`;

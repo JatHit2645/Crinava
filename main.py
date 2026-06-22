@@ -19,7 +19,7 @@ from hub import load_cache, save_cache, match_hub  # noqa: E402
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(api_app: FastAPI):
     """Docstring for lifespan."""
     print("[System] Crinava Hub starting background services...")
     load_cache()
@@ -85,7 +85,7 @@ async def verify_crinava_secret(request: Request, call_next):
     # Secure bypass for local development/trusted origins and same-site dashboard requests
     origin = request.headers.get("origin") or ""
     referer = request.headers.get("referer") or ""
-    host = request.headers.get("host") or ""
+    req_host = request.headers.get("host") or ""
 
     is_local = (
         "localhost" in origin
@@ -93,7 +93,7 @@ async def verify_crinava_secret(request: Request, call_next):
         or "localhost" in referer
         or "127.0.0.1" in referer
     )
-    is_same_host = host and (host in origin or host in referer)
+    is_same_host = req_host and (req_host in origin or req_host in referer)
 
     # Allow multiple known keys for flexibility (both the configured secret and frontend hardcoded values)
     allowed_keys = {
@@ -118,9 +118,8 @@ async def verify_crinava_secret(request: Request, call_next):
 
 def _ext_id(internal_id: str) -> str:
     """Strip internal prefixes for external API responses."""
-    for prefix in ("CREX_", "CB_", "NDTV_"):
-        if internal_id.startswith(prefix):
-            return internal_id[len(prefix) :]
+    prefix = next(filter(internal_id.startswith, ("CREX_", "CB_", "NDTV_")), None)
+    return internal_id[len(prefix) :] if prefix else internal_id
     return internal_id
 
 
@@ -234,9 +233,8 @@ async def list_matches():
 @app.get("/cache_status")
 async def cache_status():
     """Returns the current cache state for diagnostic purposes."""
-    status = {}
-    for mid, data in match_hub.items():
-        status[mid] = {
+    status = {
+        mid: {
             "history_count": len(data.get("history", [])),
             "has_scorecard": bool(data.get("scorecard")),
             "state": data.get("state", "Unknown"),
@@ -246,6 +244,8 @@ async def cache_status():
             if data.get("history")
             else None,
         }
+        for mid, data in match_hub.items()
+    }
     return {"total_matches_cached": len(status), "matches": status}
 
 
@@ -388,7 +388,6 @@ async def orchestrator():
 
 if __name__ == "__main__":
     import uvicorn
-    import os
 
     host = os.environ.get("HOST", "127.0.0.1")
     uvicorn.run(app, host=host, port=7860)

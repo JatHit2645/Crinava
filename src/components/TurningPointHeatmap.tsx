@@ -58,7 +58,7 @@ export const TurningPointHeatmap: React.FC<{ rawInfo: any }> = ({
       let currentOver = 1;
       let currentBall = 1;
       inningData.deliveries.forEach((dObj: any) => {
-        const key = Object.keys(dObj)[0];
+        const [key] = Object.keys(dObj);
         const overNo = Math.floor(parseFloat(key)) + 1;
         if (overNo !== currentOver) {
           currentOver = overNo;
@@ -69,7 +69,7 @@ export const TurningPointHeatmap: React.FC<{ rawInfo: any }> = ({
           over_no: overNo,
           ball_no: currentBall,
         });
-        currentBall++;
+        currentBall += 1;
       });
     }
 

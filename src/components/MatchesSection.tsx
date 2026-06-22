@@ -96,7 +96,7 @@ const parseScorecard = (rawInfo: any) => {
       });
     } else if (inning.deliveries) {
       inning.deliveries.forEach((dObj: any) => {
-        const key = Object.keys(dObj)[0];
+        const [key] = Object.keys(dObj);
         deliveries.push(dObj[key]);
       });
     }
@@ -1198,7 +1198,7 @@ const MatchDetail: React.FC<{ matchId: number; onBack: () => void }> = ({
 
         if (deliveries && deliveries.length > 0) {
           // Reconstruct MatchData from deliveries and info
-          const firstBall = deliveries[0];
+          const [firstBall] = deliveries;
           const reconstructedMatch: any = {
             match_id: matchId,
             match_date: info.date || firstBall.match_date,

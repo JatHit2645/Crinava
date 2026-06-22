@@ -48,7 +48,7 @@ interface EnrichmentState {
   lastStyles: string | null;
 }
 
-let enrichmentState: EnrichmentState = {
+const enrichmentState: EnrichmentState = {
   status: "idle",
   processedCount: 0,
   totalCount: 0,
@@ -243,7 +243,7 @@ async function startServer() {
           }),
         });
 
-        const status = response.status;
+        const { status } = response;
         const body = await response.text();
         res.json({ url, status, body, model });
       } catch (err: any) {
@@ -348,7 +348,7 @@ async function startServer() {
       const { matchId } = req.body;
 
       const points = [];
-      for (let i = 1; i <= 20; i++) {
+      for (let i = 1; i <= 20; i += 1) {
         const pressure = Math.sin(i / 2) * 50 + (Math.random() * 40 - 20);
         points.push({
           over: i,
@@ -429,7 +429,7 @@ async function startServer() {
           try {
             players = (await Promise.race([
               getPlayersToEnrich(),
-              new Promise((_, reject) => {
+              new Promise((_resolve, reject) => {
                 setTimeout(
                   () => reject(new Error("Supabase query timed out after 45s")),
                   45000,
@@ -586,7 +586,7 @@ async function startServer() {
                       );
                       await Promise.race([
                         upsertPlayerStyles(validUpdateData),
-                        new Promise((_, reject) => {
+                        new Promise((_resolve, reject) => {
                           setTimeout(
                             () =>
                               reject(
@@ -606,7 +606,7 @@ async function startServer() {
                     success = true;
                     console.log(`Enrichment: Batch completed successfully.`);
                   } catch (err: any) {
-                    retryCount++;
+                    retryCount += 1;
                     console.error(
                       `Enrichment: Batch error (Retry ${retryCount}/${maxRetries}):`,
                       err,
@@ -773,7 +773,7 @@ async function startServer() {
         const options = {
           amount: amount * 100, // amount in the smallest currency unit
           currency: "INR",
-          receipt: "order_rcptid_" + Date.now(),
+          receipt: `order_rcptid_${Date.now()}`,
         };
         const order = await razorpay.orders.create(options);
         res.json(order);
@@ -969,7 +969,7 @@ async function startServer() {
       const { side } = req.body;
       const debate = debates.find((d) => d.id === id);
       if (debate) {
-        debate.votes[side as "for" | "against"]++;
+        debate.votes[side as "for" | "against"] += 1;
         res.json(debate);
       } else {
         res.status(404).json({ error: "Debate not found" });

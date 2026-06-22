@@ -55,7 +55,7 @@ export const PlayerImpactRadar: React.FC<{
       });
     } else if (inningData.deliveries) {
       inningData.deliveries.forEach((dObj: any) => {
-        const key = Object.keys(dObj)[0];
+        const [key] = Object.keys(dObj);
         deliveries.push(dObj[key]);
       });
     }

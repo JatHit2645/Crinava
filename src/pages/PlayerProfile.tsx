@@ -47,7 +47,7 @@ export const PlayerProfile: React.FC<PlayerProfileProps> = ({
             return bMatches - aMatches;
           });
 
-          const playerInfo = sortedPlayers[0];
+          const [playerInfo] = sortedPlayers;
           const dbPlayerId = playerInfo.player_id;
 
           // 2. Fetch pre-calculated career stats using the exact player_id

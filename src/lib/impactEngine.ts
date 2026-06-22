@@ -37,7 +37,7 @@ export function calculateImpact(
     if (role === "batter" && !isBatter) return;
     if (role === "bowler" && !isBowler) return;
 
-    balls++;
+    balls += 1;
     matchIds.add(d.match_id);
 
     const runsScored = d.runs_batter || 0;
@@ -47,7 +47,7 @@ export function calculateImpact(
     if (role === "batter") {
       runs += runsScored;
       if (String(d.wicket_player_out) === String(playerId)) {
-        wickets++;
+        wickets += 1;
       }
     } else {
       // Bowler
@@ -61,7 +61,7 @@ export function calculateImpact(
           "retired out",
         ].includes(d.wicket_kind)
       ) {
-        wickets++;
+        wickets += 1;
       }
     }
   });

@@ -29,7 +29,7 @@ async function checkMatchScorecard() {
   console.log("Match ID:", match.match_id);
   console.log("Players in info:", players);
 
-  const firstInning = rawInfo.innings[0];
+  const [firstInning] = rawInfo.innings;
   const firstOver = firstInning.overs?.[0] || firstInning.deliveries?.[0];
   console.log(
     "Sample delivery batter:",

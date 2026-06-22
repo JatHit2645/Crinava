@@ -22,7 +22,7 @@ export const SimulationTerminal: React.FC = () => {
     const logInterval = setInterval(() => {
       if (currentLog < simulationLogs.length) {
         setLogs((prev) => [...prev, simulationLogs[currentLog]]);
-        currentLog++;
+        currentLog += 1;
         setProgress((prev) => Math.min(prev + 12.5, 100));
       } else {
         clearInterval(logInterval);

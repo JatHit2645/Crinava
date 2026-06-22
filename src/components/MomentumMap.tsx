@@ -60,7 +60,7 @@ export const MomentumMap: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
       });
     } else if (inningData.deliveries) {
       inningData.deliveries.forEach((dObj: any) => {
-        const key = Object.keys(dObj)[0];
+        const [key] = Object.keys(dObj);
         const overNo = Math.floor(parseFloat(key)) + 1;
         deliveries.push({ ...dObj[key], over_no: overNo });
       });
@@ -84,19 +84,19 @@ export const MomentumMap: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
     // Baseline is roughly 8 runs per over.
     // Positive = Batting dominance, Negative = Bowling dominance
     const rawPressures: Record<number, number> = {};
-    for (let i = 1; i <= maxOver; i++) {
+    for (let i = 1; i <= maxOver; i += 1) {
       const stats = overData[i] || { runs: 0, wickets: 0 };
       rawPressures[i] = stats.runs - 8 - stats.wickets * 12;
     }
 
     // Apply a 3-over rolling average to smooth the wave
     const formattedData: MomentumPoint[] = [];
-    for (let i = 1; i <= maxOver; i++) {
+    for (let i = 1; i <= maxOver; i += 1) {
       let sum = 0;
       let count = 0;
-      for (let j = Math.max(1, i - 1); j <= Math.min(maxOver, i + 1); j++) {
+      for (let j = Math.max(1, i - 1); j <= Math.min(maxOver, i + 1); j += 1) {
         sum += rawPressures[j];
-        count++;
+        count += 1;
       }
       const smoothedPressure = sum / count;
 

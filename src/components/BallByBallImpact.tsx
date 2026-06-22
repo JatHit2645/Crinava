@@ -79,7 +79,7 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
           over_no: overNo,
           ball_no: currentBall,
         });
-        currentBall++;
+        currentBall += 1;
       });
     }
 

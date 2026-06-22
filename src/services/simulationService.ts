@@ -24,11 +24,11 @@ export async function runMonteCarloSimulation(factors: MatchFactors) {
   if (factors.weather === "humid") baseProb -= 0.02; // Humidity impact
 
   // 3. The 2-Million-Iteration Loop
-  for (let i = 0; i < iterations; i++) {
+  for (let i = 0; i < iterations; i += 1) {
     if (Math.random() < baseProb) {
-      teamAWins++;
+      teamAWins += 1;
     } else {
-      teamBWins++;
+      teamBWins += 1;
     }
   }
 

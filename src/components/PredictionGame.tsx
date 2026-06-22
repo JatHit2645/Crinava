@@ -388,7 +388,7 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
   const genCode = () => {
     const c = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     let s = "";
-    for (let i = 0; i < 6; i++) s += c[Math.floor(Math.random() * c.length)];
+    for (let i = 0; i < 6; i += 1) s += c[Math.floor(Math.random() * c.length)];
     return s;
   };
 

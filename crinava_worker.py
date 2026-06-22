@@ -722,7 +722,7 @@ class CrexMatchWorker:
                             current_bowler_id = pid
                             break
                     break
-        bowler = next((b for b in bowlers if b.get("id") == current_bowler_id), None)
+        bowler = next(filter(lambda b: b.get("id") == current_bowler_id, bowlers), None)
         if not bowler and bowlers:
             bowler = bowlers[-1]
 
@@ -1295,8 +1295,8 @@ class CrexMatchWorker:
 
             if item_type == "b":
                 # Only hit the API for the very latest unseen ball in the startup batch
-                is_last_unseen_ball = not any(
-                    future_item[0].get("type") == "b"
+                is_last_unseen_ball = all(
+                    future_item[0].get("type") != "b"
                     for future_item in reversed_items[idx + 1 :]
                 )
                 skip_api = not is_last_unseen_ball
@@ -1318,8 +1318,8 @@ class CrexMatchWorker:
             await self.broadcast_to_clients(packet)
 
             if self.ai_api_key:
-                is_last_unseen_ball = not any(
-                    future_item[0].get("type") == "b"
+                is_last_unseen_ball = all(
+                    future_item[0].get("type") != "b"
                     for future_item in reversed_items[idx + 1 :]
                 )
                 if not is_startup or is_last_unseen_ball:
@@ -1507,20 +1507,19 @@ class CrexMatchWorker:
 
     def get_matched_commentary(self, over_ball: str) -> dict:
         """Docstring for get_matched_commentary."""
-        import html as html_mod
 
         def clean_html(raw_html):
             """Docstring for clean_html."""
             if not raw_html:
                 return ""
-            return html_mod.unescape(re.sub(r"<.*?>", "", raw_html)).strip()
+            return html.unescape(re.sub(r"<[^>]*>", "", raw_html)).strip()
 
         search_over = str(over_ball)
 
         if search_over.endswith(".0"):
             try:
-                major = int(search_over.split(".")[0])
-                prev_prefix = str(major - 1) + "."
+                major = int(search_over.split(".", maxsplit=1)[0])
+                prev_prefix = f"{major - 1}."
                 for item in self.feed_items:
                     if item.get("type") == "b" and str(item.get("o", "")).startswith(
                         prev_prefix
@@ -1555,7 +1554,7 @@ class CrexMatchWorker:
                 extra = clean_html(matching_t.get("c", ""))
                 if extra:
                     raw_commentary = (
-                        (raw_commentary + " " + extra).strip()
+                        f"{raw_commentary} {extra}".strip()
                         if raw_commentary
                         else extra
                     )
@@ -1808,8 +1807,8 @@ class CrexMatchWorker:
             over_no, ball_no = 0, 0
             try:
                 if "." in str(over_ball):
-                    over_no = int(str(over_ball).split(".")[0])
-                    ball_no = int(str(over_ball).split(".")[1])
+                    over_no = int(str(over_ball).split(".", maxsplit=1)[0])
+                    ball_no = int(str(over_ball).split(".", maxsplit=1)[1])
             except Exception:
                 pass
 
@@ -1961,8 +1960,6 @@ class CrexMatchWorker:
                 return {}
 
             payload = self.ball_states_history
-
-            import os
 
             api_key = os.environ.get("AI_API_KEY")
             if not api_key:
@@ -2372,7 +2369,7 @@ class HierarchyScraperWorker:
                                     self.target_url = (
                                         href
                                         if href.startswith("http")
-                                        else "https://sports.ndtv.com" + href
+                                        else f"https://sports.ndtv.com{href}"
                                     )
                                     break
                     except Exception:
@@ -2398,7 +2395,7 @@ class HierarchyScraperWorker:
                                         self.target_url = (
                                             href
                                             if href.startswith("http")
-                                            else "https://sportzwiki.com" + href
+                                            else f"https://sportzwiki.com{href}"
                                         )
                                         break
                         except Exception:

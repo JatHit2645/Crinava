@@ -102,9 +102,8 @@ def main():
         "test_dns.py",
         "test_mapping_endpoint.py",
     ]
-    for filename in python_files:
-        if os.path.exists(filename):
-            insert_docstrings(filename)
+    for filename in filter(os.path.exists, python_files):
+        insert_docstrings(filename)
 
 
 if __name__ == "__main__":

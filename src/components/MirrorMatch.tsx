@@ -98,7 +98,7 @@ export const MirrorMatch: React.FC<{
                 });
               } else if (inningData.deliveries) {
                 inningData.deliveries.forEach((dObj: any) => {
-                  const key = Object.keys(dObj)[0];
+                  const [key] = Object.keys(dObj);
                   const overNo = Math.floor(parseFloat(key)) + 1;
                   deliveries.push({ ...dObj[key], over_no: overNo });
                 });
