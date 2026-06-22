@@ -12,6 +12,8 @@ import {
 import { Waves } from "lucide-react";
 import { parseInningDeliveries } from "../utils/matchParser";
 import { InningSelector } from "./shared/InningSelector";
+
+interface MomentumPoint {
   over: number;
   pressure: number;
   isTurningPoint?: boolean;
