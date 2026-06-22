@@ -81,7 +81,7 @@ class CrinavaDiscovery:
         await asyncio.gather(*tasks)
 
         # Ordered Priority insertion: Completed -> Upcoming -> Live
-        for state in ["Completed", "Upcoming", "Live"]:
+        for state in ("Completed", "Upcoming", "Live"):
             for cb_id, slug in results[state]:
                 if cb_id in seen_ids:
                     continue
@@ -110,7 +110,7 @@ class CrinavaDiscovery:
             len(final_matches),
             tuple(
                 (state, len(results[state]))
-                for state in ["Live", "Completed", "Upcoming"]
+                for state in ("Live", "Completed", "Upcoming")
             ),
         )
         self._print_on_change(
@@ -180,7 +180,7 @@ class CrinavaDiscovery:
                         # 1. Completed check (highest priority)
                         if any(
                             phrase in card_text
-                            for phrase in [
+                            for phrase in (
                                 "won by",
                                 "won the series",
                                 "result",
@@ -190,7 +190,7 @@ class CrinavaDiscovery:
                                 "no result",
                                 "complete",
                                 "won the match",
-                            ]
+                            )
                         ):
                             crex_map[mid]["state"] = "Completed"
                         # 2. Upcoming check (check next to prevent wrong Live tags)

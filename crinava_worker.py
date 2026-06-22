@@ -313,41 +313,41 @@ class CrexMatchWorker:
         suffix = (
             str(item_id)[-6:] if item_id is not None else str(abs(hash(raw_text)))[-6:]
         )
-        if any(word in lower for word in ["toss", "opt to", "elected to", "choose to"]):
+        if any(word in lower for word in ("toss", "opt to", "elected to", "choose to")):
             return f"UPDATE_TOSS_{suffix}", "INFO", ["toss"]
         if any(
             word in lower
-            for word in [
+            for word in (
                 "strategic timeout",
                 "drinks",
                 "timeout",
                 "innings break",
                 "break",
-            ]
+            )
         ):
             return f"UPDATE_BREAK_{suffix}", "INFO", ["break"]
         if any(
             word in lower
-            for word in ["rain", "covers", "delay", "inspection", "wet outfield"]
+            for word in ("rain", "covers", "delay", "inspection", "wet outfield")
         ):
             return f"UPDATE_RAIN_{suffix}", "INFO", ["weather"]
         if any(
             word in lower
-            for word in [
+            for word in (
                 "post-match",
                 "presentation",
                 "potm",
                 "player of the match",
                 "captain):",
                 "(captain)",
-            ]
+            )
         ):
             return f"UPDATE_PRESENTATION_{suffix}", "INFO", ["quote"]
-        if any(word in lower for word in ["wicket", "dismissed", "gone", "out!"]):
+        if any(word in lower for word in ("wicket", "dismissed", "gone", "out!")):
             return f"UPDATE_WICKET_{suffix}", "INFO", ["wicket"]
         if any(
             word in lower
-            for word in [
+            for word in (
                 "stat",
                 "most ",
                 "fastest",
@@ -355,7 +355,7 @@ class CrexMatchWorker:
                 "milestone",
                 "partnership",
                 "instances",
-            ]
+            )
         ):
             return f"UPDATE_STAT_{suffix}", "STAT", ["stat"]
         return f"UPDATE_INFO_{suffix}", "INFO", ["update"]
@@ -477,23 +477,20 @@ class CrexMatchWorker:
         if not text:
             return extras
 
-        detailed = re.search(
-            r"(\d+)\s*\(\s*b\s*(\d+),\s*lb\s*(\d+),\s*w\s*(\d+),\s*nb\s*(\d+)(?:,\s*p\s*(\d+))?",
-            text,
-            flags=re.I,
-        )
-        if detailed:
-            extras.update(
-                {
-                    "total": int(detailed.group(1)),
-                    "byes": int(detailed.group(2)),
-                    "legByes": int(detailed.group(3)),
-                    "wides": int(detailed.group(4)),
-                    "noBalls": int(detailed.group(5)),
-                    "penalty": int(detailed.group(6) or 0),
-                }
-            )
-            return extras
+        if "(" in text and "b" in text.lower() and "lb" in text.lower():
+            nums = re.findall(r"\d+", text)
+            if len(nums) >= 5:
+                extras.update(
+                    {
+                        "total": int(nums[0]),
+                        "byes": int(nums[1]),
+                        "legByes": int(nums[2]),
+                        "wides": int(nums[3]),
+                        "noBalls": int(nums[4]),
+                        "penalty": int(nums[5]) if len(nums) > 5 else 0,
+                    }
+                )
+                return extras
 
         parts = [p for p in re.split(r"[./|,\s]+", text) if p != ""]
         if len(parts) >= 4 and all(p.isdigit() for p in parts[:5]):
@@ -530,13 +527,11 @@ class CrexMatchWorker:
 
     def _parse_sc4_scorecard(self, sc_data) -> dict:
         """Docstring for _parse_sc4_scorecard."""
-        innings_list = (
-            sc_data
-            if isinstance(sc_data, list)
-            else sc_data.get("innings", [])
-            if isinstance(sc_data, dict)
-            else []
-        )
+        innings_list = []
+        if isinstance(sc_data, list):
+            innings_list = sc_data
+        elif isinstance(sc_data, dict):
+            innings_list = sc_data.get("innings", [])
         parsed_innings = []
         all_extras = []
         dismissal_timeline = []
@@ -667,7 +662,7 @@ class CrexMatchWorker:
                         }
                     )
 
-            for raw in [inn.get("x"), inn.get("i")]:
+            for raw in (inn.get("x"), inn.get("i")):
                 if raw:
                     for token in re.split(r"[/._-]+", str(raw)):
                         token = self._norm_pid(token)
@@ -929,28 +924,28 @@ class CrexMatchWorker:
             old_scorecard_base = raw_base.replace("match-updates-", "scorecard-")
 
             bases = []
-            for candidate in [
+            for candidate in (
                 raw_base,
                 info_base,
                 old_scorecard_base,
                 _swap_teams(raw_base),
                 _swap_teams(info_base),
                 _swap_teams(old_scorecard_base),
-            ]:
+            ):
                 if candidate and candidate not in bases:
                     bases.append(candidate)
 
             urls = []
             seen = set()
             for base in bases:
-                for suffix, label in [
+                for suffix, label in (
                     ("", "info"),
                     ("/match-scorecard", "scorecard"),
                     ("/playing11", "playing11"),
                     ("/match-info", "match-info"),
                     ("/info", "info-tab"),
                     ("/scorecard", "scorecard-tab"),
-                ]:
+                ):
                     full = base + suffix
                     if full not in seen:
                         seen.add(full)
@@ -960,7 +955,7 @@ class CrexMatchWorker:
         urls_to_fetch = _candidate_urls(base_url)
 
         player_regex = re.compile(
-            r"(?:/|\\/)player(?:/|\\/)((?:[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*)-([A-Za-z0-9]{1,8}))(?=[^a-zA-Z0-9]|$)"
+            r"(?:/|\\/)player(?:/|\\/)([a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*-([A-Za-z0-9]{1,8}))(?=[^a-zA-Z0-9]|$)"
         )
 
         added = 0
@@ -1094,7 +1089,7 @@ class CrexMatchWorker:
             # 1. Completed check: banner indicators or API codes
             is_completed = any(
                 phrase in b_text
-                for phrase in [
+                for phrase in (
                     "won by",
                     "won the series",
                     "tied",
@@ -1105,7 +1100,7 @@ class CrexMatchWorker:
                     "won the match",
                     "victory",
                     "win",
-                ]
+                )
             ) or st in {"2", "4"}
 
             # 2. Upcoming check: no scores, or explicit indicators
@@ -1410,15 +1405,15 @@ class CrexMatchWorker:
 
     async def _fetch_ball_feeds(self) -> list:
         """Docstring for _fetch_ball_feeds."""
-        feeds_url = "https://content.crickapi.com/commentary/v3/getBallFeeds"
+        feeds_url = _BALL_FEEDS_URL
         f_payload = {"matchKey": self.raw_id, "lastDocId": None, "filters": {}}
         f_headers = {
-            "Accept": "application/json, text/plain, */*",
-            "Content-Type": "application/json",
+            "Accept": _ACCEPT_HEADER,
+            "Content-Type": _CONTENT_TYPE_JSON,
             "authorization": os.environ.get("CREX_AUTHORIZATION_TOKEN", ""),
             "cc": "IN",
-            "Origin": "https://crex.com",
-            "Referer": "https://crex.com/",
+            "Origin": _CREX_ORIGIN,
+            "Referer": _CREX_REFERER,
         }
         resp = await asyncio.to_thread(
             reqs.post,
@@ -1680,15 +1675,15 @@ class CrexMatchWorker:
             try:
                 await asyncio.sleep(8)
 
-                feeds_url = "https://content.crickapi.com/commentary/v3/getBallFeeds"
+                feeds_url = _BALL_FEEDS_URL
                 f_payload = {"matchKey": self.raw_id, "lastDocId": None, "filters": {}}
                 f_headers = {
-                    "Accept": "application/json, text/plain, */*",
-                    "Content-Type": "application/json",
+                    "Accept": _ACCEPT_HEADER,
+                    "Content-Type": _CONTENT_TYPE_JSON,
                     "authorization": os.environ.get("CREX_AUTHORIZATION_TOKEN", ""),
                     "cc": "IN",
-                    "Origin": "https://crex.com",
-                    "Referer": "https://crex.com/",
+                    "Origin": _CREX_ORIGIN,
+                    "Referer": _CREX_REFERER,
                 }
                 try:
                     r2 = await asyncio.to_thread(
@@ -1803,11 +1798,11 @@ class CrexMatchWorker:
                 return {}
 
             cumulative_runs = int(m_score.group(1))
-            cumulative_wkts = (
-                int(m_score.group(2))
-                if m_score.group(2)
-                else (10 if "all out" in active_score.lower() else 0)
-            )
+            cumulative_wkts = 0
+            if m_score.group(2):
+                cumulative_wkts = int(m_score.group(2))
+            elif "all out" in active_score.lower():
+                cumulative_wkts = 10
 
             over_ball = packet.get("over_ball", "0.0")
             over_no, ball_no = 0, 0
@@ -1830,13 +1825,13 @@ class CrexMatchWorker:
 
             title_lower = self.match.get("title", "").lower()
             if any(
-                kw in title_lower for kw in ["odi", "50 overs", "list a", "one day"]
+                kw in title_lower for kw in ("odi", "50 overs", "list a", "one day")
             ):
                 match_format = "ODI"
                 total_innings_balls = 300
             elif any(
                 kw in title_lower
-                for kw in ["t10", "10 overs", "t-10", "10-over", "ten-ten"]
+                for kw in ("t10", "10 overs", "t-10", "10-over", "ten-ten")
             ):
                 match_format = "T10"
                 total_innings_balls = 60
@@ -1907,14 +1902,9 @@ class CrexMatchWorker:
                         if resolved and resolved != tn_id:
                             batting_team = resolved
                         # Attempt to resolve bowling team from the other innings
-                        if innings_no == 1 and len(innings_list) > 1:
-                            bowling_id = innings_list[1].get("tn")
-                            if bowling_id:
-                                r2 = self.player_map.get(bowling_id, bowling_id)
-                                if r2 and r2 != bowling_id:
-                                    bowling_team = r2
-                        elif innings_no > 1:
-                            bowling_id = innings_list[innings_no - 2].get("tn")
+                        opp_idx = 1 if innings_no == 1 and len(innings_list) > 1 else (innings_no - 2 if innings_no > 1 else -1)
+                        if opp_idx >= 0:
+                            bowling_id = innings_list[opp_idx].get("tn")
                             if bowling_id:
                                 r2 = self.player_map.get(bowling_id, bowling_id)
                                 if r2 and r2 != bowling_id:
@@ -2043,8 +2033,8 @@ class CrexMatchWorker:
 
         is_nvidia = "nvapi-" in self.ai_api_key
 
-        bowler_name = "the bowler"
-        batsman_name = "the batsman"
+        bowler_name = _DEFAULT_BOWLER
+        batsman_name = _DEFAULT_BATSMAN
         header = raw_comm.split(" - ")[0] if " - " in raw_comm else raw_comm
         m = re.search(
             r"([A-Za-z0-9][A-Za-z0-9\s'\.\-]{1,35})\s+to\s+([A-Za-z0-9][A-Za-z0-9\s'\.\-]{1,35})",
@@ -2055,11 +2045,11 @@ class CrexMatchWorker:
             batsman_name = self.resolve_player_id(m.group(2).strip())
 
         if "overs" in bowler_name.lower() or len(bowler_name) > 35:
-            bowler_name = "the bowler"
+            bowler_name = _DEFAULT_BOWLER
         if "overs" in batsman_name.lower() or len(batsman_name) > 35:
-            batsman_name = "the batsman"
+            batsman_name = _DEFAULT_BATSMAN
 
-        if bowler_name == "the bowler" or batsman_name == "the batsman":
+        if bowler_name == _DEFAULT_BOWLER or batsman_name == _DEFAULT_BATSMAN:
             fb, fa = self.get_current_players()
             if bowler_name == "the bowler":
                 bowler_name = fb
@@ -2430,7 +2420,7 @@ class HierarchyScraperWorker:
                     if resp.status_code == 200:
                         soup = BeautifulSoup(resp.text, _HTML_PARSER)
                         for s in list(soup(
-                            ["script", "style", "header", "nav", "footer", "aside"]
+                            ("script", "style", "header", "nav", "footer", "aside")
                         )):
                             s.decompose()
                         for w in list(soup.find_all(
@@ -2441,21 +2431,21 @@ class HierarchyScraperWorker:
                             w.decompose()
 
                         score_pat = re.compile(
-                            r"\b\d{1,3}[/-]\d{1,2}\b|\b\d{1,3}\s*/\s*\d{1,2}\s*\(\d+\.?\d*\)\b"
+                            r"\b\d{1,3}\s*[/-]\s*\d{1,2}\b(?:\s*\(\d+\.?\d*\))?"
                         )
                         score_text = ""
 
-                        for c in soup.find_all(
-                            ["div", "span", "h1", "h2"],
+                        for c in list(soup.find_all(
+                            ("div", "span", "h1", "h2"),
                             class_=re.compile(r"score|scr|match|bat|inn|total", re.I),
-                        ):
+                        )):
                             txt = c.get_text(separator=" ", strip=True)
                             if score_pat.search(txt) and len(txt) < 60:
                                 score_text = txt
                                 break
 
                         if not score_text:
-                            for c in list(soup.find_all(["div", "span", "h1", "h2"])):
+                            for c in list(soup.find_all(("div", "span", "h1", "h2"))):
                                 txt = c.get_text(separator=" ", strip=True)
                                 if score_pat.search(txt) and len(txt) < 60:
                                     score_text = txt

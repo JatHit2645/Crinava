@@ -1010,7 +1010,7 @@ const TournamentMatchesList: React.FC<{
                   <button
                     key={tab.id}
                     onClick={() => setActiveStatTab(tab.id as any)}
-                    className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold transition-all ${activeStatTab === tab.id ? "bg-metallic-gold text-black" : "bg-white/5 text-gray-400 hover:text-white hover:bg-white/10"}`}
+                    className={`shrink-0 px-4 py-2 rounded-full text-sm font-bold transition-all ${activeStatTab === tab.id ? "bg-metallic-gold text-black" : "bg-white/5 text-gray-400 hover:text-white hover:bg-white/10"}`}
                   >
                     {tab.label}
                   </button>

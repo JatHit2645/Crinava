@@ -370,7 +370,7 @@ async function startServer() {
     // --- Data Enrichment API ---
     // --- Player Enrichment Background Worker ---
     const sleep = (ms: number) => {
-      return new Promise((resolve) => setTimeout(resolve, ms));
+      return new Promise((resolve) => { setTimeout(resolve, ms); });
     };
 
     /* eslint-disable no-await-in-loop */

@@ -28,37 +28,30 @@ def insert_docstrings(filepath):
             self.generic_visit(node)
 
         def visit_ClassDef(self, node):
-            if not ast.get_docstring(node):
-                if node.body:
-                    first_stmt = node.body[0]
-                    line_idx = first_stmt.lineno - 1
-                    indent = get_indentation(lines[line_idx])
-                    to_insert.append(
-                        (line_idx, indent, f'"""Docstring for {node.name} class."""\n')
-                    )
+            if not ast.get_docstring(node) and node.body:
+                first_stmt = node.body[0]
+                line_idx = first_stmt.lineno - 1
+                indent = get_indentation(lines[line_idx])
+                to_insert.append(
+                    (line_idx, indent, f'"""Docstring for {node.name} class."""\n')
+                )
+            self.generic_visit(node)
+
+        def _handle_function(self, node):
+            if not ast.get_docstring(node) and node.body:
+                first_stmt = node.body[0]
+                line_idx = first_stmt.lineno - 1
+                indent = get_indentation(lines[line_idx])
+                to_insert.append(
+                    (line_idx, indent, f'"""Docstring for {node.name}."""\n')
+                )
             self.generic_visit(node)
 
         def visit_FunctionDef(self, node):
-            if not ast.get_docstring(node):
-                if node.body:
-                    first_stmt = node.body[0]
-                    line_idx = first_stmt.lineno - 1
-                    indent = get_indentation(lines[line_idx])
-                    to_insert.append(
-                        (line_idx, indent, f'"""Docstring for {node.name}."""\n')
-                    )
-            self.generic_visit(node)
+            self._handle_function(node)
 
         def visit_AsyncFunctionDef(self, node):
-            if not ast.get_docstring(node):
-                if node.body:
-                    first_stmt = node.body[0]
-                    line_idx = first_stmt.lineno - 1
-                    indent = get_indentation(lines[line_idx])
-                    to_insert.append(
-                        (line_idx, indent, f'"""Docstring for {node.name}."""\n')
-                    )
-            self.generic_visit(node)
+            self._handle_function(node)
 
     DocstringFinder().visit(tree)
 

@@ -118,7 +118,7 @@ async def verify_crinava_secret(request: Request, call_next):
 
 def _ext_id(internal_id: str) -> str:
     """Strip internal prefixes for external API responses."""
-    for prefix in ["CREX_", "CB_", "NDTV_"]:
+    for prefix in ("CREX_", "CB_", "NDTV_"):
         if internal_id.startswith(prefix):
             return internal_id[len(prefix) :]
     return internal_id
@@ -128,7 +128,7 @@ def _resolve_id(ext_id: str) -> str:
     """Resolve an external match ID back to internal format."""
     if ext_id in match_hub:
         return ext_id
-    for prefix in ["CREX_", "CB_", "NDTV_"]:
+    for prefix in ("CREX_", "CB_", "NDTV_"):
         candidate = f"{prefix}{ext_id}"
         if candidate in match_hub:
             return candidate
