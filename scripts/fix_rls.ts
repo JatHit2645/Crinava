@@ -7,6 +7,13 @@ const supabase = createClient(
   process.env.VITE_SUPABASE_ANON_KEY!,
 );
 
+/**
+* Logs SQL statements to enable RLS and create public read policies for selected Supabase tables.
+* @example
+* fixRLS()
+* undefined
+* @returns {void} Does not return a value; outputs SQL instructions to the console.
+**/
 async function fixRLS() {
   console.log("Applying RLS policies...");
 
@@ -35,6 +42,13 @@ async function fixRLS() {
   console.log(sql);
 }
 
+/**
+* Checks the deliveries table schema by querying a single row and logging its columns or any errors.
+* @example
+* await checkDeliveriesSchema()
+* undefined
+* @returns {Promise<void>} Resolves after the schema check and console logging are complete.
+**/
 async function checkDeliveriesSchema() {
   console.log("\nChecking deliveries schema...");
   const { data, error } = await supabase

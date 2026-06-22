@@ -12,6 +12,20 @@ interface MobileNavProps {
   onNotificationsClick: () => void;
 }
 
+/**
+ * Renders a full-screen animated mobile navigation overlay with user info, navigation links, and contextual action buttons.
+ * @example
+ * MobileNav({ isOpen: true, onClose: () => {}, user: { email: "demo@example.com" }, coins: 120, onAuthClick: () => {}, onProfileClick: () => {}, onNotificationsClick: () => {} })
+ * <MobileNav />
+ * @param {boolean} isOpen - Controls whether the mobile navigation panel is visible.
+ * @param {Function} onClose - Callback invoked to close the mobile navigation panel.
+ * @param {Object|null} user - Authenticated user object used to display profile information, or null when signed out.
+ * @param {number} coins - The current coin balance displayed in the user section.
+ * @param {Function} onAuthClick - Callback invoked when the unauthenticated "Get Started" action is clicked.
+ * @param {Function} onProfileClick - Callback invoked when the authenticated "View Profile" action is clicked.
+ * @param {Function} onNotificationsClick - Callback invoked when the notifications button is clicked.
+ * @returns {JSX.Element} The mobile navigation overlay component.
+ **/
 export const MobileNav: React.FC<MobileNavProps> = ({
   isOpen,
   onClose,

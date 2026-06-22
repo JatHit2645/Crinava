@@ -2,6 +2,14 @@ import { supabase } from "../lib/supabaseClient";
 
 // Feature 1: Turning Point Heatmap
 // Fetches ball-by-ball data and calculates momentum impact score
+/**
+* Retrieves delivery data for a match and computes an impact score for each ball.
+* @example
+* getTurningPointData(12345)
+* [{ over_no: 1, ball_no: 1, runs_total: 0, wicket_kind: null, impactScore: 0 }]
+* @param {number} matchId - The match identifier used to fetch delivery records.
+* @returns {Promise<Array<{over_no: number, ball_no: number, runs_total: number, wicket_kind: string | null, impactScore: number}>>} A promise that resolves to the deliveries annotated with calculated impact scores.
+**/
 export async function getTurningPointData(matchId: number) {
   const { data, error } = await supabase
     .from("deliveries")
@@ -22,6 +30,15 @@ export async function getTurningPointData(matchId: number) {
 
 // Feature 2: Mirror Match
 // Fetches historical match data for similarity search
+/**
+ * Aggregates match run totals at a specific over for mirror match analysis.
+ * @example
+ * getMirrorMatchData("Wankhede Stadium", 10)
+ * [{ match_id: 1, total_runs: 84 }, { match_id: 2, total_runs: 79 }]
+ * @param {string} venue - Venue name used to filter match context.
+ * @param {number} over - Over number to snapshot deliveries from.
+ * @returns {Promise<Array<{ match_id: number, total_runs: number }>>} A promise that resolves to the top 20 grouped match run totals.
+ **/
 export async function getMirrorMatchData(venue: string, over: number) {
   // Aggregate runs and wickets per match at the specified over
   const { data, error } = await supabase
@@ -44,6 +61,14 @@ export async function getMirrorMatchData(venue: string, over: number) {
 
 // Feature 3: Player Impact Radar
 // Aggregates player performance metrics
+/**
+ * Generates mock impact metric data for a given player.
+ * @example
+ * getPlayerImpactData("John Doe")
+ * [{ subject: "Aggression", A: 82, fullMark: 100 }, ...]
+ * @param {string} playerName - The name of the player to generate impact data for.
+ * @returns {{ subject: string, A: number, fullMark: number }[]} An array of player impact metrics with randomized scores.
+ **/
 export async function getPlayerImpactData(playerName: string) {
   // In a real app, we'd query player_stats. For now, we'll derive some metrics
   // or use a more robust mock that feels real.
@@ -59,6 +84,14 @@ export async function getPlayerImpactData(playerName: string) {
 
 // Feature 4: Execution Gap
 // Fetches actual performance vs historical averages
+/**
+ * Aggregates delivery runs by over for a given match and returns execution gap data.
+ * @example
+ * getExecutionGapData(12345)
+ * [{ over_no: 1, runs_total: 8 }, { over_no: 2, runs_total: 12 }]
+ * @param {number} matchId - The unique identifier of the match to fetch delivery data for.
+ * @returns {Promise<Array<{ over_no: number, runs_total: number }>>} A promise that resolves to an array of over-wise run totals.
+ */
 export async function getExecutionGapData(matchId: number) {
   const { data, error } = await supabase
     .from("deliveries")

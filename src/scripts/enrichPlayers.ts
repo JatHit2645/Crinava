@@ -1,5 +1,12 @@
 import { supabase } from "../lib/supabaseServer";
 
+/**
+ * Fetches up to 1000 players whose batting or bowling style is missing, empty, or marked as unknown.
+ * @example
+ * getPlayersToEnrich()
+ * [{ player_id: 1, player_name: "John Doe", bowling_style: null, batting_style: "", gender: "M" }]
+ * @returns {Promise<Array>} A promise that resolves to an array of player records needing enrichment.
+ **/
 export async function getPlayersToEnrich() {
   console.log("getPlayersToEnrich: Starting Supabase query (limit 200)...");
   const startTime = Date.now();
@@ -35,6 +42,14 @@ export async function getPlayersToEnrich() {
   }
 }
 
+/**
+* Counts players in the database that need enrichment based on missing or unknown bowling and batting styles.
+* @example
+* await countPlayersToEnrich()
+* 42
+* @param {void} - This function does not accept any arguments.
+* @returns {Promise<number>} A promise that resolves to the number of players matching the enrichment criteria.
+**/
 export async function countPlayersToEnrich() {
   console.log("countPlayersToEnrich: Starting Supabase count query...");
   const { count, error } = await supabase
@@ -57,6 +72,14 @@ export async function countPlayersToEnrich() {
   return count || 0;
 }
 
+/**
+ * Upserts player style information into the players table by player_id.
+ * @example
+ * upsertPlayerStyles([{ player_id: 1, player_name: "John Doe", bowling_style: "Right-arm fast", batting_style: "Right-hand bat" }])
+ * { success: true }
+ * @param {{player_id: any, player_name: string, bowling_style: string, batting_style: string}[]} data - Array of player style records to upsert.
+ * @returns {{success: boolean}} Returns an object indicating the batch was successfully upserted.
+ */
 export async function upsertPlayerStyles(
   data: {
     player_id: any;

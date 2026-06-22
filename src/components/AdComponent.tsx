@@ -6,6 +6,15 @@ interface AdComponentProps {
   className?: string;
 }
 
+/**
+ * Renders a Google AdSense ad unit for unsubscribed users and loads the AdSense script when needed.
+ * @example
+ * AdComponent({ slot: "1234567890", className: "ad-wrapper" })
+ * null
+ * @param {string} slot - The AdSense ad slot ID to display.
+ * @param {string} className - Optional CSS class name applied to the ad container.
+ * @returns {JSX.Element | null} The ad container element, or null when the user is loading or subscribed.
+ **/
 export const AdComponent: React.FC<AdComponentProps> = ({
   slot,
   className,

@@ -82,6 +82,13 @@ export const VerdictTool: React.FC<VerdictToolProps> = ({ scope, context }) => {
   );
 
   useEffect(() => {
+    /**
+    * Fetches up to 100 players from Supabase, sorts them by name, and updates the player list state.
+    * @example
+    * sync()
+    * undefined
+    * @returns {Promise<void>} A promise that resolves after the players have been fetched and state is updated.
+    **/
     const fetchPlayers = async () => {
       const { data } = await supabase
         .from("players")
@@ -113,6 +120,14 @@ export const VerdictTool: React.FC<VerdictToolProps> = ({ scope, context }) => {
     localStorage.setItem("recent_verdicts", JSON.stringify(updated));
   };
 
+  /**
+  * Handles the form submission for generating a verdict by sending the current query and context to the server.
+  * @example
+  * sync(event)
+  * void
+  * @param {React.FormEvent} e - The form submit event.
+  * @returns {Promise<void>} A promise that resolves when the verdict request completes.
+  **/
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim()) return;

@@ -12,6 +12,14 @@ interface HeatmapData {
   bowler: string;
 }
 
+/**
+ * Renders an interactive ball-by-ball cricket heatmap that visualizes delivery impact by inning, over, and ball.
+ * @example
+ * TurningPointHeatmap({ rawInfo })
+ * <heatmap component with selectable delivery details>
+ * @param {{ rawInfo: any }} rawInfo - Match data object containing innings, overs, and delivery information.
+ * @returns {JSX.Element} An interactive heatmap UI with inning toggles, color-coded deliveries, and a delivery analysis modal.
+ **/
 export const TurningPointHeatmap: React.FC<{ rawInfo: any }> = ({
   rawInfo,
 }) => {

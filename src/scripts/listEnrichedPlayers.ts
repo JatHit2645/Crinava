@@ -1,5 +1,12 @@
 import { supabase } from "../lib/supabaseServer";
 
+/**
+* Fetches and logs players who have a non-null bowling style from the players table.
+* @example
+* listEnrichedPlayers()
+* undefined
+* @returns {Promise<void>} A promise that resolves when the enriched players have been fetched and logged.
+**/
 async function listEnrichedPlayers() {
   console.log("Fetching enriched players...");
   const { data, error } = await supabase

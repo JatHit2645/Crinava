@@ -7,6 +7,15 @@ interface MatchCardProps {
   onPredict: (match: any) => void;
 }
 
+/**
+ * Renders a live match card with teams, statistics, venue, and a predict action.
+ * @example
+ * MatchCard(match, onPredict)
+ * <MatchCard match={match} onPredict={handlePredict} />
+ * @param {{Object}} match - Match data containing team names, abbreviations, format, probabilities, momentum, status, and venue.
+ * @param {{Function}} onPredict - Callback invoked when the Predict button is clicked with the current match object.
+ * @returns {JSX.Element} A stylized match card component.
+ **/
 export const MatchCard: React.FC<MatchCardProps> = ({ match, onPredict }) => {
   return (
     <motion.div

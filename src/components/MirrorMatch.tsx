@@ -16,6 +16,16 @@ export const MirrorMatch: React.FC<{
   rawInfo: any;
   venue: string;
   matchType?: string;
+/**
+ * Fetches and visualizes historical venue-based match metrics up to a selected over, with selectable statistics and an average reference line.
+ * @example
+ * MirrorMatch({ rawInfo, venue, matchType: "T20" })
+ * <LineChart />
+ * @param {Object} rawInfo - Match data object used to infer overs and innings details.
+ * @param {string} venue - Venue name used to retrieve and compare historical matches.
+ * @param {string} [matchType="T20"] - Match format used to filter records and determine default over count.
+ * @returns {JSX.Element} A venue analysis chart component with metric and over selectors.
+ **/
 }> = ({ rawInfo, venue, matchType = "T20" }) => {
   const [data, setData] = useState<any[]>([]);
   const [selectedOver, setSelectedOver] = useState(6);
@@ -41,6 +51,14 @@ export const MirrorMatch: React.FC<{
   ];
 
   useEffect(() => {
+    /**
+     * Fetches recent matches for the selected venue and match type, then computes per-match batting statistics up to the selected over.
+     * @example
+     * sync()
+     * void
+     * @param {void} - This function does not accept any arguments.
+     * @returns {Promise<void>} Updates component state with processed match data and loading status.
+     **/
     const fetchVenueData = async () => {
       setLoading(true);
       if (!venue) {
