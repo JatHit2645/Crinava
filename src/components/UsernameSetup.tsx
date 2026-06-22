@@ -9,6 +9,15 @@ interface UsernameSetupProps {
   onComplete: (username: string) => void;
 }
 
+/**
+* Handles the username setup flow by validating availability, creating the username mapping, and initializing the user's profile.
+* @example
+* handleUsernameSetup({ isOpen: true, onComplete: (username) => console.log(username) })
+* "cricket_pro_99"
+* @param {{ boolean }} isOpen - Controls whether the username setup modal is displayed.
+* @param {{ function }} onComplete - Callback invoked with the chosen username after successful profile creation.
+* @returns {{ JSX.Element | null }} The username setup modal UI, or null when the modal is closed.
+**/
 export const UsernameSetup: React.FC<UsernameSetupProps> = ({
   isOpen,
   onComplete,
@@ -16,6 +25,14 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({
   const [username, setUsername] = useState("");
   const { isAvailable, checking } = useUsernameCheck(username);
 
+  /**
+   * Submits the chosen username, creates the username mapping and profile, and handles loading/error state.
+   * @example
+   * sync(event)
+   * undefined
+   * @param {React.FormEvent} e - Form submit event used to prevent the default submission behavior.
+   * @returns {Promise<void>} Resolves when the username setup flow completes or fails.
+   **/
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!username || !isAvailable) return;

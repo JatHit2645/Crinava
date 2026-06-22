@@ -15,6 +15,16 @@ export interface VerdictResponse {
   outOfScope?: boolean;
 }
 
+/**
+ * Fetches all available rows from a database query in paginated batches and returns the combined results.
+ * @example
+ * fetchFullData("users", "id,name", dbQuery)
+ * []
+ * @param {string} table - The table name used for logging error context.
+ * @param {string} select - The selected columns/query string.
+ * @param {any} dbQuery - The database query builder or client supporting range requests.
+ * @returns {Promise<any[]>} A promise that resolves to an array containing all fetched records.
+ */
 async function fetchFullData(
   table: string,
   select: string,
@@ -51,6 +61,14 @@ async function fetchFullData(
   return allData;
 }
 
+/**
+ * Extracts and parses JSON from a string, returning an empty object when parsing fails.
+ * @example
+ * extractJson('{"key":"value"}')
+ * { key: "value" }
+ * @param {string | null} content - The input string that may contain valid JSON.
+ * @returns {any} The parsed JSON object, or an empty object if parsing is unsuccessful.
+ **/
 function extractJson(content: string | null): any {
   if (!content) return {};
   try {
@@ -68,6 +86,14 @@ function extractJson(content: string | null): any {
   }
 }
 
+/**
+* Calls the configured AI chat completions API with the provided message list.
+* @example
+* callAIApi([{ role: "user", content: "Hello" }])
+* { choices: [...] }
+* @param {any[]} messages - Array of chat message objects to send to the AI API.
+* @returns {Promise<any>} Resolves with the JSON response from the AI API.
+**/
 async function callAIApi(messages: any[]): Promise<any> {
   const apiKey = (process.env.NVIDIA_API_KEY || process.env.MISTRAL_API_KEY)
     ?.trim()
@@ -107,6 +133,18 @@ async function callAIApi(messages: any[]): Promise<any> {
   return await response.json();
 }
 
+/**
+ * Generates a data-backed cricket verdict for a query within a specified scope.
+ *
+ * @example
+ * generateVerdict("Who is better?", "match", { matchId: 123 })
+ * { verdict: "Player A is mathematically superior.", confidence: 85, explanation: "...", proof: {...} }
+ *
+ * @param {string} query - User statement to analyze and convert into a verdict.
+ * @param {"global" | "series" | "match"} scope - Analysis scope for the verdict.
+ * @param {{ matchId?: number; eventName?: string; season?: string; scorecard?: any[] }} [context] - Optional contextual data for series or match-level analysis.
+ * @returns {Promise<VerdictResponse>} A promise that resolves to the final verdict response object.
+ **/
 export async function generateVerdict(
   query: string,
   scope: "global" | "series" | "match",

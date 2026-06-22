@@ -8,6 +8,14 @@ const supabase = createClient(
   process.env.VITE_SUPABASE_ANON_KEY || "",
 );
 
+/**
+* Parses cricket innings raw scorecard data and returns structured team scorecard summaries.
+* @example
+* parseScorecard(rawInfo)
+* [{ team: "Team A", totalRuns: 120, totalWickets: 5, overs: "20.0", batters: [], bowlers: [], extras: {}, didNotBat: [] }]
+* @param {any} rawInfo - Raw innings scorecard data as an object or JSON string.
+* @returns {Array<{team:string,totalRuns:number,totalWickets:number,overs:string,batters:Array<any>,bowlers:Array<any>,extras:{b:number,lb:number,w:number,nb:number,p:number,total:number},didNotBat:Array<string>}>} Structured innings scorecard summaries.
+**/
 const parseScorecard = (rawInfo: any) => {
   if (typeof rawInfo === "string") {
     try {
@@ -200,6 +208,13 @@ const parseScorecard = (rawInfo: any) => {
   });
 };
 
+/**
+ * Fetches a sample match from the database and tests whether its scorecard can be parsed successfully.
+ * @example
+ * testScorecard()
+ * undefined
+ * @returns {Promise<void>} Resolves when the scorecard test and logging are complete.
+ */
 async function testScorecard() {
   const { data, error } = await supabase
     .from("matches")

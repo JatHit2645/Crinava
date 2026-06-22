@@ -7,6 +7,13 @@ const supabase = createClient(
   process.env.VITE_SUPABASE_ANON_KEY!,
 );
 
+/**
+ * Checks the "deliveries" table schema by fetching one row and logging its columns or any error.
+ * @example
+ * check()
+ * undefined
+ * @returns {Promise<void>} Resolves when the schema check and logging are complete.
+ **/
 async function check() {
   const { data, error } = await supabase
     .from("deliveries")

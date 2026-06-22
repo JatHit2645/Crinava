@@ -3,6 +3,11 @@ import re
 
 def fix_shorthand(content):
     # standard h-x w-x -> size-x
+    """Normalize paired width/height utility classes into a single size shorthand.
+    Parameters:
+        - content (str): String containing utility class markup to normalize.
+    Returns:
+        - str: Updated string with matching h/w or w/h pairs replaced by size shorthand."""
     content = re.sub(r'\bh-([a-zA-Z0-9.\[\]-]+)\s+w-\1\b', r'size-\1', content)
     content = re.sub(r'\bw-([a-zA-Z0-9.\[\]-]+)\s+h-\1\b', r'size-\1', content)
     

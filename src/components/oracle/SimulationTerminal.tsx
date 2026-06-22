@@ -2,6 +2,13 @@ import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Terminal, Cpu, Zap, Globe, Shield } from "lucide-react";
 
+/**
+ * Renders a real-time oracle simulation terminal with animated log output, progress tracking, and status metrics.
+ * @example
+ * SimulationTerminal()
+ * <section>...</section>
+ * @returns {JSX.Element} The simulation terminal UI component.
+ **/
 export const SimulationTerminal: React.FC = () => {
   const [logs, setLogs] = useState<string[]>([]);
   const [progress, setProgress] = useState(0);

@@ -148,6 +148,12 @@ async def home():
 
 
 def _determine_match_state(mid: str, default_state: str) -> str:
+    """Determine the current match state from match history and stored metadata.
+    Parameters:
+        - mid (str): Match identifier used to look up match data.
+        - default_state (str): Fallback state returned when no match-specific state can be determined.
+    Returns:
+        - str: The resolved match state, such as "Completed", "Upcoming", or the provided default state."""
     state = default_state
     if mid in match_hub:
         if match_hub[mid].get("state") == "Completed":

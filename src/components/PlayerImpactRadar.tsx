@@ -12,6 +12,16 @@ import { Trophy, ChevronDown } from "lucide-react";
 import { extractInningData } from "../utils/matchParser";
 import { InningSelector } from "./shared/InningSelector";
 
+/**
+ * Renders a radar chart visualizing player impact data.
+ * @example
+ * PlayerImpactRadar({ data, color, name })
+ * <RadarChart />
+ * @param {{data: any[]}} data - Array of radar chart data points.
+ * @param {string} color - Stroke and fill color for the radar series.
+ * @param {string} name - Display name for the radar series.
+ * @returns {JSX.Element} A responsive radar chart component.
+ **/
 const ImpactRadarChart = ({ data, color, name }: { data: any[], color: string, name: string }) => (
   <ResponsiveContainer width="100%" height="100%">
     <RadarChart cx="50%" cy="50%" outerRadius="55%" data={data}>
@@ -35,6 +45,14 @@ export const PlayerImpactRadar: React.FC<{
   rawInfo: any;
   playerId: string;
   allPlayers?: string[];
+/**
+ * Analyzes a selected player's batting and bowling impact for the chosen inning and renders radar chart data.
+ * @example
+ * PlayerImpactRadar({ rawInfo, playerId: "player_1", allPlayers: ["player_1", "player_2"] })
+ * { battingData: [...], bowlingData: [...], loading: false }
+ * @param {object} { rawInfo, playerId, allPlayers } - Match data, the initial selected player ID, and an optional list of players to choose from.
+ * @returns {JSX.Element} A player impact radar visualization with batting and bowling metrics for the selected inning.
+ **/
 }> = ({ rawInfo, playerId: initialPlayerId, allPlayers = [] }) => {
   const [battingData, setBattingData] = useState<any[]>([]);
   const [bowlingData, setBowlingData] = useState<any[]>([]);
@@ -192,6 +210,15 @@ export const PlayerImpactRadar: React.FC<{
     setLoading(false);
   }, [selectedPlayer, rawInfo, activeInning]);
 
+  /**
+  * Renders a custom tooltip for the player impact radar chart when a data point is active.
+  * @example
+  * CustomTooltip({ active: true, payload: [{ payload: { subject: "Passing", value: 85 } }] })
+  * <div>Passing 85</div>
+  * @param {{any}} active - Indicates whether the tooltip should be shown.
+  * @param {{any}} payload - Chart payload containing the active data point information.
+  * @returns {{JSX.Element | null}} Tooltip markup when active data is available, otherwise null.
+  **/
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (

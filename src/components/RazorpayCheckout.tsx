@@ -6,12 +6,29 @@ interface RazorpayCheckoutProps {
   onSuccess: () => void;
 }
 
+/**
+* Handles the Razorpay subscription checkout flow for a logged-in user, including order creation, payment initiation, and payment verification.
+* @example
+* handlePayment()
+* "Payment successful!"
+* @param {number} amount - The subscription amount to charge in INR.
+* @param {Function} onSuccess - Callback invoked after successful payment verification.
+* @returns {JSX.Element} A checkout UI with a subscribe button and optional status message.
+**/
 export const RazorpayCheckout: React.FC<RazorpayCheckoutProps> = ({
   amount,
   onSuccess,
 }) => {
   const [message, setMessage] = useState<string | null>(null);
 
+  /**
+  * Initiates a Razorpay subscription payment flow for the signed-in user, creates an order, opens the checkout modal, and verifies the payment on success.
+  * @example
+  * sync()
+  * undefined
+  * @param {void} - This function does not accept any parameters.
+  * @returns {Promise<void>} A promise that resolves after the payment flow is started or an error is handled.
+  **/
   const handlePayment = async () => {
     setMessage(null);
     try {

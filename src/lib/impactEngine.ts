@@ -15,6 +15,18 @@ export interface ImpactBaselines {
   wicketValue: number;
 }
 
+/**
+ * Calculates a player's impact from ball-by-ball deliveries by comparing actual runs and wickets to league-average expectations.
+ * @example
+ * calculateImpact(deliveries, playerId, playerName, "batter")
+ * { name: "Player Name", role: "batter", totalImpact: 12.34, balls: 45, impactPerBall: 0.274, runs: 62, wickets: 1, matchCount: 3, normalizedScore: 77.4 }
+ * @param {any[]} deliveries - Array of delivery objects used to compute impact.
+ * @param {string} playerId - Unique player identifier to filter relevant deliveries.
+ * @param {string} playerName - Player display name included in the returned impact stats.
+ * @param {"batter" | "bowler"} role - Player role used to determine how runs and wickets are evaluated.
+ * @param {ImpactBaselines} baselines - Baseline values used for league-average run and wicket expectations.
+ * @returns {ImpactStats} Returns an impact summary including total impact, per-ball impact, raw stats, match count, and normalized score.
+ */
 export function calculateImpact(
   deliveries: any[],
   playerId: string,

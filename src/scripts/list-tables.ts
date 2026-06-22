@@ -9,6 +9,13 @@ const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
 
 const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
 
+/**
+* Lists several known Supabase tables by probing them one by one and logging whether each table exists or returns an error.
+* @example
+* listTables()
+* undefined
+* @returns {Promise<void>} Resolves when all table probes have completed.
+**/
 async function listTables() {
   console.log("Listing tables (via a hacky way)...");
   // Since we don't have direct access to list tables easily in Supabase client without RPC,

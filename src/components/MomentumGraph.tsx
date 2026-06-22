@@ -15,6 +15,14 @@ interface MomentumData {
   event?: string;
 }
 
+/**
+ * Renders a momentum area chart with a glowing cyan gradient, zero baseline, and tooltip.
+ * @example
+ * MomentumGraph(data)
+ * <div>...</div>
+ * @param {Array<Object>} data - Array of chart data points containing at least `over` and `score` fields.
+ * @returns {JSX.Element} A styled React component displaying the momentum graph.
+ **/
 export const MomentumGraph: React.FC<{ data: MomentumData[] }> = ({ data }) => {
   return (
     <div className="h-[300px] w-full bg-[#0A0A0A] p-6 rounded-[32px] border border-white/5">

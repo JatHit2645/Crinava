@@ -8,6 +8,14 @@ export interface MatchFactors {
   weather: "clear" | "humid" | "overcast";
 }
 
+/**
+ * Runs a Monte Carlo simulation to estimate match outcome probabilities based on match factors.
+ * @example
+ * runMonteCarloSimulation(factors)
+ * { winner: "Team A", teamAWins: 1200000, teamBWins: 800000, iterations: 2000000, winProbability: 60 }
+ * @param {MatchFactors} factors - Match conditions and attributes used to adjust the simulation probability.
+ * @returns {{ winner: string, teamAWins: number, teamBWins: number, iterations: number, winProbability: number }} Simulation results including predicted winner, win counts, total iterations, and win probability percentage.
+ **/
 export async function runMonteCarloSimulation(factors: MatchFactors) {
   // 1. In a real system, we would fetch pre-computed stats from Supabase views here.
   // For now, we simulate the logic.

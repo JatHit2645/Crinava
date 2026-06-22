@@ -18,6 +18,14 @@ interface Match {
   ball_count: string;
 }
 
+/**
+ * Displays a searchable archive of historical matches fetched from the API.
+ * @example
+ * MatchArchive()
+ * <MatchArchive />
+ * @param {undefined} Argument - This component does not accept any arguments.
+ * @returns {JSX.Element} A match archive UI with loading state, search filtering, and match cards.
+ **/
 export const MatchArchive: React.FC = () => {
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);

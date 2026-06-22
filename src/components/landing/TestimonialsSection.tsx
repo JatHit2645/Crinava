@@ -23,6 +23,14 @@ const testimonials = [
   },
 ];
 
+/**
+ * Renders a testimonials section showcasing user feedback with animated testimonial cards.
+ * @example
+ * TestimonialsSection()
+ * <section>...</section>
+ * @param {undefined} No arguments are required.
+ * @returns {JSX.Element} The testimonials section component.
+ **/
 export const TestimonialsSection: React.FC = () => {
   return (
     <section id="community" className="py-24 px-6 relative overflow-hidden">

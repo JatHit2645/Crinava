@@ -5,6 +5,15 @@ interface InningSelectorProps {
   setActiveInning: (inning: number) => void;
 }
 
+/**
+ * Renders a two-button inning selector and updates the active inning state when a button is clicked.
+ * @example
+ * InningSelector({ activeInning: 0, setActiveInning })
+ * <div>Inning 1 / Inning 2 selector</div>
+ * @param {{number}} activeInning - The currently selected inning index, where 0 represents Inning 1 and 1 represents Inning 2.
+ * @param {{(inning: number) => void}} setActiveInning - Callback used to update the selected inning index.
+ * @returns {{JSX.Element}} The rendered inning selector UI.
+ **/
 export const InningSelector: React.FC<InningSelectorProps> = ({
   activeInning,
   setActiveInning,

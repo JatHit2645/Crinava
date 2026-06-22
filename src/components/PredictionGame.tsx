@@ -365,6 +365,14 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
   });
 
   // Sync
+  /**
+   * Updates the game state and persists selected fields to localStorage.
+   * @example
+   * updateGameState(newSt)
+   * undefined
+   * @param {GameState} newSt - The new game state to store and save.
+   * @returns {void} No return value.
+   **/
   const saveSt = (newSt: GameState) => {
     setSt(newSt);
     localStorage.setItem(
@@ -402,6 +410,14 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
     return s;
   };
 
+  /**
+   * Synchronizes the current prediction game state to a remote bin and returns its bin ID.
+   * @example
+   * sync(currentState)
+   * "bin_123abc"
+   * @param {GameState} currentState - The current game state to be serialized and saved.
+   * @returns {Promise<string|undefined>} A promise that resolves to the created or updated bin ID, or the existing bin ID on failure.
+   **/
   const syncSave = async (currentState: GameState) => {
     const data = {
       room: currentState.room,
@@ -453,6 +469,13 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
     }
   };
 
+  /**
+  * Synchronizes the current game state by fetching the latest record for the active battle ID and merging it into state.
+  * @example
+  * sync()
+  * undefined
+  * @returns {void} No return value.
+  **/
   const syncLoad = async () => {
     if (!st.bid) return;
     try {
@@ -483,6 +506,13 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
     }
   }, [st.room, st.bid, st.myProf?.player]);
 
+  /**
+  * Creates a new game room after validating both player names, saves the initial state, and navigates to the onboard view.
+  * @example
+  * sync()
+  * undefined
+  * @returns {Promise<void>} Resolves when the room has been created and the game state has been saved and updated.
+  **/
   const handleCreate = async () => {
     if (!p1Input || !p2Input) {
       showToast("Enter both player names");
@@ -503,6 +533,14 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
     setView("onboard");
   };
 
+  /**
+   * Joins a prediction game room using a full join code, loads the latest room state, and switches to the onboarding view.
+   * @example
+   * sync()
+   * void
+   * @param {void} - This function takes no arguments.
+   * @returns {Promise<void>} Resolves after attempting to join the room; shows an error toast if the room is invalid or not found.
+   **/
   const handleJoin = async () => {
     if (!joinCode.includes(":")) {
       showToast("Paste the FULL code (e.g. ABCD12:abc123)");
@@ -541,6 +579,13 @@ export function PredictionGame({ onBack }: { onBack: () => void }) {
     }
   };
 
+  /**
+   * Saves the current profile PIN, syncs state, and navigates into the game view.
+   * @example
+   * sync()
+   * undefined
+   * @returns {Promise<void>} Resolves after the state is saved and the view is updated.
+   **/
   const handleFinishOnboard = async () => {
     if (tempProf.pin.length < 4) {
       showToast("Enter 4-digit PIN");
