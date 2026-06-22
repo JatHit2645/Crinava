@@ -540,7 +540,7 @@ const TournamentsList: React.FC<{ onSelect: (t: Tournament) => void }> = ({
                     className={`w-10 h-5 rounded-full relative transition-all ${leaguesOnly ? "bg-metallic-gold" : "bg-gray-700"}`}
                   >
                     <div
-                      className={`absolute top-1 w-3 h-3 rounded-full transition-all ${leaguesOnly ? "left-6 bg-black" : "left-1 bg-white"}`}
+                      className={`absolute top-1 size-3 rounded-full transition-all ${leaguesOnly ? "left-6 bg-black" : "left-1 bg-white"}`}
                     />
                   </button>
                 </div>
@@ -623,7 +623,7 @@ const TournamentsList: React.FC<{ onSelect: (t: Tournament) => void }> = ({
                             yearRange[1],
                           ]);
                         }}
-                        className="absolute w-full h-2 bg-transparent appearance-none pointer-events-none z-20 [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-metallic-gold [&::-webkit-slider-thumb]:rounded-full"
+                        className="absolute w-full h-2 bg-transparent appearance-none pointer-events-none z-20 [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-metallic-gold [&::-webkit-slider-thumb]:rounded-full"
                       />
                       <input
                         type="range"
@@ -637,7 +637,7 @@ const TournamentsList: React.FC<{ onSelect: (t: Tournament) => void }> = ({
                             Math.max(val, yearRange[0]),
                           ]);
                         }}
-                        className="absolute w-full h-2 bg-transparent appearance-none pointer-events-none z-20 [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-metallic-gold [&::-webkit-slider-thumb]:rounded-full"
+                        className="absolute w-full h-2 bg-transparent appearance-none pointer-events-none z-20 [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-metallic-gold [&::-webkit-slider-thumb]:rounded-full"
                       />
                     </div>
                   </div>
@@ -1355,7 +1355,7 @@ const MatchDetail: React.FC<{ matchId: number; onBack: () => void }> = ({
           <div className="text-xs font-black text-aurora-teal uppercase tracking-widest">
             {match?.match_type || "T20"}
           </div>
-          <div className="w-1 h-1 rounded-full bg-white/20" />
+          <div className="size-1 rounded-full bg-white/20" />
           <div className="text-xs font-black text-aurora-teal uppercase tracking-widest">
             {match?.match_date
               ? new Date(match.match_date).getFullYear()
@@ -1880,7 +1880,7 @@ const LiveMatchesList: React.FC<{ onSelect: (m: LiveMatch) => void }> = ({
   if (liveMatches.length === 0) {
     return (
       <div className="p-12 bg-[#111111] border border-white/5 rounded-3xl text-center space-y-4">
-        <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-dashed border-white/10 mx-auto">
+        <div className="size-16 rounded-full bg-white/5 flex items-center justify-center border border-dashed border-white/10 mx-auto">
           <Activity size={30} className="text-gray-700" />
         </div>
         <p className="text-xs text-gray-500 font-black uppercase tracking-widest">
@@ -1952,14 +1952,14 @@ const LiveMatchesList: React.FC<{ onSelect: (m: LiveMatch) => void }> = ({
                 className="p-6 rounded-2xl bg-gradient-to-br from-white/[0.02] to-transparent border border-white/5 hover:border-aurora-teal/30 hover:shadow-[0_0_20px_rgba(17,235,207,0.05)] cursor-pointer transition-all space-y-4 group relative overflow-hidden"
               >
                 <div className="absolute top-4 right-4 flex items-center gap-2">
-                  <span className="flex h-2 w-2 relative">
+                  <span className="flex size-2 relative">
                     {matchState === "Live" && (
                       <span
-                        className={`animate-ping absolute inline-flex h-full w-full rounded-full ${dotColor.split(" ")[0]} opacity-75`}
+                        className={`animate-ping absolute inline-flex size-full rounded-full ${dotColor.split(" ")[0]} opacity-75`}
                       ></span>
                     )}
                     <span
-                      className={`relative inline-flex rounded-full h-2 w-2 ${dotColor.split(" ")[0]}`}
+                      className={`relative inline-flex rounded-full size-2 ${dotColor.split(" ")[0]}`}
                     ></span>
                   </span>
                   <span
@@ -2722,13 +2722,13 @@ const LiveMatchDetail: React.FC<{ match: LiveMatch; onBack: () => void }> = ({
               <span className="text-[10px] font-black text-metallic-gold uppercase tracking-[0.2em]">
                 {match.source} Live Feed
               </span>
-              <div className="w-1 h-1 rounded-full bg-white/20" />
+              <div className="size-1 rounded-full bg-white/20" />
               <div className="flex items-center gap-2">
                 <span
-                  className={`flex h-2 w-2 relative ${connected ? "visible" : "hidden"}`}
+                  className={`flex size-2 relative ${connected ? "visible" : "hidden"}`}
                 >
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-aurora-teal opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-aurora-teal"></span>
+                  <span className="animate-ping absolute inline-flex size-full rounded-full bg-aurora-teal opacity-75"></span>
+                  <span className="relative inline-flex rounded-full size-2 bg-aurora-teal"></span>
                 </span>
                 <span
                   className={`text-[8px] font-black uppercase tracking-widest ${connected ? "text-aurora-teal" : "text-gray-500 animate-pulse"}`}
@@ -2912,7 +2912,7 @@ export const MatchesSection: React.FC<{ onBackToHome?: () => void }> = ({
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           onClick={handleBack}
-          className="flex items-center justify-center w-10 h-10 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-metallic-gold group shadow-lg"
+          className="flex items-center justify-center size-10 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-metallic-gold group shadow-lg"
         >
           <ArrowLeft
             size={20}

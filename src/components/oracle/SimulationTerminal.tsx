@@ -51,22 +51,22 @@ export const SimulationTerminal: React.FC = () => {
             <div className="space-y-6">
               {[
                 {
-                  icon: <Cpu className="w-5 h-5" />,
+                  icon: <Cpu className="size-5" />,
                   label: "Neural Processing",
                   value: "Active",
                 },
                 {
-                  icon: <Zap className="w-5 h-5" />,
+                  icon: <Zap className="size-5" />,
                   label: "Latency",
                   value: "14ms",
                 },
                 {
-                  icon: <Globe className="w-5 h-5" />,
+                  icon: <Globe className="size-5" />,
                   label: "Global Nodes",
                   value: "128",
                 },
                 {
-                  icon: <Shield className="w-5 h-5" />,
+                  icon: <Shield className="size-5" />,
                   label: "Data Integrity",
                   value: "99.9%",
                 },
@@ -97,12 +97,12 @@ export const SimulationTerminal: React.FC = () => {
               {/* Terminal Header */}
               <div className="px-6 py-4 bg-white/5 border-b border-white/10 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
+                  <div className="size-3 rounded-full bg-red-500/50"></div>
+                  <div className="size-3 rounded-full bg-yellow-500/50"></div>
+                  <div className="size-3 rounded-full bg-green-500/50"></div>
                 </div>
                 <div className="flex items-center gap-2 text-xs font-mono text-white/40">
-                  <Terminal className="w-3 h-3" />
+                  <Terminal className="size-3" />
                   ORACLE_SIM_v2.5
                 </div>
               </div>
@@ -147,8 +147,8 @@ export const SimulationTerminal: React.FC = () => {
             </div>
 
             {/* Floating Decoration */}
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-aurora/10 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-imperial/10 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute -top-10 -right-10 size-32 bg-aurora/10 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute -bottom-10 -left-10 size-32 bg-imperial/10 rounded-full blur-3xl animate-pulse"></div>
           </div>
         </div>
       </div>

@@ -57,7 +57,7 @@ export const MatchArchive: React.FC = () => {
           </div>
 
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 size-4" />
             <input
               type="text"
               placeholder="Search by ID, Venue or City..."
@@ -71,7 +71,7 @@ export const MatchArchive: React.FC = () => {
         {/* Match Grid */}
         {loading ? (
           <div className="flex flex-col items-center justify-center h-64">
-            <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+            <div className="size-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
             <p className="mt-4 text-slate-400">Accessing Historical Vault...</p>
           </div>
         ) : (
@@ -92,7 +92,7 @@ export const MatchArchive: React.FC = () => {
 
                   <div className="flex items-start gap-4">
                     <div className="bg-indigo-500/20 p-3 rounded-lg">
-                      <Trophy className="w-6 h-6 text-indigo-400" />
+                      <Trophy className="size-6 text-indigo-400" />
                     </div>
                     <div>
                       <h3 className="font-bold text-lg group-hover:text-indigo-400 transition-colors">
@@ -100,11 +100,11 @@ export const MatchArchive: React.FC = () => {
                       </h3>
                       <div className="flex flex-col gap-2 mt-3 text-sm text-slate-400">
                         <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4" />
+                          <Calendar className="size-4" />
                           {new Date(match.match_date).toLocaleDateString()}
                         </div>
                         <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4" />
+                          <MapPin className="size-4" />
                           {match.venue}, {match.city}
                         </div>
                         <div className="flex items-center gap-2">
@@ -127,7 +127,7 @@ export const MatchArchive: React.FC = () => {
                     </span>
                     <button className="flex items-center gap-1 text-indigo-400 text-sm font-semibold group-hover:translate-x-1 transition-transform">
                       View Full Scorecard
-                      <ChevronRight className="w-4 h-4" />
+                      <ChevronRight className="size-4" />
                     </button>
                   </div>
                 </motion.div>

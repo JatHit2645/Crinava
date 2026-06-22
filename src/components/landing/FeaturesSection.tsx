@@ -4,42 +4,42 @@ import { Target, Cpu, TrendingUp, Users, ShieldCheck, Zap } from "lucide-react";
 
 const features = [
   {
-    icon: <Target className="w-6 h-6" />,
+    icon: <Target className="size-6" />,
     title: "Oracle Engine",
     description:
       "AI-driven predictive analytics with 94.2% historical accuracy across all formats.",
     color: "aurora",
   },
   {
-    icon: <Cpu className="w-6 h-6" />,
+    icon: <Cpu className="size-6" />,
     title: "Monte Carlo Simulations",
     description:
       "Run 10,000+ match scenarios in seconds to identify high-probability outcomes.",
     color: "imperial",
   },
   {
-    icon: <TrendingUp className="w-6 h-6" />,
+    icon: <TrendingUp className="size-6" />,
     title: "Momentum Flow",
     description:
       "Real-time telemetry tracking psychological and physical momentum shifts.",
     color: "aurora",
   },
   {
-    icon: <Users className="w-6 h-6" />,
+    icon: <Users className="size-6" />,
     title: "Smart XI Optimizer",
     description:
       "Algorithmic team selection based on pitch conditions and player matchups.",
     color: "imperial",
   },
   {
-    icon: <ShieldCheck className="w-6 h-6" />,
+    icon: <ShieldCheck className="size-6" />,
     title: "Risk Assessment",
     description:
       "Advanced volatility metrics to protect your strategy from outlier events.",
     color: "aurora",
   },
   {
-    icon: <Zap className="w-6 h-6" />,
+    icon: <Zap className="size-6" />,
     title: "Instant Telemetry",
     description:
       "Sub-second data updates from global match feeds directly to your dashboard.",
@@ -93,7 +93,7 @@ export const FeaturesSection: React.FC = () => {
               className={`glass-card p-8 group hover:border-${feature.color}/40`}
             >
               <div
-                className={`w-14 h-14 rounded-2xl bg-${feature.color}/10 border border-${feature.color}/20 flex items-center justify-center text-${feature.color} mb-8 group-hover:scale-110 transition-transform duration-500`}
+                className={`size-14 rounded-2xl bg-${feature.color}/10 border border-${feature.color}/20 flex items-center justify-center text-${feature.color} mb-8 group-hover:scale-110 transition-transform duration-500`}
               >
                 {feature.icon}
               </div>

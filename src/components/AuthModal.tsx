@@ -162,7 +162,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
             {sent ? (
               <div className="space-y-6 text-center py-8">
-                <div className="w-16 h-16 bg-cmd-cyan/10 rounded-full flex items-center justify-center mx-auto">
+                <div className="size-16 bg-cmd-cyan/10 rounded-full flex items-center justify-center mx-auto">
                   <Mail className="text-cmd-cyan" size={32} />
                 </div>
                 <div className="space-y-2">

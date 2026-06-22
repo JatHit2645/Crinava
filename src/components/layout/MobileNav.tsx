@@ -34,7 +34,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
           {/* Header */}
           <div className="flex items-center justify-between mb-12">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-aurora flex items-center justify-center shadow-aurora">
+              <div className="size-10 rounded-xl bg-gradient-aurora flex items-center justify-center shadow-aurora">
                 <span className="text-void font-bold text-xl">C</span>
               </div>
               <span className="text-xl font-bold tracking-tighter text-gradient-white">
@@ -45,7 +45,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
               onClick={onClose}
               className="p-3 rounded-xl bg-white/5 border border-white/10"
             >
-              <X className="w-6 h-6" />
+              <X className="size-6" />
             </button>
           </div>
 
@@ -53,15 +53,15 @@ export const MobileNav: React.FC<MobileNavProps> = ({
           {user && (
             <div className="glass-card p-6 mb-12 flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-aurora flex items-center justify-center text-void">
-                  <User className="w-6 h-6" />
+                <div className="size-12 rounded-xl bg-gradient-aurora flex items-center justify-center text-void">
+                  <User className="size-6" />
                 </div>
                 <div>
                   <div className="font-bold text-white">
                     {user.email?.split("@")[0]}
                   </div>
                   <div className="flex items-center gap-2 text-xs font-bold text-imperial uppercase tracking-widest">
-                    <Coins className="w-3 h-3" />
+                    <Coins className="size-3" />
                     {coins} Coins
                   </div>
                 </div>
@@ -73,8 +73,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                 }}
                 className="p-2.5 rounded-xl bg-white/5 border border-white/10 relative"
               >
-                <Bell className="w-5 h-5 text-white/80" />
-                <span className="absolute top-2 right-2 w-2 h-2 bg-aurora rounded-full border-2 border-void"></span>
+                <Bell className="size-5 text-white/80" />
+                <span className="absolute top-2 right-2 size-2 bg-aurora rounded-full border-2 border-void"></span>
               </button>
             </div>
           )}
@@ -89,7 +89,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                 className="text-2xl font-bold text-white/60 hover:text-aurora flex items-center justify-between group"
               >
                 {item}
-                <ArrowRight className="w-6 h-6 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all" />
+                <ArrowRight className="size-6 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all" />
               </a>
             ))}
           </div>
@@ -114,7 +114,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                 }}
                 className="btn-secondary w-full py-4 text-lg flex items-center justify-center gap-3"
               >
-                <User className="w-5 h-5" />
+                <User className="size-5" />
                 View Profile
               </button>
             )}

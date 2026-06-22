@@ -116,7 +116,7 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({
         >
           <div className="p-8 space-y-8">
             <div className="space-y-2 text-center">
-              <div className="w-16 h-16 bg-accent-default/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="size-16 bg-accent-default/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Sparkles className="text-accent-default" size={32} />
               </div>
               <h2 className="text-3xl font-black text-fg-primary uppercase italic tracking-tighter">

@@ -779,11 +779,11 @@ const VerdictCard = ({
     switch (status) {
       case "TRUE":
       case "LARGELY TRUE":
-        return <ShieldCheck className={`w-8 h-8 ${color}`} />;
+        return <ShieldCheck className={`size-8 ${color}`} />;
       case "FALSE":
-        return <ShieldAlert className={`w-8 h-8 ${color}`} />;
+        return <ShieldAlert className={`size-8 ${color}`} />;
       case "CONTESTED":
-        return <ShieldQuestion className={`w-8 h-8 ${color}`} />;
+        return <ShieldQuestion className={`size-8 ${color}`} />;
     }
   };
 
@@ -1781,7 +1781,7 @@ export default function App() {
             >
               <Bell size={20} />
               {notifications.some((n) => !n.read) && (
-                <span className="absolute top-2 right-2 w-2 h-2 bg-mercury rounded-full pulse-mercury" />
+                <span className="absolute top-2 right-2 size-2 bg-mercury rounded-full pulse-mercury" />
               )}
             </button>
           </div>
@@ -1816,7 +1816,7 @@ export default function App() {
               {/* Minimal Header */}
               <div className="p-8 pb-4 flex items-center justify-between relative z-10 shrink-0">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-white flex items-center justify-center rounded-[4px]">
+                  <div className="size-8 bg-white flex items-center justify-center rounded-[4px]">
                     <span className="text-[#020203] font-display font-black text-xl tracking-tighter">
                       C
                     </span>
@@ -1836,7 +1836,7 @@ export default function App() {
               <div className="flex-1 overflow-y-auto custom-scrollbar px-8 pb-8 relative z-10 flex flex-col gap-10">
                 {/* Profile Identity Block */}
                 <div className="flex items-center gap-6">
-                  <div className="relative w-20 h-20 shrink-0">
+                  <div className="relative size-20 shrink-0">
                     <div className="absolute inset-0 border-2 border-aurora-teal/30 rounded-full animate-pulse" />
                     <div className="absolute inset-[4px] border border-aurora-teal/50 rounded-full border-t-aurora-teal rotate-45" />
                     <div className="absolute inset-[8px] bg-[#111113] rounded-full overflow-hidden flex items-center justify-center">
@@ -1844,7 +1844,7 @@ export default function App() {
                         <img
                           src={profile.photoURL}
                           alt="Profile"
-                          className="w-full h-full object-cover grayscale opacity-80"
+                          className="size-full object-cover grayscale opacity-80"
                         />
                       ) : (
                         <UserCircle size={40} className="text-aurora-teal/50" />
@@ -1857,7 +1857,7 @@ export default function App() {
                         (session ? profile?.email?.split("@")[0] : "GUEST_UXR")}
                     </h2>
                     <div className="inline-flex items-center gap-2">
-                      <div className="w-2 h-2 bg-aurora-teal rounded-full shadow-[0_0_8px_rgba(46,213,115,1)]" />
+                      <div className="size-2 bg-aurora-teal rounded-full shadow-[0_0_8px_rgba(46,213,115,1)]" />
                       <span className="text-[10px] font-black text-aurora-teal uppercase tracking-[0.2em] truncate">
                         {profile?.expertise_badge || "Initiate Status"}
                       </span>
@@ -1868,7 +1868,7 @@ export default function App() {
                 {/* Cyberpunk Grid Stats */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-[#0a0a0c] border border-white/5 p-4 rounded-xl relative group overflow-hidden">
-                    <div className="absolute top-0 right-0 w-16 h-16 bg-metallic-gold/10 blur-xl group-hover:bg-metallic-gold/20 transition-all" />
+                    <div className="absolute top-0 right-0 size-16 bg-metallic-gold/10 blur-xl group-hover:bg-metallic-gold/20 transition-all" />
                     <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] mb-4">
                       Core Balance
                     </p>
@@ -1882,7 +1882,7 @@ export default function App() {
                     </div>
                   </div>
                   <div className="bg-[#0a0a0c] border border-white/5 p-4 rounded-xl relative group overflow-hidden">
-                    <div className="absolute top-0 right-0 w-16 h-16 bg-aurora-teal/10 blur-xl group-hover:bg-aurora-teal/20 transition-all" />
+                    <div className="absolute top-0 right-0 size-16 bg-aurora-teal/10 blur-xl group-hover:bg-aurora-teal/20 transition-all" />
                     <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] mb-4">
                       Intelligence
                     </p>
@@ -1954,7 +1954,7 @@ export default function App() {
                       {profile?.professional_comparison?.match || "Virat Kohli"}
                     </h3>
                     <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-aurora-teal/10 border border-aurora-teal/20 rounded-sm">
-                      <div className="w-1.5 h-1.5 bg-aurora-teal rounded-full animate-pulse" />
+                      <div className="size-1.5 bg-aurora-teal rounded-full animate-pulse" />
                       <span className="text-[9px] font-black text-aurora-teal uppercase tracking-[0.2em]">
                         92% DNA MATCH
                       </span>
@@ -2003,7 +2003,7 @@ export default function App() {
                         <div
                           key={b.id}
                           title={b.name}
-                          className={`w-8 h-8 rounded-[4px] flex items-center justify-center text-xs border ${b.progress === 100 ? "bg-metallic-gold/10 border-metallic-gold/30 text-metallic-gold" : "bg-white/5 border-white/5 text-gray-600 grayscale"}`}
+                          className={`size-8 rounded-[4px] flex items-center justify-center text-xs border ${b.progress === 100 ? "bg-metallic-gold/10 border-metallic-gold/30 text-metallic-gold" : "bg-white/5 border-white/5 text-gray-600 grayscale"}`}
                         >
                           {b.icon}
                         </div>
@@ -2023,7 +2023,7 @@ export default function App() {
                     }}
                     className="flex items-center gap-3 text-gray-500 hover:text-red-500 transition-colors group"
                   >
-                    <div className="w-8 h-8 rounded-full border border-gray-800 flex items-center justify-center group-hover:border-red-500/50 group-hover:bg-red-500/10 transition-colors">
+                    <div className="size-8 rounded-full border border-gray-800 flex items-center justify-center group-hover:border-red-500/50 group-hover:bg-red-500/10 transition-colors">
                       <LogOut
                         size={12}
                         className="group-hover:-translate-x-0.5 transition-transform"
@@ -2233,7 +2233,7 @@ export default function App() {
                 </p>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-aurora-teal mt-1.5" />
+                    <div className="size-1.5 rounded-full bg-aurora-teal mt-1.5" />
                     <p className="text-[10px] text-gray-300 font-medium">
                       <span className="text-white font-black">
                         Predictions:
@@ -2242,14 +2242,14 @@ export default function App() {
                     </p>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-aurora-teal mt-1.5" />
+                    <div className="size-1.5 rounded-full bg-aurora-teal mt-1.5" />
                     <p className="text-[10px] text-gray-300 font-medium">
                       <span className="text-white font-black">Debates:</span>{" "}
                       Quality of tactical arguments and community consensus.
                     </p>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-aurora-teal mt-1.5" />
+                    <div className="size-1.5 rounded-full bg-aurora-teal mt-1.5" />
                     <p className="text-[10px] text-gray-300 font-medium">
                       <span className="text-white font-black">
                         Simulations:
@@ -2288,7 +2288,7 @@ export default function App() {
                     key={badge.id}
                     className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 flex items-center gap-4 group hover:border-aurora-teal/30 transition-all"
                   >
-                    <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                    <div className="size-14 rounded-2xl bg-white/5 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                       {badge.icon}
                     </div>
                     <div className="flex-1">
@@ -2383,11 +2383,11 @@ export default function App() {
                     <div className="flex justify-center relative">
                       <div className="relative w-full max-w-sm aspect-[4/5]">
                         <ArtifactCard className="absolute inset-0 z-10 p-0 overflow-visible border-0 bg-transparent hover:bg-transparent">
-                          <div className="w-full h-full relative z-10 shadow-[20px_20px_60px_rgba(0,0,0,0.8)] overflow-hidden artifact-resonance">
+                          <div className="size-full relative z-10 shadow-[20px_20px_60px_rgba(0,0,0,0.8)] overflow-hidden artifact-resonance">
                             <img
                               src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                               alt="Brutalist Structure"
-                              className="w-full h-full object-cover mix-blend-luminosity grayscale contrast-125 hover:scale-105 transition-transform duration-1000"
+                              className="size-full object-cover mix-blend-luminosity grayscale contrast-125 hover:scale-105 transition-transform duration-1000"
                             />
                           </div>
                         </ArtifactCard>
@@ -2511,11 +2511,11 @@ export default function App() {
                             onClick={() => setActiveTab(feature.tab as AppTab)}
                             className="w-full aspect-[4/5] cursor-pointer border-0 bg-transparent hover:bg-transparent p-0"
                           >
-                            <div className="w-full h-full relative z-10 shadow-[10px_10px_40px_rgba(0,0,0,0.9)] overflow-hidden artifact-resonance">
+                            <div className="size-full relative z-10 shadow-[10px_10px_40px_rgba(0,0,0,0.9)] overflow-hidden artifact-resonance">
                               <img
                                 src={feature.img}
                                 alt={feature.title}
-                                className="w-full h-full object-cover grayscale contrast-125"
+                                className="size-full object-cover grayscale contrast-125"
                               />
                             </div>
                           </ArtifactCard>
@@ -2606,7 +2606,7 @@ export default function App() {
                       </select>
                       {selectedMatch && (
                         <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-aurora-teal animate-pulse" />
+                          <div className="size-2 rounded-full bg-aurora-teal animate-pulse" />
                           <span className="text-[10px] font-black text-white uppercase tracking-widest">
                             Telemetry Active
                           </span>
@@ -2731,7 +2731,7 @@ export default function App() {
                             </p>
                           </div>
                           <div className="flex items-center gap-3 p-3 rounded-xl bg-aurora-teal/10 border border-aurora-teal/20">
-                            <div className="w-10 h-10 rounded-full bg-aurora-teal/20 flex items-center justify-center">
+                            <div className="size-10 rounded-full bg-aurora-teal/20 flex items-center justify-center">
                               <CoinIcon size={24} />
                             </div>
                             <div>
@@ -3000,7 +3000,7 @@ export default function App() {
 
                     <div className="flex items-center gap-6">
                       <div className="relative">
-                        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-aurora-teal/20 to-transparent border border-aurora-teal/30 flex items-center justify-center">
+                        <div className="size-24 rounded-full bg-gradient-to-br from-aurora-teal/20 to-transparent border border-aurora-teal/30 flex items-center justify-center">
                           <Zap className="text-aurora-teal" size={40} />
                         </div>
                         <div className="absolute -bottom-2 -right-2 bg-white text-black text-[8px] font-black px-2 py-1 rounded-full uppercase italic">
@@ -3151,7 +3151,7 @@ export default function App() {
                     </div>
                   ) : (
                     <div className="py-20 flex flex-col items-center justify-center space-y-4">
-                      <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-dashed border-white/10">
+                      <div className="size-16 rounded-full bg-white/5 flex items-center justify-center border border-dashed border-white/10">
                         <BookOpen size={30} className="text-gray-700" />
                       </div>
                       <p className="text-xs text-gray-500 font-black uppercase tracking-widest">
@@ -3440,8 +3440,8 @@ export default function App() {
                   </div>
                 ) : simulating ? (
                   <div className="bg-[#111111] border border-aurora-teal/30 rounded-3xl p-12 flex flex-col items-center space-y-8">
-                    <div className="relative w-32 h-32">
-                      <svg className="w-full h-full" viewBox="0 0 100 100">
+                    <div className="relative size-32">
+                      <svg className="size-full" viewBox="0 0 100 100">
                         <circle
                           className="text-white/5 stroke-current"
                           strokeWidth="4"
@@ -3729,7 +3729,7 @@ export default function App() {
                             onClick={() =>
                               setRaffleQuantity((prev) => Math.max(1, prev - 1))
                             }
-                            className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white/5"
+                            className="size-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white/5"
                           >
                             -
                           </button>
@@ -3742,7 +3742,7 @@ export default function App() {
                                 Math.min(50, prev + 1),
                               )
                             }
-                            className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white/5"
+                            className="size-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white/5"
                           >
                             +
                           </button>
@@ -3862,8 +3862,8 @@ export default function App() {
                 <div className="relative group">
                   <div className="absolute -inset-1 bg-gradient-to-r from-aurora-teal to-metallic-gold rounded-[40px] blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
                   <div className="relative p-12 rounded-[40px] bg-[#0A0A0A] border border-white/5 text-center space-y-8 overflow-hidden">
-                    <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-aurora-teal/5 rounded-full blur-3xl"></div>
-                    <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-metallic-gold/5 rounded-full blur-3xl"></div>
+                    <div className="absolute top-0 right-0 -mr-16 -mt-16 size-64 bg-aurora-teal/5 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-0 left-0 -ml-16 -mb-16 size-64 bg-metallic-gold/5 rounded-full blur-3xl"></div>
 
                     <div className="space-y-2 relative z-10">
                       <div className="text-[10px] text-gray-500 font-black uppercase tracking-[0.4em]">
@@ -3876,7 +3876,7 @@ export default function App() {
                     </div>
 
                     <div className="flex justify-center items-center gap-3 relative z-10">
-                      <div className="w-1.5 h-1.5 bg-aurora-teal rounded-full animate-pulse"></div>
+                      <div className="size-1.5 bg-aurora-teal rounded-full animate-pulse"></div>
                       <span className="text-[10px] text-aurora-teal font-black uppercase tracking-[0.2em]">
                         Secure Ledger Sync Active
                       </span>
@@ -4054,7 +4054,7 @@ export default function App() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="p-8 bg-[#111111] border border-white/5 rounded-3xl space-y-6">
-                    <div className="w-12 h-12 bg-aurora-teal/10 rounded-xl flex items-center justify-center">
+                    <div className="size-12 bg-aurora-teal/10 rounded-xl flex items-center justify-center">
                       <PlusCircle size={24} className="text-aurora-teal" />
                     </div>
                     <div className="space-y-2">
@@ -4071,7 +4071,7 @@ export default function App() {
                   </div>
 
                   <div className="p-8 bg-[#111111] border border-white/5 rounded-3xl space-y-6">
-                    <div className="w-12 h-12 bg-metallic-gold/10 rounded-xl flex items-center justify-center">
+                    <div className="size-12 bg-metallic-gold/10 rounded-xl flex items-center justify-center">
                       <Trophy size={24} className="text-metallic-gold" />
                     </div>
                     <div className="space-y-2">
@@ -4088,7 +4088,7 @@ export default function App() {
                   </div>
 
                   <div className="p-8 bg-[#111111] border border-white/5 rounded-3xl space-y-6">
-                    <div className="w-12 h-12 bg-red-500/10 rounded-xl flex items-center justify-center">
+                    <div className="size-12 bg-red-500/10 rounded-xl flex items-center justify-center">
                       <ShieldAlert size={24} className="text-red-500" />
                     </div>
                     <div className="space-y-2">
@@ -4116,9 +4116,9 @@ export default function App() {
                       </p>
                     </div>
                     <div className="flex gap-2">
-                      <div className="w-2 h-2 bg-aurora-teal rounded-full animate-pulse"></div>
-                      <div className="w-2 h-2 bg-aurora-teal rounded-full animate-pulse delay-75"></div>
-                      <div className="w-2 h-2 bg-aurora-teal rounded-full animate-pulse delay-150"></div>
+                      <div className="size-2 bg-aurora-teal rounded-full animate-pulse"></div>
+                      <div className="size-2 bg-aurora-teal rounded-full animate-pulse delay-75"></div>
+                      <div className="size-2 bg-aurora-teal rounded-full animate-pulse delay-150"></div>
                     </div>
                   </div>
                 </div>
@@ -4186,7 +4186,7 @@ export default function App() {
                           })}
                         </span>
                         {isUnread && (
-                          <span className="w-1.5 h-1.5 bg-aurora-teal rounded-full animate-pulse" />
+                          <span className="size-1.5 bg-aurora-teal rounded-full animate-pulse" />
                         )}
                       </div>
                       <div className="p-3 bg-white/5 rounded-2xl rounded-tl-none border border-white/5">
@@ -4284,7 +4284,7 @@ export default function App() {
               <tab.icon size={18} />
               <span className="text-label">{tab.label}</span>
               {activeTab === tab.id && (
-                <div className="w-1 h-1 bg-mercury rounded-full mt-0.5 pulse-mercury" />
+                <div className="size-1 bg-mercury rounded-full mt-0.5 pulse-mercury" />
               )}
             </button>
           ))}
@@ -4297,7 +4297,7 @@ export default function App() {
               <ShieldCheck size={18} />
               <span className="text-label">Admin</span>
               {activeTab === "admin" && (
-                <div className="w-1 h-1 bg-mercury rounded-full mt-0.5" />
+                <div className="size-1 bg-mercury rounded-full mt-0.5" />
               )}
             </button>
           )}

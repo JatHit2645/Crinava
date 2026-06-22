@@ -105,7 +105,7 @@ export const TurningPointHeatmap: React.FC<{ rawInfo: any }> = ({
   if (loading)
     return (
       <div className="h-[400px] flex flex-col items-center justify-center space-y-4">
-        <div className="w-12 h-12 border-4 border-aurora-teal/20 border-t-aurora-teal rounded-full animate-spin" />
+        <div className="size-12 border-4 border-aurora-teal/20 border-t-aurora-teal rounded-full animate-spin" />
         <div className="text-gray-500 text-xs uppercase font-black tracking-widest animate-pulse">
           Mapping Match DNA...
         </div>
@@ -221,25 +221,25 @@ export const TurningPointHeatmap: React.FC<{ rawInfo: any }> = ({
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-6 border-t border-white/5 pt-6">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-[#FF4D4D] rounded-sm" />
+          <div className="size-3 bg-[#FF4D4D] rounded-sm" />
           <span className="text-[10px] text-gray-400 uppercase font-black tracking-widest">
             Wicket
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-[#FFD700] rounded-sm" />
+          <div className="size-3 bg-[#FFD700] rounded-sm" />
           <span className="text-[10px] text-gray-400 uppercase font-black tracking-widest">
             Boundary/Six
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-[#11EBCF] rounded-sm" />
+          <div className="size-3 bg-[#11EBCF] rounded-sm" />
           <span className="text-[10px] text-gray-400 uppercase font-black tracking-widest">
             Four
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-[#11EBCF]/20 rounded-sm" />
+          <div className="size-3 bg-[#11EBCF]/20 rounded-sm" />
           <span className="text-[10px] text-gray-400 uppercase font-black tracking-widest">
             Dot/Single
           </span>

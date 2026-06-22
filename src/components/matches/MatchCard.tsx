@@ -16,13 +16,13 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, onPredict }) => {
       className="glass-card p-8 group relative overflow-hidden"
     >
       {/* Background Decoration */}
-      <div className="absolute -top-12 -right-12 w-32 h-32 bg-aurora/5 rounded-full blur-3xl group-hover:bg-aurora/10 transition-colors"></div>
+      <div className="absolute -top-12 -right-12 size-32 bg-aurora/5 rounded-full blur-3xl group-hover:bg-aurora/10 transition-colors"></div>
 
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="badge-live">Live Telemetry</div>
         <div className="flex items-center gap-2 text-xs font-bold text-white/40 uppercase tracking-widest">
-          <Clock className="w-3 h-3" />
+          <Clock className="size-3" />
           {match.status === "LIVE" ? "In Progress" : "Upcoming"}
         </div>
       </div>
@@ -30,7 +30,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, onPredict }) => {
       {/* Match Info */}
       <div className="flex items-center justify-between gap-8 mb-10">
         <div className="flex-1 text-center">
-          <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-500">
+          <div className="size-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-500">
             <span className="text-2xl font-bold text-white">
               {match.team1_short}
             </span>
@@ -46,7 +46,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, onPredict }) => {
         </div>
 
         <div className="flex-1 text-center">
-          <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-500">
+          <div className="size-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-500">
             <span className="text-2xl font-bold text-white">
               {match.team2_short}
             </span>
@@ -59,7 +59,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, onPredict }) => {
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div className="p-4 rounded-xl bg-white/3 border border-white/5 flex flex-col gap-1">
           <div className="flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest">
-            <TrendingUp className="w-3 h-3 text-aurora" />
+            <TrendingUp className="size-3 text-aurora" />
             Win Probability
           </div>
           <div className="text-xl font-mono font-bold text-white">
@@ -70,7 +70,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, onPredict }) => {
         </div>
         <div className="p-4 rounded-xl bg-white/3 border border-white/5 flex flex-col gap-1">
           <div className="flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest">
-            <Activity className="w-3 h-3 text-imperial" />
+            <Activity className="size-3 text-imperial" />
             Momentum
           </div>
           <div className="text-xl font-mono font-bold text-white">
@@ -83,7 +83,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, onPredict }) => {
       {/* Footer */}
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2 text-xs font-bold text-white/40 uppercase tracking-widest">
-          <MapPin className="w-3 h-3" />
+          <MapPin className="size-3" />
           {match.venue}
         </div>
         <button
@@ -92,7 +92,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, onPredict }) => {
         >
           <span className="flex items-center gap-2">
             Predict
-            <Zap className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
+            <Zap className="size-4 group-hover/btn:scale-110 transition-transform" />
           </span>
         </button>
       </div>

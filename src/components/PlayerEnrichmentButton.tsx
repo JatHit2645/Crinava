@@ -243,7 +243,7 @@ export function PlayerEnrichmentButton() {
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <div
-                className={`w-1.5 h-1.5 rounded-full ${isRunning ? "bg-accent animate-pulse" : "bg-cmd-text-muted"}`}
+                className={`size-1.5 rounded-full ${isRunning ? "bg-accent animate-pulse" : "bg-cmd-text-muted"}`}
               />
               <span className="text-[10px] font-black uppercase tracking-widest text-accent">
                 System Message
@@ -268,7 +268,7 @@ export function PlayerEnrichmentButton() {
                   {lastHeartbeatStr}
                 </span>
                 <div
-                  className={`w-1 h-1 rounded-full ${isHeartbeatHealthy ? "bg-accent" : "bg-status-error"} ${isHeartbeatHealthy ? "animate-ping" : ""}`}
+                  className={`size-1 rounded-full ${isHeartbeatHealthy ? "bg-accent" : "bg-status-error"} ${isHeartbeatHealthy ? "animate-ping" : ""}`}
                 />
               </div>
             )}

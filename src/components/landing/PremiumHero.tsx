@@ -58,12 +58,12 @@ export const PremiumHero: React.FC<PremiumHeroProps> = ({ onGetStarted }) => {
             <button onClick={onGetStarted} className="btn-primary group">
               <span className="flex items-center gap-2">
                 Launch Oracle Engine
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
               </span>
             </button>
             <button className="btn-secondary flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-aurora/20 transition-colors">
-                <Play className="w-3 h-3 fill-white group-hover:fill-aurora transition-colors" />
+              <div className="size-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-aurora/20 transition-colors">
+                <Play className="size-3 fill-white group-hover:fill-aurora transition-colors" />
               </div>
               Watch Simulation
             </button>
@@ -77,25 +77,25 @@ export const PremiumHero: React.FC<PremiumHeroProps> = ({ onGetStarted }) => {
             className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-12 opacity-40 grayscale hover:grayscale-0 transition-all duration-700"
           >
             <div className="flex items-center gap-3">
-              <Shield className="w-6 h-6" />
+              <Shield className="size-6" />
               <span className="text-xs font-bold tracking-widest uppercase">
                 Encrypted
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <Zap className="w-6 h-6" />
+              <Zap className="size-6" />
               <span className="text-xs font-bold tracking-widest uppercase">
                 Real-time
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <Globe className="w-6 h-6" />
+              <Globe className="size-6" />
               <span className="text-xs font-bold tracking-widest uppercase">
                 Global Data
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-6 h-6 border-2 border-white rounded-sm"></div>
+              <div className="size-6 border-2 border-white rounded-sm"></div>
               <span className="text-xs font-bold tracking-widest uppercase">
                 Verified
               </span>

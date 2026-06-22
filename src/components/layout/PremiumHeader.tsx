@@ -26,7 +26,7 @@ export const PremiumHeader: React.FC<PremiumHeaderProps> = ({
         <nav className="glass-card-aurora px-6 py-3 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-3 group cursor-pointer">
-            <div className="w-10 h-10 rounded-xl bg-gradient-aurora flex items-center justify-center shadow-aurora group-hover:scale-110 transition-transform duration-500">
+            <div className="size-10 rounded-xl bg-gradient-aurora flex items-center justify-center shadow-aurora group-hover:scale-110 transition-transform duration-500">
               <span className="text-void font-bold text-xl">C</span>
             </div>
             <span className="text-xl font-bold tracking-tighter text-gradient-white">
@@ -52,7 +52,7 @@ export const PremiumHeader: React.FC<PremiumHeaderProps> = ({
             {user ? (
               <>
                 <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-imperial/10 border border-imperial/20">
-                  <Coins className="w-4 h-4 text-imperial" />
+                  <Coins className="size-4 text-imperial" />
                   <span className="text-sm font-bold text-imperial">
                     {coins}
                   </span>
@@ -61,14 +61,14 @@ export const PremiumHeader: React.FC<PremiumHeaderProps> = ({
                   onClick={onNotificationsClick}
                   className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-aurora/40 hover:bg-white/10 transition-all duration-300 relative"
                 >
-                  <Bell className="w-5 h-5 text-white/80" />
-                  <span className="absolute top-2 right-2 w-2 h-2 bg-aurora rounded-full border-2 border-void"></span>
+                  <Bell className="size-5 text-white/80" />
+                  <span className="absolute top-2 right-2 size-2 bg-aurora rounded-full border-2 border-void"></span>
                 </button>
                 <button
                   onClick={onProfileClick}
                   className="p-2.5 rounded-xl bg-gradient-aurora text-void hover:shadow-aurora transition-all duration-300"
                 >
-                  <User className="w-5 h-5" />
+                  <User className="size-5" />
                 </button>
               </>
             ) : (
@@ -82,9 +82,9 @@ export const PremiumHeader: React.FC<PremiumHeaderProps> = ({
               className="md:hidden p-2.5 rounded-xl bg-white/5 border border-white/10"
             >
               {isMenuOpen ? (
-                <X className="w-5 h-5" />
+                <X className="size-5" />
               ) : (
-                <Menu className="w-5 h-5" />
+                <Menu className="size-5" />
               )}
             </button>
           </div>

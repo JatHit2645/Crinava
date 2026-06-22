@@ -193,7 +193,7 @@ export const PlayerProfile: React.FC<PlayerProfileProps> = ({
   if (loading) {
     return (
       <div className="w-full flex justify-center items-center py-20">
-        <div className="w-8 h-8 border-2 border-metallic-gold border-t-transparent rounded-full animate-spin" />
+        <div className="size-8 border-2 border-metallic-gold border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -212,7 +212,7 @@ export const PlayerProfile: React.FC<PlayerProfileProps> = ({
             onClick={onBack}
             className="p-3 hover:bg-white/10 rounded-full transition-colors"
           >
-            <ArrowLeft className="w-6 h-6 text-white" />
+            <ArrowLeft className="size-6 text-white" />
           </button>
           <div>
             <h1 className="text-3xl font-black text-white uppercase italic">
@@ -242,7 +242,7 @@ export const PlayerProfile: React.FC<PlayerProfileProps> = ({
         {/* Batting Stats */}
         <div className="bg-black/40 p-6 rounded-2xl border border-white/10 backdrop-blur-md space-y-6">
           <div className="flex items-center gap-3 text-metallic-gold">
-            <Target className="w-5 h-5" />
+            <Target className="size-5" />
             <h2 className="text-lg font-black uppercase tracking-widest">
               Batting Career
             </h2>
@@ -286,7 +286,7 @@ export const PlayerProfile: React.FC<PlayerProfileProps> = ({
         {/* Bowling Stats */}
         <div className="bg-black/40 p-6 rounded-2xl border border-white/10 backdrop-blur-md space-y-6">
           <div className="flex items-center gap-3 text-aurora-teal">
-            <Zap className="w-5 h-5" />
+            <Zap className="size-5" />
             <h2 className="text-lg font-black uppercase tracking-widest">
               Bowling Career
             </h2>

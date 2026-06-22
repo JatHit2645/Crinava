@@ -50,14 +50,14 @@ export const TestimonialsSection: React.FC = () => {
               className="glass-card p-10 relative group"
             >
               <div className="absolute top-8 right-8 text-aurora/20 group-hover:text-aurora/40 transition-colors">
-                <Quote className="w-12 h-12" />
+                <Quote className="size-12" />
               </div>
 
               <div className="flex gap-1 mb-6">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className="w-4 h-4 fill-imperial text-imperial"
+                    className="size-4 fill-imperial text-imperial"
                   />
                 ))}
               </div>
@@ -67,11 +67,11 @@ export const TestimonialsSection: React.FC = () => {
               </p>
 
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-aurora/20 group-hover:border-aurora transition-colors">
+                <div className="size-12 rounded-full overflow-hidden border-2 border-aurora/20 group-hover:border-aurora transition-colors">
                   <img
                     src={testimonial.avatar}
                     alt={testimonial.name}
-                    className="w-full h-full object-cover"
+                    className="size-full object-cover"
                     referrerPolicy="no-referrer"
                   />
                 </div>

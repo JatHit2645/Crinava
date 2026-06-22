@@ -249,19 +249,19 @@ export const BallByBallImpact: React.FC<{ rawInfo: any }> = ({ rawInfo }) => {
           </h4>
           <div className="flex flex-wrap gap-4 text-xs text-gray-300">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#FF4444]"></div> Wickets
+              <div className="size-3 rounded-full bg-[#FF4444]"></div> Wickets
               (-5)
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#11EBCF]"></div>{" "}
+              <div className="size-3 rounded-full bg-[#11EBCF]"></div>{" "}
               Boundaries
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#ffffff80]"></div> Runs
+              <div className="size-3 rounded-full bg-[#ffffff80]"></div> Runs
               (1-3)
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#FFD700]"></div> Dot
+              <div className="size-3 rounded-full bg-[#FFD700]"></div> Dot
               Balls (0)
             </div>
           </div>

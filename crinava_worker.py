@@ -1901,8 +1901,11 @@ class CrexMatchWorker:
                         resolved = self.player_map.get(tn_id, tn_id)
                         if resolved and resolved != tn_id:
                             batting_team = resolved
-                        # Attempt to resolve bowling team from the other innings
-                        opp_idx = 1 if innings_no == 1 and len(innings_list) > 1 else (innings_no - 2 if innings_no > 1 else -1)
+                        opp_idx = -1
+                        if innings_no == 1 and len(innings_list) > 1:
+                            opp_idx = 1
+                        elif innings_no > 1:
+                            opp_idx = innings_no - 2
                         if opp_idx >= 0:
                             bowling_id = innings_list[opp_idx].get("tn")
                             if bowling_id:
