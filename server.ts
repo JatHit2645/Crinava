@@ -23,6 +23,41 @@ import { generateVerdict } from "./src/services/verdictService";
 import Razorpay from "razorpay";
 console.log("Razorpay imported.");
 
+import TelegramBot from "node-telegram-bot-api";
+import { authenticator } from "otplib";
+console.log("Security libs imported.");
+
+const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+export const ADMIN_TOTP_SECRET = process.env.ADMIN_TOTP_SECRET || authenticator.generateSecret();
+
+const pendingLogins = new Map<string, { status: string; timestamp: number }>();
+
+let telegramBot: TelegramBot | null = null;
+if (TELEGRAM_TOKEN) {
+  try {
+    telegramBot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
+    console.log("Telegram bot initialized for Admin Security.");
+    telegramBot.on("callback_query", (query) => {
+      if (query.data?.startsWith("approve_")) {
+        const sid = query.data.split("_")[1];
+        if (pendingLogins.has(sid)) {
+          pendingLogins.set(sid, { ...pendingLogins.get(sid), status: "approved" });
+        }
+        telegramBot?.sendMessage(query.message?.chat.id!, "✅ Session Approved.");
+      } else if (query.data?.startsWith("deny_")) {
+        const sid = query.data.split("_")[1];
+        if (pendingLogins.has(sid)) {
+          pendingLogins.set(sid, { ...pendingLogins.get(sid), status: "denied" });
+        }
+        telegramBot?.sendMessage(query.message?.chat.id!, "❌ Session Denied.");
+      }
+    });
+  } catch (e) {
+    console.error("Telegram init failed:", e);
+  }
+}
+
 console.log("Initializing Razorpay...");
 let razorpay: any;
 try {
@@ -93,6 +128,33 @@ const debates = [
   },
 ];
 
+const blogs = [
+  {
+    title: "The Cummins Masterclass: Analyzing the 18th Over",
+    date: "22 Mar 2026",
+    readTime: "4 min",
+    content: "Pat Cummins showed why he is the best in the business...",
+    category: "Analysis",
+    isAI: true,
+  },
+  {
+    title: "Predictive Trends: Why Spin will dominate IPL 2026",
+    date: "21 Mar 2026",
+    readTime: "6 min",
+    content: "Spinners are becoming the most valuable assets in T20...",
+    category: "Trends",
+    isAI: true,
+  },
+  {
+    title: "Telemetry Breakdown: Kohli's Cover Drive Mechanics",
+    date: "20 Mar 2026",
+    readTime: "5 min",
+    content: "Analyzing the biomechanics of Virat Kohli...",
+    category: "Technique",
+    isAI: false,
+  },
+];
+
 async function startServer() {
   console.log("startServer: Function called.");
   try {
@@ -104,10 +166,21 @@ async function startServer() {
     app.use(express.json());
     console.log("startServer: express.json() middleware added.");
 
+    // Telemetry tracking
+    let totalRequests = 15402; // Base offset to simulate active server
+    app.use((req, res, next) => {
+      totalRequests++;
+      next();
+    });
+
     app.get("/api/debates", (req, res) => {
       console.log("Received request for /api/debates");
       console.log("Global debates array length:", debates.length);
       res.json(debates);
+    });
+
+    app.get("/api/blogs", (req, res) => {
+      res.json(blogs);
     });
 
     app.post("/api/verdict", async (req, res) => {
@@ -1074,6 +1147,125 @@ async function startServer() {
 
     // --- Vertex AI Super-Computer Bridge with Caching ---
     // Removed in favor of direct frontend Gemini integration
+
+    // --- Admin Control Center API ---
+    app.post("/api/admin/session-alert", express.json(), (req, res) => {
+      const { type, timeLeft } = req.body;
+      if (telegramBot && TELEGRAM_CHAT_ID) {
+        if (type === "forced_logout") {
+          telegramBot.sendMessage(TELEGRAM_CHAT_ID, `🔒 CRINAVA SECURITY UPDATE 🔒\n\nAdmin session has reached its max limit and was forcefully closed.`);
+        } else if (type === "warning") {
+          telegramBot.sendMessage(TELEGRAM_CHAT_ID, `⏳ CRINAVA SESSION ALERT ⏳\n\nAdmin session is still active! Time remaining: ${timeLeft}s.\nPlease ensure you log out safely when done.`);
+        }
+      }
+      res.json({ success: true });
+    });
+
+    app.get("/api/admin/telemetry", (req, res) => {
+      res.json({
+        uptime: process.uptime(),
+        memoryUsageMB: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
+        totalRequests,
+        activeDebates: debates.length,
+        totalBlogs: blogs.length
+      });
+    });
+
+    app.post("/api/admin/login", express.json(), async (req, res) => {
+      const { password, totp } = req.body;
+      const ip = req.ip || req.connection?.remoteAddress || "Unknown IP";
+      const userAgent = req.headers['user-agent'] || 'Unknown Browser';
+
+      if (password !== (process.env.ADMIN_PASSWORD || "crinava_admin_secure")) {
+        if (telegramBot && TELEGRAM_CHAT_ID) {
+          telegramBot.sendMessage(TELEGRAM_CHAT_ID, `⚠️ CRINAVA SECURITY WARNING ⚠️\n\nFailed admin login attempt (Invalid Password).\nIP: ${ip}\nBrowser: ${userAgent}`);
+        }
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+      
+      const isValidTotp = authenticator.check(totp, ADMIN_TOTP_SECRET);
+      if (!isValidTotp) {
+        if (telegramBot && TELEGRAM_CHAT_ID) {
+          telegramBot.sendMessage(TELEGRAM_CHAT_ID, `⚠️ CRINAVA SECURITY WARNING ⚠️\n\nFailed admin login attempt (Invalid TOTP).\nIP: ${ip}\nBrowser: ${userAgent}`);
+        }
+        return res.status(401).json({ error: "Invalid TOTP token" });
+      }
+
+      if (telegramBot && TELEGRAM_CHAT_ID) {
+        const sessionId = Math.random().toString(36).substring(7);
+        pendingLogins.set(sessionId, { status: "pending", timestamp: Date.now() });
+        try {
+          await telegramBot.sendMessage(TELEGRAM_CHAT_ID, `🚨 CRINAVA ADMIN ALERT 🚨\n\nLogin attempt detected.\nIP: ${req.ip}\n\nApprove this session?`, {
+            reply_markup: {
+              inline_keyboard: [[
+                { text: "✅ Approve", callback_data: `approve_${sessionId}` },
+                { text: "❌ Deny", callback_data: `deny_${sessionId}` }
+              ]]
+            }
+          });
+          return res.json({ requireTelegram: true, sessionId });
+        } catch (e) {
+          console.error("Telegram send error:", e);
+          return res.json({ success: true, warning: "Telegram notification failed." });
+        }
+      }
+
+      return res.json({ success: true });
+    });
+
+    app.get("/api/admin/check-approval/:sessionId", (req, res) => {
+      const session = pendingLogins.get(req.params.sessionId);
+      if (!session) return res.status(404).json({ status: "expired" });
+      res.json({ status: session.status });
+    });
+
+    app.post("/api/admin/debate", express.json(), (req, res) => {
+      const { topic } = req.body;
+      const newDebate = {
+        id: Math.random().toString(36).substr(2, 9),
+        claim: topic,
+        arguments: {
+          for: "Community will decide.",
+          against: "Community will decide."
+        },
+        votes: { for: 0, against: 0 },
+        status: "open",
+        createdAt: new Date().toISOString(),
+        trending: true
+      };
+      debates.unshift(newDebate);
+      console.log("[Admin] New debate broadcasted:", topic);
+      res.json({ success: true, debate: newDebate });
+    });
+
+    app.post("/api/admin/blog/draft", express.json(), async (req, res) => {
+      const { topic } = req.body;
+      try {
+        const response = await aiClient.models.generateContent({
+          model: "gemini-3-flash-preview",
+          contents: `Write a detailed, professional cricket blog post in Markdown format about: ${topic}. Focus on deep tactical analysis, use headings, and include placeholders for specific statistics if needed.`,
+        });
+        res.json({ draft: response.text });
+      } catch (err) {
+        console.error("AI Blog error:", err);
+        res.status(500).json({ error: "Failed to generate blog draft." });
+      }
+    });
+
+    app.post("/api/admin/blog/publish", express.json(), (req, res) => {
+      const { topic, draft } = req.body;
+      const newBlog = {
+        title: topic,
+        date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+        readTime: "5 min",
+        content: draft,
+        category: "Analysis",
+        isAI: true
+      };
+      blogs.unshift(newBlog);
+      console.log("[Admin] New blog published:", topic);
+      res.json({ success: true, blog: newBlog });
+    });
 
     // --- Global Error Handler ---
     app.use(

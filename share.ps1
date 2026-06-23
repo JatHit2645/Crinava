@@ -25,7 +25,10 @@ foreach ($port in $ports) {
     }
 }
 
-# Clean up log files
+# Wait half a second for Windows to release file locks on the logs
+Start-Sleep -Milliseconds 500
+
+# Clean up log files quietly
 $fastapiLog = Join-Path $scriptDir "fastapi.log"
 $fastapiErr = Join-Path $scriptDir "fastapi_error.log"
 $npmLog = Join-Path $scriptDir "npm.log"
@@ -34,7 +37,9 @@ $serveoLog = Join-Path $scriptDir "serveo.log"
 $serveoErr = Join-Path $scriptDir "serveo_error.log"
 
 foreach ($file in @($fastapiLog, $fastapiErr, $npmLog, $npmErr, $serveoLog, $serveoErr)) {
-    if (Test-Path $file) { Remove-Item $file }
+    if (Test-Path $file) { 
+        Remove-Item $file -Force -ErrorAction SilentlyContinue 
+    }
 }
 
 # 2. Start Live Score FastAPI Engine (Silently in background)

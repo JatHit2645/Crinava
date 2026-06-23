@@ -66,6 +66,7 @@ import { MatchesSection } from "./components/MatchesSection";
 import { VerdictTool } from "./components/VerdictTool";
 import { VerdictTray } from "./components/VerdictTray";
 import { PlayerProfile } from "./pages/PlayerProfile";
+import { AdminControlCenter } from "./pages/AdminControlCenter";
 
 // --- Celestial Organic Elements ---
 
@@ -1044,32 +1045,7 @@ export default function App() {
   const [matches, setMatches] = useState<MatchData[]>([]);
   const [prediction, setPrediction] = useState<PredictionResult | null>(null);
   const [isSubscribed, setIsSubscribed] = useState(true);
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([
-    {
-      title: "The Cummins Masterclass: Analyzing the 18th Over",
-      date: "22 Mar 2026",
-      readTime: "4 min",
-      content: "Pat Cummins showed why he is the best in the business...",
-      category: "Analysis",
-      isAI: true,
-    },
-    {
-      title: "Predictive Trends: Why Spin will dominate IPL 2026",
-      date: "21 Mar 2026",
-      readTime: "6 min",
-      content: "Spinners are becoming the most valuable assets in T20...",
-      category: "Trends",
-      isAI: true,
-    },
-    {
-      title: "Telemetry Breakdown: Kohli's Cover Drive Mechanics",
-      date: "20 Mar 2026",
-      readTime: "5 min",
-      content: "Analyzing the biomechanics of Virat Kohli...",
-      category: "Technique",
-      isAI: false,
-    },
-  ]);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [raffleTickets, setRaffleTickets] = useState<string[]>([]);
   const [isRaffleModalOpen, setIsRaffleModalOpen] = useState(false);
   const [raffleQuantity, setRaffleQuantity] = useState(1);
@@ -1087,6 +1063,20 @@ export default function App() {
     checkAdmin();
     window.addEventListener("hashchange", checkAdmin);
     return () => window.removeEventListener("hashchange", checkAdmin);
+  }, []);
+
+  useEffect(() => {
+    const fetchBlogs = () => {
+      fetch("/api/blogs")
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) setBlogPosts(data);
+        })
+        .catch(console.error);
+    };
+    fetchBlogs();
+    const interval = setInterval(fetchBlogs, 5000);
+    return () => clearInterval(interval);
   }, []);
   const [raffleHistory] = useState<RaffleHistory[]>([
     {
@@ -1481,6 +1471,8 @@ export default function App() {
       }
     };
     fetchDebates();
+    const interval = setInterval(fetchDebates, 5000);
+    return () => clearInterval(interval);
   }, []);
   const [momentumData, setMomentumData] = useState<MomentumPoint[]>([]);
   const [selectedMatch, setSelectedMatch] = useState<string>("");
@@ -1949,6 +1941,13 @@ export default function App() {
   const fillSearch = (text: string) => {
     setQuery(text);
   };
+
+  if (
+    window.location.pathname === "/adminjatincontrolcentre260109071108" ||
+    window.location.hash === "#adminjatincontrolcentre260109071108"
+  ) {
+    return <AdminControlCenter />;
+  }
 
   return (
     <div className="min-h-screen bg-transparent text-on-surface font-body selection:bg-mercury selection:text-void overflow-x-hidden relative">
