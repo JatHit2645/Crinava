@@ -97,7 +97,7 @@ function extractJson(content: string | null): any {
 async function callAIApi(messages: any[]): Promise<any> {
   const apiKey = (process.env.NVIDIA_API_KEY || process.env.MISTRAL_API_KEY)
     ?.trim()
-    .replace(/^["']|["']$/g, "");
+    ?.replace(/^["']|["']$/g, "");
   if (!apiKey) throw new Error("AI API Key not found.");
 
   let model = process.env.NVIDIA_MODEL_NAME || "meta/llama-3.1-70b-instruct";
