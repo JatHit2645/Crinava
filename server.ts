@@ -167,7 +167,7 @@ async function startServer() {
     console.log("startServer: express.json() middleware added.");
 
     // Telemetry tracking
-    let totalRequests = 15402; // Base offset to simulate active server
+    let totalRequests = 0;
     app.use((req, res, next) => {
       totalRequests++;
       next();
