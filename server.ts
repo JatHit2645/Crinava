@@ -3,6 +3,38 @@ import express from "express";
 import cors from "cors";
 import { createServer as createViteServer } from "vite";
 import path from "path";
+import { Pool } from "pg";
+
+const pool = new Pool({
+  connectionString: process.env.COCKROACH_URL
+});
+
+// --- Real-time Log Interception ---
+const MAX_LOGS = 200;
+export const serverLogs: { type: string, message: string, time: string }[] = [];
+
+const originalLog = console.log;
+const originalError = console.error;
+const originalWarn = console.warn;
+
+function captureLog(type: string, ...args: any[]) {
+  const message = args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
+  serverLogs.push({ type, message, time: new Date().toISOString() });
+  if (serverLogs.length > MAX_LOGS) serverLogs.shift();
+}
+
+console.log = function(...args) {
+  captureLog('info', ...args);
+  originalLog.apply(console, args);
+};
+console.error = function(...args) {
+  captureLog('error', ...args);
+  originalError.apply(console, args);
+};
+console.warn = function(...args) {
+  captureLog('warn', ...args);
+  originalWarn.apply(console, args);
+};
 
 console.log("Server file is being executed...");
 import OpenAI from "openai";
@@ -32,12 +64,35 @@ const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 export const ADMIN_TOTP_SECRET = process.env.ADMIN_TOTP_SECRET || authenticator.generateSecret();
 
 const pendingLogins = new Map<string, { status: string; timestamp: number }>();
+const magicTokens = new Map<string, number>();
 
 let telegramBot: TelegramBot | null = null;
+let dynamicPublicDomain = process.env.PUBLIC_DOMAIN || process.env.APP_URL || "http://localhost:3000";
+
 if (TELEGRAM_TOKEN) {
   try {
     telegramBot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
     console.log("Telegram bot initialized for Admin Security.");
+    
+    telegramBot.onText(/\/login/, (msg) => {
+      console.log(`[Telegram Bot] /login command received from Chat ID: ${msg.chat.id}`);
+      if (msg.chat.id.toString() !== TELEGRAM_CHAT_ID) {
+        console.log(`[Telegram Bot] Chat ID mismatch. Expected: ${TELEGRAM_CHAT_ID}, Got: ${msg.chat.id}`);
+        telegramBot?.sendMessage(msg.chat.id, `❌ Unauthorized Chat ID: <code>${msg.chat.id}</code>\n\nPlease update your <code>TELEGRAM_CHAT_ID</code> in your server configuration (<code>.env</code>) to authorize this account.`, { parse_mode: 'HTML' });
+        return;
+      }
+      
+      const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      const shortCode = Math.random().toString(36).substring(2, 8).toUpperCase(); // 6 chars
+      
+      magicTokens.set(token, Date.now() + 5 * 60 * 1000); // 5 mins expiry (giving time to type)
+      magicTokens.set(shortCode, Date.now() + 5 * 60 * 1000);
+      
+      const link = `${dynamicPublicDomain}/adminjatincontrolcentre260109071108?magic_token=${token}`;
+      
+      telegramBot?.sendMessage(msg.chat.id, `🔑 <b>Crinava Magic Link</b>\n\nClick below to securely access the Control Center (expires in 5m):\n\n${link}\n\n<b>Laptop Entry Code:</b> <code>${shortCode}</code>`, { parse_mode: 'HTML' });
+    });
+
     telegramBot.on("callback_query", (query) => {
       if (query.data?.startsWith("approve_")) {
         const sid = query.data.split("_")[1];
@@ -52,6 +107,14 @@ if (TELEGRAM_TOKEN) {
         }
         telegramBot?.sendMessage(query.message?.chat.id!, "❌ Session Denied.");
       }
+    });
+
+    telegramBot.on("message", (msg) => {
+      console.log(`[Telegram Bot Debug] Message received: "${msg.text}" from Chat ID: ${msg.chat.id}`);
+    });
+
+    telegramBot.on("polling_error", (err) => {
+      console.error(`[Telegram Bot Polling Error]:`, err.message);
     });
   } catch (e) {
     console.error("Telegram init failed:", e);
@@ -155,14 +218,22 @@ const blogs = [
   },
 ];
 
-async function startServer() {
+export async function startServer() {
   console.log("startServer: Function called.");
   try {
     const app = express();
-    const PORT = 3000;
+    const PORT = parseInt(process.env.PORT || "3000");
     console.log(`startServer: Using PORT ${PORT}`);
 
-    app.use(cors());
+    // Dynamic Host Capture Middleware
+    app.use((req, res, next) => {
+      if (req.headers.host && !req.url.startsWith('/api/admin/logs') && !req.url.startsWith('/api/admin/audit-logs')) {
+        const proto = req.headers['x-forwarded-proto'] || req.protocol;
+        dynamicPublicDomain = `${proto}://${req.headers.host}`;
+      }
+      next();
+    });
+
     app.use(express.json());
     console.log("startServer: express.json() middleware added.");
 
@@ -1149,6 +1220,121 @@ async function startServer() {
     // Removed in favor of direct frontend Gemini integration
 
     // --- Admin Control Center API ---
+
+    // AIOps & DevOps State
+    let activeAIModel = "gemini-3-flash-preview";
+    let aiRateLimits = { free: 5, premium: 50 };
+    let aiCorePrompt = "You are an expert cricket analyst. Provide deep tactical insights.";
+    let canaryFeatures = { visualStories: true, matchTwin: true };
+
+    const logAdminAction = async (action: string, req: express.Request) => {
+      const ip = req.ip || req.connection?.remoteAddress || "Unknown IP";
+      const userAgent = req.headers['user-agent'] || 'Unknown Browser';
+      const timestamp = new Date().toISOString();
+      
+      try {
+        const { error } = await supabase.from("admin_audit_logs").insert([{
+          action,
+          ip_address: ip,
+          user_agent: userAgent,
+          admin_id: "superadmin",
+          created_at: timestamp
+        }]);
+        if (error) console.error("[Audit Log Supabase Error]:", error.message);
+      } catch (e) {
+        console.error("[Audit Log Failed to Save to DB]:", e);
+      }
+    };
+
+    app.post("/api/admin/magic-login", express.json(), async (req, res) => {
+      const { token } = req.body;
+      console.log(`[Admin Login] Received magic token/code verification request for: "${token}"`);
+      console.log(`[Admin Login] Active magic tokens in cache:`, Array.from(magicTokens.keys()));
+      
+      const expiresAt = magicTokens.get(token);
+      
+      if (!expiresAt || Date.now() > expiresAt) {
+        if (telegramBot && TELEGRAM_CHAT_ID) {
+          const ip = req.ip || req.connection?.remoteAddress || "Unknown IP";
+          const userAgent = req.headers['user-agent'] || 'Unknown Browser';
+          telegramBot.sendMessage(TELEGRAM_CHAT_ID, `⚠️ CRINAVA SECURITY WARNING ⚠️\n\nFailed magic login attempt (Invalid or expired token/code: ${token}).\nIP: ${ip}\nBrowser: ${userAgent}`);
+        }
+        return res.status(401).json({ success: false, error: "Invalid or expired token" });
+      }
+      
+      // Token is valid, consume it
+      magicTokens.delete(token);
+      
+      // Log magic link access
+      if (telegramBot && TELEGRAM_CHAT_ID) {
+        const ip = req.ip || req.connection?.remoteAddress || "Unknown IP";
+        telegramBot.sendMessage(TELEGRAM_CHAT_ID, `✅ *Magic Link/Code Used*\nIP: ${ip}`, { parse_mode: 'Markdown' });
+      }
+      
+      await logAdminAction("Magic Link Login", req);
+      
+      return res.json({ success: true });
+    });
+
+    // AIOps Endpoints
+    app.post("/api/admin/model-switch", express.json(), async (req, res) => {
+      activeAIModel = req.body.model;
+      console.log(`[Admin] Model switched to: ${activeAIModel}`);
+      await logAdminAction(`Model Failover Switch -> ${activeAIModel}`, req);
+      res.json({ success: true, activeModel: activeAIModel });
+    });
+
+    app.post("/api/admin/rate-limits", express.json(), async (req, res) => {
+      aiRateLimits = { ...aiRateLimits, ...req.body };
+      console.log(`[Admin] Rate limits updated:`, aiRateLimits);
+      await logAdminAction(`Updated Rate Limits`, req);
+      res.json({ success: true, rateLimits: aiRateLimits });
+    });
+
+    app.post("/api/admin/prompt", express.json(), async (req, res) => {
+      aiCorePrompt = req.body.prompt;
+      console.log(`[Admin] Core Prompt Updated. Syncing to HuggingFace API...`);
+      await logAdminAction(`Updated AI Core Prompt`, req);
+      res.json({ success: true, prompt: aiCorePrompt });
+    });
+
+    // DevOps Endpoints
+    app.post("/api/admin/canary", express.json(), async (req, res) => {
+      const { feature, value } = req.body;
+      canaryFeatures[feature as keyof typeof canaryFeatures] = value;
+      console.log(`[Admin] Canary Feature ${feature} toggled to ${value}`);
+      await logAdminAction(`Toggled Canary Feature: ${feature} -> ${value}`, req);
+      res.json({ success: true, canaryFeatures });
+    });
+
+    app.post("/api/admin/sql", express.json(), async (req, res) => {
+      const { query } = req.body;
+      console.log(`[Admin] Executing SQL: ${query}`);
+      await logAdminAction(`Executed Raw SQL: ${query.substring(0, 50)}...`, req);
+      
+      try {
+        const result = await pool.query(query);
+        res.json({ success: true, rows: result.rows, rowCount: result.rowCount });
+      } catch (e: any) {
+        console.error("SQL Execution failed:", e.message);
+        res.json({ success: false, error: e.message });
+      }
+    });
+
+    app.get("/api/admin/logs", (req, res) => {
+      res.json(serverLogs);
+    });
+
+    app.get("/api/admin/audit-logs", async (req, res) => {
+      try {
+        const { data, error } = await supabase.from("admin_audit_logs").select("*").order("created_at", { ascending: false }).limit(50);
+        if (error) throw error;
+        res.json(data);
+      } catch (e) {
+        res.status(500).json({ error: "Failed to load audit logs" });
+      }
+    });
+
     app.post("/api/admin/session-alert", express.json(), (req, res) => {
       const { type, timeLeft } = req.body;
       if (telegramBot && TELEGRAM_CHAT_ID) {
@@ -1219,7 +1405,7 @@ async function startServer() {
       res.json({ status: session.status });
     });
 
-    app.post("/api/admin/debate", express.json(), (req, res) => {
+    app.post("/api/admin/debate", express.json(), async (req, res) => {
       const { topic } = req.body;
       const newDebate = {
         id: Math.random().toString(36).substr(2, 9),
@@ -1235,12 +1421,19 @@ async function startServer() {
       };
       debates.unshift(newDebate);
       console.log("[Admin] New debate broadcasted:", topic);
+      await logAdminAction(`Published Debate: ${topic}`, req);
       res.json({ success: true, debate: newDebate });
     });
 
     app.post("/api/admin/blog/draft", express.json(), async (req, res) => {
       const { topic } = req.body;
       try {
+        if (topic === "auto_scrape") {
+          const { scrapeAndRefineNews } = require("./src/scripts/newsScraper");
+          const drafts = await scrapeAndRefineNews();
+          return res.json({ draft: drafts[0] || "No events with enough sources found today. Try again later." });
+        }
+
         const response = await aiClient.models.generateContent({
           model: "gemini-3-flash-preview",
           contents: `Write a detailed, professional cricket blog post in Markdown format about: ${topic}. Focus on deep tactical analysis, use headings, and include placeholders for specific statistics if needed.`,
@@ -1252,7 +1445,7 @@ async function startServer() {
       }
     });
 
-    app.post("/api/admin/blog/publish", express.json(), (req, res) => {
+    app.post("/api/admin/blog/publish", express.json(), async (req, res) => {
       const { topic, draft } = req.body;
       const newBlog = {
         title: topic,
@@ -1264,6 +1457,7 @@ async function startServer() {
       };
       blogs.unshift(newBlog);
       console.log("[Admin] New blog published:", topic);
+      await logAdminAction(`Published Blog: ${topic}`, req);
       res.json({ success: true, blog: newBlog });
     });
 

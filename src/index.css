@@ -56,7 +56,12 @@
   body {
     @apply bg-void text-on-surface font-body overflow-x-hidden;
     -webkit-tap-highlight-color: transparent;
-    cursor: none; /* Hide default cursor for Celestial Organic */
+    cursor: none;
+  }
+
+  .admin-control-center-wrapper,
+  .admin-control-center-wrapper * {
+    cursor: auto !important;
   }
 
   /* Noise Grain Overlay */

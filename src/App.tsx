@@ -222,7 +222,11 @@ const StarfieldCanvas = () => {
  * null
  * @returns {JSX.Element | null} The custom cursor overlay elements, or null when the cursor is not visible.
  **/
+
 const CelestialCursor = () => {
+  if (window.location.pathname.includes("adminjatincontrolcentre")) {
+    return null;
+  }
   const [position, setPosition] = React.useState({ x: 0, y: 0 });
   const [trail, setTrail] = React.useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = React.useState(false);
