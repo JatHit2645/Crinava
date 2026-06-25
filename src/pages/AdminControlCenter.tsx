@@ -46,10 +46,14 @@ export const AdminControlCenter = () => {
   
   // Forms state
   const [debateTopic, setDebateTopic] = useState("");
-  const [blogTopic, setBlogTopic] = useState("");
+  const [blogTitle, setBlogTitle] = useState("");
+  const [blogCategory, setBlogCategory] = useState("Tactical Analysis");
   const [blogDraft, setBlogDraft] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
-
+  const [hfDrafts, setHfDrafts] = useState<any[]>([]);
+  const [blogSubTab, setBlogSubTab] = useState<"new" | "old" | "approved" | "revoked">("new");
+  const [approvedBlogs, setApprovedBlogs] = useState<any[]>([]);
+  const [revokedBlogs, setRevokedBlogs] = useState<any[]>([]);
   // Command Bar
   const [showCommandBar, setShowCommandBar] = useState(false);
   const [commandQuery, setCommandQuery] = useState("");
@@ -230,11 +234,24 @@ export const AdminControlCenter = () => {
     setError("");
 
     if (loginStep === "password") {
-      // Basic client-side check, actual verification happens on the server next
-      if (password === "crinava_admin_secure") {
-        setLoginStep("totp");
+      if (password.trim().length > 0) {
+        try {
+          const res = await fetch("/api/admin/verify-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ password })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            setLoginStep("totp");
+          } else {
+            setError(data.error || "Invalid credentials");
+          }
+        } catch (e) {
+          setError("Connection failed. Try again.");
+        }
       } else {
-        setError("Invalid credentials");
+        setError("Please enter your password");
       }
     } else if (loginStep === "totp") {
       if (totpCode.length === 6) {
@@ -300,18 +317,34 @@ export const AdminControlCenter = () => {
     }
   };
 
-  const handleGenerateBlog = async () => {
+  const handleFetchDrafts = async () => {
     setIsGenerating(true);
     try {
-      const res = await fetch("/api/admin/blog/draft", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic: blogTopic })
-      });
+      const res = await fetch("/api/admin/blog-drafts");
       const data = await res.json();
-      setBlogDraft(data.draft || "Error generating draft from AI.");
+      const now = Date.now();
+      
+      setHfDrafts(prev => {
+        const newDrafts = [...prev];
+        (data || []).forEach((draft: any) => {
+           if (!newDrafts.find(d => d.title === draft.title)) {
+              newDrafts.push({ ...draft, fetchedAt: now });
+           }
+        });
+        return newDrafts;
+      });
+      
+      if (data.length > 0) {
+        setBlogTitle(data[0].title);
+        setBlogCategory(data[0].category || "Tactical Analysis");
+        setBlogDraft(data[0].content);
+      }
+      
+      fetch("/api/blogs").then(res => res.json()).then(data => setApprovedBlogs(data));
+      fetch("/api/admin/blogs/revoked").then(res => res.json()).then(data => setRevokedBlogs(data));
+      
     } catch (e) {
-      setBlogDraft("Failed to connect to the backend AI engine.");
+      setBlogDraft("Failed to connect to Hugging Face API.");
     }
     setIsGenerating(false);
   };
@@ -335,19 +368,42 @@ export const AdminControlCenter = () => {
 
   const handlePublishBlog = async () => {
     try {
-      const res = await fetch("/api/admin/blog/publish", {
+      const res = await fetch("/api/admin/blog-publish", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic: blogTopic, draft: blogDraft })
+        body: JSON.stringify({ title: blogTitle, category: blogCategory, content: blogDraft })
       });
       const data = await res.json();
       if (data.success) {
         alert("Blog published live!");
+        setHfDrafts(prev => prev.filter(d => d.title !== blogTitle));
+        fetch("/api/blogs").then(r => r.json()).then(d => setApprovedBlogs(d));
         setBlogDraft("");
-        setBlogTopic("");
+        setBlogTitle("");
       }
     } catch (e) {
       alert("Failed to publish blog.");
+    }
+  };
+
+  const handleRevokeBlog = async (id: string) => {
+    try {
+      await fetch(`/api/admin/blogs/${id}/revoke`, { method: "POST" });
+      fetch("/api/blogs").then(r => r.json()).then(d => setApprovedBlogs(d));
+      fetch("/api/admin/blogs/revoked").then(r => r.json()).then(d => setRevokedBlogs(d));
+      alert("Blog revoked from live site.");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleDeleteBlog = async (id: string) => {
+    if(!window.confirm("Are you sure you want to permanently delete this?")) return;
+    try {
+      await fetch(`/api/admin/blogs/${id}`, { method: "DELETE" });
+      fetch("/api/admin/blogs/revoked").then(r => r.json()).then(d => setRevokedBlogs(d));
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -690,42 +746,90 @@ export const AdminControlCenter = () => {
 
         {activeAdminTab === "blog" && (
           <div className="grid grid-cols-2 gap-8 h-[calc(100vh-12rem)]">
-            <div className="bg-black/40 border border-mercury/10 p-6 rounded-xl flex flex-col">
-              <h3 className="text-lg font-bold mb-4 flex items-center"><Zap className="mr-2 text-metallic-gold" /> Step 1: AI Generation</h3>
-              <p className="text-sm text-mercury/60 mb-4">Enter a topic or select a recent match to have the AI draft a comprehensive, SEO-optimized blog post.</p>
-              <textarea
-                value={blogTopic}
-                onChange={(e) => setBlogTopic(e.target.value)}
-                className="w-full h-32 bg-black/60 border border-mercury/20 rounded-lg p-4 text-white resize-none focus:border-metallic-gold transition-colors mb-4"
-                placeholder="Topic: Analyze Rohit Sharma's tactical field placements in today's match..."
-              />
-              <button 
-                onClick={handleGenerateBlog} 
-                disabled={isGenerating || (!blogTopic && blogTopic !== "auto_scrape")}
-                className="py-3 bg-white/5 border border-mercury/20 text-white font-medium rounded-lg hover:bg-white/10 transition-all disabled:opacity-50 mb-4"
-              >
-                {isGenerating ? "AI is writing..." : "Generate AI Draft (Manual Topic)"}
-              </button>
+            <div className="bg-black/40 border border-mercury/10 p-6 rounded-xl flex flex-col overflow-y-auto">
+              <h3 className="text-lg font-bold mb-4 flex items-center"><Zap className="mr-2 text-metallic-gold" /> AI Blog Management</h3>
               
-              <div className="relative flex py-2 items-center">
-                <div className="flex-grow border-t border-mercury/20"></div>
-                <span className="flex-shrink-0 mx-4 text-mercury/50 text-xs uppercase">Or</span>
-                <div className="flex-grow border-t border-mercury/20"></div>
+              <div className="flex space-x-2 mb-6 bg-[#111] p-1 rounded-lg">
+                <button onClick={() => setBlogSubTab("new")} className={`flex-1 py-2 text-xs font-bold rounded ${blogSubTab === "new" ? "bg-aurora-teal text-black" : "text-mercury/60"}`}>New Drafts</button>
+                <button onClick={() => setBlogSubTab("old")} className={`flex-1 py-2 text-xs font-bold rounded ${blogSubTab === "old" ? "bg-metallic-gold text-black" : "text-mercury/60"}`}>Old Drafts</button>
+                <button onClick={() => setBlogSubTab("approved")} className={`flex-1 py-2 text-xs font-bold rounded ${blogSubTab === "approved" ? "bg-white text-black" : "text-mercury/60"}`}>Approved</button>
+                <button onClick={() => setBlogSubTab("revoked")} className={`flex-1 py-2 text-xs font-bold rounded ${blogSubTab === "revoked" ? "bg-red-500 text-white" : "text-mercury/60"}`}>Revoked</button>
               </div>
 
               <button 
-                onClick={() => { setBlogTopic("auto_scrape"); setTimeout(handleGenerateBlog, 0); }} 
+                onClick={handleFetchDrafts} 
                 disabled={isGenerating}
-                className="mt-4 py-3 bg-aurora-teal/20 border border-aurora-teal/30 text-aurora-teal font-bold rounded-lg hover:bg-aurora-teal/30 transition-all disabled:opacity-50 flex items-center justify-center space-x-2"
+                className="py-3 bg-aurora-teal/20 border border-aurora-teal/30 text-aurora-teal font-bold rounded-lg hover:bg-aurora-teal/30 transition-all disabled:opacity-50 flex items-center justify-center space-x-2 w-full mb-6"
               >
                 <Zap size={18} />
-                <span>Auto-Scrape News & Refine</span>
+                <span>{isGenerating ? "Fetching..." : "Fetch Latest from Hugging Face"}</span>
               </button>
+
+              <div className="space-y-4">
+                {(blogSubTab === "new" || blogSubTab === "old") && hfDrafts.filter(d => {
+                  const ageMs = Date.now() - (d.fetchedAt || Date.now());
+                  const isOld = ageMs > 6 * 60 * 60 * 1000;
+                  return blogSubTab === "new" ? !isOld : isOld;
+                }).map((draft, i) => (
+                  <div 
+                    key={i} 
+                    onClick={() => { setBlogTitle(draft.title); setBlogCategory(draft.category); setBlogDraft(draft.content); }}
+                    className={`p-4 rounded-xl border cursor-pointer transition-all ${blogTitle === draft.title ? 'border-metallic-gold bg-metallic-gold/10' : 'border-mercury/20 hover:border-mercury/50'}`}
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="font-bold text-white mb-1 leading-snug">{draft.title}</h4>
+                    </div>
+                    <div className="flex justify-between items-center mt-2">
+                      <span className="text-xs font-bold text-aurora-teal bg-aurora-teal/10 px-2 py-1 rounded">{draft.category}</span>
+                      <span className="text-[10px] text-mercury/40">Not Approved</span>
+                    </div>
+                  </div>
+                ))}
+
+                {blogSubTab === "approved" && approvedBlogs.map((blog, i) => (
+                  <div key={i} className="p-4 rounded-xl border border-mercury/20 flex flex-col justify-between">
+                    <h4 className="font-bold text-white mb-2">{blog.title}</h4>
+                    <span className="text-xs text-white bg-white/10 w-max px-2 py-1 rounded mb-4">{blog.category}</span>
+                    <button onClick={() => handleRevokeBlog(blog.id)} className="w-full py-2 bg-red-500/20 text-red-500 hover:bg-red-500/40 font-bold rounded text-xs transition-colors">Revoke Live Status</button>
+                  </div>
+                ))}
+
+                {blogSubTab === "revoked" && revokedBlogs.map((blog, i) => (
+                  <div key={i} className="p-4 rounded-xl border border-red-500/30 bg-red-500/5 flex flex-col justify-between">
+                    <div className="cursor-pointer" onClick={() => { setBlogTitle(blog.title); setBlogCategory(blog.category); setBlogDraft(blog.content); }}>
+                      <h4 className="font-bold text-white mb-2 line-through opacity-50 hover:opacity-100">{blog.title}</h4>
+                      <p className="text-xs text-mercury/40 mb-4">Click to edit and republish</p>
+                    </div>
+                    <button onClick={() => handleDeleteBlog(blog.id)} className="w-full py-2 bg-red-500 text-white hover:bg-red-600 font-bold rounded text-xs transition-colors">Delete Permanently</button>
+                  </div>
+                ))}
+
+                {((blogSubTab === "new" || blogSubTab === "old") && hfDrafts.length === 0) && (
+                  <div className="text-center p-8 border border-dashed border-mercury/20 rounded-xl text-mercury/40">
+                    No drafts pending in this category.
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="bg-black/40 border border-mercury/10 p-6 rounded-xl flex flex-col">
-              <h3 className="text-lg font-bold mb-4">Step 2: The Manual Touch</h3>
-              <p className="text-sm text-mercury/60 mb-4">Review and edit the Markdown draft below before publishing to the live site.</p>
+              <h3 className="text-lg font-bold mb-4">Step 2: Review & Publish</h3>
+              
+              <input 
+                type="text" 
+                value={blogTitle} 
+                onChange={(e) => setBlogTitle(e.target.value)}
+                placeholder="Article Title..."
+                className="bg-[#111] border border-mercury/20 rounded-lg p-3 text-white focus:border-metallic-gold mb-3 w-full"
+              />
+              <input 
+                type="text" 
+                value={blogCategory} 
+                onChange={(e) => setBlogCategory(e.target.value)}
+                placeholder="Category (e.g. Tactical Analysis)"
+                className="bg-[#111] border border-mercury/20 rounded-lg p-3 text-white focus:border-metallic-gold mb-4 w-full"
+              />
+
               <textarea
                 value={blogDraft}
                 onChange={(e) => setBlogDraft(e.target.value)}
@@ -734,7 +838,7 @@ export const AdminControlCenter = () => {
               />
               <button 
                 onClick={handlePublishBlog}
-                disabled={!blogDraft}
+                disabled={!blogDraft || !blogTitle}
                 className="py-3 bg-metallic-gold text-black font-bold rounded-lg hover:brightness-110 transition-all disabled:opacity-50 disabled:bg-gray-600 disabled:text-gray-400"
               >
                 Publish Article Live

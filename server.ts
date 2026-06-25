@@ -49,6 +49,14 @@ import {
 console.log("enrichPlayers imported.");
 import { supabase } from "./src/lib/supabaseServer";
 console.log("supabaseServer imported.");
+import { createClient } from "@supabase/supabase-js";
+
+export let blogSupabase: any = null;
+if (process.env.BLOG_SUPABASE_URL && process.env.BLOG_SUPABASE_KEY) {
+  blogSupabase = createClient(process.env.BLOG_SUPABASE_URL, process.env.BLOG_SUPABASE_KEY);
+  console.log("Blog Supabase client initialized.");
+}
+
 import { aiClient } from "./src/lib/ai";
 console.log("aiClient imported.");
 import { generateVerdict } from "./src/services/verdictService";
@@ -250,8 +258,131 @@ export async function startServer() {
       res.json(debates);
     });
 
-    app.get("/api/blogs", (req, res) => {
-      res.json(blogs);
+    app.get("/api/blogs", async (req, res) => {
+      try {
+        if (blogSupabase) {
+          const { data, error } = await blogSupabase
+            .from("blogs")
+            .select("*")
+            .not("status", "eq", "revoked")
+            .order("created_at", { ascending: false });
+          if (!error && data) {
+            return res.json(data);
+          }
+          console.error("Blog DB Fetch Error:", error);
+        }
+        // Fallback if DB fails or not configured
+        res.json(blogs);
+      } catch (err) {
+        res.status(500).json({ error: "Failed to fetch blogs" });
+      }
+    });
+
+    app.get("/api/admin/blog-drafts", async (req, res) => {
+      try {
+        const hfUrl = process.env.HF_BLOG_API_URL;
+        if (!hfUrl || hfUrl.includes("PASTE_YOUR")) {
+          return res.json([
+            {
+              id: "draft-setup",
+              title: "Missing Configuration",
+              category: "System Setup",
+              content: "Please update `HF_BLOG_API_URL` in your `.env` file to connect to Hugging Face."
+            }
+          ]);
+        }
+        
+        const cleanUrl = hfUrl.replace(/\/$/, '');
+        const response = await fetch(`${cleanUrl}/api/hf-drafts`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch from HF");
+        }
+        const data = await response.json();
+        res.json(data || []);
+      } catch (err) {
+        console.error("Failed to fetch HF drafts:", err);
+        res.status(500).json({ error: "Failed to connect to Hugging Face API" });
+      }
+    });
+
+    app.post("/api/admin/blog-publish", async (req, res) => {
+      try {
+        const { title, category, content } = req.body;
+        const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+        const words = content.split(" ").length;
+        const readTime = Math.ceil(words / 200) + " min read";
+
+        if (blogSupabase) {
+          const { data, error } = await blogSupabase.from("blogs").upsert([{ 
+            title, slug, category, content, read_time: readTime, status: "published" 
+          }], { onConflict: 'slug' });
+          
+          if (error) {
+            console.error("Blog Insert/Upsert Error:", error);
+            return res.status(500).json({ success: false, error: "Database error" });
+          }
+          
+          return res.json({ success: true, slug });
+        }
+        res.json({ success: true, slug });
+      } catch (err) {
+        res.status(500).json({ success: false });
+      }
+    });
+
+    app.get("/api/admin/blogs/revoked", async (req, res) => {
+      try {
+        if (blogSupabase) {
+          const { data, error } = await blogSupabase
+            .from("blogs")
+            .select("*")
+            .eq("status", "revoked")
+            .order("created_at", { ascending: false });
+          if (!error && data) return res.json(data);
+        }
+        res.json([]);
+      } catch (e) {
+        res.status(500).json({ error: "Failed to fetch revoked" });
+      }
+    });
+
+    app.post("/api/admin/blogs/:id/revoke", async (req, res) => {
+      try {
+        if (blogSupabase) {
+          await blogSupabase.from("blogs").update({ status: "revoked" }).eq("id", req.params.id);
+          return res.json({ success: true });
+        }
+        res.json({ success: false });
+      } catch (e) {
+        res.status(500).json({ success: false });
+      }
+    });
+
+    app.delete("/api/admin/blogs/:id", async (req, res) => {
+      try {
+        if (blogSupabase) {
+          await blogSupabase.from("blogs").delete().eq("id", req.params.id);
+          return res.json({ success: true });
+        }
+        res.json({ success: false });
+      } catch (e) {
+        res.status(500).json({ success: false });
+      }
+    });
+
+    app.get("/api/blogs/:slug", async (req, res) => {
+      try {
+        if (blogSupabase) {
+          const { data, error } = await blogSupabase.from("blogs").select("*").eq("slug", req.params.slug).single();
+          if (data) return res.json(data);
+        }
+        
+        // Fallback
+        const blog = blogs.find(b => b.slug === req.params.slug) || blogs[0];
+        res.json(blog);
+      } catch (err) {
+        res.status(500).json({ error: "Failed to fetch blog post" });
+      }
     });
 
     app.post("/api/verdict", async (req, res) => {
@@ -1355,6 +1486,14 @@ export async function startServer() {
         activeDebates: debates.length,
         totalBlogs: blogs.length
       });
+    });
+
+    app.post("/api/admin/verify-password", express.json(), (req, res) => {
+      const { password } = req.body;
+      if (password === (process.env.ADMIN_PASSWORD || "crinava_admin_secure")) {
+        return res.json({ success: true });
+      }
+      return res.status(401).json({ error: "Invalid credentials" });
     });
 
     app.post("/api/admin/login", express.json(), async (req, res) => {

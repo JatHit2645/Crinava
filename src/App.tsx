@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { BlogArchive } from "./pages/BlogArchive";
+import { BlogPost } from "./pages/BlogPost";
 import React, { useState, useEffect, useRef } from "react";
 import { GoogleGenAI, Type } from "@google/genai";
 import {
@@ -1037,6 +1040,8 @@ const VerdictCard = ({
 import { useVerdictStore } from "./store/verdictStore";
 
 export default function App() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<AppTab>("home");
   const { playerProfileId, setPlayerProfileId } = useVerdictStore();
   const [isMatchesContext, setIsMatchesContext] = useState(false);
@@ -1951,6 +1956,15 @@ export default function App() {
     window.location.hash === "#adminjatincontrolcentre260109071108"
   ) {
     return <AdminControlCenter />;
+  }
+
+  if (window.location.pathname.startsWith("/blog")) {
+    return (
+      <Routes>
+        <Route path="/blog" element={<BlogArchive />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
+      </Routes>
+    );
   }
 
   return (
@@ -4042,6 +4056,7 @@ export default function App() {
                   {blogPosts.map((post, i) => (
                     <div
                       key={i}
+                      onClick={() => navigate(`/blog/${post.slug}`)}
                       className="group cursor-pointer space-y-4 p-8 rounded-3xl bg-[#111111] hover:bg-white/[0.02] transition-all border border-white/5 hover:border-aurora-teal/30"
                     >
                       <div className="flex justify-between items-center">
@@ -4056,14 +4071,14 @@ export default function App() {
                           )}
                         </div>
                         <span className="text-[9px] text-gray-500 font-black uppercase tracking-widest">
-                          {post.date} • {post.readTime} read
+                          {post.date || new Date(post.created_at).toLocaleDateString()} • {post.readTime || post.read_time}
                         </span>
                       </div>
                       <h3 className="text-2xl font-black text-white group-hover:text-aurora-teal transition-colors leading-tight italic">
                         {post.title}
                       </h3>
                       <p className="text-xs text-gray-400 font-medium line-clamp-3 leading-relaxed">
-                        {post.content}
+                        {post.content.replace(/[#*`>]/g, "").substring(0, 150)}...
                       </p>
                       <div className="flex items-center gap-2 text-aurora-teal text-[9px] font-black uppercase tracking-widest group-hover:translate-x-2 transition-transform">
                         Read Full Note <ChevronRight size={12} />
