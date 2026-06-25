@@ -4,6 +4,29 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import { Clock, Calendar, ArrowLeft } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
+const highlightQuotesInChildren = (children: React.ReactNode): React.ReactNode => {
+  return React.Children.map(children, (child) => {
+    if (typeof child === "string") {
+      // Matches both regular "..." and curly “...” quotes, excluding multi-line matches
+      const parts = child.split(/(["“][^"”\n]+["”])/g);
+      return parts.map((part, idx) => {
+        if ((part.startsWith('"') && part.endsWith('"')) || (part.startsWith('“') && part.endsWith('”'))) {
+          return (
+            <span 
+              key={idx} 
+              className="bg-gradient-to-r from-aurora-teal/10 to-metallic-gold/15 text-white italic px-1.5 py-0.5 rounded border border-white/5 font-semibold text-base inline-block"
+            >
+              {part}
+            </span>
+          );
+        }
+        return part;
+      });
+    }
+    return child;
+  });
+};
+
 export const BlogPost = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -91,7 +114,7 @@ export const BlogPost = () => {
                   h2: ({node, ...props}) => <h2 className="text-3xl font-display font-bold text-metallic-gold mt-10 mb-5 tracking-tight border-b border-white/10 pb-2" {...props} />,
                   h3: ({node, ...props}) => <h3 className="text-2xl font-bold text-white mt-8 mb-4" {...props} />,
                   h4: ({node, ...props}) => <h4 className="text-xl font-bold text-aurora-teal mt-6 mb-3" {...props} />,
-                  p: ({node, ...props}) => <p className="mb-6 leading-relaxed" {...props} />,
+                  p: ({node, ...props}) => <p className="mb-6 leading-relaxed">{highlightQuotesInChildren(props.children)}</p>,
                   ul: ({node, ...props}) => <ul className="list-disc pl-6 mb-6 space-y-2 marker:text-aurora-teal" {...props} />,
                   ol: ({node, ...props}) => <ol className="list-decimal pl-6 mb-6 space-y-2 marker:text-metallic-gold" {...props} />,
                   li: ({node, ...props}) => <li className="pl-2" {...props} />,

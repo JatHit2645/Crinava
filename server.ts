@@ -307,14 +307,14 @@ export async function startServer() {
 
     app.post("/api/admin/blog-publish", async (req, res) => {
       try {
-        const { title, category, content } = req.body;
+        const { title, category, content, image_url } = req.body;
         const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
         const words = content.split(" ").length;
         const readTime = Math.ceil(words / 200) + " min read";
 
         if (blogSupabase) {
           const { data, error } = await blogSupabase.from("blogs").upsert([{ 
-            title, slug, category, content, read_time: readTime, status: "published" 
+            title, slug, category, content, read_time: readTime, status: "published", image_url 
           }], { onConflict: 'slug' });
           
           if (error) {

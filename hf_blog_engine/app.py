@@ -145,10 +145,15 @@ def init_draft_store() -> None:
                     cluster_signature TEXT UNIQUE NOT NULL,
                     source_count INTEGER NOT NULL,
                     model TEXT NOT NULL,
-                    created_at TEXT NOT NULL
+                    created_at TEXT NOT NULL,
+                    image_url TEXT
                 )
                 """
             )
+            try:
+                connection.execute("ALTER TABLE drafts ADD COLUMN image_url TEXT")
+            except sqlite3.OperationalError:
+                pass
             connection.execute(
                 "CREATE INDEX IF NOT EXISTS idx_drafts_created_at ON drafts(created_at DESC)"
             )
@@ -165,6 +170,7 @@ def draft_from_row(row: sqlite3.Row) -> Dict[str, Any]:
         "source_count": row["source_count"],
         "model": row["model"],
         "created_at": row["created_at"],
+        "image_url": row["image_url"] if "image_url" in row.keys() else None,
     }
 
 
@@ -175,7 +181,7 @@ def get_stored_drafts(limit: int = API_DEFAULT_LIMIT, offset: int = 0) -> List[D
         with get_db_connection() as connection:
             rows = connection.execute(
                 """
-                SELECT id, title, category, content, sources_json, source_count, model, created_at
+                SELECT id, title, category, content, sources_json, source_count, model, created_at, image_url
                 FROM drafts
                 ORDER BY created_at DESC
                 LIMIT ? OFFSET ?
@@ -236,9 +242,9 @@ def save_draft(draft: Dict[str, Any], cluster_signature: str) -> bool:
                 """
                 INSERT OR IGNORE INTO drafts (
                     id, title, category, content, sources_json,
-                    cluster_signature, source_count, model, created_at
+                    cluster_signature, source_count, model, created_at, image_url
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     draft["id"],
@@ -250,6 +256,7 @@ def save_draft(draft: Dict[str, Any], cluster_signature: str) -> bool:
                     len(draft.get("sources", [])),
                     AI_MODEL,
                     draft["created_at"],
+                    draft.get("image_url"),
                 ),
             )
             saved = cursor.rowcount == 1
@@ -503,6 +510,21 @@ def create_chat_completion(client: OpenAI, request_payload: Dict[str, Any]) -> A
     raise RuntimeError("AI generation failed before a request was attempted.")
 
 
+def extract_og_image(url: str) -> Optional[str]:
+    try:
+        response = requests.get(url, headers=REQUEST_HEADERS, timeout=8)
+        if response.status_code == 200:
+            match = re.search(r'<meta[^>]*property=["\']og:image["\'][^>]*content=["\']([^"\']+)["\']', response.text)
+            if match:
+                return match.group(1)
+            match = re.search(r'<meta[^>]*content=["\']([^"\']+)["\'][^>]*property=["\']og:image["\']', response.text)
+            if match:
+                return match.group(1)
+    except Exception:
+        pass
+    return None
+
+
 def generate_blog_draft(cluster_articles: List[Dict[str, str]]) -> Optional[Dict[str, Any]]:
     """Generate one Markdown blog draft from a cluster of related cricket articles."""
     client = get_ai_client()
@@ -556,7 +578,18 @@ News Sources:
         response = create_chat_completion(client, request_payload)
         content = response.choices[0].message.content
         draft = normalize_draft(extract_json_object(content), cluster_articles)
-        log_event(f"Successfully generated blog: {draft['title']}")
+        
+        primary_link = cluster_articles[0].get("link", "")
+        img_url = None
+        if primary_link:
+            log_event(f"Attempting to extract og:image from: {primary_link}")
+            img_url = extract_og_image(primary_link)
+            
+        if not img_url:
+            img_url = "https://images.unsplash.com/photo-1531415080290-bc9b899ddfb6?w=800&auto=format&fit=crop&q=60"
+            
+        draft["image_url"] = img_url
+        log_event(f"Successfully generated blog: {draft['title']} with image: {img_url}")
         return draft
     except Exception as exc:
         log_event(f"AI Generation Error: {exc}")
