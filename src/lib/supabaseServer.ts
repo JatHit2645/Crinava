@@ -1,16 +1,23 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-const supabaseAnonKey =
-  process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl =
+  process.env.BLOG_SUPABASE_URL ||
+  process.env.SUPABASE_URL ||
+  process.env.VITE_SUPABASE_URL;
+const supabaseKey =
+  process.env.BLOG_SUPABASE_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
+console.log("Initializing supabaseServer with URL:", supabaseUrl);
+
+if (!supabaseUrl || !supabaseKey) {
   console.error(
-    "CRITICAL: Missing Supabase environment variables (SUPABASE_URL, SUPABASE_ANON_KEY)",
+    "CRITICAL: Missing Supabase environment variables (BLOG_SUPABASE_URL or standard keys)",
   );
 }
 
 export const supabase = createClient(
   supabaseUrl || "http://placeholder.url",
-  supabaseAnonKey || "placeholder-key",
+  supabaseKey || "placeholder-key",
 );

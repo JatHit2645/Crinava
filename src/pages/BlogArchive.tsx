@@ -47,9 +47,20 @@ export const BlogArchive = () => {
               >
                 <Link
                   to={`/blog/${blog.slug}`}
-                  className="group block bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden hover:border-aurora-teal/50 transition-all hover:-translate-y-2 h-full"
+                  className="group block bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden hover:border-aurora-teal/50 transition-all hover:-translate-y-2 h-full flex flex-col"
                 >
-                  <div className="p-6 h-full flex flex-col">
+                  {blog.image_url ? (
+                    <div className="h-48 w-full overflow-hidden relative flex-shrink-0">
+                      <img src={blog.image_url} alt={blog.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
+                    </div>
+                  ) : (
+                    <div className="h-48 w-full bg-white/5 flex items-center justify-center relative flex-shrink-0">
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
+                      <span className="text-mercury/20 font-bold uppercase tracking-widest relative z-10">Crinava</span>
+                    </div>
+                  )}
+                  <div className="p-6 flex-1 flex flex-col">
                     <div className="flex items-center space-x-4 text-xs text-mercury/50 mb-4 font-mono">
                       <span className="flex items-center"><Calendar size={14} className="mr-1" /> {new Date(blog.created_at || blog.date).toLocaleDateString()}</span>
                       <span className="flex items-center"><Clock size={14} className="mr-1" /> {blog.read_time || blog.readTime}</span>

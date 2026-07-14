@@ -171,33 +171,7 @@ let pauseEnrichmentRequested = false;
 const isStopRequested = () => stopEnrichmentRequested;
 const isPauseRequested = () => pauseEnrichmentRequested;
 
-const debates = [
-  {
-    id: "1",
-    claim: "Virat Kohli is the greatest ODI batsman of all time.",
-    arguments: {
-      for: "Unmatched consistency, 50 centuries, and incredible chasing record.",
-      against:
-        "Viv Richards and Sachin Tendulkar played in tougher eras with different rules.",
-    },
-    votes: { for: 1240, against: 850 },
-    status: "open",
-    createdAt: new Date().toISOString(),
-    trending: true,
-  },
-  {
-    id: "2",
-    claim: "IPL has improved the quality of international cricket.",
-    arguments: {
-      for: "Exposure to high-pressure situations and global talent sharing.",
-      against: "Workload issues and dilution of traditional techniques.",
-    },
-    votes: { for: 3200, against: 1100 },
-    status: "open",
-    createdAt: new Date().toISOString(),
-    trending: true,
-  },
-];
+
 
 const blogs = [
   {
@@ -252,10 +226,37 @@ export async function startServer() {
       next();
     });
 
-    app.get("/api/debates", (req, res) => {
+    // --- In-Memory Vote Tracker (primary source of truth for vote state) ---
+    // Key: "debateId::username", Value: { stance: 'for'|'against', hasFlipped: boolean }
+    const voteTracker: Record<string, { stance: string; hasFlipped: boolean }> = {};
+
+    app.get("/api/debates", async (req, res) => {
       console.log("Received request for /api/debates");
-      console.log("Global debates array length:", debates.length);
-      res.json(debates);
+      try {
+        const { data, error } = await supabase
+          .from("debates")
+          .select("*")
+          .order("created_at", { ascending: false });
+        if (error) {
+          console.error("Supabase debates fetch error:", error);
+          throw error;
+        }
+
+        const username = req.query.username as string;
+        if (username && data) {
+          // Map userVote from in-memory tracker
+          const mappedData = data.map(d => {
+            const key = `${d.id}::${username}`;
+            const tracked = voteTracker[key];
+            return { ...d, userVote: tracked ? tracked.stance : undefined };
+          });
+          return res.json(mappedData);
+        }
+        res.json(data || []);
+      } catch (err: any) {
+        console.error("Failed to fetch debates from DB:", err);
+        res.status(500).json({ error: "Failed to fetch debates" });
+      }
     });
 
     app.get("/api/blogs", async (req, res) => {
@@ -308,18 +309,25 @@ export async function startServer() {
     app.post("/api/admin/blog-publish", async (req, res) => {
       try {
         const { title, category, content, image_url } = req.body;
+        if (!title || !content) {
+          return res.status(400).json({ success: false, error: "Title and content are required." });
+        }
+        
         const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
         const words = content.split(" ").length;
         const readTime = Math.ceil(words / 200) + " min read";
 
         if (blogSupabase) {
-          const { data, error } = await blogSupabase.from("blogs").upsert([{ 
-            title, slug, category, content, read_time: readTime, status: "published", image_url 
-          }], { onConflict: 'slug' });
+          const payload: any = { title, slug, category, content, read_time: readTime, status: "published" };
+          if (image_url) {
+            payload.image_url = image_url;
+          }
+          
+          const { data, error } = await blogSupabase.from("blogs").upsert([payload], { onConflict: 'slug' });
           
           if (error) {
             console.error("Blog Insert/Upsert Error:", error);
-            return res.status(500).json({ success: false, error: "Database error" });
+            return res.status(500).json({ success: false, error: error.message || "Database error" });
           }
           
           return res.json({ success: true, slug });
@@ -1239,70 +1247,85 @@ export async function startServer() {
     });
 
     // --- Debate Room API ---
-    app.post("/api/debates/:id/vote", (req, res) => {
+    app.post("/api/debates/:id/vote", express.json(), async (req, res) => {
       const { id } = req.params;
-      const { side } = req.body;
-      const debate = debates.find((d) => d.id === id);
-      if (debate) {
-        debate.votes[side as "for" | "against"] += 1;
-        res.json(debate);
-      } else {
-        res.status(404).json({ error: "Debate not found" });
+      const { side, username } = req.body;
+      if (!username) return res.status(400).json({ error: "Username required" });
+      if (side !== 'for' && side !== 'against') return res.status(400).json({ error: "Side must be 'for' or 'against'" });
+
+      const key = `${id}::${username}`;
+      const existing = voteTracker[key];
+
+      try {
+        if (existing) {
+          // Same vote — no-op
+          if (existing.stance === side) {
+            return res.json({ success: true, message: "Vote unchanged" });
+          }
+          // Already flipped once — LOCKED forever
+          if (existing.hasFlipped) {
+            return res.status(403).json({ error: "Mind-Blower limit reached! You already used your one-time vote flip." });
+          }
+          // First flip allowed — the "Mind-Blower"
+          const oldSide = existing.stance === 'for' ? 'votes_for' : 'votes_against';
+          const newSide = side === 'for' ? 'votes_for' : 'votes_against';
+          const { data: debate } = await supabase.from("debates").select("*").eq("id", id).single();
+          if (debate) {
+            await supabase.from("debates").update({
+              [oldSide]: Math.max(0, debate[oldSide] - 1),
+              [newSide]: debate[newSide] + 1
+            }).eq("id", id);
+          }
+          voteTracker[key] = { stance: side, hasFlipped: true };
+          supabase.from("debate_votes").update({ stance: side, has_flipped: true }).eq("debate_id", id).eq("username", username).then(() => {}).catch(() => {});
+          return res.json({ success: true, flipped: true });
+        }
+
+        // Brand new vote
+        const newSide = side === 'for' ? 'votes_for' : 'votes_against';
+        const { data: debate } = await supabase.from("debates").select("*").eq("id", id).single();
+        if (debate) {
+          await supabase.from("debates").update({ [newSide]: debate[newSide] + 1 }).eq("id", id);
+        }
+        voteTracker[key] = { stance: side, hasFlipped: false };
+        supabase.from("debate_votes").insert([{ debate_id: id, username, stance: side }]).then(() => {}).catch(() => {});
+        res.json({ success: true });
+      } catch (err: any) {
+        console.error("Vote error:", err);
+        res.status(500).json({ error: err.message });
       }
     });
 
     // --- Debate Chat API ---
-    const debateMessages: Record<string, any[]> = {
-      "1": [
-        {
-          id: "m1",
-          user: "CricketFan99",
-          text: "Kohli is definitely the GOAT in ODIs.",
-          vote: "for",
-          timestamp: new Date().toISOString(),
-        },
-        {
-          id: "m2",
-          user: "OldSchoolLover",
-          text: "Sachin played in a different era, you can't compare.",
-          vote: "against",
-          timestamp: new Date().toISOString(),
-        },
-      ],
-      "2": [
-        {
-          id: "m3",
-          user: "T20Specialist",
-          text: "IPL has brought so much innovation.",
-          vote: "for",
-          timestamp: new Date().toISOString(),
-        },
-      ],
-    };
-
-    app.get("/api/debates/:id/messages", (req, res) => {
+    app.get("/api/debates/:id/messages", async (req, res) => {
       const { id } = req.params;
-      res.json(debateMessages[id] || []);
+      try {
+        const { data, error } = await supabase
+          .from("debate_messages")
+          .select("*")
+          .eq("debate_id", id)
+          .order("created_at", { ascending: true });
+        if (error) throw error;
+        res.json(data || []);
+      } catch (err: any) {
+        res.status(500).json({ error: err.message });
+      }
     });
 
-    app.post("/api/debates/:id/messages", (req, res) => {
+    app.post("/api/debates/:id/messages", express.json(), async (req, res) => {
       const { id } = req.params;
       const { user, text, vote } = req.body;
-
-      if (!debateMessages[id]) {
-        debateMessages[id] = [];
+      try {
+        const { data, error } = await supabase
+          .from("debate_messages")
+          .insert([{ debate_id: id, username: user, text, stance: vote }])
+          .select()
+          .single();
+        if (error) throw error;
+        res.json(data);
+      } catch (err: any) {
+        res.status(500).json({ error: err.message });
       }
-
-      const newMessage = {
-        id: Math.random().toString(36).substr(2, 9),
-        user,
-        text,
-        vote,
-        timestamp: new Date().toISOString(),
-      };
-
-      debateMessages[id].push(newMessage);
-      res.json(newMessage);
     });
 
     // --- Career Trajectory API ---
@@ -1376,6 +1399,24 @@ export async function startServer() {
         console.error("[Audit Log Failed to Save to DB]:", e);
       }
     };
+
+    app.post("/api/admin/request-magic-code", express.json(), async (req, res) => {
+      console.log(`[Admin Login] Received request to generate magic code from UI`);
+      if (telegramBot && TELEGRAM_CHAT_ID) {
+        const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        const shortCode = Math.random().toString(36).substring(2, 8).toUpperCase(); // 6 chars
+        
+        magicTokens.set(token, Date.now() + 5 * 60 * 1000); // 5 mins expiry
+        magicTokens.set(shortCode, Date.now() + 5 * 60 * 1000);
+        
+        const link = `${dynamicPublicDomain}/adminjatincontrolcentre260109071108?magic_token=${token}`;
+        
+        const ip = req.ip || req.connection?.remoteAddress || "Unknown IP";
+        telegramBot.sendMessage(TELEGRAM_CHAT_ID, `🔑 <b>Crinava Magic Link Requested</b>\n\nSomeone (IP: ${ip}) requested a laptop entry code.\nClick below to securely access the Control Center (expires in 5m):\n\n${link}\n\n<b>Laptop Entry Code:</b> <code>${shortCode}</code>`, { parse_mode: 'HTML' }).catch(e => console.error("Failed to send telegram msg", e));
+        return res.json({ success: true, message: "Code sent to Telegram" });
+      }
+      return res.status(500).json({ error: "Telegram bot not configured" });
+    });
 
     app.post("/api/admin/magic-login", express.json(), async (req, res) => {
       const { token } = req.body;
@@ -1478,12 +1519,17 @@ export async function startServer() {
       res.json({ success: true });
     });
 
-    app.get("/api/admin/telemetry", (req, res) => {
+    app.get("/api/admin/telemetry", async (req, res) => {
+      let activeDebates = 0;
+      try {
+         const { count } = await supabase.from("debates").select("*", { count: "exact", head: true });
+         activeDebates = count || 0;
+      } catch (e) {}
       res.json({
         uptime: process.uptime(),
         memoryUsageMB: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
         totalRequests,
-        activeDebates: debates.length,
+        activeDebates,
         totalBlogs: blogs.length
       });
     });
@@ -1545,23 +1591,92 @@ export async function startServer() {
     });
 
     app.post("/api/admin/debate", express.json(), async (req, res) => {
-      const { topic } = req.body;
-      const newDebate = {
-        id: Math.random().toString(36).substr(2, 9),
-        claim: topic,
-        arguments: {
-          for: "Community will decide.",
-          against: "Community will decide."
-        },
-        votes: { for: 0, against: 0 },
-        status: "open",
-        createdAt: new Date().toISOString(),
-        trending: true
-      };
-      debates.unshift(newDebate);
-      console.log("[Admin] New debate broadcasted:", topic);
-      await logAdminAction(`Published Debate: ${topic}`, req);
-      res.json({ success: true, debate: newDebate });
+      const { topic, argumentFor, argumentAgainst, trending, timerMinutes } = req.body;
+      try {
+        let endTime = null;
+        if (timerMinutes) {
+           const date = new Date();
+           date.setMinutes(date.getMinutes() + parseInt(timerMinutes));
+           endTime = date.toISOString();
+        }
+        const { data: newDebate, error } = await supabase
+          .from("debates")
+          .insert([{
+            claim: topic,
+            argument_for: argumentFor || "Community will decide.",
+            argument_against: argumentAgainst || "Community will decide.",
+            trending: trending || false,
+            end_time: endTime,
+            status: "open"
+          }])
+          .select()
+          .single();
+          
+        if (error) throw error;
+        console.log("[Admin] New debate broadcasted:", topic);
+        await logAdminAction(`Published Debate: ${topic}`, req);
+        res.json({ success: true, debate: newDebate });
+      } catch (err: any) {
+        res.status(500).json({ error: err.message });
+      }
+    });
+
+    // Admin: Edit any field of any debate
+    app.put("/api/admin/debate/:id", express.json(), async (req, res) => {
+      const { id } = req.params;
+      const { claim, argument_for, argument_against, trending, status, votes_for, votes_against, end_time } = req.body;
+      try {
+        const updates: any = {};
+        if (claim !== undefined) updates.claim = claim;
+        if (argument_for !== undefined) updates.argument_for = argument_for;
+        if (argument_against !== undefined) updates.argument_against = argument_against;
+        if (trending !== undefined) updates.trending = trending;
+        if (status !== undefined) updates.status = status;
+        if (votes_for !== undefined) updates.votes_for = votes_for;
+        if (votes_against !== undefined) updates.votes_against = votes_against;
+        if (end_time !== undefined) updates.end_time = end_time;
+
+        const { data, error } = await supabase.from("debates").update(updates).eq("id", id).select().single();
+        if (error) throw error;
+        await logAdminAction(`Edited Debate: ${data.claim}`, req);
+        res.json({ success: true, debate: data });
+      } catch (err: any) {
+        res.status(500).json({ error: err.message });
+      }
+    });
+
+    // Admin: Delete a debate entirely
+    app.delete("/api/admin/debate/:id", express.json(), async (req, res) => {
+      const { id } = req.params;
+      try {
+        const { error } = await supabase.from("debates").delete().eq("id", id);
+        if (error) throw error;
+        // Clear voteTracker entries for this debate
+        Object.keys(voteTracker).forEach(key => {
+          if (key.startsWith(`${id}::`)) delete voteTracker[key];
+        });
+        await logAdminAction(`Deleted Debate: ${id}`, req);
+        res.json({ success: true });
+      } catch (err: any) {
+        res.status(500).json({ error: err.message });
+      }
+    });
+
+    // Admin: Reset all votes on a debate
+    app.post("/api/admin/debate/:id/reset-votes", express.json(), async (req, res) => {
+      const { id } = req.params;
+      try {
+        await supabase.from("debates").update({ votes_for: 0, votes_against: 0 }).eq("id", id);
+        // Clear voteTracker entries for this debate
+        Object.keys(voteTracker).forEach(key => {
+          if (key.startsWith(`${id}::`)) delete voteTracker[key];
+        });
+        supabase.from("debate_votes").delete().eq("debate_id", id).then(() => {}).catch(() => {});
+        await logAdminAction(`Reset votes on debate: ${id}`, req);
+        res.json({ success: true });
+      } catch (err: any) {
+        res.status(500).json({ error: err.message });
+      }
     });
 
     app.post("/api/admin/blog/draft", express.json(), async (req, res) => {

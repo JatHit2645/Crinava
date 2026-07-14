@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   ShieldAlert,
   KeyRound,
@@ -17,7 +17,10 @@ import {
   Eye,
   Command,
   Search,
-  Settings
+  Settings,
+  Check,
+  Trash2,
+  ImagePlus
 } from "lucide-react";
 import { motion } from "motion/react";
 import {
@@ -46,14 +49,24 @@ export const AdminControlCenter = () => {
   
   // Forms state
   const [debateTopic, setDebateTopic] = useState("");
+  const [debateArgumentFor, setDebateArgumentFor] = useState("");
+  const [debateArgumentAgainst, setDebateArgumentAgainst] = useState("");
+  const [debateTrending, setDebateTrending] = useState(false);
+  const [debateTimerMinutes, setDebateTimerMinutes] = useState("1440"); // Default 24 hours
   const [blogTitle, setBlogTitle] = useState("");
   const [blogCategory, setBlogCategory] = useState("Tactical Analysis");
   const [blogDraft, setBlogDraft] = useState("");
+  const [blogImageUrls, setBlogImageUrls] = useState<string[]>([]);
+  const [selectedImageUrl, setSelectedImageUrl] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [hfDrafts, setHfDrafts] = useState<any[]>([]);
   const [blogSubTab, setBlogSubTab] = useState<"new" | "old" | "approved" | "revoked">("new");
   const [approvedBlogs, setApprovedBlogs] = useState<any[]>([]);
   const [revokedBlogs, setRevokedBlogs] = useState<any[]>([]);
+  // Admin Debate Manager
+  const [liveDebates, setLiveDebates] = useState<any[]>([]);
+  const [editingDebateId, setEditingDebateId] = useState<string | null>(null);
+  const [editDebateForm, setEditDebateForm] = useState<any>({});
   // Command Bar
   const [showCommandBar, setShowCommandBar] = useState(false);
   const [commandQuery, setCommandQuery] = useState("");
@@ -163,6 +176,18 @@ export const AdminControlCenter = () => {
         };
         fetchLogs();
         logInterval = setInterval(fetchLogs, 1000);
+      } else if (activeAdminTab === "debate") {
+        const fetchDebatesAdmin = async () => {
+          try {
+            const res = await fetch("/api/debates");
+            const data = await res.json();
+            setLiveDebates(Array.isArray(data) ? data : []);
+          } catch (e) {
+            console.error("Failed to fetch debates for admin");
+          }
+        };
+        fetchDebatesAdmin();
+        auditInterval = setInterval(fetchDebatesAdmin, 5000);
       } else if (activeAdminTab === "secops") {
         const fetchAudit = async () => {
           try {
@@ -317,6 +342,15 @@ export const AdminControlCenter = () => {
     }
   };
 
+  const handleRequestMagicCode = async () => {
+    try {
+      await fetch("/api/admin/request-magic-code", { method: "POST" });
+      setLoginStep("magic_code");
+    } catch (e) {
+      setError("Failed to request magic code.");
+    }
+  };
+
   const handleFetchDrafts = async () => {
     setIsGenerating(true);
     try {
@@ -350,19 +384,35 @@ export const AdminControlCenter = () => {
   };
 
   const handlePublishDebate = async () => {
+    if (!debateTopic.trim()) {
+      alert("Please enter a debate topic.");
+      return;
+    }
     try {
       const res = await fetch("/api/admin/debate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic: debateTopic })
+        body: JSON.stringify({ 
+          topic: debateTopic,
+          argumentFor: debateArgumentFor,
+          argumentAgainst: debateArgumentAgainst,
+          trending: debateTrending,
+          timerMinutes: debateTimerMinutes === "indefinite" ? null : debateTimerMinutes
+        })
       });
       const data = await res.json();
       if (data.success) {
         alert("Debate published to main website instantly!");
         setDebateTopic("");
+        setDebateArgumentFor("");
+        setDebateArgumentAgainst("");
+        setDebateTrending(false);
+        setDebateTimerMinutes("1440");
+      } else {
+        alert("Failed to publish debate: " + (data.error || "Check database logs. Has debate_schema.sql been executed in Supabase?"));
       }
     } catch (e) {
-      alert("Failed to publish debate.");
+      alert("Failed to publish debate. Connection error.");
     }
   };
 
@@ -371,7 +421,7 @@ export const AdminControlCenter = () => {
       const res = await fetch("/api/admin/blog-publish", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: blogTitle, category: blogCategory, content: blogDraft })
+        body: JSON.stringify({ title: blogTitle, category: blogCategory, content: blogDraft, image_url: selectedImageUrl })
       });
       const data = await res.json();
       if (data.success) {
@@ -380,9 +430,14 @@ export const AdminControlCenter = () => {
         fetch("/api/blogs").then(r => r.json()).then(d => setApprovedBlogs(d));
         setBlogDraft("");
         setBlogTitle("");
+        setBlogCategory("");
+        setBlogImageUrls([]);
+        setSelectedImageUrl("");
+      } else {
+        alert("Failed to publish blog: " + (data.error || "Unknown error"));
       }
     } catch (e) {
-      alert("Failed to publish blog.");
+      alert("Failed to publish blog network error.");
     }
   };
 
@@ -489,7 +544,7 @@ export const AdminControlCenter = () => {
                 </div>
                 <button 
                   type="button"
-                  onClick={() => setLoginStep("magic_code")}
+                  onClick={handleRequestMagicCode}
                   className="w-full text-center text-xs text-metallic-gold/80 hover:text-metallic-gold transition-colors mt-4 block"
                 >
                   Or Enter Laptop Entry Code
@@ -713,6 +768,7 @@ export const AdminControlCenter = () => {
         )}
 
         {activeAdminTab === "debate" && (
+          <>
           <div className="bg-black/40 border border-mercury/10 p-8 rounded-xl max-w-3xl">
             <h3 className="text-xl font-bold mb-6 flex items-center"><MessageSquare className="mr-3 text-metallic-gold" /> Deploy New Debate</h3>
             <div className="space-y-6">
@@ -722,26 +778,172 @@ export const AdminControlCenter = () => {
                   type="text"
                   value={debateTopic}
                   onChange={(e) => setDebateTopic(e.target.value)}
-                  className="w-full bg-black/60 border border-mercury/20 rounded-lg p-4 text-white focus:border-metallic-gold transition-colors"
+                  className="w-full bg-black/60 border border-mercury/20 rounded-lg p-4 text-white focus:border-metallic-gold transition-colors outline-none"
                   placeholder="e.g. Jasprit Bumrah is the greatest T20 bowler of all time."
                 />
               </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm text-mercury/70 mb-2">Tag 1</label>
-                  <input type="text" className="w-full bg-black/60 border border-mercury/20 rounded-lg p-3 text-white" placeholder="e.g. T20" />
+                  <label className="block text-sm text-mercury/70 mb-2">The Case For (Starter Argument)</label>
+                  <textarea
+                    value={debateArgumentFor}
+                    onChange={(e) => setDebateArgumentFor(e.target.value)}
+                    rows={3}
+                    className="w-full bg-black/60 border border-mercury/20 rounded-lg p-3 text-white focus:border-metallic-gold transition-colors outline-none resize-none"
+                    placeholder="e.g. Unbelievable economy rate under pressure, unmatched variations."
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm text-mercury/70 mb-2">Tag 2</label>
-                  <input type="text" className="w-full bg-black/60 border border-mercury/20 rounded-lg p-3 text-white" placeholder="e.g. Bowling" />
+                  <label className="block text-sm text-mercury/70 mb-2">The Case Against (Starter Argument)</label>
+                  <textarea
+                    value={debateArgumentAgainst}
+                    onChange={(e) => setDebateArgumentAgainst(e.target.value)}
+                    rows={3}
+                    className="w-full bg-black/60 border border-mercury/20 rounded-lg p-3 text-white focus:border-metallic-gold transition-colors outline-none resize-none"
+                    placeholder="e.g. Needs more longevity or statistics across different formats."
+                  />
                 </div>
               </div>
+
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm text-mercury/70 mb-2">Debate Duration (Timer)</label>
+                  <select
+                    value={debateTimerMinutes}
+                    onChange={(e) => setDebateTimerMinutes(e.target.value)}
+                    className="w-full bg-black/60 border border-mercury/20 rounded-lg p-3 text-white focus:border-metallic-gold transition-colors outline-none"
+                  >
+                    <option value="15">15 Minutes (Live Match Flash)</option>
+                    <option value="60">1 Hour</option>
+                    <option value="1440">24 Hours (Standard)</option>
+                    <option value="10080">7 Days</option>
+                    <option value="indefinite">Indefinite (No Timer)</option>
+                  </select>
+                </div>
+                <div className="flex items-center space-x-3 pt-8">
+                  <input
+                    type="checkbox"
+                    id="debateTrending"
+                    checked={debateTrending}
+                    onChange={(e) => setDebateTrending(e.target.checked)}
+                    className="size-5 accent-metallic-gold bg-black/60 border border-mercury/20 rounded cursor-pointer"
+                  />
+                  <label htmlFor="debateTrending" className="text-sm text-mercury/90 cursor-pointer select-none">
+                    Mark as Hot & Trending (Flickering Fire font on Battle Feed)
+                  </label>
+                </div>
+              </div>
+
               <button onClick={handlePublishDebate} className="flex items-center justify-center space-x-2 w-full py-4 bg-metallic-gold text-black font-bold rounded-lg hover:brightness-110 transition-all">
                 <Send size={18} />
                 <span>Broadcast to All Users Instantly</span>
               </button>
             </div>
           </div>
+
+          {/* Live Debates Manager */}
+          <div className="bg-black/40 border border-mercury/10 p-8 rounded-xl max-w-5xl mt-8">
+            <h3 className="text-xl font-bold mb-6 flex items-center"><Settings className="mr-3 text-aurora-teal" /> Manage Live Debates ({liveDebates.length})</h3>
+            {liveDebates.length === 0 ? (
+              <p className="text-mercury/50 text-sm">No active debates found. Deploy one above.</p>
+            ) : (
+              <div className="space-y-4">
+                {liveDebates.map((d: any) => (
+                  <div key={d.id} className={`border rounded-xl p-5 transition-all ${d.status === 'closed' ? 'border-red-500/20 bg-red-900/5' : 'border-mercury/10 bg-black/30'}`}>
+                    {editingDebateId === d.id ? (
+                      /* --- EDITING MODE --- */
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-xs text-mercury/60 mb-1">Claim / Topic</label>
+                          <input value={editDebateForm.claim || ""} onChange={(e) => setEditDebateForm({...editDebateForm, claim: e.target.value})} className="w-full bg-black/60 border border-mercury/20 rounded-lg p-3 text-white focus:border-metallic-gold outline-none" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs text-mercury/60 mb-1">Argument For</label>
+                            <textarea value={editDebateForm.argument_for || ""} onChange={(e) => setEditDebateForm({...editDebateForm, argument_for: e.target.value})} rows={2} className="w-full bg-black/60 border border-mercury/20 rounded-lg p-3 text-white focus:border-metallic-gold outline-none resize-none" />
+                          </div>
+                          <div>
+                            <label className="block text-xs text-mercury/60 mb-1">Argument Against</label>
+                            <textarea value={editDebateForm.argument_against || ""} onChange={(e) => setEditDebateForm({...editDebateForm, argument_against: e.target.value})} rows={2} className="w-full bg-black/60 border border-mercury/20 rounded-lg p-3 text-white focus:border-metallic-gold outline-none resize-none" />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4">
+                          <div>
+                            <label className="block text-xs text-mercury/60 mb-1">Votes For</label>
+                            <input type="number" value={editDebateForm.votes_for ?? 0} onChange={(e) => setEditDebateForm({...editDebateForm, votes_for: parseInt(e.target.value) || 0})} className="w-full bg-black/60 border border-mercury/20 rounded-lg p-3 text-white outline-none" />
+                          </div>
+                          <div>
+                            <label className="block text-xs text-mercury/60 mb-1">Votes Against</label>
+                            <input type="number" value={editDebateForm.votes_against ?? 0} onChange={(e) => setEditDebateForm({...editDebateForm, votes_against: parseInt(e.target.value) || 0})} className="w-full bg-black/60 border border-mercury/20 rounded-lg p-3 text-white outline-none" />
+                          </div>
+                          <div>
+                            <label className="block text-xs text-mercury/60 mb-1">Status</label>
+                            <select value={editDebateForm.status || "open"} onChange={(e) => setEditDebateForm({...editDebateForm, status: e.target.value})} className="w-full bg-black/60 border border-mercury/20 rounded-lg p-3 text-white outline-none">
+                              <option value="open">Open</option>
+                              <option value="closed">Closed</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <input type="checkbox" checked={editDebateForm.trending || false} onChange={(e) => setEditDebateForm({...editDebateForm, trending: e.target.checked})} className="size-5 accent-orange-500" />
+                          <label className="text-sm text-mercury/90">🔥 Trending</label>
+                        </div>
+                        <div className="flex space-x-3">
+                          <button onClick={async () => {
+                            try {
+                              const res = await fetch(`/api/admin/debate/${d.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(editDebateForm) });
+                              const data = await res.json();
+                              if (data.success) { setEditingDebateId(null); setLiveDebates(prev => prev.map(x => x.id === d.id ? data.debate : x)); }
+                              else alert("Save failed: " + data.error);
+                            } catch (e) { alert("Save failed"); }
+                          }} className="flex-1 py-3 bg-aurora-teal text-black font-bold rounded-lg hover:brightness-110 transition-all flex items-center justify-center space-x-2">
+                            <Check size={16} /><span>Save Changes</span>
+                          </button>
+                          <button onClick={() => setEditingDebateId(null)} className="px-6 py-3 bg-mercury/10 text-mercury/70 rounded-lg hover:bg-mercury/20 transition-all">
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      /* --- VIEW MODE --- */
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h4 className="text-lg font-bold text-white">"{d.claim}"</h4>
+                            {d.trending && <span className="px-2 py-0.5 bg-orange-500/20 text-orange-400 text-[10px] font-bold rounded animate-pulse">🔥 TRENDING</span>}
+                            <span className={`px-2 py-0.5 text-[10px] font-bold rounded ${d.status === 'open' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>{d.status?.toUpperCase()}</span>
+                          </div>
+                          <div className="text-xs text-mercury/50 space-y-1">
+                            <p>For: <span className="text-blue-400 font-bold">{d.votes_for}</span> | Against: <span className="text-red-400 font-bold">{d.votes_against}</span> | Total: {d.votes_for + d.votes_against}</p>
+                            <p>Created: {new Date(d.created_at).toLocaleString()}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2 ml-4">
+                          <button onClick={() => { setEditingDebateId(d.id); setEditDebateForm({ claim: d.claim, argument_for: d.argument_for, argument_against: d.argument_against, trending: d.trending, status: d.status, votes_for: d.votes_for, votes_against: d.votes_against }); }} className="px-3 py-2 bg-metallic-gold/10 text-metallic-gold border border-metallic-gold/20 rounded-lg text-xs font-bold hover:bg-metallic-gold/20 transition-all">
+                            Edit
+                          </button>
+                          <button onClick={async () => {
+                            if (!window.confirm("Reset all votes on this debate?")) return;
+                            try { await fetch(`/api/admin/debate/${d.id}/reset-votes`, { method: "POST" }); setLiveDebates(prev => prev.map(x => x.id === d.id ? {...x, votes_for: 0, votes_against: 0} : x)); } catch(e) {}
+                          }} className="px-3 py-2 bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 rounded-lg text-xs font-bold hover:bg-yellow-500/20 transition-all">
+                            Reset Votes
+                          </button>
+                          <button onClick={async () => {
+                            if (!window.confirm("Permanently delete this debate?")) return;
+                            try { await fetch(`/api/admin/debate/${d.id}`, { method: "DELETE" }); setLiveDebates(prev => prev.filter(x => x.id !== d.id)); } catch(e) {}
+                          }} className="px-3 py-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg text-xs font-bold hover:bg-red-500/20 transition-all">
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          </>
         )}
 
         {activeAdminTab === "blog" && (
@@ -750,10 +952,18 @@ export const AdminControlCenter = () => {
               <h3 className="text-lg font-bold mb-4 flex items-center"><Zap className="mr-2 text-metallic-gold" /> AI Blog Management</h3>
               
               <div className="flex space-x-2 mb-6 bg-[#111] p-1 rounded-lg">
-                <button onClick={() => setBlogSubTab("new")} className={`flex-1 py-2 text-xs font-bold rounded ${blogSubTab === "new" ? "bg-aurora-teal text-black" : "text-mercury/60"}`}>New Drafts</button>
-                <button onClick={() => setBlogSubTab("old")} className={`flex-1 py-2 text-xs font-bold rounded ${blogSubTab === "old" ? "bg-metallic-gold text-black" : "text-mercury/60"}`}>Old Drafts</button>
-                <button onClick={() => setBlogSubTab("approved")} className={`flex-1 py-2 text-xs font-bold rounded ${blogSubTab === "approved" ? "bg-white text-black" : "text-mercury/60"}`}>Approved</button>
-                <button onClick={() => setBlogSubTab("revoked")} className={`flex-1 py-2 text-xs font-bold rounded ${blogSubTab === "revoked" ? "bg-red-500 text-white" : "text-mercury/60"}`}>Revoked</button>
+                <button onClick={() => setBlogSubTab("new")} className={`flex-1 py-2 text-xs font-bold rounded ${blogSubTab === "new" ? "bg-aurora-teal text-black" : "text-mercury/60"}`}>
+                  New ({hfDrafts.filter(d => (Date.now() - (d.fetchedAt || Date.now())) <= 6 * 60 * 60 * 1000).length})
+                </button>
+                <button onClick={() => setBlogSubTab("old")} className={`flex-1 py-2 text-xs font-bold rounded ${blogSubTab === "old" ? "bg-metallic-gold text-black" : "text-mercury/60"}`}>
+                  Old ({hfDrafts.filter(d => (Date.now() - (d.fetchedAt || Date.now())) > 6 * 60 * 60 * 1000).length})
+                </button>
+                <button onClick={() => setBlogSubTab("approved")} className={`flex-1 py-2 text-xs font-bold rounded ${blogSubTab === "approved" ? "bg-white text-black" : "text-mercury/60"}`}>
+                  Approved ({approvedBlogs.length})
+                </button>
+                <button onClick={() => setBlogSubTab("revoked")} className={`flex-1 py-2 text-xs font-bold rounded ${blogSubTab === "revoked" ? "bg-red-500 text-white" : "text-mercury/60"}`}>
+                  Revoked ({revokedBlogs.length})
+                </button>
               </div>
 
               <button 
@@ -773,14 +983,42 @@ export const AdminControlCenter = () => {
                 }).map((draft, i) => (
                   <div 
                     key={i} 
-                    onClick={() => { setBlogTitle(draft.title); setBlogCategory(draft.category); setBlogDraft(draft.content); }}
+                    onClick={() => { 
+                      setBlogTitle(draft.title); 
+                      setBlogCategory(draft.category); 
+                      setBlogDraft(draft.content); 
+                      setBlogImageUrls(draft.image_urls || []);
+                      setSelectedImageUrl(draft.image_urls && draft.image_urls.length > 0 ? draft.image_urls[0] : "");
+                    }}
                     className={`p-4 rounded-xl border cursor-pointer transition-all ${blogTitle === draft.title ? 'border-metallic-gold bg-metallic-gold/10' : 'border-mercury/20 hover:border-mercury/50'}`}
                   >
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-bold text-white mb-1 leading-snug">{draft.title}</h4>
+                    <div className="flex justify-between items-start mb-2 group/title">
+                      <h4 className="font-bold text-white mb-1 leading-snug pr-4">{draft.title}</h4>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (confirm("Are you sure you want to discard this draft?")) {
+                            setHfDrafts(prev => prev.filter(d => d.id !== draft.id));
+                            if (blogTitle === draft.title) {
+                              setBlogTitle(""); setBlogCategory(""); setBlogDraft(""); setBlogImageUrls([]); setSelectedImageUrl("");
+                            }
+                          }
+                        }}
+                        className="text-mercury/20 hover:text-red-500 transition-colors p-1"
+                        title="Discard Draft"
+                      >
+                        <Trash2 size={16} />
+                      </button>
                     </div>
                     <div className="flex justify-between items-center mt-2">
-                      <span className="text-xs font-bold text-aurora-teal bg-aurora-teal/10 px-2 py-1 rounded">{draft.category}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-aurora-teal bg-aurora-teal/10 px-2 py-1 rounded">{draft.category}</span>
+                        {draft.image_urls && draft.image_urls.length > 0 ? (
+                          <span className="text-[10px] bg-metallic-gold/20 text-metallic-gold px-1.5 py-0.5 rounded flex items-center gap-1">🖼️ Has Image</span>
+                        ) : (
+                          <span className="text-[10px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded flex items-center gap-1">📸 No Image</span>
+                        )}
+                      </div>
                       <span className="text-[10px] text-mercury/40">Not Approved</span>
                     </div>
                   </div>
@@ -789,16 +1027,36 @@ export const AdminControlCenter = () => {
                 {blogSubTab === "approved" && approvedBlogs.map((blog, i) => (
                   <div key={i} className="p-4 rounded-xl border border-mercury/20 flex flex-col justify-between">
                     <h4 className="font-bold text-white mb-2">{blog.title}</h4>
-                    <span className="text-xs text-white bg-white/10 w-max px-2 py-1 rounded mb-4">{blog.category}</span>
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="text-xs text-white bg-white/10 w-max px-2 py-1 rounded">{blog.category}</span>
+                      {blog.image_url ? (
+                        <span className="text-[10px] bg-metallic-gold/20 text-metallic-gold w-max px-1.5 py-0.5 rounded">🖼️ Has Image</span>
+                      ) : (
+                        <span className="text-[10px] bg-red-500/20 text-red-400 w-max px-1.5 py-0.5 rounded">📸 No Image</span>
+                      )}
+                    </div>
                     <button onClick={() => handleRevokeBlog(blog.id)} className="w-full py-2 bg-red-500/20 text-red-500 hover:bg-red-500/40 font-bold rounded text-xs transition-colors">Revoke Live Status</button>
                   </div>
                 ))}
 
                 {blogSubTab === "revoked" && revokedBlogs.map((blog, i) => (
                   <div key={i} className="p-4 rounded-xl border border-red-500/30 bg-red-500/5 flex flex-col justify-between">
-                    <div className="cursor-pointer" onClick={() => { setBlogTitle(blog.title); setBlogCategory(blog.category); setBlogDraft(blog.content); }}>
+                    <div className="cursor-pointer" onClick={() => { 
+                      setBlogTitle(blog.title); 
+                      setBlogCategory(blog.category); 
+                      setBlogDraft(blog.content); 
+                      setBlogImageUrls(blog.image_url ? [blog.image_url] : []);
+                      setSelectedImageUrl(blog.image_url || "");
+                    }}>
                       <h4 className="font-bold text-white mb-2 line-through opacity-50 hover:opacity-100">{blog.title}</h4>
-                      <p className="text-xs text-mercury/40 mb-4">Click to edit and republish</p>
+                      <div className="flex items-center gap-2 mb-4">
+                        <p className="text-xs text-mercury/40 m-0">Click to edit and republish</p>
+                        {blog.image_url ? (
+                          <span className="text-[10px] bg-metallic-gold/20 text-metallic-gold w-max px-1.5 py-0.5 rounded">🖼️ Has Image</span>
+                        ) : (
+                          <span className="text-[10px] bg-red-500/20 text-red-400 w-max px-1.5 py-0.5 rounded">📸 No Image</span>
+                        )}
+                      </div>
                     </div>
                     <button onClick={() => handleDeleteBlog(blog.id)} className="w-full py-2 bg-red-500 text-white hover:bg-red-600 font-bold rounded text-xs transition-colors">Delete Permanently</button>
                   </div>
@@ -815,6 +1073,58 @@ export const AdminControlCenter = () => {
             <div className="bg-black/40 border border-mercury/10 p-6 rounded-xl flex flex-col">
               <h3 className="text-lg font-bold mb-4">Step 2: Review & Publish</h3>
               
+              <div className="mb-4">
+                <span className="text-xs text-mercury/50 mb-2 block uppercase tracking-widest font-bold">Cover Image URL</span>
+                <div className="flex gap-2 mb-2">
+                  <input 
+                    type="text" 
+                    value={selectedImageUrl} 
+                    onChange={(e) => setSelectedImageUrl(e.target.value)}
+                    placeholder="https://example.com/image.jpg"
+                    className="flex-1 bg-[#111] border border-mercury/20 rounded-lg p-3 text-white focus:border-metallic-gold text-xs"
+                  />
+                  <label className="cursor-pointer bg-mercury/10 hover:bg-mercury/20 text-white rounded-lg px-4 flex items-center transition-colors">
+                    <span className="text-xs font-bold whitespace-nowrap">Local File</span>
+                    <input type="file" className="hidden" accept="image/*" onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => setSelectedImageUrl(reader.result as string);
+                        reader.readAsDataURL(file);
+                      }
+                    }} />
+                  </label>
+                </div>
+                <div className="flex justify-end mb-2">
+                  <button 
+                    onClick={() => setBlogDraft(prev => prev + `\n\n![Image](${selectedImageUrl})\n`)}
+                    disabled={!selectedImageUrl}
+                    className="text-[10px] text-metallic-gold hover:text-white bg-metallic-gold/10 hover:bg-metallic-gold/20 px-2 py-1 rounded transition-colors disabled:opacity-50 flex items-center gap-1"
+                  >
+                    <ImagePlus size={12} /> Insert Selected Image Into Article Content
+                  </button>
+                </div>
+                
+                {blogImageUrls.length > 0 && (
+                  <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-mercury/20 mt-2">
+                    {blogImageUrls.map((url, i) => (
+                      <div 
+                        key={i} 
+                        onClick={() => setSelectedImageUrl(url)}
+                        className={`relative cursor-pointer rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${selectedImageUrl === url ? 'border-aurora-teal scale-105 shadow-[0_0_15px_rgba(45,212,191,0.3)] z-10' : 'border-transparent opacity-50 hover:opacity-100'}`}
+                      >
+                        <img src={url} alt="Cover option" className="h-20 w-32 object-cover" />
+                        {selectedImageUrl === url && (
+                          <div className="absolute top-1 right-1 bg-aurora-teal text-black p-0.5 rounded-full">
+                            <Check size={12} />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <input 
                 type="text" 
                 value={blogTitle} 

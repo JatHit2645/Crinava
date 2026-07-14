@@ -6,7 +6,7 @@
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { BlogArchive } from "./pages/BlogArchive";
 import { BlogPost } from "./pages/BlogPost";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { GoogleGenAI, Type } from "@google/genai";
 import {
   TrendingUp,
@@ -542,18 +542,15 @@ interface RaffleHistory {
 interface Debate {
   id: string;
   claim: string;
-  arguments: {
-    for: string;
-    against: string;
-  };
-  votes: {
-    for: number;
-    against: number;
-  };
+  argument_for: string;
+  argument_against: string;
+  votes_for: number;
+  votes_against: number;
   userVote?: "for" | "against";
   userReasoning?: string;
   status: "open" | "closed";
-  createdAt: string;
+  created_at: string;
+  end_time?: string;
   trending?: boolean;
 }
 
@@ -582,7 +579,7 @@ interface MomentumPoint {
 * Generates a short AI-powered cricket blog post with a title, content, category, read time, and current date.
 * @example
 * generateBlogPost("India vs Australia Test analysis")
-* { title: "…", content: "…", category: "…", readTime: "…", date: "23 Jun 2026", isAI: true }
+* { title: "â€¦", content: "â€¦", category: "â€¦", readTime: "â€¦", date: "23 Jun 2026", isAI: true }
 * @param {string} topic - The cricket topic to generate the blog post about.
 * @returns {Promise<BlogPost>} A promise that resolves to the generated blog post object.
 **/
@@ -1029,7 +1026,7 @@ const VerdictCard = ({
         {/* Footer */}
         <div className="p-4 bg-white/[0.01] border-t border-hairline flex justify-center">
           <div className="text-meta text-[#948f96] tracking-[0.3em]">
-            ORACLE_ENGINE • CRINAVA_INTELLIGENCE
+            ORACLE_ENGINE â€¢ CRINAVA_INTELLIGENCE
           </div>
         </div>
       </div>
@@ -1038,6 +1035,22 @@ const VerdictCard = ({
 };
 
 import { useVerdictStore } from "./store/verdictStore";
+
+// Sparkle helper (Moved outside component loop to prevent remounting)
+const Sp = ({ x, y, t }: { x: number; y: number; t: number }) => (
+  <g>
+    <line x1={x-4} y1={y} x2={x+4} y2={y} stroke="#fef08a" strokeWidth="2" strokeLinecap="round"><animate attributeName="opacity" values="0;1;0" dur={`${t}s`} repeatCount="indefinite" /></line>
+    <line x1={x} y1={y-4} x2={x} y2={y+4} stroke="#fef08a" strokeWidth="2" strokeLinecap="round"><animate attributeName="opacity" values="0;1;0" dur={`${t}s`} repeatCount="indefinite" /></line>
+  </g>
+);
+
+// Sweat teardrop helper
+const Sw = ({ x, y, t, s = 1 }: { x: number; y: number; t: number; s?: number }) => (
+  <path d={`M ${x},${y} Q ${x+3*s},${y+5*s} ${x},${y+8*s} Q ${x-3*s},${y+5*s} ${x},${y}`} fill="#60a5fa">
+    <animate attributeName="opacity" values="0.9;0" dur={`${t}s`} repeatCount="indefinite" />
+    <animateTransform attributeName="transform" type="translate" values={`0,0;0,${18*s}`} dur={`${t}s`} repeatCount="indefinite" />
+  </path>
+);
 
 export default function App() {
   const navigate = useNavigate();
@@ -1115,7 +1128,7 @@ export default function App() {
       id: "early-bird",
       name: "Early Bird",
       description: "Joined Crinava in its inaugural month.",
-      icon: "🌟",
+      icon: "ðŸŒŸ",
       requirement: "Join before April 2026",
       progress: 100,
     },
@@ -1123,7 +1136,7 @@ export default function App() {
       id: "strategist",
       name: "Strategist",
       description: "Master of tactical debates.",
-      icon: "🧠",
+      icon: "ðŸ§ ",
       requirement: "Win 10 community debates",
       progress: 40,
     },
@@ -1131,7 +1144,7 @@ export default function App() {
       id: "oracle",
       name: "Oracle",
       description: "Uncanny ability to predict match outcomes.",
-      icon: "🔮",
+      icon: "ðŸ”®",
       requirement: "80% accuracy over 50 predictions",
       progress: 15,
     },
@@ -1139,7 +1152,7 @@ export default function App() {
       id: "iron-man",
       name: "Iron Man",
       description: "Unwavering consistency.",
-      icon: "🛡️",
+      icon: "ðŸ›¡ï¸",
       requirement: "30-day login streak",
       progress: 60,
     },
@@ -1147,7 +1160,7 @@ export default function App() {
       id: "mastermind",
       name: "Mastermind",
       description: "Advanced simulation expert.",
-      icon: "⚡",
+      icon: "âš¡",
       requirement: "Score > 90 in 5 advanced simulations",
       progress: 0,
     },
@@ -1443,46 +1456,96 @@ export default function App() {
 
   // New Pillars State
   const [debates, setDebates] = useState<Debate[]>([]);
+  const [isTrafficSimulating, setIsTrafficSimulating] = useState(false);
+  const simIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const simBiasesRef = useRef<Record<string, number>>({});
+  const biasDriftIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const toggleSimulation = () => {
+    if (isTrafficSimulating) {
+      if (simIntervalRef.current) clearInterval(simIntervalRef.current);
+      if (biasDriftIntervalRef.current) clearInterval(biasDriftIntervalRef.current);
+      setIsTrafficSimulating(false);
+    } else {
+      setIsTrafficSimulating(true);
+      
+      // Initialize independent biases for each debate card to make them behave uniquely
+      const initialBiases: Record<string, number> = {};
+      debates.forEach(d => {
+        initialBiases[d.id] = (Math.random() - 0.5) * 0.4;
+      });
+      simBiasesRef.current = initialBiases;
+
+      // Drift each debate's bias independently every 1.5 seconds
+      biasDriftIntervalRef.current = setInterval(() => {
+        const updatedBiases = { ...simBiasesRef.current };
+        Object.keys(updatedBiases).forEach(id => {
+          const currentBias = updatedBiases[id] || 0;
+          const change = (Math.random() - 0.5) * 0.6; // Organic momentum shifts
+          let newBias = currentBias + change;
+          if (newBias > 0.85) newBias = 0.85;
+          if (newBias < -0.85) newBias = -0.85;
+          updatedBiases[id] = newBias;
+        });
+        simBiasesRef.current = updatedBiases;
+      }, 1500);
+
+      simIntervalRef.current = setInterval(() => {
+        setDebates(prev => prev.map(d => {
+          // Retrieve the independent bias for this specific debate ID
+          const debateBias = simBiasesRef.current[d.id] ?? 0;
+          const forWeight = 0.5 + debateBias * 0.45;
+          
+          // Math fix: Scale the size of vote increments using the square root of the total votes.
+          // This prevents the percentage from getting "diluted" and stuck at 50% when vote counts grow large.
+          const totalVotes = d.votes_for + d.votes_against;
+          const baseIncrement = 5 + Math.floor(Math.sqrt(totalVotes) * 0.7);
+
+          const randomFor = Math.floor(Math.random() * baseIncrement * (forWeight * 2));
+          const randomAgainst = Math.floor(Math.random() * baseIncrement * ((1 - forWeight) * 2));
+          
+          return {
+            ...d,
+            votes_for: d.votes_for + Math.max(0, randomFor),
+            votes_against: d.votes_against + Math.max(0, randomAgainst)
+          };
+        }));
+      }, 50);
+    }
+  };
 
   useEffect(() => {
-    /**
-    * Fetches debate data from the API and updates the debates state.
-    * @example
-    * sync()
-    * undefined
-    * @returns {Promise<void>} A promise that resolves after the fetch attempt completes.
-    **/
-    const fetchDebates = async () => {
-      console.log("Fetching debates...");
-      try {
-        const response = await fetch("/api/debates");
-        console.log("Response status:", response.status);
-        console.log(
-          "Response headers:",
-          Object.fromEntries(response.headers.entries()),
-        );
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Debates data:", data);
-          setDebates(data);
-        } else {
-          const text = await response.text();
-          console.error(
-            "Failed to fetch debates. Status:",
-            response.status,
-            "Body:",
-            text,
-          );
-          throw new Error(`Failed to fetch: ${response.status} ${text}`);
-        }
-      } catch (err) {
-        console.error("Debate fetch failed", err);
-      }
+    return () => {
+      if (simIntervalRef.current) clearInterval(simIntervalRef.current);
+      if (biasDriftIntervalRef.current) clearInterval(biasDriftIntervalRef.current);
     };
-    fetchDebates();
-    const interval = setInterval(fetchDebates, 5000);
-    return () => clearInterval(interval);
   }, []);
+
+  const fetchDebates = useCallback(async () => {
+    console.log("Fetching debates...");
+    try {
+      const currentUser = session?.user?.email?.split("@")[0] || "GuestUser";
+      const response = await fetch(`/api/debates?username=${currentUser}`);
+      if (response.ok) {
+        const data = await response.json();
+        setDebates(data);
+      } else {
+        console.error("Failed to fetch debates. Status:", response.status);
+      }
+    } catch (err) {
+      console.error("Debate fetch failed", err);
+    }
+  }, [session]);
+
+  useEffect(() => {
+    fetchDebates();
+    const interval = setInterval(() => {
+      if (!isTrafficSimulating) {
+        fetchDebates();
+      }
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [fetchDebates, isTrafficSimulating]);
   const [momentumData, setMomentumData] = useState<MomentumPoint[]>([]);
   const [selectedMatch, setSelectedMatch] = useState<string>("");
   const [vertexResult, setVertexResult] = useState<any>(null);
@@ -1817,21 +1880,24 @@ export default function App() {
     }
     */
     try {
+      const currentUser = session?.user?.email?.split("@")[0] || "GuestUser";
       const response = await fetch(`/api/debates/${debateId}/vote`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ side }),
+        body: JSON.stringify({ side, username: currentUser }), // Pass dynamic username
       });
       if (response.ok) {
-        const updatedDebate = await response.json();
-        setDebates((prev) =>
-          prev.map((d) =>
-            d.id === debateId
-              ? { ...updatedDebate, userVote: side, userReasoning: reasoning }
-              : d,
-          ),
-        );
-        updateProfileStats(cricketIQ + 25);
+        const result = await response.json();
+        if (result.success) {
+          // If vote was changed/added, fetch latest debates immediately
+          fetchDebates();
+          updateProfileStats(cricketIQ + 25);
+        } else if (result.error) {
+          alert(result.error);
+        }
+      } else {
+        const errorData = await response.json();
+        alert(errorData.error || "Failed to vote. You may have reached your vote flip limit.");
       }
     } catch (err) {
       console.error("Vote failed", err);
@@ -3029,9 +3095,17 @@ export default function App() {
                       Settle the Score
                     </p>
                   </div>
-                  <button className="px-6 py-2 bg-aurora-teal text-black font-black text-[10px] uppercase tracking-widest rounded-full hover:scale-105 transition-all">
-                    Create Debate
-                  </button>
+                  <div className="flex gap-4 items-center">
+                    <button 
+                      onClick={toggleSimulation}
+                      className={`px-6 py-2 font-black text-[10px] uppercase tracking-widest rounded-full hover:scale-105 transition-all ${isTrafficSimulating ? "bg-red-500 text-white" : "bg-yellow-400 text-black"}`}
+                    >
+                      {isTrafficSimulating ? "PAUSE TRAFFIC" : "PLAY TRAFFIC"}
+                    </button>
+                    <button className="px-6 py-2 bg-aurora-teal text-black font-black text-[10px] uppercase tracking-widest rounded-full hover:scale-105 transition-all">
+                      Create Debate
+                    </button>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -3056,8 +3130,8 @@ export default function App() {
                           </button>
                         </div>
                         {d.trending && (
-                          <span className="px-2 py-1 bg-metallic-gold/10 text-metallic-gold text-[8px] font-black uppercase tracking-widest rounded">
-                            Trending
+                          <span className="px-2 py-1 bg-orange-500/20 text-orange-400 border border-orange-500/30 text-[8px] font-black uppercase tracking-widest rounded animate-pulse flex items-center gap-1 shadow-[0_0_15px_rgba(249,115,22,0.4)]">
+                            ðŸ”¥ Trending
                           </span>
                         )}
                       </div>
@@ -3072,7 +3146,7 @@ export default function App() {
                             The Case For
                           </div>
                           <p className="text-[10px] text-gray-400 leading-relaxed">
-                            {d.arguments.for}
+                            {d.argument_for}
                           </p>
                         </div>
                         <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
@@ -3080,7 +3154,7 @@ export default function App() {
                             The Case Against
                           </div>
                           <p className="text-[10px] text-gray-400 leading-relaxed">
-                            {d.arguments.against}
+                            {d.argument_against}
                           </p>
                         </div>
                       </div>
@@ -3089,36 +3163,271 @@ export default function App() {
                         <div className="flex justify-between text-[10px] font-black text-white uppercase italic">
                           <span>
                             For:{" "}
-                            {Math.round(
-                              (d.votes.for / (d.votes.for + d.votes.against)) *
-                                100,
-                            )}
+                            {d.votes_for + d.votes_against > 0
+                              ? Math.round((d.votes_for / (d.votes_for + d.votes_against)) * 100)
+                              : 50}
                             %
                           </span>
                           <span>
                             Against:{" "}
-                            {Math.round(
-                              (d.votes.against /
-                                (d.votes.for + d.votes.against)) *
-                                100,
-                            )}
+                            {d.votes_for + d.votes_against > 0
+                              ? Math.round((d.votes_against / (d.votes_for + d.votes_against)) * 100)
+                              : 50}
                             %
                           </span>
                         </div>
-                        <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden flex">
-                          <div
-                            className="h-full bg-aurora-teal transition-all duration-1000"
-                            style={{
-                              width: `${(d.votes.for / (d.votes.for + d.votes.against)) * 100}%`,
-                            }}
-                          />
-                          <div
-                            className="h-full bg-red-500/50 transition-all duration-1000"
-                            style={{
-                              width: `${(d.votes.against / (d.votes.for + d.votes.against)) * 100}%`,
-                            }}
-                          />
-                        </div>
+                        {/* Tug-of-War Arena */}
+                        {(() => {
+                          const totalVotes = d.votes_for + d.votes_against;
+                          const forPct = totalVotes > 0 ? (d.votes_for / totalVotes) * 100 : 50;
+                          const againstPct = 100 - forPct;
+                          const lean = (forPct - 50) / 50; // +1 if Blue wins 100%
+                          const absLean = Math.abs(lean);
+                          const forWins = forPct > 50;
+                          const againstWins = againstPct > 50;
+                          const isTied = forPct === 50;
+
+                          const forLabel = isTied ? "DEADLOCK" : forPct > 65 ? "DOMINATING" : forPct > 50 ? "WINNING" : forPct > 35 ? "STRUGGLING" : "CRUSHED";
+                          const againstLabel = isTied ? "DEADLOCK" : againstPct > 65 ? "DOMINATING" : againstPct > 50 ? "WINNING" : againstPct > 35 ? "STRUGGLING" : "CRUSHED";
+
+                          // The entire arena shifts based on who is dragging who
+                          // Max drag distance = 35px
+                          const dragShift = lean * 35; 
+                          
+                          // Base Y anchors
+                          const G = 148, RY = 88, HP = 112, HY = 40, SY = 64;
+                          
+                          // Base X anchors dynamically shifted
+                          const BASE_LC = 58;
+                          const BASE_RC = 342;
+                          const LC = BASE_LC - dragShift;
+                          const RC = BASE_RC - dragShift;
+                          const LG = 92 - dragShift;
+                          const RG = 308 - dragShift;
+                          const RW = 216; // Distance between grips is constant (308 - 92)
+
+                          // Body leaning (head & shoulders shift further based on lean)
+                          const lhx = LC - lean * 18;
+                          const lsx = LC - lean * 10;
+                          const rhx = RC - lean * 18;
+                          const rsx = RC - lean * 10;
+
+                          // Dynamic LEGS (Stepping forwards/backwards realistically)
+                          // lbf = left back foot, lff = left front foot
+                          // When leaning +1 (winning), Blue plants feet further back
+                          const lbf = LC - 22 - lean * 14; 
+                          const lff = LC + 14 + lean * 12;
+                          const rbf = RC + 22 - lean * 14; 
+                          const rff = RC - 14 + lean * 12;
+
+                          // Dynamic ARM control points for taut/slack feeling
+                          const lacY = SY - 5 - lean * 12; 
+                          const lacY2 = SY + 16 + lean * 8; 
+                          const racY = SY - 5 + lean * 12; 
+                          const racY2 = SY + 16 - lean * 8;
+
+                          // Rope split calculations (relative to LG)
+                          const mx = LG + RW * (forPct / 100); 
+                          const bw = RW * (forPct / 100);
+                          const rw = RW * (againstPct / 100);
+
+                          // Huge sweat and struggle if losing
+                          const forSweatN = forPct >= 50 ? 0 : Math.min(8, Math.ceil((50 - forPct) / 5));
+                          const agSweatN = againstPct >= 50 ? 0 : Math.min(8, Math.ceil((50 - againstPct) / 5));
+
+                          const u = (d.id || "x").replace(/[^a-z0-9]/gi, "").slice(0, 8);
+                          const trans = { type: "spring", bounce: 0.2, duration: 1.2 };
+
+                          
+                          
+                          const sweatPos = [
+                            { dx: 15, dy: -5, t: 0.7 }, { dx: 19, dy: 5, t: 1.0 },
+                            { dx: 12, dy: 12, t: 0.6 }, { dx: 21, dy: -9, t: 0.9 },
+                            { dx: 9, dy: 16, t: 0.8 }, { dx: 23, dy: 2, t: 1.1 },
+                            { dx: 26, dy: 10, t: 0.75 }, { dx: 6, dy: 8, t: 0.95 }
+                          ];
+
+                          return (
+                            <div className="relative py-4 overflow-hidden">
+                              <svg viewBox="0 0 400 192" className="w-full" style={{ maxHeight: "250px" }}>
+                                <defs>
+                                  <linearGradient id={`cg${u}`} x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stopColor="#fef08a" /><stop offset="50%" stopColor="#fbbf24" /><stop offset="100%" stopColor="#d97706" />
+                                  </linearGradient>
+                                  <linearGradient id={`bl${u}`} x1="0" y1="0" x2="1" y2="0">
+                                    <stop offset="0%" stopColor="rgba(59,130,246,0.6)" /><stop offset="100%" stopColor="rgba(59,130,246,0.15)" />
+                                  </linearGradient>
+                                  <linearGradient id={`rl${u}`} x1="0" y1="0" x2="1" y2="0">
+                                    <stop offset="0%" stopColor="rgba(239,68,68,0.15)" /><stop offset="100%" stopColor="rgba(239,68,68,0.6)" />
+                                  </linearGradient>
+                                  <pattern id={`rp${u}`} width="8" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+                                    <rect width="8" height="10" fill="#7c4a1e" /><rect x="0" y="0" width="4" height="5" fill="#a3691b" /><rect x="4" y="5" width="4" height="5" fill="#5c3310" />
+                                  </pattern>
+
+                                  <filter id={`gl${u}`}><feGaussianBlur stdDeviation="2.5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+                                </defs>
+
+                                {/* GROUND */}
+                                <line x1="10" y1={G + 2} x2="390" y2={G + 2} stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+                                <motion.ellipse animate={{ cx: LC }} cy={G + 4} rx="28" ry="3" fill="rgba(0,0,0,0.3)" transition={trans} />
+                                <motion.ellipse animate={{ cx: RC }} cy={G + 4} rx="28" ry="3" fill="rgba(0,0,0,0.3)" transition={trans} />
+
+                                {/* AURA */}
+                                <motion.circle animate={{ opacity: forWins ? 1 : 0, cx: lhx }} cy={HY + 30} r="45" fill="rgba(59,130,246,0.07)" transition={trans} initial={false}><animate attributeName="r" values="38;52;38" dur="3s" repeatCount="indefinite" /></motion.circle>
+                                <motion.circle animate={{ opacity: againstWins ? 1 : 0, cx: rhx }} cy={HY + 30} r="45" fill="rgba(239,68,68,0.07)" transition={trans} initial={false}><animate attributeName="r" values="38;52;38" dur="3s" repeatCount="indefinite" /></motion.circle>
+
+                                {/* DUST near loser */}
+                                <g>
+                                  {[10, 20, 3, -10].map((o, i) => (
+                                    <motion.circle key={`ld${i}`} animate={{ opacity: (forSweatN > 0 && absLean > 0.15) ? 1 : 0, cx: LC + o }} cy={G} r="3" fill="rgba(255,255,255,0.12)" transition={trans} initial={false}>
+                                      <animate attributeName="cy" values={`${G};${G - 12 - i * 4}`} dur={`${0.7 + i * 0.3}s`} repeatCount="indefinite" />
+                                      <animate attributeName="r" values="2;6" dur={`${0.7 + i * 0.3}s`} repeatCount="indefinite" />
+                                      <animate attributeName="opacity" values="0.18;0" dur={`${0.7 + i * 0.3}s`} repeatCount="indefinite" />
+                                    </motion.circle>
+                                  ))}
+                                </g>
+                                <g>
+                                  {[-10, -20, -3, 10].map((o, i) => (
+                                    <motion.circle key={`rd${i}`} animate={{ opacity: (agSweatN > 0 && absLean > 0.15) ? 1 : 0, cx: RC + o }} cy={G} r="3" fill="rgba(255,255,255,0.12)" transition={trans} initial={false}>
+                                      <animate attributeName="cy" values={`${G};${G - 12 - i * 4}`} dur={`${0.7 + i * 0.3}s`} repeatCount="indefinite" />
+                                      <animate attributeName="r" values="2;6" dur={`${0.7 + i * 0.3}s`} repeatCount="indefinite" />
+                                      <animate attributeName="opacity" values="0.18;0" dur={`${0.7 + i * 0.3}s`} repeatCount="indefinite" />
+                                    </motion.circle>
+                                  ))}
+                                </g>
+
+                                {/* LEFT CHARACTER (BLUE) */}
+                                <motion.path animate={{ d: `M ${LC},${HP} L ${lbf},${G}` }} fill="none" stroke="#3b82f6" strokeWidth="4.5" strokeLinecap="round" transition={trans} />
+                                <motion.path animate={{ d: `M ${LC},${HP} L ${lff},${G}` }} fill="none" stroke="#3b82f6" strokeWidth="4.5" strokeLinecap="round" transition={trans} />
+                                <motion.path animate={{ d: `M ${lsx},${SY} L ${LC},${HP}` }} fill="none" stroke="#3b82f6" strokeWidth="5" strokeLinecap="round" transition={trans} />
+                                <motion.path animate={{ d: `M ${lhx},${HY + 14} L ${lsx},${SY}` }} fill="none" stroke="#3b82f6" strokeWidth="3.5" strokeLinecap="round" transition={trans} />
+                                <motion.path animate={{ d: `M ${lsx},${SY + 5} Q ${(lsx + LG) / 2},${lacY} ${LG},${RY}` }} fill="none" stroke="#3b82f6" strokeWidth="4" strokeLinecap="round" transition={trans} />
+                                <motion.path animate={{ d: `M ${lsx},${SY + 14} Q ${(lsx + LG + 10) / 2},${lacY2} ${LG + 10},${RY}` }} fill="none" stroke="#3b82f6" strokeWidth="4" strokeLinecap="round" transition={trans} />
+                                <motion.circle animate={{ cx: lhx }} cy={HY} r="14" fill="rgba(59,130,246,0.07)" stroke="#3b82f6" strokeWidth="3.5" transition={trans} />
+                                <motion.circle animate={{ cx: lhx + 4 }} cy={HY - 2} r="3" fill="#3b82f6" transition={trans} />
+                                <motion.circle animate={{ cx: lhx + 5 }} cy={HY - 2.5} r="1.2" fill="white" transition={trans} />
+                                <motion.circle animate={{ cx: lhx + 10 }} cy={HY - 2} r="3" fill="#3b82f6" transition={trans} />
+                                <motion.circle animate={{ cx: lhx + 11 }} cy={HY - 2.5} r="1.2" fill="white" transition={trans} />
+                                <motion.path animate={{ opacity: isTied ? 0 : 1, d: forWins ? `M ${lhx+1},${HY-7} L ${lhx+7},${HY-9}` : `M ${lhx+1},${HY-9} L ${lhx+7},${HY-7}` }} fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" transition={trans} initial={false} />
+                                <motion.path animate={{ opacity: isTied ? 0 : 1, d: forWins ? `M ${lhx+8},${HY-9} L ${lhx+13},${HY-7}` : `M ${lhx+8},${HY-7} L ${lhx+13},${HY-9}` }} fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" transition={trans} initial={false} />
+                                <motion.path animate={{ d: forWins ? `M ${lhx+1},${HY+5} Q ${lhx+7},${HY+11} ${lhx+13},${HY+5}` : isTied ? `M ${lhx+3},${HY+7} L ${lhx+11},${HY+7}` : `M ${lhx+1},${HY+9} Q ${lhx+7},${HY+4} ${lhx+13},${HY+9}` }} fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" transition={trans} initial={false} />
+
+                                {/* RIGHT CHARACTER (RED) */}
+                                <motion.path animate={{ d: `M ${RC},${HP} L ${rbf},${G}` }} fill="none" stroke="#ef4444" strokeWidth="4.5" strokeLinecap="round" transition={trans} />
+                                <motion.path animate={{ d: `M ${RC},${HP} L ${rff},${G}` }} fill="none" stroke="#ef4444" strokeWidth="4.5" strokeLinecap="round" transition={trans} />
+                                <motion.path animate={{ d: `M ${rsx},${SY} L ${RC},${HP}` }} fill="none" stroke="#ef4444" strokeWidth="5" strokeLinecap="round" transition={trans} />
+                                <motion.path animate={{ d: `M ${rhx},${HY + 14} L ${rsx},${SY}` }} fill="none" stroke="#ef4444" strokeWidth="3.5" strokeLinecap="round" transition={trans} />
+                                <motion.path animate={{ d: `M ${rsx},${SY + 5} Q ${(rsx + RG) / 2},${racY} ${RG},${RY}` }} fill="none" stroke="#ef4444" strokeWidth="4" strokeLinecap="round" transition={trans} />
+                                <motion.path animate={{ d: `M ${rsx},${SY + 14} Q ${(rsx + RG - 10) / 2},${racY2} ${RG - 10},${RY}` }} fill="none" stroke="#ef4444" strokeWidth="4" strokeLinecap="round" transition={trans} />
+                                <motion.circle animate={{ cx: rhx }} cy={HY} r="14" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="3.5" transition={trans} />
+                                <motion.circle animate={{ cx: rhx - 10 }} cy={HY - 2} r="3" fill="#ef4444" transition={trans} />
+                                <motion.circle animate={{ cx: rhx - 11 }} cy={HY - 2.5} r="1.2" fill="white" transition={trans} />
+                                <motion.circle animate={{ cx: rhx - 4 }} cy={HY - 2} r="3" fill="#ef4444" transition={trans} />
+                                <motion.circle animate={{ cx: rhx - 5 }} cy={HY - 2.5} r="1.2" fill="white" transition={trans} />
+                                <motion.path animate={{ opacity: isTied ? 0 : 1, d: againstWins ? `M ${rhx-13},${HY-7} L ${rhx-8},${HY-9}` : `M ${rhx-13},${HY-9} L ${rhx-8},${HY-7}` }} fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" transition={trans} initial={false} />
+                                <motion.path animate={{ opacity: isTied ? 0 : 1, d: againstWins ? `M ${rhx-7},${HY-9} L ${rhx-1},${HY-7}` : `M ${rhx-7},${HY-7} L ${rhx-1},${HY-9}` }} fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" transition={trans} initial={false} />
+                                <motion.path animate={{ d: againstWins ? `M ${rhx-13},${HY+5} Q ${rhx-7},${HY+11} ${rhx-1},${HY+5}` : isTied ? `M ${rhx-11},${HY+7} L ${rhx-3},${HY+7}` : `M ${rhx-13},${HY+9} Q ${rhx-7},${HY+4} ${rhx-1},${HY+9}` }} fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" transition={trans} initial={false} />
+
+                                {/* ROPE BASE */}
+                                <motion.rect animate={{ x: LG }} y={RY - 7} width={RW} height="14" rx="7" fill={`url(#rp${u})`} stroke="#3d1e00" strokeWidth="2" transition={trans} />
+                                
+                                {/* COLORED DOMINANCE FILLS */}
+                                <g>
+                                  <motion.path animate={{ d: `M ${LG+7},${RY-7} L ${mx},${RY-7} L ${mx},${RY+7} L ${LG+7},${RY+7} A 7,7 0 0,1 ${LG},${RY} A 7,7 0 0,1 ${LG+7},${RY-7} Z` }} fill={`url(#bl${u})`} transition={trans} initial={false} />
+                                  <motion.path animate={{ d: `M ${mx},${RY-7} L ${RG-7},${RY-7} A 7,7 0 0,1 ${RG},${RY} A 7,7 0 0,1 ${RG-7},${RY+7} L ${mx},${RY+7} Z` }} fill={`url(#rl${u})`} transition={trans} initial={false} />
+                                  {/* BRIGHT DIVIDER */}
+                                  <motion.rect animate={{ x: mx - 1 }} y={RY - 10} width="2" height="20" rx="1" fill="rgba(255,255,255,0.9)" transition={trans} initial={false} />
+                                </g>
+
+                                {/* PERCENTAGE ON ROPE */}
+                                {forPct >= 15 && <motion.text animate={{ x: LG + bw / 2 }} y={RY + 4} textAnchor="middle" fontSize="11" fontWeight="900" fill="white" fontFamily="sans-serif" transition={trans} initial={false}>{Math.round(forPct)}%</motion.text>}
+                                {againstPct >= 15 && <motion.text animate={{ x: RG - rw / 2 }} y={RY + 4} textAnchor="middle" fontSize="11" fontWeight="900" fill="white" fontFamily="sans-serif" transition={trans} initial={false}>{Math.round(againstPct)}%</motion.text>}
+                                
+                                {/* KNOTS ON ROPE */}
+                                {[0.12, 0.3, 0.5, 0.7, 0.88].map((p, i) => <motion.circle key={`rk${i}`} animate={{ cx: LG + RW * p }} cy={RY} r="3.5" fill="#5c3310" stroke="#3d1e00" strokeWidth="1" transition={trans} initial={false} />)}
+
+                                {/* FISTS */}
+                                <motion.circle animate={{ cx: LG }} cy={RY} r="6.5" fill="#3b82f6" stroke="#1e3a8a" strokeWidth="2" transition={trans} initial={false} />
+                                <motion.circle animate={{ cx: LG + 12 }} cy={RY} r="5.5" fill="#3b82f6" stroke="#1e3a8a" strokeWidth="2" transition={trans} initial={false} />
+                                <motion.circle animate={{ cx: RG }} cy={RY} r="6.5" fill="#ef4444" stroke="#7f1d1d" strokeWidth="2" transition={trans} initial={false} />
+                                <motion.circle animate={{ cx: RG - 12 }} cy={RY} r="5.5" fill="#ef4444" stroke="#7f1d1d" strokeWidth="2" transition={trans} initial={false} />
+
+                                {/* VS MARKER */}
+                                <motion.g animate={{ x: mx - 200 }} transition={trans} initial={false}>
+                                  <line x1="200" y1={RY - 32} x2="200" y2={RY - 5} stroke="rgba(255,255,255,0.85)" strokeWidth="2.5" strokeLinecap="round" />
+                                  <polygon points={`200,${RY - 32} 216,${RY - 25} 200,${RY - 18}`} fill="#fbbf24" stroke="#b45309" strokeWidth="1">
+                                    <animate attributeName="fill" values="#fbbf24;#fef08a;#fbbf24" dur="2s" repeatCount="indefinite" />
+                                  </polygon>
+                                  <text x="205" y={RY - 23} fontSize="6" fontWeight="bold" fill="#451a03" fontFamily="sans-serif">VS</text>
+                                  {absLean > 0.2 && [-12, 0, 12].map((off, i) => (
+                                    <line key={`tl${i}`} x1={200 + off} y1={RY - 15} x2={200 + off + 2} y2={RY - 21} stroke="rgba(255,255,255,0.25)" strokeWidth="1.5" strokeLinecap="round">
+                                      <animate attributeName="opacity" values="0;0.35;0" dur={`${0.3 + i * 0.12}s`} repeatCount="indefinite" />
+                                    </line>
+                                  ))}
+                                </motion.g>
+
+                                {/* CROWN WINNER */}
+                                <motion.g filter={`url(#gl${u})`} animate={{ opacity: forWins ? 1 : 0, x: lhx - (BASE_LC - lean*18) }} style={{ pointerEvents: forWins ? "auto" : "none" }} transition={trans} initial={false}>
+                                  <motion.path animate={{ d: `M ${BASE_LC - lean*18 - 12},${HY-16} L ${BASE_LC - lean*18 - 8},${HY-8} L ${BASE_LC - lean*18 - 3},${HY-22} L ${BASE_LC - lean*18 + 3},${HY-8} L ${BASE_LC - lean*18 + 8},${HY-22} L ${BASE_LC - lean*18 + 12},${HY-8} L ${BASE_LC - lean*18 + 14},${HY-16} L ${BASE_LC - lean*18 + 12},${HY-5} L ${BASE_LC - lean*18 - 10},${HY-5} Z` }} fill={`url(#cg${u})`} stroke="#b45309" strokeWidth="1" transition={trans} initial={false}>
+                                    <animate attributeName="opacity" values="0.85;1;0.85" dur="2s" repeatCount="indefinite" />
+                                  </motion.path>
+                                  <motion.circle r="2" fill="#dc2626" animate={{ cx: BASE_LC - lean*18 - 3 }} cy={HY - 15} transition={trans} initial={false} />
+                                  <motion.circle r="2" fill="#2563eb" animate={{ cx: BASE_LC - lean*18 + 8 }} cy={HY - 15} transition={trans} initial={false} />
+                                  <motion.circle r="1.5" fill="#fef08a" animate={{ cx: BASE_LC - lean*18 + 2 }} cy={HY - 10} transition={trans} initial={false} />
+                                  <Sp x={BASE_LC - lean*18 - 18} y={HY - 20} t={0.7} />
+                                  <Sp x={BASE_LC - lean*18 + 20} y={HY - 18} t={1.0} />
+                                  <Sp x={BASE_LC - lean*18 + 1} y={HY - 30} t={0.5} />
+                                </motion.g>
+
+                                <motion.g filter={`url(#gl${u})`} animate={{ opacity: againstWins ? 1 : 0, x: rhx - (BASE_RC - lean*18) }} style={{ pointerEvents: againstWins ? "auto" : "none" }} transition={trans} initial={false}>
+                                  <motion.path animate={{ d: `M ${BASE_RC - lean*18 - 14},${HY-16} L ${BASE_RC - lean*18 - 12},${HY-8} L ${BASE_RC - lean*18 - 8},${HY-22} L ${BASE_RC - lean*18 - 3},${HY-8} L ${BASE_RC - lean*18 + 3},${HY-22} L ${BASE_RC - lean*18 + 8},${HY-8} L ${BASE_RC - lean*18 + 12},${HY-16} L ${BASE_RC - lean*18 + 10},${HY-5} L ${BASE_RC - lean*18 - 12},${HY-5} Z` }} fill={`url(#cg${u})`} stroke="#b45309" strokeWidth="1" transition={trans} initial={false}>
+                                    <animate attributeName="opacity" values="0.85;1;0.85" dur="2s" repeatCount="indefinite" />
+                                  </motion.path>
+                                  <motion.circle r="2" fill="#dc2626" animate={{ cx: BASE_RC - lean*18 - 8 }} cy={HY - 15} transition={trans} initial={false} />
+                                  <motion.circle r="2" fill="#2563eb" animate={{ cx: BASE_RC - lean*18 + 3 }} cy={HY - 15} transition={trans} initial={false} />
+                                  <motion.circle r="1.5" fill="#fef08a" animate={{ cx: BASE_RC - lean*18 - 2 }} cy={HY - 10} transition={trans} initial={false} />
+                                  <Sp x={BASE_RC - lean*18 - 20} y={HY - 18} t={0.9} />
+                                  <Sp x={BASE_RC - lean*18 + 18} y={HY - 20} t={0.6} />
+                                  <Sp x={BASE_RC - lean*18 - 1} y={HY - 30} t={1.1} />
+                                </motion.g>
+
+                                {/* SWEAT DROPS */}
+                                <g>
+                                  {sweatPos.map((s, i) => (
+                                    <motion.g key={`ls${i}`} animate={{ opacity: i < forSweatN ? 1 : 0 }} transition={trans} initial={false}>
+                                      <Sw x={lhx + s.dx} y={HY + s.dy} t={s.t} s={forSweatN > 4 ? 1.6 : 1} />
+                                    </motion.g>
+                                  ))}
+                                </g>
+                                <g>
+                                  {sweatPos.map((s, i) => (
+                                    <motion.g key={`rs${i}`} animate={{ opacity: i < agSweatN ? 1 : 0 }} transition={trans} initial={false}>
+                                      <Sw x={rhx - s.dx} y={HY + s.dy} t={s.t} s={agSweatN > 4 ? 1.6 : 1} />
+                                    </motion.g>
+                                  ))}
+                                </g>
+
+                                {/* LABELS AND VOTE COUNTS */}
+                                <motion.text animate={{ x: LC }} y={G + 20} textAnchor="middle" fontFamily="monospace,sans-serif" fontSize="11" fontWeight="900" fill={forWins ? "#3b82f6" : isTied ? "#94a3b8" : "rgba(59,130,246,0.4)"} letterSpacing="0.12em" transition={trans} initial={false}>
+                                  {forLabel}
+                                  {forWins && <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite" />}
+                                </motion.text>
+                                <motion.text animate={{ x: LC }} y={G + 34} textAnchor="middle" fontFamily="monospace,sans-serif" fontSize="10" fontWeight="bold" fill="rgba(255,255,255,0.7)" transition={trans} initial={false}>
+                                  {d.votes_for.toLocaleString()} Votes
+                                </motion.text>
+
+                                <motion.text animate={{ x: RC }} y={G + 20} textAnchor="middle" fontFamily="monospace,sans-serif" fontSize="11" fontWeight="900" fill={againstWins ? "#ef4444" : isTied ? "#94a3b8" : "rgba(239,68,68,0.4)"} letterSpacing="0.12em" transition={trans} initial={false}>
+                                  {againstLabel}
+                                  {againstWins && <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite" />}
+                                </motion.text>
+                                <motion.text animate={{ x: RC }} y={G + 34} textAnchor="middle" fontFamily="monospace,sans-serif" fontSize="10" fontWeight="bold" fill="rgba(255,255,255,0.7)" transition={trans} initial={false}>
+                                  {d.votes_against.toLocaleString()} Votes
+                                </motion.text>
+                              </svg>
+                            </div>
+                          );
+                        })()}
+
 
                         {d.userVote ? (
                           <div
@@ -3736,7 +4045,7 @@ export default function App() {
                             {prediction.match}
                           </h3>
                           <div className="text-[10px] text-aurora-teal font-black uppercase tracking-widest">
-                            Simulation Complete • 1M Iterations
+                            Simulation Complete â€¢ 1M Iterations
                           </div>
                         </div>
                         <button
@@ -3934,7 +4243,7 @@ export default function App() {
                               {item.winner}
                             </div>
                             <div className="text-[8px] text-gray-500 font-bold uppercase tracking-widest">
-                              {item.date} • {item.drawId}
+                              {item.date} â€¢ {item.drawId}
                             </div>
                           </div>
                           <div className="text-[9px] font-black text-aurora-teal uppercase tracking-widest">
@@ -4071,7 +4380,7 @@ export default function App() {
                           )}
                         </div>
                         <span className="text-[9px] text-gray-500 font-black uppercase tracking-widest">
-                          {post.date || new Date(post.created_at).toLocaleDateString()} • {post.readTime || post.read_time}
+                          {post.date || new Date(post.created_at).toLocaleDateString()} â€¢ {post.readTime || post.read_time}
                         </span>
                       </div>
                       <h3 className="text-2xl font-black text-white group-hover:text-aurora-teal transition-colors leading-tight italic">
@@ -4180,7 +4489,7 @@ export default function App() {
                         </div>
                         <div className="text-right">
                           <div className="text-xl font-black text-white">
-                            ₹{pkg.price}
+                            â‚¹{pkg.price}
                           </div>
                           <div className="text-[8px] text-gray-600 font-black uppercase tracking-widest">
                             One-time
@@ -4410,10 +4719,10 @@ export default function App() {
                   const isUnread =
                     lastReadMessageId &&
                     msg.id !== lastReadMessageId &&
-                    new Date(msg.timestamp) >
+                    new Date(msg.created_at) >
                       new Date(
                         debateMessages.find((m) => m.id === lastReadMessageId)
-                          ?.timestamp || 0,
+                          ?.created_at || 0,
                       );
                   return (
                     <motion.div
@@ -4424,12 +4733,12 @@ export default function App() {
                     >
                       <div className="flex items-center gap-2">
                         <span
-                          className={`text-[10px] font-black uppercase tracking-widest ${msg.vote === "for" ? "text-blue-400" : msg.vote === "against" ? "text-red-400" : "text-gray-400"}`}
+                          className={`text-[10px] font-black uppercase tracking-widest ${msg.stance === "for" ? "text-blue-400" : msg.stance === "against" ? "text-red-400" : "text-gray-400"}`}
                         >
-                          {msg.user}
+                          {msg.username}
                         </span>
                         <span className="text-[8px] text-gray-600 font-black uppercase">
-                          {new Date(msg.timestamp).toLocaleTimeString([], {
+                          {new Date(msg.created_at).toLocaleTimeString([], {
                             hour: "2-digit",
                             minute: "2-digit",
                           })}
@@ -4438,7 +4747,7 @@ export default function App() {
                           <span className="size-1.5 bg-aurora-teal rounded-full animate-pulse" />
                         )}
                       </div>
-                      <div className="p-3 bg-white/5 rounded-2xl rounded-tl-none border border-white/5">
+                      <div className={`p-3 rounded-2xl rounded-tl-none border ${msg.stance === "for" ? "bg-blue-500/10 border-blue-500/20" : msg.stance === "against" ? "bg-red-500/10 border-red-500/20" : "bg-white/5 border-white/5"}`}>
                         <p className="text-xs text-gray-300 leading-relaxed">
                           {msg.text}
                         </p>
@@ -4450,30 +4759,39 @@ export default function App() {
               </div>
 
               <div className="p-6 border-t border-white/5 bg-white/[0.02]">
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const input = e.currentTarget.elements.namedItem(
-                      "message",
-                    ) as HTMLInputElement;
-                    sendDebateMessage(input.value);
-                    input.value = "";
-                  }}
-                  className="flex gap-2"
-                >
-                  <input
-                    name="message"
-                    type="text"
-                    placeholder="Add your voice..."
-                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-aurora-teal/50 transition-all"
-                  />
-                  <button
-                    type="submit"
-                    className="px-6 py-3 bg-aurora-teal text-black font-black text-[10px] uppercase tracking-widest rounded-xl hover:scale-105 transition-all"
+                {debates.find((d) => d.id === activeDebateChat)?.userVote ? (
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const input = e.currentTarget.elements.namedItem(
+                        "message",
+                      ) as HTMLInputElement;
+                      sendDebateMessage(input.value);
+                      input.value = "";
+                    }}
+                    className="flex gap-2"
                   >
-                    Send
-                  </button>
-                </form>
+                    <input
+                      name="message"
+                      type="text"
+                      placeholder="Add your voice..."
+                      className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-aurora-teal/50 transition-all"
+                    />
+                    <button
+                      type="submit"
+                      className="px-6 py-3 bg-aurora-teal text-black font-black text-[10px] uppercase tracking-widest rounded-xl hover:scale-105 transition-all"
+                    >
+                      Send
+                    </button>
+                  </form>
+                ) : (
+                  <div className="text-center p-4 bg-red-500/10 rounded-xl border border-red-500/20">
+                     <p className="text-[10px] font-black text-red-400 uppercase tracking-widest mb-1 flex items-center justify-center gap-2">
+                       <MessageSquare size={14} /> View-Only Mode
+                     </p>
+                     <p className="text-xs text-gray-400">You must cast your vote on the main battleground before joining the debate.</p>
+                  </div>
+                )}
               </div>
             </motion.div>
           </div>

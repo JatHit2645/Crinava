@@ -102,10 +102,17 @@ export const BlogPost = () => {
               {blog.title}
             </h1>
 
-            <div className="flex items-center space-x-6 text-sm text-mercury/40 font-mono mb-16 pb-8 border-b border-white/10">
+            <div className="flex items-center space-x-6 text-sm text-mercury/40 font-mono mb-10 pb-8 border-b border-white/10">
               <span className="flex items-center"><Calendar size={16} className="mr-2" /> {new Date(blog.created_at || blog.date).toLocaleDateString()}</span>
               <span className="flex items-center"><Clock size={16} className="mr-2" /> {blog.read_time || blog.readTime}</span>
             </div>
+
+            {blog.image_url && (
+              <div className="w-full h-80 md:h-96 mb-12 rounded-2xl overflow-hidden border border-white/10 relative">
+                <img src={blog.image_url} alt={blog.title} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-void via-transparent to-transparent opacity-80" />
+              </div>
+            )}
 
             <div className="max-w-none text-mercury/80 leading-relaxed text-lg pb-12">
               <ReactMarkdown

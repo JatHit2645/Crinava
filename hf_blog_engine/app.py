@@ -2,12 +2,15 @@ import json
 import os
 import re
 import hashlib
+import html as html_lib
 import sqlite3
 import threading
 import time
 import uuid
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from urllib.parse import urljoin, urlparse
 
 import feedparser
 import requests
@@ -58,13 +61,14 @@ def env_float(name: str, default: float) -> float:
 
 AI_TIMEOUT_SECONDS = env_float("AI_TIMEOUT_SECONDS", 180)
 AI_MAX_RETRIES = env_int("AI_MAX_RETRIES", 2)
-MAX_DRAFTS_PER_RUN = env_int("MAX_DRAFTS_PER_RUN", 20)
+MAX_DRAFTS_PER_RUN = env_int("MAX_DRAFTS_PER_RUN", 150)
 MAX_SOURCES_PER_DRAFT = env_int("MAX_SOURCES_PER_DRAFT", 8)
 MAX_SUMMARY_CHARS = env_int("MAX_SUMMARY_CHARS", 900)
 PIPELINE_INTERVAL_MINUTES = env_int("PIPELINE_INTERVAL_MINUTES", 30)
-API_DEFAULT_LIMIT = env_int("API_DEFAULT_LIMIT", 20)
-API_MAX_LIMIT = env_int("API_MAX_LIMIT", 100)
+API_DEFAULT_LIMIT = env_int("API_DEFAULT_LIMIT", 250)
+API_MAX_LIMIT = env_int("API_MAX_LIMIT", 500)
 DRAFT_RETENTION_LIMIT = env_int("DRAFT_RETENTION_LIMIT", 0)
+FALLBACK_IMAGE_URL = os.getenv("FALLBACK_IMAGE_URL", "").strip()
 
 
 def default_drafts_db_path() -> str:
@@ -87,12 +91,17 @@ RSS_FEEDS = [
     "https://news.google.com/rss/search?q=Test%20cricket%20OR%20T20%20OR%20ODI%20when:1d&hl=en-IN&gl=IN&ceid=IN:en",
 ]
 
-REQUEST_HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/126.0.0.0 Safari/537.36"
-    )
+RSS_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "Accept": "application/rss+xml, application/rdf+xml, application/xml;q=0.9, text/xml;q=0.8, */*;q=0.1",
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
+PAGE_HEADERS = {
+    "User-Agent": "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.5",
+    "Connection": "keep-alive",
 }
 
 app = FastAPI(title="Crinava Blog Engine")
@@ -146,14 +155,19 @@ def init_draft_store() -> None:
                     source_count INTEGER NOT NULL,
                     model TEXT NOT NULL,
                     created_at TEXT NOT NULL,
-                    image_url TEXT
+                    image_url TEXT,
+                    image_urls_json TEXT NOT NULL DEFAULT '[]'
                 )
                 """
             )
-            try:
+            existing_columns = {
+                row["name"]
+                for row in connection.execute("PRAGMA table_info(drafts)").fetchall()
+            }
+            if "image_url" not in existing_columns:
                 connection.execute("ALTER TABLE drafts ADD COLUMN image_url TEXT")
-            except sqlite3.OperationalError:
-                pass
+            if "image_urls_json" not in existing_columns:
+                connection.execute("ALTER TABLE drafts ADD COLUMN image_urls_json TEXT NOT NULL DEFAULT '[]'")
             connection.execute(
                 "CREATE INDEX IF NOT EXISTS idx_drafts_created_at ON drafts(created_at DESC)"
             )
@@ -161,6 +175,19 @@ def init_draft_store() -> None:
 
 
 def draft_from_row(row: sqlite3.Row) -> Dict[str, Any]:
+    image_urls = []
+    image_urls_raw = row["image_urls_json"] if "image_urls_json" in row.keys() else "[]"
+    try:
+        parsed_image_urls = json.loads(image_urls_raw or "[]")
+        if isinstance(parsed_image_urls, list):
+            image_urls = [str(url) for url in parsed_image_urls if url]
+    except json.JSONDecodeError:
+        image_urls = []
+
+    image_url = row["image_url"] if "image_url" in row.keys() else None
+    if image_url and image_url not in image_urls:
+        image_urls.insert(0, image_url)
+
     return {
         "id": row["id"],
         "title": row["title"],
@@ -170,7 +197,8 @@ def draft_from_row(row: sqlite3.Row) -> Dict[str, Any]:
         "source_count": row["source_count"],
         "model": row["model"],
         "created_at": row["created_at"],
-        "image_url": row["image_url"] if "image_url" in row.keys() else None,
+        "image_url": image_urls[0] if image_urls else None,
+        "image_urls": image_urls,
     }
 
 
@@ -181,7 +209,8 @@ def get_stored_drafts(limit: int = API_DEFAULT_LIMIT, offset: int = 0) -> List[D
         with get_db_connection() as connection:
             rows = connection.execute(
                 """
-                SELECT id, title, category, content, sources_json, source_count, model, created_at, image_url
+                SELECT id, title, category, content, sources_json, source_count, model,
+                       created_at, image_url, image_urls_json
                 FROM drafts
                 ORDER BY created_at DESC
                 LIMIT ? OFFSET ?
@@ -242,9 +271,9 @@ def save_draft(draft: Dict[str, Any], cluster_signature: str) -> bool:
                 """
                 INSERT OR IGNORE INTO drafts (
                     id, title, category, content, sources_json,
-                    cluster_signature, source_count, model, created_at, image_url
+                    cluster_signature, source_count, model, created_at, image_url, image_urls_json
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     draft["id"],
@@ -257,6 +286,7 @@ def save_draft(draft: Dict[str, Any], cluster_signature: str) -> bool:
                     AI_MODEL,
                     draft["created_at"],
                     draft.get("image_url"),
+                    json.dumps(draft.get("image_urls", []), ensure_ascii=True),
                 ),
             )
             saved = cursor.rowcount == 1
@@ -301,16 +331,170 @@ def get_ai_client() -> Optional[OpenAI]:
     return ai_client
 
 
+def is_valid_image_url(image_url: str) -> bool:
+    if not image_url:
+        return False
+
+    parsed = urlparse(image_url)
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        return False
+
+    lowered = image_url.lower()
+    blocked_fragments = [
+        "logo",
+        "sprite",
+        "favicon",
+        "tracking",
+        "pixel",
+        "analytics",
+        "doubleclick",
+        "googletag",
+        "googleusercontent.com",
+        "gstatic.com",
+        "profile_images",
+        "icon",
+        "avatar"
+    ]
+    if any(fragment in lowered for fragment in blocked_fragments):
+        return False
+
+    if lowered.startswith("data:") or lowered.endswith(".svg"):
+        return False
+
+    return True
+
+
+def add_image_url(image_urls: List[str], seen: set, image_url: str, base_url: str = "") -> None:
+    if not image_url:
+        return
+
+    normalized = html_lib.unescape(str(image_url).strip())
+    if base_url:
+        normalized = urljoin(base_url, normalized)
+
+    normalized = normalized.replace(" ", "%20")
+    if is_valid_image_url(normalized) and normalized not in seen:
+        seen.add(normalized)
+        image_urls.append(normalized)
+
+
+class MetadataImageParser(HTMLParser):
+    def __init__(self, base_url: str) -> None:
+        super().__init__()
+        self.base_url = base_url
+        self.images: List[str] = []
+        self.seen = set()
+
+    def handle_starttag(self, tag: str, attrs: List[tuple]) -> None:
+        attrs_dict = {str(key).lower(): value for key, value in attrs if key}
+        tag_name = tag.lower()
+
+        if tag_name == "meta":
+            property_name = str(attrs_dict.get("property") or attrs_dict.get("name") or "").lower()
+            if property_name in {"og:image", "og:image:url", "og:image:secure_url", "twitter:image", "twitter:image:src"}:
+                add_image_url(self.images, self.seen, attrs_dict.get("content", ""), self.base_url)
+
+        if tag_name == "link":
+            rel = str(attrs_dict.get("rel") or "").lower()
+            if "image_src" in rel:
+                add_image_url(self.images, self.seen, attrs_dict.get("href", ""), self.base_url)
+
+
+def extract_entry_image_urls(entry: Any) -> List[str]:
+    image_urls: List[str] = []
+    seen = set()
+
+    for attr_name in ["media_thumbnail", "media_content"]:
+        media_items = getattr(entry, attr_name, []) or []
+        for item in media_items:
+            if isinstance(item, dict):
+                add_image_url(image_urls, seen, item.get("url", ""))
+
+    for enclosure in getattr(entry, "enclosures", []) or []:
+        if isinstance(enclosure, dict):
+            enclosure_type = str(enclosure.get("type", "")).lower()
+            if enclosure_type.startswith("image/") or not enclosure_type:
+                add_image_url(image_urls, seen, enclosure.get("href") or enclosure.get("url") or "")
+
+    summary_html = str(getattr(entry, "summary", "") or "")
+    for match in re.finditer(r'<img[^>]+src=["\']([^"\']+)["\']', summary_html, flags=re.IGNORECASE):
+        add_image_url(image_urls, seen, match.group(1))
+
+    return image_urls
+
+
+def extract_page_image_urls(page_url: str, max_images: int = 3) -> List[str]:
+    if not page_url:
+        return []
+
+    html_text = ""
+    try:
+        response = requests.get(
+            page_url,
+            headers=PAGE_HEADERS,
+            timeout=8,
+            allow_redirects=True,
+        )
+        response.raise_for_status()
+        html_text = response.text
+    except Exception as exc:
+        log_event(f"Direct fetch failed for {page_url}: {exc}. Trying proxy...")
+        try:
+            import urllib.parse
+            proxy_url = f"https://api.allorigins.win/get?url={urllib.parse.quote(page_url)}"
+            proxy_res = requests.get(proxy_url, timeout=12)
+            proxy_res.raise_for_status()
+            proxy_data = proxy_res.json()
+            html_text = proxy_data.get("contents", "")
+        except Exception as proxy_exc:
+            log_event(f"Proxy fetch failed for {page_url}: {proxy_exc}")
+            return []
+
+    if not html_text:
+        return []
+
+    parser = MetadataImageParser(page_url)
+    try:
+        parser.feed(html_text)
+    except Exception as exc:
+        log_event(f"Image metadata parsing failed for {page_url}: {exc}")
+        return []
+
+    return parser.images[:max_images]
+
+
+def collect_cluster_image_urls(cluster_articles: List[Dict[str, str]], max_images: int = 6) -> List[str]:
+    image_urls: List[str] = []
+    seen = set()
+
+    for article in cluster_articles:
+        for image_url in article.get("image_urls", []) or []:
+            add_image_url(image_urls, seen, image_url, article.get("link", ""))
+            if len(image_urls) >= max_images:
+                return image_urls
+
+    for article in cluster_articles[:MAX_SOURCES_PER_DRAFT]:
+        for image_url in extract_page_image_urls(article.get("link", ""), max_images=max_images):
+            add_image_url(image_urls, seen, image_url, article.get("link", ""))
+            if len(image_urls) >= max_images:
+                return image_urls
+
+    return image_urls
+
+
 def fetch_cricket_news() -> List[Dict[str, str]]:
     """Fetch cricket news from configured RSS sources."""
     log_event("Fetching latest cricket news...")
     articles: List[Dict[str, str]] = []
     seen_links = set()
     seen_titles = set()
+    
+    current_time = time.time()
+    max_age_seconds = 14 * 24 * 60 * 60
 
     for url in RSS_FEEDS:
         try:
-            response = requests.get(url, headers=REQUEST_HEADERS, timeout=15)
+            response = requests.get(url, headers=RSS_HEADERS, timeout=15)
             response.raise_for_status()
             parsed = feedparser.parse(response.content)
 
@@ -324,12 +508,23 @@ def fetch_cricket_news() -> List[Dict[str, str]]:
 
                 if not title or not link:
                     continue
+                    
+                # Date filtering logic
+                entry_time_parsed = getattr(entry, "published_parsed", None) or getattr(entry, "updated_parsed", None)
+                if entry_time_parsed:
+                    try:
+                        entry_timestamp = time.mktime(entry_time_parsed)
+                        if current_time - entry_timestamp > max_age_seconds:
+                            continue
+                    except Exception:
+                        pass
 
                 normalized_title = re.sub(r"\s+", " ", title.lower())
                 if link in seen_links or normalized_title in seen_titles:
                     continue
 
                 clean_summary = re.sub(r"<[^>]+>", "", summary)
+                image_urls = extract_entry_image_urls(entry)
                 seen_links.add(link)
                 seen_titles.add(normalized_title)
                 articles.append(
@@ -337,6 +532,7 @@ def fetch_cricket_news() -> List[Dict[str, str]]:
                         "title": title,
                         "summary": clean_summary,
                         "link": link,
+                        "image_urls": image_urls,
                         "text": f"{title} {clean_summary}",
                     }
                 )
@@ -358,7 +554,7 @@ def cluster_articles(articles: List[Dict[str, str]]) -> Dict[int, List[Dict[str,
         vectorizer = TfidfVectorizer(stop_words="english", max_features=1000, min_df=1)
         matrix = vectorizer.fit_transform(texts)
 
-        clustering = DBSCAN(eps=0.72, min_samples=1, metric="cosine").fit(matrix)
+        clustering = DBSCAN(eps=0.45, min_samples=1, metric="cosine").fit(matrix)
 
         clusters: Dict[int, List[Dict[str, str]]] = {}
         for idx, label in enumerate(clustering.labels_):
@@ -442,6 +638,7 @@ def normalize_draft(raw_draft: Dict[str, Any], cluster_articles: List[Dict[str, 
             {
                 "title": article.get("title", ""),
                 "link": article.get("link", ""),
+                "image_urls": article.get("image_urls", []),
             }
             for article in cluster_articles
         ],
@@ -510,21 +707,6 @@ def create_chat_completion(client: OpenAI, request_payload: Dict[str, Any]) -> A
     raise RuntimeError("AI generation failed before a request was attempted.")
 
 
-def extract_og_image(url: str) -> Optional[str]:
-    try:
-        response = requests.get(url, headers=REQUEST_HEADERS, timeout=8)
-        if response.status_code == 200:
-            match = re.search(r'<meta[^>]*property=["\']og:image["\'][^>]*content=["\']([^"\']+)["\']', response.text)
-            if match:
-                return match.group(1)
-            match = re.search(r'<meta[^>]*content=["\']([^"\']+)["\'][^>]*property=["\']og:image["\']', response.text)
-            if match:
-                return match.group(1)
-    except Exception:
-        pass
-    return None
-
-
 def generate_blog_draft(cluster_articles: List[Dict[str, str]]) -> Optional[Dict[str, Any]]:
     """Generate one Markdown blog draft from a cluster of related cricket articles."""
     client = get_ai_client()
@@ -578,18 +760,12 @@ News Sources:
         response = create_chat_completion(client, request_payload)
         content = response.choices[0].message.content
         draft = normalize_draft(extract_json_object(content), cluster_articles)
-        
-        primary_link = cluster_articles[0].get("link", "")
-        img_url = None
-        if primary_link:
-            log_event(f"Attempting to extract og:image from: {primary_link}")
-            img_url = extract_og_image(primary_link)
-            
-        if not img_url:
-            img_url = "https://images.unsplash.com/photo-1531415080290-bc9b899ddfb6?w=800&auto=format&fit=crop&q=60"
-            
-        draft["image_url"] = img_url
-        log_event(f"Successfully generated blog: {draft['title']} with image: {img_url}")
+        image_urls = collect_cluster_image_urls(cluster_articles, max_images=6)
+        if not image_urls and FALLBACK_IMAGE_URL:
+            image_urls = [FALLBACK_IMAGE_URL]
+        draft["image_urls"] = image_urls
+        draft["image_url"] = image_urls[0] if image_urls else None
+        log_event(f"Successfully generated blog: {draft['title']} with {len(image_urls)} image(s).")
         return draft
     except Exception as exc:
         log_event(f"AI Generation Error: {exc}")
