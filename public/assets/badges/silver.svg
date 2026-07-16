@@ -1,0 +1,129 @@
+<svg width="800" height="800" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background: Deeper, richer cool charcoal with a subtle steel-blue ambient glow -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#14171a"/>
+      <stop offset="60%" stop-color="#0b0c0e"/>
+      <stop offset="100%" stop-color="#030405"/>
+    </radialGradient>
+
+    <!-- Metallic Rim: Highly polished silver-chrome gradient with high-specular highlights -->
+    <linearGradient id="premiumSilver" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/> <!-- White Glint highlight -->
+      <stop offset="20%" stop-color="#b0bec5"/> <!-- Pure Silver -->
+      <stop offset="45%" stop-color="#455a64"/> <!-- Deep Steel Shadow -->
+      <stop offset="65%" stop-color="#ffffff"/> <!-- Mirror Reflection -->
+      <stop offset="85%" stop-color="#78909c"/> <!-- Light Silver -->
+      <stop offset="100%" stop-color="#1c272c"/> <!-- Deep core shadow -->
+    </linearGradient>
+
+    <!-- Inner Gem Facet: Deep Obsidian-Silver -->
+    <linearGradient id="gemObsidianSilver" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#78909c"/>
+      <stop offset="50%" stop-color="#263238"/>
+      <stop offset="100%" stop-color="#0d1316"/>
+    </linearGradient>
+
+    <!-- Soft outer drop shadow and glowing filters -->
+    <filter id="glowSilver" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="15" result="blur"/>
+      <feColorMatrix type="matrix" values="
+        0.8 0 0 0 0.5
+        0 0.8 0 0 0.6
+        0 0 0.9 0 0.7
+        0 0 0 0.3 0
+      "/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.75"/>
+    </filter>
+
+    <clipPath id="gemClip">
+      <polygon points="495,400 467,467 400,495 333,467 305,400 333,333 400,305 467,333"/>
+    </clipPath>
+  </defs>
+
+  <!-- 1. Background -->
+  
+
+  <!-- 2. Ambient Under-Medal Glow (Cyan/Silver tint) -->
+  <circle cx="400" cy="410" r="240" fill="#90a4ae" opacity="0.10" filter="url(#glowSilver)"/>
+
+  <!-- 3. The Main Medal Ring (Outer structure) -->
+  <g filter="url(#softShadow)">
+    <!-- Outer silver-chrome ring -->
+    <circle cx="400" cy="400" r="236" fill="none" stroke="url(#premiumSilver)" stroke-width="12"/>
+    <circle cx="400" cy="400" r="228" fill="#111315" stroke="rgba(255, 255, 255, 0.04)" stroke-width="2"/>
+
+    <!-- Orbital design tick marks: Cardinal Major Ticks -->
+    <!-- Major Ticks (North, South, East, West) -->
+    <g stroke="url(#premiumSilver)" stroke-width="2" opacity="0.75">
+      <line x1="400" y1="168" x2="400" y2="176"/>
+      <line x1="400" y1="624" x2="400" y2="632"/>
+      <line x1="168" y1="400" x2="176" y2="400"/>
+      <line x1="624" y1="400" x2="632" y2="400"/>
+    </g>
+
+    <!-- Inner frame ring -->
+    <circle cx="400" cy="400" r="210" fill="none" stroke="url(#premiumSilver)" stroke-width="4" opacity="0.8"/>
+
+    <!-- Concentric Dotted Dial -->
+    <circle cx="400" cy="400" r="192" fill="none" stroke="url(#premiumSilver)" stroke-width="2" stroke-dasharray="6,8" opacity="0.3"/>
+  </g>
+
+  <!-- 4. EXTRA ELEMENT 1: Concentric Outer Gem Octagonal Ring (Seat Frame) -->
+  <!-- An offset octagon framing the central gem to add tiered layers -->
+  <polygon points="507,400 476,476 400,507 324,476 293,400 324,324 400,293 476,324" fill="none" stroke="url(#premiumSilver)" stroke-width="2" opacity="0.4" filter="url(#softShadow)"/>
+
+  <!-- 5. EXTRA ELEMENT 2: Octagon Vertex Rivets (Jeweler's setting anchors) -->
+  <g fill="url(#premiumSilver)" opacity="0.6">
+    <circle cx="507" cy="400" r="3.5" />
+    <circle cx="476" cy="476" r="3.5" />
+    <circle cx="400" cy="507" r="3.5" />
+    <circle cx="324" cy="476" r="3.5" />
+    <circle cx="293" cy="400" r="3.5" />
+    <circle cx="324" cy="324" r="3.5" />
+    <circle cx="400" cy="293" r="3.5" />
+    <circle cx="476" cy="324" r="3.5" />
+  </g>
+
+  <!-- 6. EXTRA ELEMENT 3: Technical Crosshair Guidelines (Aligns bezel to the gem core) -->
+  <!-- Thin, precise vector lines connecting the inner watch-ring to the octagonal seat -->
+  <g stroke="url(#premiumSilver)" stroke-width="1.5" opacity="0.25">
+    <line x1="400" y1="190" x2="400" y2="293"/> <!-- Top Guide -->
+    <line x1="400" y1="610" x2="400" y2="507"/> <!-- Bottom Guide -->
+    <line x1="190" y1="400" x2="293" y2="400"/> <!-- Left Guide -->
+    <line x1="610" y1="400" x2="507" y2="400"/> <!-- Right Guide -->
+  </g>
+
+  <!-- 7. The Faceted Core Gem -->
+  <g filter="url(#softShadow)">
+    <g clip-path="url(#gemClip)">
+      <!-- Octagon background -->
+      <polygon points="495,400 467,467 400,495 333,467 305,400 333,333 400,305 467,333" fill="url(#gemObsidianSilver)"/>
+      <!-- Perfectly symmetric 8-facet 3D shading radiating from center (400,400) -->
+      <polygon points="400,400 400,305 333,333" fill="#ffffff" opacity="0.12"/> <!-- North-NW -->
+      <polygon points="400,400 333,333 305,400" fill="#ffffff" opacity="0.08"/> <!-- West-NW -->
+      <polygon points="400,400 305,400 333,467" fill="#000000" opacity="0.15"/> <!-- West-SW -->
+      <polygon points="400,400 333,467 400,495" fill="#000000" opacity="0.25"/> <!-- South-SW -->
+      <polygon points="400,400 400,495 467,467" fill="#000000" opacity="0.35"/> <!-- South-SE -->
+      <polygon points="400,400 467,467 495,400" fill="#000000" opacity="0.25"/> <!-- East-SE -->
+      <polygon points="400,400 495,400 467,333" fill="#ffffff" opacity="0.02"/> <!-- East-NE -->
+      <polygon points="400,400 467,333 400,305" fill="#ffffff" opacity="0.06"/> <!-- North-NE -->
+      <!-- Custom Icon space is reserved right here in the center of the viewport (400, 400) -->
+      <!-- <image href="/assets/badges/voter.png" x="320" y="320" width="160" height="160" /> -->
+      <!-- Gloss glass reflection sweep -->
+      <rect x="200" y="230" width="80" height="340" fill="#ffffff" opacity="0.15" transform="rotate(28 400 400)"/>
+    </g>
+  </g>
+
+  <!-- 8. Beveled Outlines & Highlights -->
+  <!-- Crisp high-end outline to make the facets stand out sharply -->
+  <polygon points="495,400 467,467 400,495 333,467 305,400 333,333 400,305 467,333" fill="none" stroke="url(#premiumSilver)" stroke-width="3"/>
+  <polygon points="493,400 466,466 400,493 334,466 307,400 334,334 400,307 466,334" fill="none" stroke="rgba(255, 255, 255, 0.25)" stroke-width="1"/>
+</svg>

@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { createServer as createViteServer } from "vite";
 import path from "path";
+import fs from "fs";
 import { Pool } from "pg";
 
 const pool = new Pool({
@@ -305,6 +306,85 @@ export async function startServer() {
         res.status(500).json({ error: "Failed to connect to Hugging Face API" });
       }
     });
+
+    app.post("/api/admin/badges/save", async (req, res) => {
+      try {
+        const badgesData = req.body;
+        if (!badgesData || typeof badgesData !== "object") {
+          return res.status(400).json({ success: false, error: "Invalid payload" });
+        }
+
+        const badgesArray = Object.values(badgesData).map((b: any) => ({
+          id: b.id,
+          name: b.name,
+          category: b.category,
+          description: b.description,
+          targets: b.targets || [1, 2, 3, 4, 5],
+          thresholds: b.thresholds,
+          icon: b.icon || 'Award'
+        }));
+
+        const { error } = await supabase.from("badges").upsert(badgesArray);
+        if (error) throw error;
+        res.json({ success: true });
+      } catch (err: any) {
+        console.error("Failed to save badges config:", err);
+        res.status(500).json({ success: false, error: err.message });
+      }
+    });
+
+    app.delete("/api/admin/badges/:id", async (req, res) => {
+      try {
+        const { id } = req.params;
+        const { error } = await supabase.from("badges").delete().eq("id", id);
+        if (error) throw error;
+        res.json({ success: true });
+      } catch (err: any) {
+        console.error("Failed to delete badge:", err);
+        res.status(500).json({ success: false, error: err.message });
+      }
+    });
+
+    app.get("/api/badges", async (req, res) => {
+      try {
+        const { data, error } = await supabase.from("badges").select("*");
+        if (error) throw error;
+        res.json(data || []);
+      } catch (err: any) {
+        console.error("Failed to fetch badges:", err);
+        res.status(500).json({ error: err.message });
+      }
+    });
+
+    app.get("/api/admin/users", async (req, res) => {
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("id, username")
+          .order("username", { ascending: true });
+        if (error) throw error;
+        res.json(data || []);
+      } catch (err: any) {
+        console.error("Failed to fetch admin users:", err);
+        res.status(500).json({ error: err.message });
+      }
+    });
+
+    app.get("/api/admin/engine-logs", async (req, res) => {
+      try {
+        const { data, error } = await supabase
+          .from("user_achievement_logs")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(100);
+        if (error) throw error;
+        res.json(data || []);
+      } catch (err: any) {
+        console.error("Failed to fetch engine logs:", err);
+        res.status(500).json({ error: err.message });
+      }
+    });
+
 
     app.post("/api/admin/blog-publish", async (req, res) => {
       try {

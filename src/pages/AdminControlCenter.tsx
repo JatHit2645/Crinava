@@ -20,8 +20,13 @@ import {
   Settings,
   Check,
   Trash2,
-  ImagePlus
+  ImagePlus,
+  Award,
+  Plus,
+  Save,
+  Edit
 } from "lucide-react";
+import { ACHIEVEMENTS_CONFIG, AchievementThreshold } from "../lib/achievementsConfig";
 import { motion } from "motion/react";
 import {
   LineChart,
@@ -46,6 +51,56 @@ export const AdminControlCenter = () => {
   const [activeAdminTab, setActiveAdminTab] = useState("dashboard");
   const [sessionTimeLeft, setSessionTimeLeft] = useState(60);
   const isVerifyingMagicLink = useRef(false);
+
+  // Engine Monitor State
+  const [engineLogs, setEngineLogs] = useState<{time: string, type: string, message: string}[]>([]);
+  const [cheatEvent, setCheatEvent] = useState("vote_cast");
+  const [cheatUser, setCheatUser] = useState("");
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [registeredUsers, setRegisteredUsers] = useState<{id: string, username: string}[]>([]);
+  
+  useEffect(() => {
+    const handleEngineLog = (e: any) => {
+      setEngineLogs(prev => [{
+        time: e.detail.timestamp,
+        type: e.detail.type,
+        message: e.detail.message
+      }, ...prev].slice(0, 100)); // Keep last 100 logs
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener('badge-engine-log', handleEngineLog);
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('badge-engine-log', handleEngineLog);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (activeAdminTab === "engine") {
+      // Fetch users for the dropdown helper
+      fetch("/api/admin/users")
+        .then(res => res.json())
+        .then(data => setRegisteredUsers(data))
+        .catch(err => console.error("Error fetching users:", err));
+
+      // Fetch persistent database logs
+      fetch("/api/admin/engine-logs")
+        .then(res => res.json())
+        .then(data => {
+          const formattedLogs = data.map((log: any) => ({
+            time: log.created_at,
+            type: log.new_stage ? 'SUCCESS' : 'INFO',
+            message: log.new_stage 
+              ? `[DB Log] 🏆 LEVEL UP! User ${log.username || log.user_id} reached Stage ${log.new_stage} on '${log.badge_id}'!`
+              : `[DB Log] Event '${log.event_type}' recorded for user ${log.username || log.user_id} (Amount: +${log.amount})`
+          }));
+          setEngineLogs(formattedLogs);
+        })
+        .catch(err => console.error("Error fetching logs:", err));
+    }
+  }, [activeAdminTab]);
   
   // Forms state
   const [debateTopic, setDebateTopic] = useState("");
@@ -91,6 +146,36 @@ export const AdminControlCenter = () => {
   const [canary, setCanary] = useState({ visualStories: true, matchTwin: true });
   const [sqlQuery, setSqlQuery] = useState("");
   const [sqlResult, setSqlResult] = useState<any>(null);
+
+  // Badges Editor State
+  const [editableBadges, setEditableBadges] = useState<Record<string, AchievementThreshold>>(ACHIEVEMENTS_CONFIG);
+  const [editingBadgeId, setEditingBadgeId] = useState<string | null>(null);
+  const [isSavingBadges, setIsSavingBadges] = useState(false);
+
+  useEffect(() => {
+    if (activeAdminTab === "badges") {
+      fetch("/api/badges")
+        .then(res => res.json())
+        .then((data: any[]) => {
+          if (Array.isArray(data) && data.length > 0) {
+            const record: any = {};
+            data.forEach((b: any) => {
+              record[b.id] = {
+                id: b.id,
+                name: b.name,
+                category: b.category,
+                description: b.description,
+                targets: b.targets || [1, 2, 3, 4, 5],
+                thresholds: b.thresholds || ["", "", "", "", ""],
+                icon: b.icon || 'Award'
+              };
+            });
+            setEditableBadges(record);
+          }
+        })
+        .catch(console.error);
+    }
+  }, [activeAdminTab]);
 
   // Fake 404 Disguise & Magic Link
   useEffect(() => {
@@ -475,6 +560,26 @@ export const AdminControlCenter = () => {
     }
   };
 
+  const handleSaveBadgesConfig = async () => {
+    setIsSavingBadges(true);
+    try {
+      const res = await fetch("/api/admin/badges/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editableBadges)
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert("Badges configuration successfully deployed! (Hot-reload should apply instantly)");
+      } else {
+        alert("Failed to deploy: " + data.error);
+      }
+    } catch (e) {
+      alert("Failed to deploy badges configuration. Connection error.");
+    }
+    setIsSavingBadges(false);
+  };
+
   const handleSqlExecute = async () => {
     try {
       const res = await fetch("/api/admin/sql", {
@@ -701,6 +806,14 @@ export const AdminControlCenter = () => {
           <Eye size={20} />
           <span>SecOps Audit</span>
         </button>
+        <button onClick={() => setActiveAdminTab("badges")} className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${activeAdminTab === "badges" ? "bg-metallic-gold/10 text-metallic-gold border border-metallic-gold/20" : "text-mercury/70 hover:bg-white/5"}`}>
+          <Award size={20} />
+          <span className="font-bold tracking-wide">Badges</span>
+        </button>
+        <button onClick={() => setActiveAdminTab("engine")} className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${activeAdminTab === "engine" ? "bg-aurora-teal/10 text-aurora-teal border border-aurora-teal/20" : "text-mercury/70 hover:bg-white/5"}`}>
+          <Zap size={20} />
+          <span className="font-bold tracking-wide">Engine & Cheat</span>
+        </button>
       </div>
 
       {/* Main Content Area */}
@@ -713,6 +826,8 @@ export const AdminControlCenter = () => {
             {activeAdminTab === "devops" && "DevOps Engineering Console"}
             {activeAdminTab === "canary" && "Canary Cohort Controls"}
             {activeAdminTab === "secops" && "SecOps Audit & Access"}
+            {activeAdminTab === "badges" && "Badge Configuration Matrix"}
+            {activeAdminTab === "engine" && "Event Engine & Cheat Mode"}
           </h2>
           <div className="flex items-center space-x-4">
             <div className={`flex items-center space-x-2 px-4 py-1.5 rounded-full border font-mono font-bold ${sessionTimeLeft <= 15 ? "text-red-400 bg-red-900/20 border-red-500/30 animate-pulse" : "text-yellow-400 bg-yellow-900/20 border-yellow-500/30"}`}>
@@ -1270,6 +1385,329 @@ export const AdminControlCenter = () => {
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {activeAdminTab === "badges" && (
+          <div className="bg-black/40 border border-mercury/10 p-6 rounded-xl flex flex-col h-[calc(100vh-12rem)]">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg font-bold flex items-center"><Award className="mr-2 text-metallic-gold" /> Pro Badge Editor</h3>
+              <div className="flex space-x-4">
+                <button 
+                  onClick={() => {
+                    const newId = "new_badge_" + Date.now();
+                    setEditableBadges(prev => ({
+                      ...prev,
+                      [newId]: {
+                        id: newId,
+                        name: "New Badge",
+                        category: "General",
+                        description: "Description here",
+                        targets: [1, 10, 50, 100, 500],
+                        thresholds: ["1 action", "10 actions", "50 actions", "100 actions", "500 actions"],
+                        icon: "Award"
+                      }
+                    }));
+                    setEditingBadgeId(newId);
+                  }}
+                  className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg flex items-center transition-colors text-sm font-bold"
+                >
+                  <Plus size={16} className="mr-2" /> Add Badge
+                </button>
+                <button 
+                  onClick={handleSaveBadgesConfig}
+                  disabled={isSavingBadges}
+                  className="px-4 py-2 bg-metallic-gold hover:brightness-110 text-black rounded-lg flex items-center transition-all text-sm font-bold disabled:opacity-50"
+                >
+                  <Save size={16} className="mr-2" /> {isSavingBadges ? "Deploying..." : "Deploy Config"}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex-1 flex gap-6 overflow-hidden">
+              <div className="w-1/3 overflow-y-auto border border-mercury/10 rounded-lg p-2 bg-black/50">
+                {Object.values(editableBadges).map(badge => (
+                  <div 
+                    key={badge.id}
+                    onClick={() => setEditingBadgeId(badge.id)}
+                    className={`p-3 rounded-lg mb-2 cursor-pointer border transition-colors ${editingBadgeId === badge.id ? 'bg-metallic-gold/10 border-metallic-gold text-white' : 'bg-transparent border-transparent hover:bg-white/5 text-mercury/80'}`}
+                  >
+                    <div className="font-bold text-sm">{badge.name}</div>
+                    <div className="text-xs opacity-60 truncate">{badge.category}</div>
+                  </div>
+                ))}
+              </div>
+
+              {editingBadgeId && editableBadges[editingBadgeId] ? (
+                <div className="w-2/3 overflow-y-auto border border-mercury/10 rounded-lg p-6 bg-black/50 space-y-6">
+                  <div>
+                    <label className="block text-xs uppercase tracking-widest text-mercury/60 mb-2">Internal ID</label>
+                    <input 
+                      type="text" 
+                      value={editableBadges[editingBadgeId].id}
+                      onChange={(e) => {
+                        const newId = e.target.value.replace(/[^a-zA-Z0-9_]/g, '');
+                        setEditableBadges(prev => {
+                          const newBadges = { ...prev };
+                          const oldBadge = newBadges[editingBadgeId];
+                          delete newBadges[editingBadgeId];
+                          newBadges[newId] = { ...oldBadge, id: newId };
+                          setEditingBadgeId(newId);
+                          return newBadges;
+                        });
+                      }}
+                      className="w-full bg-black border border-mercury/20 rounded p-3 text-white text-sm focus:border-metallic-gold outline-none font-mono"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-widest text-mercury/60 mb-2">Badge Name</label>
+                    <input 
+                      type="text" 
+                      value={editableBadges[editingBadgeId].name}
+                      onChange={(e) => setEditableBadges(prev => ({...prev, [editingBadgeId]: {...prev[editingBadgeId], name: e.target.value}}))}
+                      className="w-full bg-black border border-mercury/20 rounded p-3 text-white text-sm focus:border-metallic-gold outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-widest text-mercury/60 mb-2">Icon (Lucide name or URL)</label>
+                    <input 
+                      type="text" 
+                      value={(editableBadges[editingBadgeId].icon || 'Award').split('|')[0]}
+                      onChange={(e) => {
+                        const parts = (editableBadges[editingBadgeId].icon || 'Award').split('|');
+                        const newEvent = parts[1] ? `|${parts[1]}` : '';
+                        setEditableBadges(prev => ({...prev, [editingBadgeId]: {...prev[editingBadgeId], icon: e.target.value + newEvent}}));
+                      }}
+                      className="w-full bg-black border border-mercury/20 rounded p-3 text-white text-sm focus:border-metallic-gold outline-none"
+                      placeholder="e.g. Shield, Zap, or https://example.com/icon.svg"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-widest text-metallic-gold mb-2">Dynamic Event Trigger (Engine)</label>
+                    <select
+                      value={(editableBadges[editingBadgeId].icon || 'Award').split('|')[1] || ''}
+                      onChange={(e) => {
+                        const iconPart = (editableBadges[editingBadgeId].icon || 'Award').split('|')[0];
+                        const newEvent = e.target.value ? `|${e.target.value}` : '';
+                        setEditableBadges(prev => ({...prev, [editingBadgeId]: {...prev[editingBadgeId], icon: iconPart + newEvent}}));
+                      }}
+                      className="w-full bg-black border border-mercury/20 rounded p-3 text-white text-sm focus:border-metallic-gold outline-none"
+                    >
+                      <option value="">No trigger (Manual only)</option>
+                      <option value="vote_cast">Debate Vote Cast (vote_cast)</option>
+                      <option value="prediction_made">Prediction Made (prediction_made)</option>
+                      <option value="prediction_won">Prediction Won (prediction_won)</option>
+                      <option value="profile_visit">Profile Visited (profile_visit)</option>
+                      <option value="coin_spent">Coins Spent (coin_spent)</option>
+                      <option value="daily_login">Daily Login (daily_login)</option>
+                    </select>
+                    <p className="text-[10px] text-mercury/50 mt-1">If selected, the Engine will automatically level up this badge whenever this action occurs.</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-widest text-mercury/60 mb-2">Category</label>
+                    <input 
+                      type="text" 
+                      value={editableBadges[editingBadgeId].category}
+                      onChange={(e) => setEditableBadges(prev => ({...prev, [editingBadgeId]: {...prev[editingBadgeId], category: e.target.value}}))}
+                      className="w-full bg-black border border-mercury/20 rounded p-3 text-white text-sm focus:border-metallic-gold outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-widest text-mercury/60 mb-2">Description</label>
+                    <textarea 
+                      value={editableBadges[editingBadgeId].description}
+                      onChange={(e) => setEditableBadges(prev => ({...prev, [editingBadgeId]: {...prev[editingBadgeId], description: e.target.value}}))}
+                      rows={3}
+                      className="w-full bg-black border border-mercury/20 rounded p-3 text-white text-sm focus:border-metallic-gold outline-none resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs uppercase tracking-widest text-mercury/60 mb-4">Stage Configurations (Target and Display Label)</label>
+                    <div className="space-y-3">
+                      {['Bronze (1)', 'Silver (2)', 'Gold (3)', 'Diamond (4)', 'Legendary (5)'].map((label, idx) => (
+                        <div key={idx} className="flex items-center space-x-4">
+                          <span className="w-24 text-xs font-bold text-mercury/80">{label}</span>
+                          <input 
+                            type="number" 
+                            placeholder="Target"
+                            value={(editableBadges[editingBadgeId] as any).targets?.[idx] || 0}
+                            onChange={(e) => {
+                              const val = parseInt(e.target.value) || 0;
+                              setEditableBadges(prev => {
+                                const newBadges = { ...prev };
+                                const newTargets = [...((newBadges[editingBadgeId] as any).targets || [1, 2, 3, 4, 5])];
+                                newTargets[idx] = val;
+                                newBadges[editingBadgeId] = { 
+                                  ...newBadges[editingBadgeId], 
+                                  targets: newTargets
+                                } as any;
+                                return newBadges;
+                              });
+                            }}
+                            className="w-24 bg-black border border-mercury/20 rounded p-2 text-white text-sm focus:border-metallic-gold outline-none text-center"
+                          />
+                          <input 
+                            type="text" 
+                            placeholder="Display Label"
+                            value={editableBadges[editingBadgeId].thresholds[idx]}
+                            onChange={(e) => {
+                              const newVal = e.target.value;
+                              setEditableBadges(prev => {
+                                const newBadges = { ...prev };
+                                const newThresholds = [...newBadges[editingBadgeId].thresholds];
+                                newThresholds[idx] = newVal;
+                                newBadges[editingBadgeId] = { ...newBadges[editingBadgeId], thresholds: newThresholds as [string,string,string,string,string] };
+                                return newBadges;
+                              });
+                            }}
+                            className="flex-1 bg-black border border-mercury/20 rounded p-2 text-white text-sm focus:border-metallic-gold outline-none"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-6 border-t border-red-500/20">
+                    <button 
+                      onClick={async () => {
+                        if(window.confirm("Are you sure you want to completely delete this badge from existence?")) {
+                          try {
+                            const res = await fetch(`/api/admin/badges/${editingBadgeId}`, { method: 'DELETE' });
+                            const data = await res.json();
+                            if (data.success) {
+                              setEditableBadges(prev => {
+                                const newBadges = { ...prev };
+                                delete newBadges[editingBadgeId];
+                                return newBadges;
+                              });
+                              setEditingBadgeId(null);
+                              alert("Badge successfully deleted!");
+                            } else {
+                              alert("Failed to delete badge: " + data.error);
+                            }
+                          } catch (err) {
+                            alert("Failed to delete badge. Connection error.");
+                          }
+                        }
+                      }}
+                      className="flex items-center text-red-500 hover:text-red-400 text-sm font-bold transition-colors"
+                    >
+                      <Trash2 size={16} className="mr-2" /> Delete Entire Badge
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="w-2/3 border border-dashed border-mercury/20 rounded-lg flex items-center justify-center text-mercury/40 flex-col">
+                  <Award size={48} className="mb-4 opacity-20" />
+                  <p>Select a badge to edit or create a new one.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeAdminTab === "engine" && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-[calc(100vh-12rem)]">
+            {/* Monitor Panel */}
+            <div className="bg-black/40 border border-mercury/10 p-6 rounded-xl flex flex-col font-mono relative">
+              <h3 className="text-xl font-bold mb-4 flex items-center text-aurora-teal"><Zap className="mr-3" /> Live Event Monitor</h3>
+              <p className="text-xs text-mercury/50 mb-4">Listening for dynamic events dispatched by the application...</p>
+              
+              <div className="flex-1 bg-black border border-mercury/20 rounded-lg p-4 overflow-y-auto space-y-2 font-mono text-xs">
+                {engineLogs.length === 0 ? (
+                  <div className="text-mercury/30 italic text-center mt-10">No events recorded yet. Waiting...</div>
+                ) : (
+                  engineLogs.map((log, i) => (
+                    <div key={i} className={`pb-2 border-b border-mercury/10 ${log.type === 'SUCCESS' ? 'text-green-400' : log.type === 'WARN' ? 'text-yellow-400' : log.type === 'ERROR' ? 'text-red-400' : 'text-mercury/70'}`}>
+                      <span className="text-mercury/40 mr-2">[{new Date(log.time).toLocaleTimeString()}]</span>
+                      {log.message}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* Cheat Mode Panel */}
+            <div className="bg-black/40 border border-mercury/10 p-6 rounded-xl flex flex-col">
+              <h3 className="text-xl font-bold mb-4 flex items-center text-red-500"><Terminal className="mr-3" /> Cheat Mode Simulator</h3>
+              <p className="text-sm text-mercury/60 mb-8">Manually trigger events to simulate user actions and test if badges are leveling up correctly.</p>
+
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-xs uppercase tracking-widest text-mercury/60 mb-2">Simulate Event Type</label>
+                  <select
+                    value={cheatEvent}
+                    onChange={(e) => setCheatEvent(e.target.value)}
+                    className="w-full bg-black border border-mercury/20 rounded p-3 text-white text-sm focus:border-red-500 outline-none"
+                  >
+                    <option value="vote_cast">Debate Vote Cast (vote_cast)</option>
+                    <option value="prediction_made">Prediction Made (prediction_made)</option>
+                    <option value="prediction_won">Prediction Won (prediction_won)</option>
+                    <option value="profile_visit">Profile Visited (profile_visit)</option>
+                    <option value="coin_spent">Coins Spent (coin_spent)</option>
+                    <option value="daily_login">Daily Login (daily_login)</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-xs uppercase tracking-widest text-mercury/60">Target User ID (UUID)</label>
+                    {registeredUsers.length > 0 && (
+                      <span className="text-[10px] text-aurora-teal/70 font-mono">
+                        ({registeredUsers.length} users registered)
+                      </span>
+                    )}
+                  </div>
+                  <input
+                    type="text"
+                    value={cheatUser}
+                    onChange={(e) => setCheatUser(e.target.value)}
+                    placeholder="e.g. 123e4567-e89b-12d3-a456-426614174000"
+                    className="w-full bg-black border border-mercury/20 rounded p-3 text-white text-sm focus:border-red-500 outline-none font-mono mb-3"
+                  />
+                  {registeredUsers.length > 0 && (
+                    <div className="bg-black/60 border border-mercury/10 rounded p-3 max-h-[140px] overflow-y-auto space-y-1.5 custom-scrollbar text-xs">
+                      <p className="text-[10px] uppercase text-mercury/40 tracking-wider mb-2 font-bold">Quick Select Registered User:</p>
+                      {registeredUsers.map(u => (
+                        <button
+                          key={u.id}
+                          type="button"
+                          onClick={() => setCheatUser(u.id)}
+                          className={`w-full text-left px-2 py-1 rounded transition-colors flex justify-between items-center ${cheatUser === u.id ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'hover:bg-white/5 text-mercury/80 border border-transparent'}`}
+                        >
+                          <span className="font-bold">{u.username || 'Anonymous'}</span>
+                          <span className="font-mono text-[10px] opacity-60">{u.id}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  onClick={async () => {
+                    if (!cheatUser) {
+                      alert("Please provide a Target User ID.");
+                      return;
+                    }
+                    setIsSimulating(true);
+                    try {
+                      const { trackEvent } = await import('../lib/achievementsEngine');
+                      // @ts-ignore
+                      const { supabase } = await import('../lib/supabase');
+                      await trackEvent(supabase, cheatUser, cheatEvent, 1);
+                    } catch(e: any) {
+                      alert("Simulation failed: " + e.message);
+                    }
+                    setIsSimulating(false);
+                  }}
+                  disabled={isSimulating}
+                  className="w-full bg-red-500/20 hover:bg-red-500/30 text-red-500 border border-red-500/30 font-bold tracking-widest uppercase rounded-lg py-4 transition-colors disabled:opacity-50"
+                >
+                  {isSimulating ? "Simulating..." : "🔥 FIRE EVENT"}
+                </button>
+              </div>
             </div>
           </div>
         )}

@@ -4,6 +4,7 @@
  */
 
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import * as Lucide from "lucide-react";
 import { BlogArchive } from "./pages/BlogArchive";
 import { BlogPost } from "./pages/BlogPost";
 import React, { useState, useEffect, useRef, useCallback } from "react";
@@ -47,6 +48,35 @@ import {
   Library,
   MessageCircle,
   Gift,
+  Vote,
+  RotateCcw,
+  MessageSquarePlus,
+  Target,
+  Shield,
+  Anchor,
+  CalendarCheck,
+  Scale,
+  Star,
+  ClipboardList,
+  Dices,
+  Coins,
+  ListChecks,
+  ToggleRight,
+  PiggyBank,
+  CreditCard,
+  Calendar,
+  RefreshCw,
+  Ticket,
+  Clover,
+  Gem,
+  Hourglass,
+  Dna,
+  FileText,
+  LineChart as LineChartIcon,
+  UserCheck,
+  Globe,
+  Radar,
+  Crown
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -62,6 +92,7 @@ import {
   Line,
 } from "recharts";
 import { supabase } from "./lib/supabaseClient";
+import { ACHIEVEMENTS_CONFIG, calculateCurrentStage } from "./lib/achievementsConfig";
 import { AuthModal } from "./components/AuthModal";
 import { UsernameModal } from "./components/UsernameModal";
 import { PredictionGame } from "./components/PredictionGame";
@@ -72,6 +103,67 @@ import { PlayerProfile } from "./pages/PlayerProfile";
 import { AdminControlCenter } from "./pages/AdminControlCenter";
 
 // --- Celestial Organic Elements ---
+
+export const renderBadgeIcon = (id: string, stage: number, sizeClass: string = "w-[11%] h-[11%]", customIcon?: string) => {
+  let colorClass = "text-gray-500";
+  if (stage === 5) colorClass = "text-[#e0b0ff] drop-shadow-[0_0_8px_rgba(224,176,255,0.8)]";
+  else if (stage === 4) colorClass = "text-[#ff6b6b] drop-shadow-[0_0_8px_rgba(255,107,107,0.8)]";
+  else if (stage === 3) colorClass = "text-[#ffd700] drop-shadow-[0_0_8px_rgba(255,215,0,0.8)]";
+  else if (stage === 2) colorClass = "text-[#e2e8f0] drop-shadow-[0_0_8px_rgba(226,232,240,0.8)]";
+  else if (stage === 1) colorClass = "text-[#cd7f32] drop-shadow-[0_0_8px_rgba(205,127,50,0.8)]";
+
+  if (customIcon && (customIcon.startsWith("http://") || customIcon.startsWith("https://") || customIcon.startsWith("/") || customIcon.startsWith("data:"))) {
+    return <img src={customIcon} className={`${sizeClass} rounded-full object-contain filter drop-shadow`} style={{ maxWidth: '100%', maxHeight: '100%' }} alt="badge icon" />;
+  }
+
+  const LucideIcon = customIcon ? (Lucide as any)[customIcon] : null;
+
+  const icons: Record<string, any> = {
+    "rope_burner": Vote,
+    "trend_breaker": RotateCcw,
+    "crowd_commander": Users,
+    "debate_architect": MessageSquarePlus,
+    "hitmans_vanguard": Target,
+    "kings_shield": Shield,
+    "thalas_anchor": Anchor,
+    "heavy_puller": Zap,
+    "iron_grip": CalendarCheck,
+    "the_tie_breaker": Scale,
+    "neural_seer": Brain,
+    "calculated_fortune": Trophy,
+    "streak_weaver": Sparkles,
+    "underdog_alchemist": Star,
+    "smart_xi_tactician": ClipboardList,
+    "monte_carlo_survivor": Dices,
+    "high_roller": Coins,
+    "the_hedger": Share2,
+    "clean_sweep": ListChecks,
+    "oracle_override": ToggleRight,
+    "coin_accumulator": PiggyBank,
+    "patron_of_crinava": CreditCard,
+    "star_trader": Star,
+    "coin_burner": ShoppingCart,
+    "daily_collector": Calendar,
+    "ledger_sync": RefreshCw,
+    "ticket_master": Ticket,
+    "raffle_reaver": Gift,
+    "lucky_escape": Clover,
+    "high_stakes_bidding": Gem,
+    "jackpot_hunter": Hourglass,
+    "dna_decoder": Dna,
+    "telemetry_inspector": FileText,
+    "momentum_watcher": LineChartIcon,
+    "smart_selector": UserCheck,
+    "global_fan": Globe,
+    "turning_point_spotter": Radar,
+    "bloggers_guild": BookOpen,
+    "core_identity": ShieldCheck,
+    "onyx_ascendant": Crown
+  };
+
+  const IconComponent = LucideIcon || icons[id] || Award;
+  return <IconComponent className={`${sizeClass} ${colorClass} transition-colors`} />;
+};
 
 /**
  * Renders a full-screen animated canvas background with twinkling stars and occasional shooting stars.
@@ -283,8 +375,18 @@ const CelestialCursor = () => {
 
     const handleMouseLeave = () => setIsVisible(false);
 
+    const handleResize = () => {
+      const canvas = canvasRef.current;
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    };
+    handleResize();
+
     window.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("resize", handleResize);
 
     /**
     * Updates and animates the ink trail position and particle rendering on the canvas.
@@ -308,8 +410,6 @@ const CelestialCursor = () => {
       if (canvas) {
         const ctx = canvas.getContext("2d");
         if (ctx) {
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
           inkParticles.current.forEach((p, i) => {
@@ -330,6 +430,7 @@ const CelestialCursor = () => {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
     };
   }, [isVisible]);
@@ -1123,49 +1224,6 @@ export default function App() {
   const [showProInfo, setShowProInfo] = useState(false);
   const [showBadgesModal, setShowBadgesModal] = useState(false);
 
-  const badges = [
-    {
-      id: "early-bird",
-      name: "Early Bird",
-      description: "Joined Crinava in its inaugural month.",
-      icon: "ðŸŒŸ",
-      requirement: "Join before April 2026",
-      progress: 100,
-    },
-    {
-      id: "strategist",
-      name: "Strategist",
-      description: "Master of tactical debates.",
-      icon: "ðŸ§ ",
-      requirement: "Win 10 community debates",
-      progress: 40,
-    },
-    {
-      id: "oracle",
-      name: "Oracle",
-      description: "Uncanny ability to predict match outcomes.",
-      icon: "ðŸ”®",
-      requirement: "80% accuracy over 50 predictions",
-      progress: 15,
-    },
-    {
-      id: "iron-man",
-      name: "Iron Man",
-      description: "Unwavering consistency.",
-      icon: "ðŸ›¡ï¸",
-      requirement: "30-day login streak",
-      progress: 60,
-    },
-    {
-      id: "mastermind",
-      name: "Mastermind",
-      description: "Advanced simulation expert.",
-      icon: "âš¡",
-      requirement: "Score > 90 in 5 advanced simulations",
-      progress: 0,
-    },
-  ];
-
   const careerLevels = [
     { name: "Rookie", range: "0 - 500 CP", actions: "Daily Login: +10 CP" },
     {
@@ -1219,6 +1277,145 @@ export default function App() {
   const [showPredictionGame, setShowPredictionGame] = useState(false);
   const [profile, setProfile] = useState<any>(null);
   const [isProfileLoading, setIsProfileLoading] = useState(true);
+  const [selectedMedal, setSelectedMedal] = useState<any>(null);
+  const [selectedStage, setSelectedStage] = useState<number>(1);
+
+  const getIconForRank = (rank: number) => {
+    switch (rank) {
+      case 5: return "/assets/badges/legendary.svg";
+      case 4: return "/assets/badges/epic.svg";
+      case 3: return "/assets/badges/gold.svg";
+      case 2: return "/assets/badges/silver.svg";
+      case 1: return "/assets/badges/bronze.svg";
+      default: return "/assets/badges/bronze.svg";
+    }
+  };
+
+  const [badges, setBadges] = useState<any[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadBadges = async () => {
+      try {
+        const res = await fetch('/api/badges');
+        if (!res.ok) throw new Error("Failed to fetch badges");
+        const dbBadges = await res.json();
+        
+        let userAchievements: any[] = [];
+        if (session?.user?.id) {
+          const { data } = await supabase.from('user_achievements').select('*').eq('user_id', session.user.id);
+          if (data) userAchievements = data;
+        }
+
+        const combined = dbBadges.map((config: any) => {
+          const userAch = userAchievements.find(a => a.achievement_id === config.id);
+          const currentProgress = userAch?.progress || 0;
+          
+          let actualRank = 0;
+          for (let i = 0; i < 5; i++) {
+            if (currentProgress >= (config.thresholds[i] || Infinity)) {
+              actualRank = i + 1;
+            }
+          }
+
+          let progressPercent = 0;
+          if (actualRank < 5) {
+            const currentThreshold = actualRank === 0 ? 0 : config.thresholds[actualRank - 1];
+            const nextThreshold = config.thresholds[actualRank];
+            if (nextThreshold > currentThreshold) {
+              const range = nextThreshold - currentThreshold;
+              const progressIntoRange = currentProgress - currentThreshold;
+              progressPercent = (progressIntoRange / range) * 100;
+            }
+          } else {
+            progressPercent = 100;
+          }
+
+          return {
+            id: config.id,
+            name: config.name,
+            description: config.description,
+            rank: actualRank,
+            iconUrl: getIconForRank(actualRank),
+            progress: Math.min(100, Math.max(0, progressPercent)),
+            config: config
+          };
+        });
+
+        combined.sort((a: any, b: any) => {
+          if (b.rank !== a.rank) {
+            return b.rank - a.rank;
+          }
+          return a.name.localeCompare(b.name);
+        });
+
+        if (isMounted) setBadges(combined);
+      } catch (err) {
+        console.error("Error loading badges:", err);
+        if (isMounted) {
+          const fallback = Object.values(ACHIEVEMENTS_CONFIG).map(config => ({
+            id: config.id,
+            name: config.name,
+            description: config.description,
+            rank: 0,
+            iconUrl: getIconForRank(0),
+            progress: 0,
+            config: config
+          }));
+          setBadges(fallback);
+        }
+      }
+    };
+
+    loadBadges();
+    return () => { isMounted = false; };
+  }, [session?.user?.id, profile]);
+
+  const handlePrevStageOrMedal = React.useCallback(() => {
+    if (!selectedMedal) return;
+    if (selectedStage > 1) {
+      setSelectedStage(selectedStage - 1);
+    } else {
+      const currentIndex = badges.findIndex((b) => b.id === selectedMedal.id);
+      if (currentIndex > -1) {
+        const prevIndex = currentIndex === 0 ? badges.length - 1 : currentIndex - 1;
+        const prevMedal = badges[prevIndex];
+        setSelectedMedal(prevMedal);
+        setSelectedStage(Math.max(1, prevMedal.rank));
+      }
+    }
+  }, [selectedMedal, selectedStage, badges]);
+
+  const handleNextStageOrMedal = React.useCallback(() => {
+    if (!selectedMedal) return;
+    const maxUnlockedStage = Math.max(1, selectedMedal.rank);
+    if (selectedStage < maxUnlockedStage) {
+      setSelectedStage(selectedStage + 1);
+    } else {
+      const currentIndex = badges.findIndex((b) => b.id === selectedMedal.id);
+      if (currentIndex > -1) {
+        const nextIndex = currentIndex === badges.length - 1 ? 0 : currentIndex + 1;
+        const nextMedal = badges[nextIndex];
+        setSelectedMedal(nextMedal);
+        setSelectedStage(Math.max(1, nextMedal.rank));
+      }
+    }
+  }, [selectedMedal, selectedStage, badges]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!showBadgesModal || !selectedMedal) return;
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        handlePrevStageOrMedal();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        handleNextStageOrMedal();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [showBadgesModal, selectedMedal, handlePrevStageOrMedal, handleNextStageOrMedal]);
 
   const [activeDebateChat, setActiveDebateChat] = useState<string | null>(null);
   const [debateMessages, setDebateMessages] = useState<any[]>([]);
@@ -2218,11 +2415,16 @@ export default function App() {
                     { id: "store", label: "THE STORE", num: "02" },
                     { id: "prediction", label: "PREDICTIONS", num: "03" },
                     { id: "raffle", label: "RAFFLE ROOM", num: "04" },
+                    { id: "badges", label: "BADGES", num: "05" },
                   ].map((item) => (
                     <button
                       key={item.id}
                       onClick={() => {
-                        setActiveTab(item.id as AppTab);
+                        if (item.id === "badges") {
+                          setShowBadgesModal(true);
+                        } else {
+                          setActiveTab(item.id as AppTab);
+                        }
                         setShowSideMenu(false);
                       }}
                       className="group relative flex items-center justify-between px-4 py-5 overflow-hidden"
@@ -2317,9 +2519,9 @@ export default function App() {
                         <div
                           key={b.id}
                           title={b.name}
-                          className={`size-8 rounded-[4px] flex items-center justify-center text-xs border ${b.progress === 100 ? "bg-metallic-gold/10 border-metallic-gold/30 text-metallic-gold" : "bg-white/5 border-white/5 text-gray-600 grayscale"}`}
+                          className={`size-8 rounded-[4px] flex items-center justify-center text-xs border ${b.progress === 100 ? "bg-white/5 border-white/10" : "bg-black/40 border-black/50 grayscale opacity-40"}`}
                         >
-                          {b.icon}
+                          <img src={b.iconUrl} alt={b.name} className="size-full object-contain p-1 drop-shadow-md" />
                         </div>
                       ))}
                     </div>
@@ -2587,8 +2789,11 @@ export default function App() {
               className="w-full max-w-lg bg-[#0A0A0A] border border-white/10 rounded-[32px] p-8 relative max-h-[80vh] overflow-hidden flex flex-col"
             >
               <button
-                onClick={() => setShowBadgesModal(false)}
-                className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"
+                onClick={() => {
+                  setShowBadgesModal(false);
+                  setTimeout(() => { setSelectedMedal(null); setSelectedStage(1); }, 300);
+                }}
+                className="absolute top-6 right-6 z-10 text-gray-500 hover:text-white transition-colors"
               >
                 <X size={20} />
               </button>
@@ -2596,57 +2801,123 @@ export default function App() {
                 <Award className="text-metallic-gold" size={28} />
                 Hall of Fame
               </h3>
-              <div className="flex-1 overflow-y-auto pr-2 space-y-4 custom-scrollbar">
-                {badges.map((badge) => (
-                  <div
-                    key={badge.id}
-                    className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 flex items-center gap-4 group hover:border-aurora-teal/30 transition-all"
+              
+              <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                {selectedMedal ? (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }} 
+                    animate={{ opacity: 1, y: 0 }} 
+                    className="flex flex-col h-full bg-white/[0.02] border border-white/5 rounded-2xl p-6 relative"
                   >
-                    <div className="size-14 rounded-2xl bg-white/5 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                      {badge.icon}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between items-center mb-1">
-                        <h4 className="text-[11px] font-black text-white uppercase tracking-widest">
-                          {badge.name}
-                        </h4>
-                        <span className="text-[8px] font-black text-metallic-gold uppercase tracking-widest">
-                          Locked
-                        </span>
+                    <button 
+                      onClick={() => { setSelectedMedal(null); setSelectedStage(1); }} 
+                      className="absolute top-4 left-4 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-white flex items-center gap-1.5 transition-colors"
+                    >
+                      <ArrowLeft size={12} /> Back
+                    </button>
+                    
+                    <div className="flex flex-col items-center mt-8 w-full">
+                      {/* Left and Right navigation controls surrounding the badge */}
+                      <div className="flex items-center justify-between w-full max-w-[340px] mb-6">
+                        <button
+                          onClick={handlePrevStageOrMedal}
+                          className="size-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/30 hover:bg-white/10 transition-all active:scale-90"
+                          title="Previous (Left Arrow)"
+                        >
+                          <ChevronRight className="rotate-180" size={20} />
+                        </button>
+
+                        <div className={`relative size-32 transition-transform hover:scale-105 ${selectedMedal.rank >= selectedStage ? 'drop-shadow-[0_0_30px_rgba(255,255,255,0.15)]' : 'grayscale opacity-50'}`}>
+                          {selectedMedal.rank === 0 ? (
+                            <div className="size-full bg-white/5 border border-white/10 rounded-full flex items-center justify-center text-5xl font-black text-gray-500">?</div>
+                          ) : (
+                            <img src={getIconForRank(selectedStage)} alt={selectedMedal.name} className="size-full object-contain" />
+                          )}
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            {selectedMedal.rank === 0 ? null : renderBadgeIcon(selectedMedal.id, selectedStage, undefined, selectedMedal.config?.icon)}
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={handleNextStageOrMedal}
+                          className="size-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/30 hover:bg-white/10 transition-all active:scale-90"
+                          title="Next (Right Arrow)"
+                        >
+                          <ChevronRight size={20} />
+                        </button>
                       </div>
-                      <p className="text-[10px] text-gray-500 font-medium mb-2">
-                        {badge.description}
+                      <h3 className="text-xl font-black text-white uppercase tracking-widest text-center mb-1">
+                        {selectedMedal.name}
+                      </h3>
+                      <p className={`text-xs font-black uppercase tracking-widest mb-6 ${selectedMedal.rank >= selectedStage ? 'text-metallic-gold' : 'text-gray-600'}`}>
+                        {selectedStage === 5 ? 'Legendary Tier' : selectedStage === 4 ? 'Epic Tier' : selectedStage === 3 ? 'Gold Tier' : selectedStage === 2 ? 'Silver Tier' : selectedStage === 1 ? 'Bronze Tier' : 'Locked'}
+                        {selectedMedal.rank < selectedStage ? ' (Locked)' : ''}
                       </p>
-                      <div className="flex items-center gap-1.5 mb-3">
-                        <HelpCircle size={10} className="text-gray-600" />
-                        <span className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">
-                          Req: {badge.requirement}
-                        </span>
+                      
+                      <p className="text-xs text-gray-400 text-center max-w-[280px] mb-8 leading-relaxed">
+                        {selectedMedal.description}
+                      </p>
+                      
+                      <div className="w-full bg-black/40 border border-white/5 rounded-xl p-5 mb-6">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Trophy size={14} className="text-aurora-teal" />
+                          <span className="text-[9px] font-black uppercase tracking-widest text-gray-500">Milestone Target</span>
+                        </div>
+                        <p className="text-xs text-white font-medium">{selectedMedal.config.thresholds[selectedStage - 1]}</p>
                       </div>
-                      <div className="space-y-1">
-                        <div className="flex justify-between items-center text-[7px] font-black uppercase tracking-widest">
-                          <span className="text-gray-600">Progress</span>
-                          <span
-                            className={
-                              badge.progress === 100
-                                ? "text-metallic-gold"
-                                : "text-gray-400"
-                            }
-                          >
-                            {badge.progress}%
-                          </span>
-                        </div>
-                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${badge.progress}%` }}
-                            className={`h-full ${badge.progress === 100 ? "bg-metallic-gold" : "bg-gray-600"}`}
-                          />
-                        </div>
+
+                      <div className="flex justify-center gap-3">
+                        {[1, 2, 3, 4, 5].map(stage => {
+                          const isUnlocked = stage <= Math.max(1, selectedMedal.rank);
+                          const isSelected = stage === selectedStage;
+                          return (
+                            <button
+                              key={stage}
+                              disabled={!isUnlocked}
+                              onClick={() => setSelectedStage(stage)}
+                              className={`size-10 rounded-lg flex items-center justify-center border transition-all ${!isUnlocked ? 'opacity-30 grayscale cursor-not-allowed border-white/5 bg-white/5' : isSelected ? 'border-aurora-teal bg-aurora-teal/10 scale-110 drop-shadow-[0_0_10px_rgba(45,212,191,0.2)]' : 'border-white/10 hover:border-white/30 bg-white/5'}`}
+                            >
+                              {selectedMedal.rank === 0 ? (
+                                <span className="text-lg font-black text-gray-500">?</span>
+                              ) : (
+                                <img src={getIconForRank(stage)} alt={`Stage ${stage}`} className="size-6 object-contain" />
+                              )}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
-                  </div>
-                ))}
+                  </motion.div>
+                ) : (
+                  <motion.div 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    className="grid grid-cols-5 gap-3 content-start pb-4"
+                  >
+                    {badges.map((badge) => (
+                      <div
+                        key={badge.id}
+                        onClick={() => { setSelectedMedal(badge); setSelectedStage(Math.max(1, badge.rank)); }}
+                        className="aspect-square cursor-pointer flex items-center justify-center group transition-all duration-300"
+                      >
+                        <div className={`relative w-[85%] h-[85%] transition-transform duration-500 ${badge.rank > 0 ? 'group-hover:scale-110' : 'grayscale opacity-30 group-hover:opacity-50'}`}>
+                          {badge.rank === 0 ? (
+                            <div className="size-full bg-white/5 border border-white/10 rounded-full flex items-center justify-center text-4xl font-black text-gray-500">?</div>
+                          ) : (
+                            <img 
+                              src={badge.iconUrl} 
+                              alt={badge.name} 
+                              className={`size-full object-contain p-2 ${badge.rank > 0 ? 'drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] group-hover:drop-shadow-[0_0_18px_rgba(255,255,255,0.35)]' : ''}`} 
+                            />
+                          )}
+                          <div className="absolute inset-0 p-2 flex items-center justify-center pointer-events-none">
+                            {badge.rank === 0 ? null : renderBadgeIcon(badge.id, badge.rank, undefined, badge.config?.icon)}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
               </div>
             </motion.div>
           </div>
