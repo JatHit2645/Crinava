@@ -1,0 +1,90 @@
+<svg width="800" height="800" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background: Deep warm coppery charcoal with a subtle bronze ambient glow -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#140f0c"/>
+      <stop offset="60%" stop-color="#0b0806"/>
+      <stop offset="100%" stop-color="#030202"/>
+    </radialGradient>
+
+    <!-- Metallic Rim: Matte/Brushed Bronze-Copper gradient -->
+    <linearGradient id="premiumBronze" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffd2a1"/> <!-- Light Bronze Glint -->
+      <stop offset="25%" stop-color="#c48a52"/> <!-- Brushed Copper -->
+      <stop offset="50%" stop-color="#7c4e23"/> <!-- Deep Bronze Shadow -->
+      <stop offset="75%" stop-color="#b07d4b"/> <!-- Warm Metal Reflection -->
+      <stop offset="100%" stop-color="#3c2009"/> <!-- Core Shadow -->
+    </linearGradient>
+
+    <!-- Inner Gem Facet: Deep Obsidian-Bronze Glass -->
+    <linearGradient id="gemObsidianBronze" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#a87544"/>
+      <stop offset="50%" stop-color="#5c3c1e"/>
+      <stop offset="100%" stop-color="#1f1105"/>
+    </linearGradient>
+
+    <!-- Soft outer drop shadow and glowing filters -->
+    <filter id="glowBronze" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="15" result="blur"/>
+      <feColorMatrix type="matrix" values="
+        0.8 0 0 0 0.4
+        0 0.5 0 0 0.2
+        0 0 0.1 0 0.1
+        0 0 0 0.25 0
+      "/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.7"/>
+    </filter>
+
+    <clipPath id="gemClip">
+      <polygon points="495,400 467,467 400,495 333,467 305,400 333,333 400,305 467,333"/>
+    </clipPath>
+  </defs>
+
+  <!-- 1. Background -->
+  <rect width="800" height="800" fill="url(#bgGrad)"/>
+
+  <!-- 2. Ambient Under-Medal Glow (Bronze tint) -->
+  <circle cx="400" cy="410" r="240" fill="#a87544" opacity="0.08" filter="url(#glowBronze)"/>
+
+  <!-- 3. The Main Medal Ring (Outer structure) -->
+  <!-- Clean, raw circular plate representing Stage 1 (Novice) -->
+  <g filter="url(#softShadow)">
+    <!-- Outer bronze-copper ring -->
+    <circle cx="400" cy="400" r="236" fill="none" stroke="url(#premiumBronze)" stroke-width="12"/>
+    <circle cx="400" cy="400" r="228" fill="#120e0c" stroke="rgba(255, 255, 255, 0.03)" stroke-width="2"/>
+
+    <!-- Inner frame ring -->
+    <circle cx="400" cy="400" r="210" fill="none" stroke="url(#premiumBronze)" stroke-width="4" opacity="0.7"/>
+  </g>
+
+  <!-- 4. The Faceted Core Gem -->
+  <g filter="url(#softShadow)">
+    <g clip-path="url(#gemClip)">
+      <polygon points="495,400 467,467 400,495 333,467 305,400 333,333 400,305 467,333" fill="url(#gemObsidianBronze)"/>
+      <!-- Perfectly symmetric 8-facet 3D shading radiating from center (400,400) -->
+      <polygon points="400,400 400,305 333,333" fill="#ffffff" opacity="0.12"/> <!-- North-NW -->
+      <polygon points="400,400 333,333 305,400" fill="#ffffff" opacity="0.08"/> <!-- West-NW -->
+      <polygon points="400,400 305,400 333,467" fill="#000000" opacity="0.15"/> <!-- West-SW -->
+      <polygon points="400,400 333,467 400,495" fill="#000000" opacity="0.25"/> <!-- South-SW -->
+      <polygon points="400,400 400,495 467,467" fill="#000000" opacity="0.35"/> <!-- South-SE -->
+      <polygon points="400,400 467,467 495,400" fill="#000000" opacity="0.25"/> <!-- East-SE -->
+      <polygon points="400,400 495,400 467,333" fill="#ffffff" opacity="0.02"/> <!-- East-NE -->
+      <polygon points="400,400 467,333 400,305" fill="#ffffff" opacity="0.06"/> <!-- North-NE -->
+      <!-- Custom Icon space is reserved right here in the center of the viewport (400, 400) -->
+      <!-- <image href="/assets/badges/voter.png" x="320" y="320" width="160" height="160" /> -->
+      <!-- Gloss glass reflection sweep -->
+      <rect x="200" y="230" width="80" height="340" fill="#ffffff" opacity="0.12" transform="rotate(28 400 400)"/>
+    </g>
+  </g>
+
+  <!-- 5. Beveled Outlines & Highlights -->
+  <polygon points="495,400 467,467 400,495 333,467 305,400 333,333 400,305 467,333" fill="none" stroke="url(#premiumBronze)" stroke-width="3"/>
+  <polygon points="493,400 466,466 400,493 334,466 307,400 334,334 400,307 466,334" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1"/>
+</svg>

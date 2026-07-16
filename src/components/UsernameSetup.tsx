@@ -23,6 +23,8 @@ export const UsernameSetup: React.FC<UsernameSetupProps> = ({
   onComplete,
 }) => {
   const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { isAvailable, checking } = useUsernameCheck(username);
 
   /**

@@ -1,0 +1,1578 @@
+{
+    "queryUrl": "get_scorecard/71116540",
+    "doc": [
+        {
+            "event": "get_scorecard",
+            "_dob": 1778048607,
+            "_maxage": 3,
+            "data": {
+                "action": "Success",
+                "message": "OK",
+                "response_code": "OK",
+                "score": {
+                    "bettingSuspended": false,
+                    "eventId": "sr:match:71116540",
+                    "premiumCricketEventId": 71116540,
+                    "updateId": 740,
+                    "matchId": 71116540,
+                    "seriesName": "0",
+                    "matchTitle": "Sarawak v Perak   (50 Overs Each)",
+                    "matchCommentary": "Perak have won by 9 wickets",
+                    "matchStatus": 4,
+                    "currentInningsNumber": 2,
+                    "timeStamp": "/Date(1778048604846+0000)/",
+                    "innings": [
+                        {
+                            "oversAvailable": 50,
+                            "teamName": "Sarawak",
+                            "conclusion": "All Out",
+                            "summary": "109 All Out",
+                            "competitorId": "sr:competitor:1343096",
+                            "isFollowOn": false,
+                            "isFinalInnings": false,
+                            "hasTarget": false,
+                            "target": 0,
+                            "extrasSummary": {
+                                "byes": 0,
+                                "noBalls": 0,
+                                "legByes": 1,
+                                "wides": 13,
+                                "penalties": 0
+                            },
+                            "fallOfwickets": "Zainuddin, AW 1/1 (0.5), Sulhie, Mohammad Hariz Afnan Bin 6/2 (5.2), Stewart, CA 41/3 (14.5), Dzulkipli, MA 52/4 (22.4), Nazril Rahman 72/5 (28.5), Chew Chun Kit, AA 73/6 (28.6), D Mogan 74/7 (29.6), Mohammad Basare, MH 93/8 (36.2), Anuj Jotin 108/9 (44.5), Hafzan Abdullah, MZ 109/10 (47.1), ",
+                            "batsmen": [
+                                {
+                                    "description": "Keeper Catch",
+                                    "toCome": false,
+                                    "didNotBat": false,
+                                    "fielderId": "sr:player:2056967",
+                                    "fielderName": "Ajeb Khan",
+                                    "bowlerId": "sr:player:2261589",
+                                    "bowlerName": "Amir Khan",
+                                    "description2": " bowled ",
+                                    "batsmanName": "Sulhie, Mohammad Hariz Afnan Bin",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 0,
+                                    "balls": 15,
+                                    "playerId": "sr:player:2443923"
+                                },
+                                {
+                                    "description": "Keeper Catch",
+                                    "toCome": false,
+                                    "didNotBat": false,
+                                    "fielderId": "sr:player:2056967",
+                                    "fielderName": "Ajeb Khan",
+                                    "bowlerId": "sr:player:2561095",
+                                    "bowlerName": "Muhammad Azri Azhar",
+                                    "description2": " bowled ",
+                                    "batsmanName": "Zainuddin, AW",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 0,
+                                    "balls": 2,
+                                    "playerId": "sr:player:3184306"
+                                },
+                                {
+                                    "description": "Fielder Catch",
+                                    "toCome": false,
+                                    "didNotBat": false,
+                                    "fielderId": "sr:player:2076035",
+                                    "fielderName": "Aslam Khan",
+                                    "bowlerId": "sr:player:2401113",
+                                    "bowlerName": "Rahim Khan",
+                                    "description2": " bowled ",
+                                    "batsmanName": "Stewart, CA",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 2,
+                                    "sixes": 0,
+                                    "runs": 19,
+                                    "balls": 44,
+                                    "playerId": "sr:player:3184344"
+                                },
+                                {
+                                    "description": "Keeper Catch",
+                                    "toCome": false,
+                                    "didNotBat": false,
+                                    "fielderId": "sr:player:2056967",
+                                    "fielderName": "Ajeb Khan",
+                                    "bowlerId": "sr:player:2401113",
+                                    "bowlerName": "Rahim Khan",
+                                    "description2": " bowled ",
+                                    "batsmanName": "Dzulkipli, MA",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 1,
+                                    "runs": 15,
+                                    "balls": 55,
+                                    "playerId": "sr:player:3184316"
+                                },
+                                {
+                                    "description": "Fielder Catch",
+                                    "toCome": false,
+                                    "didNotBat": false,
+                                    "fielderId": "sr:player:3189762",
+                                    "fielderName": "Perera, Sameen",
+                                    "bowlerId": "sr:player:2561095",
+                                    "bowlerName": "Muhammad Azri Azhar",
+                                    "description2": " bowled ",
+                                    "batsmanName": "Anuj Jotin",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 4,
+                                    "sixes": 0,
+                                    "runs": 46,
+                                    "balls": 87,
+                                    "playerId": "sr:player:2416585"
+                                },
+                                {
+                                    "description": "Keeper Catch",
+                                    "toCome": false,
+                                    "didNotBat": false,
+                                    "fielderId": "sr:player:2056967",
+                                    "fielderName": "Ajeb Khan",
+                                    "bowlerId": "sr:player:2561095",
+                                    "bowlerName": "Muhammad Azri Azhar",
+                                    "description2": " bowled ",
+                                    "batsmanName": "Nazril Rahman",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 1,
+                                    "sixes": 0,
+                                    "runs": 11,
+                                    "balls": 21,
+                                    "playerId": "sr:player:726986"
+                                },
+                                {
+                                    "description": "Bowled",
+                                    "toCome": false,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "sr:player:2561095",
+                                    "bowlerName": "Muhammad Azri Azhar",
+                                    "description2": " bowled ",
+                                    "batsmanName": "Chew Chun Kit, AA",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 0,
+                                    "balls": 1,
+                                    "playerId": "sr:player:3184302"
+                                },
+                                {
+                                    "description": "LBW",
+                                    "toCome": false,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "sr:player:3190468",
+                                    "bowlerName": "Arachchilage, Lakshan",
+                                    "description2": " bowled ",
+                                    "batsmanName": "D Mogan",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 0,
+                                    "balls": 5,
+                                    "playerId": "sr:player:739506"
+                                },
+                                {
+                                    "description": "LBW",
+                                    "toCome": false,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "sr:player:2261589",
+                                    "bowlerName": "Amir Khan",
+                                    "description2": " bowled ",
+                                    "batsmanName": "Mohammad Basare, MH",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 3,
+                                    "balls": 23,
+                                    "playerId": "sr:player:3184312"
+                                },
+                                {
+                                    "description": "not out",
+                                    "toCome": false,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "",
+                                    "bowlerName": "",
+                                    "description2": "",
+                                    "batsmanName": "Labang Anak Tony, HE",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 1,
+                                    "balls": 27,
+                                    "playerId": "sr:player:3184336"
+                                },
+                                {
+                                    "description": "LBW",
+                                    "toCome": false,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "sr:player:2261589",
+                                    "bowlerName": "Amir Khan",
+                                    "description2": " bowled ",
+                                    "batsmanName": "Hafzan Abdullah, MZ",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 0,
+                                    "balls": 3,
+                                    "playerId": "sr:player:2443889"
+                                }
+                            ],
+                            "bowlers": [
+                                {
+                                    "bowlerName": "Aiman Zaquan Ridzuan",
+                                    "playerId": "sr:player:2356057",
+                                    "overs": 2,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 7,
+                                    "wickets": 0,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 1,
+                                    "sixes": 0,
+                                    "dotBalls": 8,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Amir Khan",
+                                    "playerId": "sr:player:2261589",
+                                    "overs": 7,
+                                    "balls": 1,
+                                    "maidens": 1,
+                                    "runs": 25,
+                                    "wickets": 3,
+                                    "wides": 8,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 2,
+                                    "sixes": 0,
+                                    "dotBalls": 34,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Rahim Khan",
+                                    "playerId": "sr:player:2401113",
+                                    "overs": 10,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 25,
+                                    "wickets": 2,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 2,
+                                    "sixes": 0,
+                                    "dotBalls": 43,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Muhammad Haziq Aiman",
+                                    "playerId": "sr:player:2256169",
+                                    "overs": 0,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 0,
+                                    "wickets": 0,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "dotBalls": 0,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "S Jayathilake",
+                                    "playerId": "sr:player:745850",
+                                    "overs": 7,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 12,
+                                    "wickets": 0,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "dotBalls": 31,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Perera, Sameen",
+                                    "playerId": "sr:player:3189762",
+                                    "overs": 0,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 0,
+                                    "wickets": 0,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "dotBalls": 0,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Muhammad Azri Azhar",
+                                    "playerId": "sr:player:2561095",
+                                    "overs": 9,
+                                    "balls": 0,
+                                    "maidens": 2,
+                                    "runs": 19,
+                                    "wickets": 4,
+                                    "wides": 5,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 2,
+                                    "sixes": 0,
+                                    "dotBalls": 46,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Muhammad Amir",
+                                    "playerId": "sr:player:1938224",
+                                    "overs": 4,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 5,
+                                    "wickets": 0,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "dotBalls": 19,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Arachchilage, Lakshan",
+                                    "playerId": "sr:player:3190468",
+                                    "overs": 8,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 15,
+                                    "wickets": 1,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 0,
+                                    "sixes": 1,
+                                    "dotBalls": 40,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Aslam Khan",
+                                    "playerId": "sr:player:2076035",
+                                    "overs": 0,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 0,
+                                    "wickets": 0,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "dotBalls": 0,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Ajeb Khan",
+                                    "playerId": "sr:player:2056967",
+                                    "overs": 0,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 0,
+                                    "wickets": 0,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "dotBalls": 0,
+                                    "isOtherBowler": false
+                                }
+                            ],
+                            "inningsNumber": 1,
+                            "runs": 109,
+                            "wickets": 10,
+                            "overs": 47.1
+                        },
+                        {
+                            "oversAvailable": 50,
+                            "teamName": "Perak",
+                            "conclusion": "In Progress",
+                            "summary": "112/1",
+                            "competitorId": "sr:competitor:1345688",
+                            "isFollowOn": false,
+                            "isFinalInnings": true,
+                            "hasTarget": false,
+                            "target": 109,
+                            "extrasSummary": {
+                                "byes": 0,
+                                "noBalls": 1,
+                                "legByes": 0,
+                                "wides": 13,
+                                "penalties": 0
+                            },
+                            "fallOfwickets": "Muhammad Haziq Aiman 80/1 (8.1), ",
+                            "batsmen": [
+                                {
+                                    "description": "Bowled",
+                                    "toCome": false,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "sr:player:726986",
+                                    "bowlerName": "Nazril Rahman",
+                                    "description2": " bowled ",
+                                    "batsmanName": "Muhammad Haziq Aiman",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 5,
+                                    "sixes": 2,
+                                    "runs": 42,
+                                    "balls": 31,
+                                    "playerId": "sr:player:2256169"
+                                },
+                                {
+                                    "description": "not out",
+                                    "toCome": false,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "",
+                                    "bowlerName": "",
+                                    "description2": "",
+                                    "batsmanName": "Aslam Khan",
+                                    "active": true,
+                                    "onStrike": true,
+                                    "fours": 3,
+                                    "sixes": 5,
+                                    "runs": 50,
+                                    "balls": 27,
+                                    "playerId": "sr:player:2076035"
+                                },
+                                {
+                                    "description": "not out",
+                                    "toCome": false,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "",
+                                    "bowlerName": "",
+                                    "description2": "",
+                                    "batsmanName": "Muhammad Amir",
+                                    "active": true,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 6,
+                                    "balls": 5,
+                                    "playerId": "sr:player:1938224"
+                                },
+                                {
+                                    "description": "",
+                                    "toCome": true,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "",
+                                    "bowlerName": "",
+                                    "description2": "",
+                                    "batsmanName": "Arachchilage, Lakshan",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 0,
+                                    "balls": 0,
+                                    "playerId": "sr:player:3190468"
+                                },
+                                {
+                                    "description": "",
+                                    "toCome": true,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "",
+                                    "bowlerName": "",
+                                    "description2": "",
+                                    "batsmanName": "Amir Khan",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 0,
+                                    "balls": 0,
+                                    "playerId": "sr:player:2261589"
+                                },
+                                {
+                                    "description": "",
+                                    "toCome": true,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "",
+                                    "bowlerName": "",
+                                    "description2": "",
+                                    "batsmanName": "S Jayathilake",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 0,
+                                    "balls": 0,
+                                    "playerId": "sr:player:745850"
+                                },
+                                {
+                                    "description": "",
+                                    "toCome": true,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "",
+                                    "bowlerName": "",
+                                    "description2": "",
+                                    "batsmanName": "Perera, Sameen",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 0,
+                                    "balls": 0,
+                                    "playerId": "sr:player:3189762"
+                                },
+                                {
+                                    "description": "",
+                                    "toCome": true,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "",
+                                    "bowlerName": "",
+                                    "description2": "",
+                                    "batsmanName": "Ajeb Khan",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 0,
+                                    "balls": 0,
+                                    "playerId": "sr:player:2056967"
+                                },
+                                {
+                                    "description": "",
+                                    "toCome": true,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "",
+                                    "bowlerName": "",
+                                    "description2": "",
+                                    "batsmanName": "Muhammad Azri Azhar",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 0,
+                                    "balls": 0,
+                                    "playerId": "sr:player:2561095"
+                                },
+                                {
+                                    "description": "",
+                                    "toCome": true,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "",
+                                    "bowlerName": "",
+                                    "description2": "",
+                                    "batsmanName": "Aiman Zaquan Ridzuan",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 0,
+                                    "balls": 0,
+                                    "playerId": "sr:player:2356057"
+                                },
+                                {
+                                    "description": "",
+                                    "toCome": true,
+                                    "didNotBat": false,
+                                    "fielderId": "",
+                                    "fielderName": "",
+                                    "bowlerId": "",
+                                    "bowlerName": "",
+                                    "description2": "",
+                                    "batsmanName": "Rahim Khan",
+                                    "active": false,
+                                    "onStrike": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "runs": 0,
+                                    "balls": 0,
+                                    "playerId": "sr:player:2401113"
+                                }
+                            ],
+                            "bowlers": [
+                                {
+                                    "bowlerName": "Stewart, CA",
+                                    "playerId": "sr:player:3184344",
+                                    "overs": 0,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 0,
+                                    "wickets": 0,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "dotBalls": 0,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Mohammad Basare, MH",
+                                    "playerId": "sr:player:3184312",
+                                    "overs": 0,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 0,
+                                    "wickets": 0,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "dotBalls": 0,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Labang Anak Tony, HE",
+                                    "playerId": "sr:player:3184336",
+                                    "overs": 0,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 0,
+                                    "wickets": 0,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "dotBalls": 0,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Chew Chun Kit, AA",
+                                    "playerId": "sr:player:3184302",
+                                    "overs": 3,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 17,
+                                    "wickets": 0,
+                                    "wides": 1,
+                                    "noBalls": 1,
+                                    "isActiveBowler": false,
+                                    "fours": 2,
+                                    "sixes": 0,
+                                    "dotBalls": 12,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Nazril Rahman",
+                                    "playerId": "sr:player:726986",
+                                    "overs": 1,
+                                    "balls": 2,
+                                    "maidens": 0,
+                                    "runs": 19,
+                                    "wickets": 1,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": true,
+                                    "fours": 2,
+                                    "sixes": 1,
+                                    "dotBalls": 2,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "D Mogan",
+                                    "playerId": "sr:player:739506",
+                                    "overs": 4,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 41,
+                                    "wickets": 0,
+                                    "wides": 8,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 3,
+                                    "sixes": 2,
+                                    "dotBalls": 11,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Zainuddin, AW",
+                                    "playerId": "sr:player:3184306",
+                                    "overs": 1,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 13,
+                                    "wickets": 0,
+                                    "wides": 4,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 0,
+                                    "sixes": 1,
+                                    "dotBalls": 2,
+                                    "isOtherBowler": true
+                                },
+                                {
+                                    "bowlerName": "Sulhie, Mohammad Hariz Afnan Bin",
+                                    "playerId": "sr:player:2443923",
+                                    "overs": 0,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 0,
+                                    "wickets": 0,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "dotBalls": 0,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Hafzan Abdullah, MZ",
+                                    "playerId": "sr:player:2443889",
+                                    "overs": 0,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 0,
+                                    "wickets": 0,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "dotBalls": 0,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Anuj Jotin",
+                                    "playerId": "sr:player:2416585",
+                                    "overs": 1,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 22,
+                                    "wickets": 0,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 1,
+                                    "sixes": 3,
+                                    "dotBalls": 2,
+                                    "isOtherBowler": false
+                                },
+                                {
+                                    "bowlerName": "Dzulkipli, MA",
+                                    "playerId": "sr:player:3184316",
+                                    "overs": 0,
+                                    "balls": 0,
+                                    "maidens": 0,
+                                    "runs": 0,
+                                    "wickets": 0,
+                                    "wides": 0,
+                                    "noBalls": 0,
+                                    "isActiveBowler": false,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "dotBalls": 0,
+                                    "isOtherBowler": false
+                                }
+                            ],
+                            "inningsNumber": 2,
+                            "runs": 112,
+                            "wickets": 1,
+                            "overs": 10.2
+                        }
+                    ],
+                    "recentOvers": [
+                        {
+                            "overNumber": 11,
+                            "runs": 6,
+                            "isCurrentOver": true,
+                            "balls": [
+                                "0",
+                                "6",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                ""
+                            ]
+                        },
+                        {
+                            "overNumber": 10,
+                            "runs": 13,
+                            "isCurrentOver": false,
+                            "balls": [
+                                "1",
+                                "1w",
+                                "1w",
+                                "1",
+                                "2w",
+                                "6",
+                                "0",
+                                "1",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "overNumber": 9,
+                            "runs": 13,
+                            "isCurrentOver": false,
+                            "balls": [
+                                "w",
+                                "2",
+                                "2",
+                                "1",
+                                "4",
+                                "4",
+                                "",
+                                "",
+                                "",
+                                ""
+                            ]
+                        },
+                        {
+                            "overNumber": 8,
+                            "runs": 22,
+                            "isCurrentOver": false,
+                            "balls": [
+                                "0",
+                                "6",
+                                "6",
+                                "6",
+                                "4",
+                                "0",
+                                "",
+                                "",
+                                "",
+                                ""
+                            ]
+                        }
+                    ],
+                    "wormAndManhattan": [
+                        {
+                            "overNumber": 1,
+                            "firstInnings": "1,1,1,1",
+                            "secondInnings": "16,0,16,0",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 2,
+                            "firstInnings": "0,0,1,1",
+                            "secondInnings": "2,0,18,0",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 3,
+                            "firstInnings": "2,0,3,1",
+                            "secondInnings": "9,0,27,0",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 4,
+                            "firstInnings": "2,0,5,1",
+                            "secondInnings": "7,0,34,0",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 5,
+                            "firstInnings": "0,0,5,1",
+                            "secondInnings": "3,0,37,0",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 6,
+                            "firstInnings": "3,1,8,2",
+                            "secondInnings": "8,0,45,0",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 7,
+                            "firstInnings": "1,0,9,2",
+                            "secondInnings": "13,0,58,0",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 8,
+                            "firstInnings": "13,0,22,2",
+                            "secondInnings": "22,0,80,0",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 9,
+                            "firstInnings": "2,0,24,2",
+                            "secondInnings": "13,1,93,1",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 10,
+                            "firstInnings": "1,0,25,2",
+                            "secondInnings": "13,0,106,1",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 11,
+                            "firstInnings": "3,0,28,2",
+                            "secondInnings": "6,0,112,1",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 12,
+                            "firstInnings": "2,0,30,2",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 13,
+                            "firstInnings": "6,0,36,2",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 14,
+                            "firstInnings": "1,0,37,2",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 15,
+                            "firstInnings": "4,1,41,3",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 16,
+                            "firstInnings": "1,0,42,3",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 17,
+                            "firstInnings": "0,0,42,3",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 18,
+                            "firstInnings": "0,0,42,3",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 19,
+                            "firstInnings": "2,0,44,3",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 20,
+                            "firstInnings": "1,0,45,3",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 21,
+                            "firstInnings": "4,0,49,3",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 22,
+                            "firstInnings": "2,0,51,3",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 23,
+                            "firstInnings": "1,1,52,4",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 24,
+                            "firstInnings": "3,0,55,4",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 25,
+                            "firstInnings": "7,0,62,4",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 26,
+                            "firstInnings": "4,0,66,4",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 27,
+                            "firstInnings": "2,0,68,4",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 28,
+                            "firstInnings": "2,0,70,4",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 29,
+                            "firstInnings": "3,2,73,6",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 30,
+                            "firstInnings": "1,1,74,7",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 31,
+                            "firstInnings": "7,0,81,7",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 32,
+                            "firstInnings": "0,0,81,7",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 33,
+                            "firstInnings": "2,0,83,7",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 34,
+                            "firstInnings": "1,0,84,7",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 35,
+                            "firstInnings": "3,0,87,7",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 36,
+                            "firstInnings": "6,0,93,7",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 37,
+                            "firstInnings": "0,1,93,8",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 38,
+                            "firstInnings": "1,0,94,8",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 39,
+                            "firstInnings": "4,0,98,8",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 40,
+                            "firstInnings": "0,0,98,8",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 41,
+                            "firstInnings": "1,0,99,8",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 42,
+                            "firstInnings": "3,0,102,8",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 43,
+                            "firstInnings": "1,0,103,8",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 44,
+                            "firstInnings": "1,0,104,8",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 45,
+                            "firstInnings": "4,1,108,9",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 46,
+                            "firstInnings": "1,0,109,9",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 47,
+                            "firstInnings": "0,0,109,9",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 48,
+                            "firstInnings": "0,1,109,10",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        }
+                    ],
+                    "ballByBallSummaries": [
+                        {
+                            "overNumber": 1,
+                            "firstInnings": "0,0,1l,0,w,0",
+                            "secondInnings": "4,4,1,5w,0,1w,0,1",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 2,
+                            "firstInnings": "0,0,0,0,0,0",
+                            "secondInnings": "0,0,0,1,1,0",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 3,
+                            "firstInnings": "0,1,1w,0,0,0,0",
+                            "secondInnings": "6,0,1,1,0,1",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 4,
+                            "firstInnings": "1w,0,0,0,0,0,1",
+                            "secondInnings": "0,0,0,0,0,5n,2",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 5,
+                            "firstInnings": "0,0,0,0,0,0",
+                            "secondInnings": "1,1w,0,1w,0,0,0,0",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 6,
+                            "firstInnings": "1w,0,w,1w,0,0,1,0",
+                            "secondInnings": "1,1w,2,0,0,0,4",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 7,
+                            "firstInnings": "0,0,0,0,1w,0,0",
+                            "secondInnings": "0,1,2,6,4,0",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 8,
+                            "firstInnings": "0,2,5w,2,0,4,0",
+                            "secondInnings": "0,6,6,6,4,0",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 9,
+                            "firstInnings": "0,1,0,0,1,0",
+                            "secondInnings": "w,2,2,1,4,4",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 10,
+                            "firstInnings": "1,0,0,0,0,0",
+                            "secondInnings": "1,1w,1w,1,2w,6,0,1,0",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 11,
+                            "firstInnings": "0,0,0,1,2,0",
+                            "secondInnings": "0,6",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 12,
+                            "firstInnings": "0,1,0,1,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 13,
+                            "firstInnings": "0,0,0,0,6,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 14,
+                            "firstInnings": "0,0,0,0,1,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 15,
+                            "firstInnings": "0,4,0,0,w,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 16,
+                            "firstInnings": "0,0,0,0,0,1",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 17,
+                            "firstInnings": "0,0,0,0,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 18,
+                            "firstInnings": "0,0,0,0,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 19,
+                            "firstInnings": "0,1,0,0,1,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 20,
+                            "firstInnings": "1,0,0,0,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 21,
+                            "firstInnings": "0,0,1,0,1,2",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 22,
+                            "firstInnings": "1,0,1,0,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 23,
+                            "firstInnings": "0,0,1,w,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 24,
+                            "firstInnings": "0,0,1,2,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 25,
+                            "firstInnings": "1,0,4,1,0,1",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 26,
+                            "firstInnings": "1,1,1,0,0,1",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 27,
+                            "firstInnings": "0,0,0,0,1,1",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 28,
+                            "firstInnings": "0,0,0,2,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 29,
+                            "firstInnings": "0,0,1,1,w,1w,w",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 30,
+                            "firstInnings": "1,0,0,0,0,w",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 31,
+                            "firstInnings": "0,4,1,0,1w,0,1",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 32,
+                            "firstInnings": "0,0,0,0,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 33,
+                            "firstInnings": "1w,0,1,0,0,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 34,
+                            "firstInnings": "0,0,1,0,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 35,
+                            "firstInnings": "0,0,1,1,1,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 36,
+                            "firstInnings": "4,0,1,0,0,1",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 37,
+                            "firstInnings": "0,w,0,0,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 38,
+                            "firstInnings": "0,0,0,0,1,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 39,
+                            "firstInnings": "0,0,0,0,4,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 40,
+                            "firstInnings": "0,0,0,0,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 41,
+                            "firstInnings": "0,0,0,0,0,1",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 42,
+                            "firstInnings": "0,0,2,0,0,1",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 43,
+                            "firstInnings": "0,0,1,0,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 44,
+                            "firstInnings": "0,0,0,1,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 45,
+                            "firstInnings": "4,0,0,0,w,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 46,
+                            "firstInnings": "0,0,0,0,1,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 47,
+                            "firstInnings": "0,0,0,0,0,0",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        },
+                        {
+                            "overNumber": 48,
+                            "firstInnings": "w",
+                            "secondInnings": "",
+                            "thirdInnings": "",
+                            "fourthInnings": ""
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

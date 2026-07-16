@@ -1,6 +1,8 @@
 export type AchievementStage = 1 | 2 | 3 | 4 | 5;
 
 export interface AchievementThreshold {
+  icon?: any;
+
   id: string;
   name: string;
   category: string;

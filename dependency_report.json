@@ -1,0 +1,547 @@
+{
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\add_docstrings.py": [
+    "ast",
+    "os"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\cors_config.py": [
+    "os"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\create_meta_db.py": [
+    "sqlite3",
+    "json",
+    "os",
+    "tqdm"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\create_speed_db.py": [
+    "sqlite3",
+    "json",
+    "os",
+    "tqdm",
+    "os",
+    "json"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\crinava_worker.py": [
+    "asyncio",
+    "os",
+    "time",
+    "re",
+    "html",
+    "httpx",
+    "curl_cffi.requests",
+    "logger",
+    "re",
+    "hub",
+    "hub",
+    "hub",
+    "hub",
+    "hub",
+    "hub",
+    "hub",
+    "hub",
+    "bs4"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\debug_token.py": [
+    "stealth",
+    "re"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\engine.py": [
+    "asyncio",
+    "stealth",
+    "bs4",
+    "re"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\fix_tailwind.py": [
+    "os",
+    "re"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\fix_ts_issues.js": [
+    "fs",
+    "path"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\generate_admin_totp.js": [
+    "otplib",
+    "qrcode"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\get_chat_id.js": [
+    "axios",
+    "fs",
+    "path"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\hf_main.py": [
+    "fastapi",
+    "sqlite3",
+    "os",
+    "fastapi.middleware.cors",
+    "cors_config"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\hub.py": [
+    "json",
+    "os"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\logger.py": [
+    "json",
+    "os"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\main.py": [
+    "fastapi",
+    "fastapi.responses",
+    "fastapi.middleware.cors",
+    "engine",
+    "crinava_worker",
+    "asyncio",
+    "json",
+    "os",
+    "dotenv",
+    "contextlib",
+    "hub",
+    "cors_config",
+    "crinava_worker",
+    "uvicorn"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\parse_report.py": [
+    "json"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\probe_api.py": [
+    "stealth"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\probe_player_map.py": [
+    "json",
+    "re",
+    "sys",
+    "os",
+    "stealth",
+    "curl_cffi.requests"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\read_complexity.py": [
+    "json"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\replace_tug_of_war.js": [
+    "fs"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\resolve_crex.py": [
+    "httpx"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\run_git.py": [
+    "subprocess"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\scratch_probe_hf.py": [
+    "asyncio",
+    "httpx",
+    "os",
+    "dotenv"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\server.ts": [
+    "express",
+    "cors",
+    "vite",
+    "path",
+    "fs",
+    "pg",
+    "openai",
+    "./src/services/simulationService",
+    "./src/lib/supabaseServer",
+    "@supabase/supabase-js",
+    "./src/lib/ai",
+    "./src/services/verdictService",
+    "razorpay",
+    "node-telegram-bot-api",
+    "otplib",
+    "./src/scripts/newsScraper"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\stealth.py": [
+    "curl_cffi",
+    "secrets"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\test-db.ts": [
+    "pg"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\test_ball_feeds.py": [
+    "sys",
+    "os",
+    "stealth"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\test_cricbuzz.py": [
+    "stealth"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\test_db.js": [
+    "dotenv/config",
+    "@supabase/supabase-js"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\test_db2.ts": [
+    "@supabase/supabase-js"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\test_dns.py": [
+    "socket",
+    "httpx"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\test_mapping_endpoint.py": [
+    "json",
+    "curl_cffi.requests"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\test_pg.ts": [
+    "pg"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\test_post.js": [],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\test_supabase_import.js": [
+    "./src/lib/supabaseServer.js"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\vite.config.ts": [
+    "@tailwindcss/vite",
+    "@vitejs/plugin-react",
+    "path",
+    "vite"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\worker.py": [
+    "json",
+    "time",
+    "re",
+    "stealth",
+    "websockets",
+    "httpx"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\hf_blog_engine\\app.py": [
+    "json",
+    "os",
+    "re",
+    "hashlib",
+    "html",
+    "sqlite3",
+    "threading",
+    "time",
+    "uuid",
+    "html.parser",
+    "pathlib",
+    "typing",
+    "urllib.parse",
+    "feedparser",
+    "requests",
+    "uvicorn",
+    "apscheduler.schedulers.background",
+    "fastapi",
+    "fastapi.responses",
+    "openai",
+    "sklearn.cluster",
+    "sklearn.feature_extraction.text",
+    "urllib.parse"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\scripts\\check_matches_schema.ts": [
+    "@supabase/supabase-js",
+    "dotenv"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\scripts\\fix_aurora.ts": [
+    "fs"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\scripts\\fix_rls.ts": [
+    "@supabase/supabase-js",
+    "dotenv"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\scripts\\parse_achievements.py": [
+    "re",
+    "json"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\scripts\\refactor.ts": [
+    "fs"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\scripts\\replace.ts": [
+    "fs",
+    "path"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\scripts\\test_connection.ts": [
+    "dotenv",
+    "../src/services/cricketData"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\scripts\\test_query.ts": [
+    "@supabase/supabase-js",
+    "dotenv"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\scripts\\test_scorecard.ts": [
+    "@supabase/supabase-js",
+    "dotenv"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\App.tsx": [
+    "react-router-dom",
+    "lucide-react",
+    "./pages/BlogArchive",
+    "./pages/BlogPost",
+    "react",
+    "@google/genai",
+    "motion/react",
+    "./lib/supabaseClient",
+    "./lib/achievementsConfig",
+    "./components/AuthModal",
+    "./components/UsernameModal",
+    "./components/PredictionGame",
+    "./components/MatchesSection",
+    "./components/VerdictTool",
+    "./components/VerdictTray",
+    "./pages/PlayerProfile",
+    "./pages/AdminControlCenter",
+    "./store/verdictStore"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\main.tsx": [
+    "react",
+    "react-dom/client",
+    "react-router-dom",
+    "./App.tsx"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\test-db.ts": [
+    "@supabase/supabase-js"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\vite-env.d.ts": [],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\AdComponent.tsx": [
+    "react",
+    "../hooks/useUserSubscription"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\AuthModal.tsx": [
+    "react",
+    "motion/react",
+    "lucide-react",
+    "../lib/supabaseClient"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\BallByBallImpact.tsx": [
+    "react",
+    "lucide-react",
+    "../utils/matchParser",
+    "./shared/InningSelector"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\MatchesSection.tsx": [
+    "react",
+    "./VerdictTool",
+    "motion/react",
+    "@google/genai",
+    "./TurningPointHeatmap",
+    "./MirrorMatch",
+    "./PlayerImpactRadar",
+    "./MomentumMap",
+    "./BallByBallImpact",
+    "../store/verdictStore"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\MirrorMatch.tsx": [
+    "react",
+    "lucide-react",
+    "../lib/supabaseClient"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\MomentumGraph.tsx": [
+    "react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\MomentumMap.tsx": [
+    "react",
+    "lucide-react",
+    "../utils/matchParser",
+    "./shared/InningSelector"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\PlayerEnrichmentButton.tsx": [
+    "react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\PlayerImpactRadar.tsx": [
+    "react",
+    "lucide-react",
+    "../utils/matchParser",
+    "./shared/InningSelector"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\PredictionGame.tsx": [
+    "react",
+    "motion/react",
+    "lucide-react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\RazorpayCheckout.tsx": [
+    "react",
+    "../lib/supabaseClient"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\TurningPointHeatmap.tsx": [
+    "react",
+    "lucide-react",
+    "motion/react",
+    "./shared/InningSelector",
+    "../utils/matchParser"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\UsernameModal.tsx": [
+    "react",
+    "motion/react",
+    "lucide-react",
+    "../lib/supabaseClient",
+    "../hooks/useUsernameCheck"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\UsernameSetup.tsx": [
+    "react",
+    "motion/react",
+    "lucide-react",
+    "../lib/supabaseClient",
+    "../hooks/useUsernameCheck"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\VerdictTool.tsx": [
+    "react",
+    "motion/react",
+    "react-markdown",
+    "../store/verdictStore",
+    "../lib/supabase"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\VerdictTray.tsx": [
+    "react",
+    "../store/verdictStore",
+    "lucide-react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\landing\\FeaturesSection.tsx": [
+    "react",
+    "motion/react",
+    "lucide-react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\landing\\PremiumHero.tsx": [
+    "react",
+    "motion/react",
+    "lucide-react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\landing\\TestimonialsSection.tsx": [
+    "react",
+    "motion/react",
+    "lucide-react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\layout\\MobileNav.tsx": [
+    "react",
+    "motion/react",
+    "lucide-react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\layout\\PremiumFooter.tsx": [
+    "react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\layout\\PremiumHeader.tsx": [
+    "react",
+    "lucide-react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\matches\\MatchArchive.tsx": [
+    "react",
+    "framer-motion"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\matches\\MatchCard.tsx": [
+    "react",
+    "motion/react",
+    "lucide-react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\oracle\\SimulationTerminal.tsx": [
+    "react",
+    "motion/react",
+    "lucide-react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\components\\shared\\InningSelector.tsx": [
+    "react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\hooks\\useUsernameCheck.ts": [
+    "react",
+    "../lib/supabaseClient"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\hooks\\useUserSubscription.ts": [
+    "react",
+    "../lib/supabaseClient"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\lib\\achievementsConfig.ts": [],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\lib\\achievementsEngine.ts": [
+    "@supabase/supabase-js"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\lib\\ai.ts": [],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\lib\\cricketUtils.ts": [],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\lib\\impactEngine.ts": [],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\lib\\supabase.ts": [
+    "@supabase/supabase-js"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\lib\\supabaseClient.ts": [
+    "@supabase/supabase-js"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\lib\\supabaseServer.ts": [
+    "@supabase/supabase-js"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\pages\\AdminControlCenter.tsx": [
+    "react",
+    "../lib/achievementsConfig",
+    "motion/react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\pages\\BlogArchive.tsx": [
+    "react",
+    "react-router-dom",
+    "framer-motion",
+    "lucide-react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\pages\\BlogPost.tsx": [
+    "react",
+    "react-router-dom",
+    "framer-motion",
+    "lucide-react",
+    "react-markdown"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\pages\\PlayerProfile.tsx": [
+    "react",
+    "../lib/supabaseClient",
+    "../store/verdictStore",
+    "lucide-react",
+    "motion/react"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\scripts\\check-career-stats.ts": [
+    "@supabase/supabase-js",
+    "dotenv",
+    "path"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\scripts\\check-deliveries.ts": [
+    "@supabase/supabase-js",
+    "dotenv",
+    "path"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\scripts\\check-match-names.ts": [
+    "@supabase/supabase-js",
+    "dotenv",
+    "path"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\scripts\\check-players.ts": [
+    "@supabase/supabase-js",
+    "dotenv",
+    "path"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\scripts\\check-volume-columns.ts": [
+    "@supabase/supabase-js",
+    "dotenv",
+    "path"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\scripts\\check-volume-stats.ts": [
+    "@supabase/supabase-js",
+    "dotenv",
+    "path"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\scripts\\enrichPlayers.ts": [
+    "../lib/supabaseServer"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\scripts\\list-tables.ts": [
+    "@supabase/supabase-js",
+    "dotenv",
+    "path"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\scripts\\listEnrichedPlayers.ts": [
+    "../lib/supabaseServer"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\scripts\\newsScraper.ts": [
+    "../lib/ai"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\scripts\\search-player.ts": [
+    "@supabase/supabase-js",
+    "dotenv",
+    "path"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\services\\cockroachService.ts": [
+    "axios"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\services\\cricketData.ts": [
+    "../lib/supabaseClient",
+    "../types/database"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\services\\crinavaAnalytics.ts": [
+    "../lib/supabaseClient"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\services\\momentumService.ts": [],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\services\\simulationService.ts": [],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\services\\verdictService.ts": [
+    "../lib/supabaseServer",
+    "../lib/impactEngine"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\store\\verdictStore.ts": [
+    "zustand"
+  ],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\types\\database.ts": [],
+  "c:/Users/hp/.gemini/antigravity/scratch/Crinava-main\\src\\utils\\matchParser.ts": []
+}

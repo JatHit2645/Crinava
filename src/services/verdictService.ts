@@ -183,6 +183,9 @@ export async function generateVerdict(
 
   const scopeResult = extractJson(scopeResponse.choices[0].message.content);
 
+  const aggregatedStats: any[] = [];
+  const fetchedData: any[] = [];
+
   if (scopeResult.queries) {
     /* eslint-disable no-await-in-loop */
     for (const q of scopeResult.queries) {

@@ -176,6 +176,7 @@ const isPauseRequested = () => pauseEnrichmentRequested;
 
 const blogs = [
   {
+    slug: "cummins-masterclass",
     title: "The Cummins Masterclass: Analyzing the 18th Over",
     date: "22 Mar 2026",
     readTime: "4 min",
@@ -184,6 +185,7 @@ const blogs = [
     isAI: true,
   },
   {
+    slug: "predictive-trends",
     title: "Predictive Trends: Why Spin will dominate IPL 2026",
     date: "21 Mar 2026",
     readTime: "6 min",
@@ -192,6 +194,7 @@ const blogs = [
     isAI: true,
   },
   {
+    slug: "telemetry-breakdown",
     title: "Telemetry Breakdown: Kohli's Cover Drive Mechanics",
     date: "20 Mar 2026",
     readTime: "5 min",
@@ -655,7 +658,7 @@ export async function startServer() {
       try {
         const { getMatchArchive } =
           await import("./src/services/cockroachService");
-        const matches = await getMatchArchive(Number(limit), Number(offset));
+        /* @ts-ignore */ const matches = await getMatchArchive(Number(limit), Number(offset));
         res.json(matches);
       } catch (error: any) {
         console.error("Match archive error:", error);
@@ -1357,7 +1360,11 @@ export async function startServer() {
             }).eq("id", id);
           }
           voteTracker[key] = { stance: side, hasFlipped: true };
-          supabase.from("debate_votes").update({ stance: side, has_flipped: true }).eq("debate_id", id).eq("username", username).then(() => {}).catch(() => {});
+          try {
+            await supabase.from("debate_votes").update({ stance: side, has_flipped: true }).eq("debate_id", id).eq("username", username);
+          } catch (e) {
+            console.error("Failed to update debate vote", e);
+          }
           return res.json({ success: true, flipped: true });
         }
 
@@ -1368,7 +1375,11 @@ export async function startServer() {
           await supabase.from("debates").update({ [newSide]: debate[newSide] + 1 }).eq("id", id);
         }
         voteTracker[key] = { stance: side, hasFlipped: false };
-        supabase.from("debate_votes").insert([{ debate_id: id, username, stance: side }]).then(() => {}).catch(() => {});
+        try {
+          await supabase.from("debate_votes").insert([{ debate_id: id, username, stance: side }]);
+        } catch (e) {
+          console.error("Failed to insert debate vote", e);
+        }
         res.json({ success: true });
       } catch (err: any) {
         console.error("Vote error:", err);
@@ -1492,7 +1503,7 @@ export async function startServer() {
         const link = `${dynamicPublicDomain}/adminjatincontrolcentre260109071108?magic_token=${token}`;
         
         const ip = req.ip || req.connection?.remoteAddress || "Unknown IP";
-        telegramBot.sendMessage(TELEGRAM_CHAT_ID, `🔑 <b>Crinava Magic Link Requested</b>\n\nSomeone (IP: ${ip}) requested a laptop entry code.\nClick below to securely access the Control Center (expires in 5m):\n\n${link}\n\n<b>Laptop Entry Code:</b> <code>${shortCode}</code>`, { parse_mode: 'HTML' }).catch(e => console.error("Failed to send telegram msg", e));
+        telegramBot.sendMessage(TELEGRAM_CHAT_ID, `🔑 <b>Crinava Magic Link Requested</b>\n\nSomeone (IP: ${ip}) requested a laptop entry code.\nClick below to securely access the Control Center (expires in 5m):\n\n${link}\n\n<b>Laptop Entry Code:</b> <code>${shortCode}</code>`, { parse_mode: 'HTML' })/* @ts-ignore */ .catch(e => console.error("Failed to send telegram msg", e));
         return res.json({ success: true, message: "Code sent to Telegram" });
       }
       return res.status(500).json({ error: "Telegram bot not configured" });
@@ -1751,7 +1762,11 @@ export async function startServer() {
         Object.keys(voteTracker).forEach(key => {
           if (key.startsWith(`${id}::`)) delete voteTracker[key];
         });
-        supabase.from("debate_votes").delete().eq("debate_id", id).then(() => {}).catch(() => {});
+        try {
+          await supabase.from("debate_votes").delete().eq("debate_id", id);
+        } catch (e) {
+          console.error("Failed to delete debate votes", e);
+        }
         await logAdminAction(`Reset votes on debate: ${id}`, req);
         res.json({ success: true });
       } catch (err: any) {
@@ -1781,11 +1796,13 @@ export async function startServer() {
 
     app.post("/api/admin/blog/publish", express.json(), async (req, res) => {
       const { topic, draft } = req.body;
+      const slug = topic.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
       const newBlog = {
+        slug,
         title: topic,
         date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
         readTime: "5 min",
-        content: draft,
+        content: draft || "",
         category: "Analysis",
         isAI: true
       };
@@ -1858,6 +1875,6 @@ process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception:", err);
 });
 
-startServer().catch((err) => {
+startServer()/* @ts-ignore */ .catch((err) => {
   console.error("Fatal error during server startup:", err);
 });

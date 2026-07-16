@@ -4,10 +4,9 @@
  */
 
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import * as Lucide from "lucide-react";
 import { BlogArchive } from "./pages/BlogArchive";
 import { BlogPost } from "./pages/BlogPost";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { Suspense, useState, useEffect, useRef, useCallback } from "react";
 import { GoogleGenAI, Type } from "@google/genai";
 import {
   TrendingUp,
@@ -95,12 +94,12 @@ import { supabase } from "./lib/supabaseClient";
 import { ACHIEVEMENTS_CONFIG, calculateCurrentStage } from "./lib/achievementsConfig";
 import { AuthModal } from "./components/AuthModal";
 import { UsernameModal } from "./components/UsernameModal";
-import { PredictionGame } from "./components/PredictionGame";
-import { MatchesSection } from "./components/MatchesSection";
-import { VerdictTool } from "./components/VerdictTool";
+
+
+
 import { VerdictTray } from "./components/VerdictTray";
-import { PlayerProfile } from "./pages/PlayerProfile";
-import { AdminControlCenter } from "./pages/AdminControlCenter";
+
+
 
 // --- Celestial Organic Elements ---
 
@@ -116,7 +115,7 @@ export const renderBadgeIcon = (id: string, stage: number, sizeClass: string = "
     return <img src={customIcon} className={`${sizeClass} rounded-full object-contain filter drop-shadow`} style={{ maxWidth: '100%', maxHeight: '100%' }} alt="badge icon" />;
   }
 
-  const LucideIcon = customIcon ? (Lucide as any)[customIcon] : null;
+  const LucideIcon = null; /* Removed dynamic lucide import to enable tree shaking */
 
   const icons: Record<string, any> = {
     "rope_burner": Vote,
@@ -757,9 +756,15 @@ Output Requirements (JSON format):
   "simulationLog": string
 }`;
 
-const apiKey =
-  process.env.GEMINI_API_KEY || "AIzaSyByjeGftpfWRfOy79WR6-hFimBSyTqTfqI";
-const ai = new GoogleGenAI({ apiKey });
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
+if (!apiKey) {
+  console.warn("WARNING: VITE_GEMINI_API_KEY is missing. AI features will be disabled.");
+}
+const ai = apiKey ? new GoogleGenAI({ apiKey }) : {
+  models: {
+    generateContent: async () => ({ text: "AI functionality disabled due to missing API key." })
+  }
+} as any;
 
 /**
 * Analyzes a cricket-related claim using AI and returns a structured verdict with supporting statistics and nuance.
@@ -1136,6 +1141,8 @@ const VerdictCard = ({
 };
 
 import { useVerdictStore } from "./store/verdictStore";
+import { useGlobalStore } from "./store/globalStore";
+import { useUIStore } from "./store/uiStore";
 
 // Sparkle helper (Moved outside component loop to prevent remounting)
 const Sp = ({ x, y, t }: { x: number; y: number; t: number }) => (
@@ -1153,26 +1160,59 @@ const Sw = ({ x, y, t, s = 1 }: { x: number; y: number; t: number; s?: number })
   </path>
 );
 
+
+
+const LazyPredictionGame = React.lazy(() => import("./components/PredictionGame").then(m => ({ default: m.PredictionGame })));
+const PredictionGame = (props: any) => (
+  <Suspense fallback={<div className="flex w-full h-64 items-center justify-center text-white/50">Loading interface...</div>}>
+    <LazyPredictionGame {...props} />
+  </Suspense>
+);
+
+const LazyMatchesSection = React.lazy(() => import("./components/MatchesSection").then(m => ({ default: m.MatchesSection })));
+const MatchesSection = (props: any) => (
+  <Suspense fallback={<div className="flex w-full h-64 items-center justify-center text-white/50">Loading interface...</div>}>
+    <LazyMatchesSection {...props} />
+  </Suspense>
+);
+
+const LazyVerdictTool = React.lazy(() => import("./components/VerdictTool").then(m => ({ default: m.VerdictTool })));
+const VerdictTool = (props: any) => (
+  <Suspense fallback={<div className="flex w-full h-64 items-center justify-center text-white/50">Loading interface...</div>}>
+    <LazyVerdictTool {...props} />
+  </Suspense>
+);
+
+const LazyPlayerProfile = React.lazy(() => import("./pages/PlayerProfile").then(m => ({ default: m.PlayerProfile })));
+const PlayerProfile = (props: any) => (
+  <Suspense fallback={<div className="flex w-full h-64 items-center justify-center text-white/50">Loading interface...</div>}>
+    <LazyPlayerProfile {...props} />
+  </Suspense>
+);
+
+const LazyAdminControlCenter = React.lazy(() => import("./pages/AdminControlCenter").then(m => ({ default: m.AdminControlCenter })));
+const AdminControlCenter = (props: any) => (
+  <Suspense fallback={<div className="flex w-full h-64 items-center justify-center text-white/50">Loading interface...</div>}>
+    <LazyAdminControlCenter {...props} />
+  </Suspense>
+);
+
 export default function App() {
+  const { coinBalance, cricketIQ, matches, prediction, profile, session, activeTab, isAdminMode, raffleTickets, notifications, verdict, blogPosts, raffleHistory, badges, debates, debateMessages, activeDebateChat, momentumData, careerData, careerPlayer, selectedSmartXI, selectedMedal, selectedStage, selectedMatch, raffleQuantity, isSubscribed, setCoinBalance, setCricketIQ, setMatches, setPrediction, setProfile, setSession, setActiveTab, setIsAdminMode, setRaffleTickets, setNotifications, setVerdict, setBlogPosts, setRaffleHistory, setBadges, setDebates, setDebateMessages, setActiveDebateChat, setMomentumData, setCareerData, setCareerPlayer, setSelectedSmartXI, setSelectedMedal, setSelectedStage, setSelectedMatch, setRaffleQuantity, setIsSubscribed } = useGlobalStore();
+  const { showAuthModal, showUsernameModal, isRaffleModalOpen, showSideMenu, showIQ, showNotifications, showCareerInfo, showProInfo, showBadgesModal, showPredictionGame, loading, error, isProfileLoading, isMatchesContext, setShowAuthModal, setShowUsernameModal, setIsRaffleModalOpen, setShowSideMenu, setShowIQ, setShowNotifications, setShowCareerInfo, setShowProInfo, setShowBadgesModal, setShowPredictionGame, setLoading, setError, setIsProfileLoading, setIsMatchesContext } = useUIStore();
+
   const navigate = useNavigate();
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<AppTab>("home");
+
+  // Handle auth callback route by replacing path to home
+  useEffect(() => {
+    if (window.location.pathname === "/auth/callback") {
+      navigate("/", { replace: true });
+    }
+  }, [navigate]);
+
   const { playerProfileId, setPlayerProfileId } = useVerdictStore();
-  const [isMatchesContext, setIsMatchesContext] = useState(false);
-  const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [verdict, setVerdict] = useState<VerdictData | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [coinBalance, setCoinBalance] = useState(0); // Balance in Crinava Coins
-  const [cricketIQ, setCricketIQ] = useState(1240); // User's Cricket IQ score
-  const [matches, setMatches] = useState<MatchData[]>([]);
-  const [prediction, setPrediction] = useState<PredictionResult | null>(null);
-  const [isSubscribed, setIsSubscribed] = useState(true);
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-  const [raffleTickets, setRaffleTickets] = useState<string[]>([]);
-  const [isRaffleModalOpen, setIsRaffleModalOpen] = useState(false);
-  const [raffleQuantity, setRaffleQuantity] = useState(1);
-  const [isAdminMode, setIsAdminMode] = useState(false);
+  const [query, setQuery] = useState(""); // Balance in Crinava Coins // User's Cricket IQ score
   const userEmail = "hemnanijatin9@gmail.com"; // Mock user email
   const isAdmin = userEmail === "hemnanijatin9@gmail.com" && isAdminMode;
 
@@ -1201,28 +1241,10 @@ export default function App() {
     const interval = setInterval(fetchBlogs, 5000);
     return () => clearInterval(interval);
   }, []);
-  const [raffleHistory] = useState<RaffleHistory[]>([
-    {
-      drawId: "RD-882",
-      winner: "user_9921",
-      prize: "Premium Sub",
-      date: "Mar 21",
-    },
-    {
-      drawId: "RD-881",
-      winner: "cricket_fan_1",
-      prize: "500 Coins",
-      date: "Mar 20",
-    },
-  ]);
+  /* removed local raffleHistory */
+
   const [simulating, setSimulating] = useState(false);
   const [simProgress, setSimProgress] = useState(0);
-  const [showIQ, setShowIQ] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [showSideMenu, setShowSideMenu] = useState(false);
-  const [showCareerInfo, setShowCareerInfo] = useState(false);
-  const [showProInfo, setShowProInfo] = useState(false);
-  const [showBadgesModal, setShowBadgesModal] = useState(false);
 
   const careerLevels = [
     { name: "Rookie", range: "0 - 500 CP", actions: "Daily Login: +10 CP" },
@@ -1248,38 +1270,6 @@ export default function App() {
     },
   ];
 
-  const [notifications, setNotifications] = useState([
-    {
-      id: "1",
-      title: "Match Alert",
-      message: "IND vs PAK starting in 30 mins!",
-      time: "10m ago",
-      read: false,
-    },
-    {
-      id: "2",
-      title: "New Analysis",
-      message: "The Oracle has a new verdict on Kohli's form.",
-      time: "1h ago",
-      read: true,
-    },
-    {
-      id: "3",
-      title: "Raffle Draw",
-      message: "Draw RD-882 completed. Check winners!",
-      time: "2h ago",
-      read: true,
-    },
-  ]);
-  const [session, setSession] = useState<any>(null);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showUsernameModal, setShowUsernameModal] = useState(false);
-  const [showPredictionGame, setShowPredictionGame] = useState(false);
-  const [profile, setProfile] = useState<any>(null);
-  const [isProfileLoading, setIsProfileLoading] = useState(true);
-  const [selectedMedal, setSelectedMedal] = useState<any>(null);
-  const [selectedStage, setSelectedStage] = useState<number>(1);
-
   const getIconForRank = (rank: number) => {
     switch (rank) {
       case 5: return "/assets/badges/legendary.svg";
@@ -1290,8 +1280,6 @@ export default function App() {
       default: return "/assets/badges/bronze.svg";
     }
   };
-
-  const [badges, setBadges] = useState<any[]>([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -1309,19 +1297,19 @@ export default function App() {
 
         const combined = dbBadges.map((config: any) => {
           const userAch = userAchievements.find(a => a.achievement_id === config.id);
-          const currentProgress = userAch?.progress || 0;
+          const currentProgress = userAch?.current_count || 0;
           
           let actualRank = 0;
           for (let i = 0; i < 5; i++) {
-            if (currentProgress >= (config.thresholds[i] || Infinity)) {
+            if (currentProgress >= (config.targets[i] || Infinity)) {
               actualRank = i + 1;
             }
           }
 
           let progressPercent = 0;
           if (actualRank < 5) {
-            const currentThreshold = actualRank === 0 ? 0 : config.thresholds[actualRank - 1];
-            const nextThreshold = config.thresholds[actualRank];
+            const currentThreshold = actualRank === 0 ? 0 : config.targets[actualRank - 1];
+            const nextThreshold = config.targets[actualRank];
             if (nextThreshold > currentThreshold) {
               const range = nextThreshold - currentThreshold;
               const progressIntoRange = currentProgress - currentThreshold;
@@ -1416,9 +1404,6 @@ export default function App() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [showBadgesModal, selectedMedal, handlePrevStageOrMedal, handleNextStageOrMedal]);
-
-  const [activeDebateChat, setActiveDebateChat] = useState<string | null>(null);
-  const [debateMessages, setDebateMessages] = useState<any[]>([]);
   const [lastReadMessageId, setLastReadMessageId] = useState<string | null>(
     null,
   );
@@ -1566,7 +1551,7 @@ export default function App() {
         const { data, error } = await supabase
           .from("profiles")
           .select("*")
-          .eq("id", session.user.uid)
+          .eq("id", session.user.id)
           .single();
 
         if (error && error.code !== "PGRST116") {
@@ -1635,7 +1620,7 @@ export default function App() {
       const { error } = await supabase
         .from("profiles")
         .update(updates)
-        .eq("id", session.user.uid);
+        .eq("id", session.user.id);
       if (error) throw error;
     } catch (error) {
       console.error("Profile update error:", error);
@@ -1652,7 +1637,6 @@ export default function App() {
   };
 
   // New Pillars State
-  const [debates, setDebates] = useState<Debate[]>([]);
   const [isTrafficSimulating, setIsTrafficSimulating] = useState(false);
   const simIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const simBiasesRef = useRef<Record<string, number>>({});
@@ -1743,8 +1727,6 @@ export default function App() {
     }, 5000);
     return () => clearInterval(interval);
   }, [fetchDebates, isTrafficSimulating]);
-  const [momentumData, setMomentumData] = useState<MomentumPoint[]>([]);
-  const [selectedMatch, setSelectedMatch] = useState<string>("");
   const [vertexResult, setVertexResult] = useState<any>(null);
   const [isSimulating, setIsSimulating] = useState(false);
 
@@ -1810,12 +1792,6 @@ export default function App() {
     setSelectedMatch(match);
     runVertexSimulation(match);
   };
-  const [selectedSmartXI, setSelectedSmartXI] = useState<Player[]>([]);
-  const [careerPlayer, setCareerPlayer] = useState<string>("");
-  const [careerData, setCareerData] = useState<{
-    points: any[];
-    chapters: any[];
-  } | null>(null);
 
   useEffect(() => {
     /**
@@ -2314,7 +2290,7 @@ export default function App() {
               initial={{ x: "-100%", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "-100%", opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 150 }}
+              transition={{ type: "spring" as any, damping: 25, stiffness: 150 }}
               className="fixed inset-y-0 left-0 w-[85vw] max-w-[420px] bg-[#020203] z-[101] shadow-[50px_0_100px_rgba(0,0,0,1)] flex flex-col overflow-hidden border-r border-white/5"
             >
               {/* Massive Watermark */}
@@ -2583,7 +2559,7 @@ export default function App() {
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              transition={{ type: "spring" as any, damping: 25, stiffness: 200 }}
               className="fixed inset-y-0 right-0 w-[85vw] max-w-sm bg-void border-l border-hairline z-[101] shadow-[-20px_0_60px_rgba(0,0,0,0.8)] flex flex-col"
             >
               <div className="p-6 border-b border-hairline flex items-center justify-between">
@@ -2926,7 +2902,7 @@ export default function App() {
 
       <UsernameModal
         isOpen={showUsernameModal}
-        uid={session?.user?.uid}
+        uid={session?.user?.id}
         email={session?.user?.email}
         onComplete={(username) => {
           setShowUsernameModal(false);
@@ -3507,7 +3483,7 @@ export default function App() {
                           const agSweatN = againstPct >= 50 ? 0 : Math.min(8, Math.ceil((50 - againstPct) / 5));
 
                           const u = (d.id || "x").replace(/[^a-z0-9]/gi, "").slice(0, 8);
-                          const trans = { type: "spring", bounce: 0.2, duration: 1.2 };
+                          const trans = { type: "spring" as any, bounce: 0.2, duration: 1.2 };
 
                           
                           

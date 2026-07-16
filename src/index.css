@@ -37,6 +37,18 @@
   --color-hairline: rgba(250, 250, 250, 0.08);
   --color-outline: #948f96;
 
+  /* Legacy/Default alias compatibility */
+  --color-bg-primary: #111415;
+  --color-fg-primary: #fafafa;
+  --color-fg-muted: #948f96;
+  --color-border-default: rgba(250, 250, 250, 0.08);
+  --color-accent-default: #d4af37;
+  --color-surface-hover: rgba(255, 255, 255, 0.04);
+  --color-foreground-muted: #948f96;
+  --color-foreground-subtle: #6b666d;
+  --color-foreground: #fafafa;
+  --color-background-base: #0a0612;
+
   /* Typography Families */
   --font-display: "Playfair Display", serif;
   --font-mono: "JetBrains Mono", monospace;

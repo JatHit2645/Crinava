@@ -1,0 +1,1 @@
+https://lmt.fn.sportradar.com/common/en/Etc:UTC/cricket/get_scorecard/71523124?T=exp=1778137330~acl=/*~data=eyJvIjoiaHR0cHM6Ly9zY29yZWNhcmQub2Rkc3RyYWQuY29tIiwiYSI6IjhlZTQ1YjU3NGUyNzgxZDU4MWIwYjBhMTMzODAzOTA2IiwiYWN0Ijoib3JpZ2luY2hlY2siLCJvc3JjIjoib3JpZ2luIn0~hmac=bace91fbdabd8f7c42a49440021c52e178de08018ba1ecf93fefc42e3bcc97d5

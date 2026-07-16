@@ -15,3 +15,7 @@ run_git.py
 .ruff_cache/
 results.txt
 parse_report.py
+
+# Environment Variables
+.env
+.env.local

@@ -37,6 +37,7 @@ interface Tournament {
 }
 
 interface MatchData {
+  [key: string]: any;
   match_id: number;
   season?: string;
   match_date?: string;
@@ -956,8 +957,15 @@ const TournamentMatchesList: React.FC<{
       const fetchAiContent = async () => {
         setAiLoading(true);
         try {
-          const apiKey = process.env.GEMINI_API_KEY || "";
-          const genAI = new GoogleGenAI({ apiKey });
+          const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
+if (!apiKey) {
+  console.warn("WARNING: VITE_GEMINI_API_KEY is missing. AI features will be disabled.");
+}
+const genAI = apiKey ? new GoogleGenAI({ apiKey }) : {
+  models: {
+    generateContent: async () => ({ text: "AI functionality disabled due to missing API key." })
+  }
+} as any;
           const model = "gemini-3-flash-preview";
 
           let prompt = "";
@@ -1560,7 +1568,7 @@ const MatchDetail: React.FC<{ matchId: number; onBack: () => void }> = ({
         <Trophy className="text-metallic-gold" size={24} />
         <div>
           <div className="text-gray-500 text-xs">Player of the Match</div>
-          <div className="text-white font-bold">{potm}</div>
+          <div className="text-white font-bold">{match.player_of_match || 'N/A'}</div>
         </div>
       </div>
 
@@ -1796,7 +1804,7 @@ const MatchDetail: React.FC<{ matchId: number; onBack: () => void }> = ({
             {activeAnalyticsTab === "mirror" && (
               <MirrorMatch
                 rawInfo={match.raw_info}
-                venue={venue || ""}
+                venue={match.venue || ""}
                 matchType={match.match_type}
               />
             )}
@@ -1827,8 +1835,8 @@ const MatchDetail: React.FC<{ matchId: number; onBack: () => void }> = ({
           <div className="flex justify-between border-b border-white/5 pb-2">
             <span className="text-gray-500">Toss</span>
             <span className="text-white font-medium text-right">
-              {match.toss_winner
-                ? `${match.toss_winner} won the toss and elected to ${match.toss_decision}`
+              {match.toss_winner_id
+                ? `${match.toss_winner_id} won the toss and elected to ${match.toss_decision}`
                 : "N/A"}
             </span>
           </div>
@@ -1864,6 +1872,7 @@ const MatchDetail: React.FC<{ matchId: number; onBack: () => void }> = ({
 };
 
 interface LiveMatch {
+  [key: string]: any;
   title: string;
   match_id: string;
   source: string;

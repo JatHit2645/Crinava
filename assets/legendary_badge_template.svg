@@ -1,0 +1,237 @@
+<svg width="800" height="800" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background: Deep cosmic void fading to absolute black -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#140b2e"/>
+      <stop offset="60%" stop-color="#0a0517"/>
+      <stop offset="100%" stop-color="#020105"/>
+    </radialGradient>
+
+    <!-- Metallic Rim: Obsidian/Gunmetal alloy with dark specular highlights -->
+    <linearGradient id="premiumObsidian" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#606470"/> <!-- Steel glint -->
+      <stop offset="25%" stop-color="#191a21"/> <!-- Dark Gunmetal -->
+      <stop offset="50%" stop-color="#0b0c10"/> <!-- Obsidian Black -->
+      <stop offset="75%" stop-color="#2a2c36"/> <!-- Soft Edge Reflection -->
+      <stop offset="100%" stop-color="#040508"/> <!-- Void Shadow -->
+    </linearGradient>
+
+    <!-- Accent Metal: Highly polished Gold for trim and regal accents -->
+    <linearGradient id="premiumGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff6d6"/> <!-- Cream Glint -->
+      <stop offset="20%" stop-color="#ffd700"/> <!-- Pure Gold -->
+      <stop offset="45%" stop-color="#8c6600"/> <!-- Deep Gold Shadow -->
+      <stop offset="65%" stop-color="#ffea7a"/> <!-- Gold Reflection -->
+      <stop offset="85%" stop-color="#ffd700"/> <!-- Pure Gold -->
+      <stop offset="100%" stop-color="#332400"/> <!-- Core shadow -->
+    </linearGradient>
+
+    <!-- Inner Gem Facet: Deep Amethyst / Cosmic Void Glass -->
+    <linearGradient id="gemAmethyst" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d47fff"/> <!-- Bright Magenta/Pink glint -->
+      <stop offset="50%" stop-color="#5900b3"/> <!-- Deep Amethyst -->
+      <stop offset="100%" stop-color="#1a0033"/> <!-- Void Purple -->
+    </linearGradient>
+
+    <!-- Symmetric Gradients for Wings so tips glow perfectly on both sides -->
+    <linearGradient id="gemAmethystWest" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d47fff"/> 
+      <stop offset="50%" stop-color="#5900b3"/>
+      <stop offset="100%" stop-color="#1a0033"/>
+    </linearGradient>
+    <linearGradient id="gemAmethystEast" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d47fff"/> 
+      <stop offset="50%" stop-color="#5900b3"/>
+      <stop offset="100%" stop-color="#1a0033"/>
+    </linearGradient>
+
+    <filter id="glowAmethyst" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="20" result="blur"/>
+      <feColorMatrix type="matrix" values="
+        0.8 0 0 0 0.5
+        0 0.2 0 0 0.1
+        1 0 0 0 0.9
+        0 0 0 0.6 0
+      "/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="25" flood-color="#000000" flood-opacity="0.95"/>
+    </filter>
+
+    <clipPath id="gemClip">
+      <polygon points="495,400 467,467 400,495 333,467 305,400 333,333 400,305 467,333"/>
+    </clipPath>
+
+    <!-- STAGE 5 OPTION 2 NEW ELEMENTS: THE SERAPH WINGS & FLOATING CRYSTALS -->
+    
+    <!-- Apex Crown (North) - Inherited from Epic Stage 4 -->
+    <g id="apexCrown" filter="url(#softShadow)">
+      <polygon points="280,190 400,140 520,190 540,100 480,120 400,40 320,120 260,100" fill="url(#premiumObsidian)" stroke="url(#premiumGold)" stroke-width="2"/>
+      <polygon points="400,140 280,190 260,100 320,120 400,40" fill="#ffffff" opacity="0.15"/>
+      <polygon points="400,140 520,190 540,100 480,120 400,40" fill="#000000" opacity="0.6"/>
+      <polygon points="400,70 340,125 400,135 460,125" fill="url(#gemAmethyst)" stroke="url(#premiumGold)" stroke-width="1.5"/>
+      <circle cx="400" cy="20" r="12" fill="url(#premiumGold)"/>
+      <circle cx="400" cy="20" r="6" fill="#d47fff" />
+    </g>
+
+    <!-- Sweeping Seraph Razor-Wing (West) -->
+    <g id="bladeWingWest" filter="url(#softShadow)">
+      <!-- Top Feather -->
+      <polygon points="220,300 80,200 140,320 180,350" fill="url(#premiumObsidian)" stroke="url(#premiumGold)" stroke-width="2"/>
+      <polygon points="220,300 80,200 140,320" fill="#ffffff" opacity="0.15"/>
+      <polygon points="145,261 112,238 130,274" fill="url(#gemAmethystWest)" stroke="url(#premiumGold)" stroke-width="1"/> 
+      <!-- Mid Feather -->
+      <polygon points="180,350 40,380 120,480 190,470" fill="url(#premiumObsidian)" stroke="url(#premiumGold)" stroke-width="2"/>
+      <polygon points="180,350 40,380 120,480" fill="#ffffff" opacity="0.15"/>
+      <polygon points="101,379 62,388 87,419" fill="url(#gemAmethystWest)" stroke="url(#premiumGold)" stroke-width="1"/>
+      <!-- Bottom Feather -->
+      <polygon points="190,470 100,600 200,650 280,580" fill="url(#premiumObsidian)" stroke="url(#premiumGold)" stroke-width="2"/>
+      <polygon points="190,470 100,600 200,650" fill="#ffffff" opacity="0.15"/>
+      <polygon points="141,563 118,595 154,613" fill="url(#gemAmethystWest)" stroke="url(#premiumGold)" stroke-width="1"/>
+    </g>
+
+    <!-- Sweeping Seraph Razor-Wing (East) -->
+    <g id="bladeWingEast" filter="url(#softShadow)">
+      <!-- Top Feather -->
+      <polygon points="580,300 720,200 660,320 620,350" fill="url(#premiumObsidian)" stroke="url(#premiumGold)" stroke-width="2"/>
+      <polygon points="580,300 720,200 660,320" fill="#000000" opacity="0.5"/>
+      <polygon points="655,261 688,238 670,274" fill="url(#gemAmethystEast)" stroke="url(#premiumGold)" stroke-width="1"/> 
+      <!-- Mid Feather -->
+      <polygon points="620,350 760,380 680,480 610,470" fill="url(#premiumObsidian)" stroke="url(#premiumGold)" stroke-width="2"/>
+      <polygon points="620,350 760,380 680,480" fill="#000000" opacity="0.5"/>
+      <polygon points="699,379 738,388 713,419" fill="url(#gemAmethystEast)" stroke="url(#premiumGold)" stroke-width="1"/>
+      <!-- Bottom Feather -->
+      <polygon points="610,470 700,600 600,650 520,580" fill="url(#premiumObsidian)" stroke="url(#premiumGold)" stroke-width="2"/>
+      <polygon points="610,470 700,600 600,650" fill="#000000" opacity="0.5"/>
+      <polygon points="659,563 682,595 646,613" fill="url(#gemAmethystEast)" stroke="url(#premiumGold)" stroke-width="1"/>
+    </g>
+
+    <!-- Floating Power Crystals (South) -->
+    <g id="floatingCrystals" filter="url(#softShadow)">
+      <!-- Center large crystal -->
+      <polygon points="400,620 440,680 400,780 360,680" fill="url(#premiumObsidian)" stroke="url(#premiumGold)" stroke-width="2"/>
+      <polygon points="400,620 440,680 400,780" fill="#ffffff" opacity="0.15"/>
+      <polygon points="400,660 420,690 400,740 380,690" fill="url(#gemAmethyst)"/>
+      <!-- Left small crystal -->
+      <polygon points="320,590 350,630 310,710 280,630" fill="url(#premiumObsidian)" stroke="url(#premiumGold)" stroke-width="1.5"/>
+      <polygon points="320,620 330,640 310,680 300,640" fill="url(#gemAmethyst)"/>
+      <!-- Right small crystal -->
+      <polygon points="480,590 520,630 490,710 450,630" fill="url(#premiumObsidian)" stroke="url(#premiumGold)" stroke-width="1.5"/>
+      <polygon points="480,620 500,640 490,680 470,640" fill="url(#gemAmethyst)"/>
+    </g>
+  </defs>
+
+  <!-- 1. Background -->
+  <rect width="800" height="800" fill="url(#bgGrad)"/>
+  
+  <!-- 2. Intense Cosmic Energy Burst (Shooting rays to the canvas edge) -->
+  <g filter="url(#glowAmethyst)">
+    <circle cx="400" cy="400" r="300" fill="#b366ff" opacity="0.15"/>
+    <polygon points="400,0 405,400 395,400" fill="#d47fff" opacity="0.4"/>
+    <polygon points="400,800 405,400 395,400" fill="#d47fff" opacity="0.4"/>
+    <polygon points="0,400 400,405 400,395" fill="#d47fff" opacity="0.4"/>
+    <polygon points="800,400 400,405 400,395" fill="#d47fff" opacity="0.4"/>
+    <polygon points="117,117 403,397 397,403" fill="#d47fff" opacity="0.25"/>
+    <polygon points="683,117 397,397 403,403" fill="#d47fff" opacity="0.25"/>
+    <polygon points="117,683 403,403 397,397" fill="#d47fff" opacity="0.25"/>
+    <polygon points="683,683 397,403 403,397" fill="#d47fff" opacity="0.25"/>
+  </g>
+
+  <!-- 3. STAGE 5 FULL ARMOR SET: Crown, Floating Crystals, Left Wing, Right Wing -->
+  <use href="#apexCrown" />
+  <use href="#floatingCrystals" />
+  <!-- Render wings behind the octagon -->
+  <use href="#bladeWingWest" />
+  <use href="#bladeWingEast" />
+
+  <!-- 4. INHERITED STAGE 3: Outer Octagonal Bezel Frame -->
+  <!-- Converted to Obsidian Black edged in Gold -->
+  <g filter="url(#softShadow)">
+    <polygon points="660,400 584,584 400,660 216,584 140,400 216,216 400,140 584,216" fill="none" stroke="url(#premiumObsidian)" stroke-width="6" opacity="0.95"/>
+    <polygon points="660,400 584,584 400,660 216,584 140,400 216,216 400,140 584,216" fill="none" stroke="url(#premiumGold)" stroke-width="2"/>
+    
+    <polygon points="648,400 575,575 400,648 225,575 152,400 225,225 400,152 575,225" fill="none" stroke="url(#premiumObsidian)" stroke-width="2" opacity="0.8"/>
+
+    <!-- Subtle connecting radial spokes -->
+    <g stroke="url(#premiumGold)" stroke-width="2" opacity="0.5">
+      <line x1="400" y1="140" x2="400" y2="164"/>
+      <line x1="400" y1="660" x2="400" y2="636"/>
+      <line x1="660" y1="400" x2="636" y2="400"/>
+      <line x1="140" y1="400" x2="164" y2="400"/>
+      <line x1="584" y1="216" x2="567" y2="233"/>
+      <line x1="584" y1="584" x2="567" y2="567"/>
+      <line x1="216" y1="584" x2="233" y2="567"/>
+      <line x1="216" y1="216" x2="233" y2="233"/>
+    </g>
+  </g>
+
+  <!-- 5. INHERITED STAGE 2 FEATURES -->
+  <!-- Outer Watch Bezel -->
+  <g filter="url(#softShadow)">
+    <circle cx="400" cy="400" r="236" fill="none" stroke="url(#premiumObsidian)" stroke-width="12"/>
+    <circle cx="400" cy="400" r="228" fill="#0d1117" stroke="rgba(255, 255, 255, 0.04)" stroke-width="2"/>
+    <!-- Gold Trim inside the bezel -->
+    <circle cx="400" cy="400" r="230" fill="none" stroke="url(#premiumGold)" stroke-width="1.5" opacity="0.5"/>
+
+    <!-- Cardinal Major Ticks -->
+    <g stroke="url(#premiumGold)" stroke-width="3" opacity="0.9">
+      <line x1="400" y1="168" x2="400" y2="176"/>
+      <line x1="400" y1="624" x2="400" y2="632"/>
+      <line x1="168" y1="400" x2="176" y2="400"/>
+      <line x1="624" y1="400" x2="632" y2="400"/>
+    </g>
+
+    <!-- Inner frame ring & Dotted Dial -->
+    <circle cx="400" cy="400" r="210" fill="none" stroke="url(#premiumGold)" stroke-width="4" opacity="0.8"/>
+    <circle cx="400" cy="400" r="192" fill="none" stroke="url(#premiumGold)" stroke-width="2" stroke-dasharray="6,8" opacity="0.4"/>
+  </g>
+
+  <!-- Inner Octagon Seat Frame -->
+  <polygon points="507,400 476,476 400,507 324,476 293,400 324,324 400,293 476,324" fill="none" stroke="url(#premiumGold)" stroke-width="2" opacity="0.6" filter="url(#softShadow)"/>
+
+  <!-- Octagon Vertex Rivets -->
+  <g fill="url(#premiumGold)" opacity="0.8">
+    <circle cx="507" cy="400" r="4" />
+    <circle cx="476" cy="476" r="4" />
+    <circle cx="400" cy="507" r="4" />
+    <circle cx="324" cy="476" r="4" />
+    <circle cx="293" cy="400" r="4" />
+    <circle cx="324" cy="324" r="4" />
+    <circle cx="400" cy="293" r="4" />
+    <circle cx="476" cy="324" r="4" />
+  </g>
+
+  <!-- Technical Crosshair Guidelines -->
+  <g stroke="url(#premiumGold)" stroke-width="1.5" opacity="0.4">
+    <line x1="400" y1="190" x2="400" y2="293"/>
+    <line x1="400" y1="610" x2="400" y2="507"/>
+    <line x1="190" y1="400" x2="293" y2="400"/>
+    <line x1="610" y1="400" x2="507" y2="400"/>
+  </g>
+
+  <!-- 6. The Faceted Core Gem (Amethyst/Cosmic Purple) -->
+  <g filter="url(#softShadow)">
+    <g clip-path="url(#gemClip)">
+      <polygon points="495,400 467,467 400,495 333,467 305,400 333,333 400,305 467,333" fill="url(#gemAmethyst)"/>
+      <!-- Perfectly symmetric 8-facet 3D shading radiating from center (400,400) -->
+      <polygon points="400,400 400,305 333,333" fill="#ffffff" opacity="0.12"/> <!-- North-NW -->
+      <polygon points="400,400 333,333 305,400" fill="#ffffff" opacity="0.08"/> <!-- West-NW -->
+      <polygon points="400,400 305,400 333,467" fill="#000000" opacity="0.15"/> <!-- West-SW -->
+      <polygon points="400,400 333,467 400,495" fill="#000000" opacity="0.25"/> <!-- South-SW -->
+      <polygon points="400,400 400,495 467,467" fill="#000000" opacity="0.35"/> <!-- South-SE -->
+      <polygon points="400,400 467,467 495,400" fill="#000000" opacity="0.25"/> <!-- East-SE -->
+      <polygon points="400,400 495,400 467,333" fill="#ffffff" opacity="0.02"/> <!-- East-NE -->
+      <polygon points="400,400 467,333 400,305" fill="#ffffff" opacity="0.06"/> <!-- North-NE -->
+      <rect x="200" y="230" width="80" height="340" fill="#ffffff" opacity="0.2" transform="rotate(28 400 400)"/>
+    </g>
+  </g>
+
+  <!-- Beveled Outlines & Highlights -->
+  <polygon points="495,400 467,467 400,495 333,467 305,400 333,333 400,305 467,333" fill="none" stroke="url(#premiumGold)" stroke-width="3"/>
+  <polygon points="493,400 466,466 400,493 334,466 307,400 334,334 400,307 466,334" fill="none" stroke="rgba(255, 255, 255, 0.4)" stroke-width="1"/>
+</svg>

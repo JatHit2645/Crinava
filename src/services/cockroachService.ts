@@ -61,3 +61,16 @@ export const getMatchDetails = async (matchId: string) => {
     return [];
   }
 };
+
+export const getMatchArchive = async (limit: number, offset: number) => {
+  try {
+    const response = await axios.get(`${ENGINE_URL}/matches/archive`, {
+      params: { limit, offset }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Engine archive error:", error);
+    return [];
+  }
+};
+
