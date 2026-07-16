@@ -1,9 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
 
+const projectId = process.env.VITE_SUPABASE_PROJECT_ID;
+
 const supabaseUrl =
   process.env.BLOG_SUPABASE_URL ||
   process.env.SUPABASE_URL ||
-  process.env.VITE_SUPABASE_URL;
+  (projectId ? `https://${projectId}.supabase.co` : process.env.VITE_SUPABASE_URL);
 const supabaseKey =
   process.env.BLOG_SUPABASE_KEY ||
   process.env.SUPABASE_ANON_KEY ||
