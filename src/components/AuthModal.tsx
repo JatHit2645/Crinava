@@ -65,10 +65,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (session) {
+    if (session && isOpen) {
       onClose();
     }
-  }, [session, onClose]);
+  }, [session, isOpen, onClose]);
 
   useEffect(() => {
     if (!isOpen) {
