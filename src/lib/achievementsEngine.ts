@@ -7,6 +7,33 @@ export interface LevelUpEvent {
   newStage: number;
 }
 
+export const BADGE_EVENT_MAP: Record<string, string[]> = {
+  'vote_cast': [
+    'rope_burner', 'trend_breaker', 'hitmans_vanguard', 
+    'kings_shield', 'thalas_anchor', 'heavy_puller', 
+    'iron_grip', 'the_tie_breaker', 'smart_selector'
+  ],
+  'debate_created': ['debate_architect'],
+  'simulation_triggered': ['crowd_commander'],
+  'prediction_placed': ['neural_seer', 'high_roller', 'the_hedger'],
+  'prediction_won': ['calculated_fortune', 'streak_weaver', 'underdog_alchemist', 'clean_sweep', 'oracle_override'],
+  'smart_xi_draft': ['smart_xi_tactician'],
+  'monte_carlo_run': ['monte_carlo_survivor'],
+  'daily_login': ['daily_collector', 'iron_grip'],
+  'coins_earned': ['coin_accumulator'],
+  'store_purchase': ['patron_of_crinava', 'coin_burner'],
+  'vip_upgrade': ['star_trader'],
+  'wallet_sync': ['ledger_sync'],
+  'raffle_ticket_bought': ['ticket_master', 'high_stakes_bidding', 'jackpot_hunter'],
+  'raffle_won': ['raffle_reaver', 'lucky_escape'],
+  'dna_match_checked': ['dna_decoder'],
+  'scorecard_viewed': ['telemetry_inspector'],
+  'momentum_chart_viewed': ['momentum_watcher'],
+  'turning_point_viewed': ['turning_point_spotter'],
+  'blog_read': ['bloggers_guild'],
+  'profile_verified': ['core_identity']
+};
+
 /**
  * Records an action for a specific achievement and processes any resulting level-ups.
  * Uses the atomic increment_user_achievement RPC to prevent race conditions.
@@ -197,17 +224,30 @@ export async function trackEvent(
       amount: incrementAmount
     });
 
-    // 1. Fetch all badges that listen to this event type
-    // We store the event mapping inside the icon string: "IconName|event_type"
+    // 1. Fetch all badges that listen to this event type using the static map
+    const mappedBadgeIds = BADGE_EVENT_MAP[eventType] || [];
+    
+    if (mappedBadgeIds.length === 0) {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('badge-engine-log', {
+          detail: {
+            timestamp: new Date().toISOString(),
+            type: 'WARN',
+            message: `[Engine] No badges are currently mapped to event '${eventType}'.`
+          }
+        }));
+      }
+      return [];
+    }
+
     const { data: listeningBadges, error } = await supabase
       .from('badges')
       .select('id, name')
-      .like('icon', `%|${eventType}`);
+      .in('id', mappedBadgeIds);
 
     if (error) {
       throw error;
     }
-
     if (!listeningBadges || listeningBadges.length === 0) {
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('badge-engine-log', {

@@ -49,6 +49,7 @@ import {
 } from "./src/scripts/enrichPlayers";
 console.log("enrichPlayers imported.");
 import { supabase } from "./src/lib/supabaseServer";
+import { ACHIEVEMENTS_CONFIG } from "./src/lib/achievementsConfig";
 console.log("supabaseServer imported.");
 import { createClient } from "@supabase/supabase-js";
 
@@ -206,6 +207,40 @@ const blogs = [
 
 export async function startServer() {
   console.log("startServer: Function called.");
+  
+  // Seed badges table if empty
+  try {
+    const { count, error: countError } = await supabase
+      .from("badges")
+      .select("*", { count: "exact", head: true });
+
+    if (countError) {
+      console.error("Error checking badges table for seeding:", countError);
+    } else if (count === 0) {
+      console.log("Badges table is empty. Seeding badges from ACHIEVEMENTS_CONFIG...");
+      const badgesArray = Object.values(ACHIEVEMENTS_CONFIG).map((b: any) => ({
+        id: b.id,
+        name: b.name,
+        category: b.category,
+        description: b.description,
+        targets: b.targets || [1, 2, 3, 4, 5],
+        thresholds: b.thresholds,
+        icon: b.icon || 'Award'
+      }));
+
+      const { error: insertError } = await supabase.from("badges").upsert(badgesArray);
+      if (insertError) {
+        console.error("Failed to seed badges:", insertError);
+      } else {
+        console.log("Successfully seeded badges configuration into the database.");
+      }
+    } else {
+      console.log(`Badges table has ${count} badges already. Skipping seed.`);
+    }
+  } catch (err) {
+    console.error("Failed to seed badges:", err);
+  }
+
   try {
     const app = express();
     const PORT = parseInt(process.env.PORT || "3000");

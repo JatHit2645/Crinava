@@ -1289,83 +1289,79 @@ export default function App() {
     }
   };
 
-  useEffect(() => {
-    let isMounted = true;
-    const loadBadges = async () => {
-      try {
-        const res = await fetch('/api/badges');
-        if (!res.ok) throw new Error("Failed to fetch badges");
-        const dbBadges = await res.json();
-        
-        let userAchievements: any[] = [];
-        if (session?.user?.id) {
-          const { data } = await supabase.from('user_achievements').select('*').eq('user_id', session.user.id);
-          if (data) userAchievements = data;
-        }
-
-        const combined = dbBadges.map((config: any) => {
-          const userAch = userAchievements.find(a => a.achievement_id === config.id);
-          const currentProgress = userAch?.current_count || 0;
-          
-          let actualRank = 0;
-          for (let i = 0; i < 5; i++) {
-            if (currentProgress >= (config.targets[i] || Infinity)) {
-              actualRank = i + 1;
-            }
-          }
-
-          let progressPercent = 0;
-          if (actualRank < 5) {
-            const currentThreshold = actualRank === 0 ? 0 : config.targets[actualRank - 1];
-            const nextThreshold = config.targets[actualRank];
-            if (nextThreshold > currentThreshold) {
-              const range = nextThreshold - currentThreshold;
-              const progressIntoRange = currentProgress - currentThreshold;
-              progressPercent = (progressIntoRange / range) * 100;
-            }
-          } else {
-            progressPercent = 100;
-          }
-
-          return {
-            id: config.id,
-            name: config.name,
-            description: config.description,
-            rank: actualRank,
-            iconUrl: getIconForRank(actualRank),
-            progress: Math.min(100, Math.max(0, progressPercent)),
-            config: config
-          };
-        });
-
-        combined.sort((a: any, b: any) => {
-          if (b.rank !== a.rank) {
-            return b.rank - a.rank;
-          }
-          return a.name.localeCompare(b.name);
-        });
-
-        if (isMounted) setBadges(combined);
-      } catch (err) {
-        console.error("Error loading badges:", err);
-        if (isMounted) {
-          const fallback = Object.values(ACHIEVEMENTS_CONFIG).map(config => ({
-            id: config.id,
-            name: config.name,
-            description: config.description,
-            rank: 0,
-            iconUrl: getIconForRank(0),
-            progress: 0,
-            config: config
-          }));
-          setBadges(fallback);
-        }
+  const loadBadges = React.useCallback(async () => {
+    try {
+      const res = await fetch('/api/badges');
+      if (!res.ok) throw new Error("Failed to fetch badges");
+      const dbBadges = await res.json();
+      
+      let userAchievements: any[] = [];
+      if (session?.user?.id) {
+        const { data } = await supabase.from('user_achievements').select('*').eq('user_id', session.user.id);
+        if (data) userAchievements = data;
       }
-    };
 
-    loadBadges();
-    return () => { isMounted = false; };
+      const combined = dbBadges.map((config: any) => {
+        const userAch = userAchievements.find(a => a.achievement_id === config.id);
+        const currentProgress = userAch?.current_count || 0;
+        
+        let actualRank = 0;
+        for (let i = 0; i < 5; i++) {
+          if (currentProgress >= (config.targets[i] || Infinity)) {
+            actualRank = i + 1;
+          }
+        }
+
+        let progressPercent = 0;
+        if (actualRank < 5) {
+          const currentThreshold = actualRank === 0 ? 0 : config.targets[actualRank - 1];
+          const nextThreshold = config.targets[actualRank];
+          if (nextThreshold > currentThreshold) {
+            const range = nextThreshold - currentThreshold;
+            const progressIntoRange = currentProgress - currentThreshold;
+            progressPercent = (progressIntoRange / range) * 100;
+          }
+        } else {
+          progressPercent = 100;
+        }
+
+        return {
+          id: config.id,
+          name: config.name,
+          description: config.description,
+          rank: actualRank,
+          iconUrl: getIconForRank(actualRank),
+          progress: Math.min(100, Math.max(0, progressPercent)),
+          config: config
+        };
+      });
+
+      combined.sort((a: any, b: any) => {
+        if (b.rank !== a.rank) {
+          return b.rank - a.rank;
+        }
+        return a.name.localeCompare(b.name);
+      });
+
+      setBadges(combined);
+    } catch (err) {
+      console.error("Error loading badges:", err);
+      const fallback = Object.values(ACHIEVEMENTS_CONFIG).map(config => ({
+        id: config.id,
+        name: config.name,
+        description: config.description,
+        rank: 0,
+        iconUrl: getIconForRank(0),
+        progress: 0,
+        config: config
+      }));
+      setBadges(fallback);
+    }
   }, [session?.user?.id, profile]);
+
+  useEffect(() => {
+    loadBadges();
+  }, [loadBadges]);
 
   const handlePrevStageOrMedal = React.useCallback(() => {
     if (!selectedMedal) return;
@@ -1657,6 +1653,13 @@ export default function App() {
       setIsTrafficSimulating(false);
     } else {
       setIsTrafficSimulating(true);
+      if (session?.user?.id) {
+        import("./lib/achievementsEngine").then(({ trackEvent }) => {
+          trackEvent(supabase, session.user.id, "traffic_sim_start", 1).then(() => {
+            loadBadges();
+          });
+        });
+      }
       
       // Initialize independent biases for each debate card to make them behave uniquely
       const initialBiases: Record<string, number> = {};
@@ -2073,6 +2076,13 @@ export default function App() {
           // If vote was changed/added, fetch latest debates immediately
           fetchDebates();
           updateProfileStats(cricketIQ + 25);
+          if (session?.user?.id) {
+            import("./lib/achievementsEngine").then(({ trackEvent }) => {
+              trackEvent(supabase, session.user.id, "vote_cast", 1).then(() => {
+                loadBadges();
+              });
+            });
+          }
         } else if (result.error) {
           alert(result.error);
         }
@@ -2138,6 +2148,13 @@ export default function App() {
         setPrediction(result);
         setSimulating(false);
         updateProfileStats(cricketIQ + 25);
+        if (session?.user?.id) {
+          import("./lib/achievementsEngine").then(({ trackEvent }) => {
+            trackEvent(supabase, session.user.id, "monte_carlo_run", 1).then(() => {
+              loadBadges();
+            });
+          });
+        }
       }, 500);
     } catch (err) {
       clearInterval(interval);
@@ -2541,7 +2558,7 @@ export default function App() {
                       />
                     </div>
                     <span className="text-[9px] font-black uppercase tracking-[0.2em]">
-                      Terminate Session
+                      Log Out
                     </span>
                   </button>
                 </div>

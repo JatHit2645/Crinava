@@ -71,6 +71,11 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
     const maxDays = getDaysInMonth(month, year);
     if (day < 1 || day > maxDays) return false;
 
+    const inputDate = new Date(year, month - 1, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (inputDate > today) return false;
+
     return true;
   };
 
