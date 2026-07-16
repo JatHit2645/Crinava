@@ -1207,9 +1207,17 @@ export default function App() {
   // Handle auth callback route by replacing path to home
   useEffect(() => {
     if (window.location.pathname === "/auth/callback") {
-      navigate("/", { replace: true });
+      if (session) {
+        navigate("/", { replace: true });
+      } else {
+        // Fallback timeout: if code exchange doesn't succeed in 5 seconds, go to home
+        const timer = setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 5000);
+        return () => clearTimeout(timer);
+      }
     }
-  }, [navigate]);
+  }, [session, navigate]);
 
   const { playerProfileId, setPlayerProfileId } = useVerdictStore();
   const [query, setQuery] = useState(""); // Balance in Crinava Coins // User's Cricket IQ score
@@ -2203,6 +2211,17 @@ export default function App() {
         <Route path="/blog" element={<BlogArchive />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
       </Routes>
+    );
+  }
+
+  if (window.location.pathname === "/auth/callback" && !session) {
+    return (
+      <div className="min-h-screen bg-void flex flex-col items-center justify-center text-on-surface">
+        <RefreshCw className="animate-spin text-mercury mb-4" size={32} />
+        <p className="text-xs font-black uppercase tracking-[0.2em] text-mercury">
+          Completing authentication...
+        </p>
+      </div>
     );
   }
 
