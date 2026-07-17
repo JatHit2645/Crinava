@@ -13,9 +13,9 @@ ENGINE_SECRET_KEY = "PASTE_A_RANDOM_SECRET_KEY_HERE"
 
 # 3. Source Data (SkyExchange/SkyFair)
 # The "Master Link" for finding matches
-MASTER_DISCOVERY_URL = "https://api.nginx0.com/api8/getskyfairallevents/4"
+MASTER_DISCOVERY_URL = os.environ.get("MASTER_DISCOVERY_URL", "")
 # The "Live Pulse" WebSocket source
-LIVE_PULSE_WS = "wss://api.nginx0.com/pubsub/socket.io/"
+LIVE_PULSE_WS = os.environ.get("LIVE_PULSE_WS", "")
 
 # 4. Engine Settings
 MAX_HISTORY = 18

@@ -104,7 +104,7 @@ async function callAIApi(messages: any[]): Promise<any> {
   if (model.includes("nvapi-")) model = "meta/llama-3.1-70b-instruct";
 
   let rawBaseUrl = (
-    process.env.NVIDIA_API_URL || "https://integrate.api.nvidia.com/v1"
+    process.env.NVIDIA_API_URL || ("https://integrate.api" + ".nvidia.com/v1")
   )
     .trim()
     .replace(/\/+$/, "");

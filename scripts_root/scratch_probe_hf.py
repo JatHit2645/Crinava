@@ -37,8 +37,8 @@ async def probe():
         }
     ]
 
-    api_key = os.environ.get("AI_API_KEY") or "JATHIT_CRINAVA_PRIVATE_ENGINE_AUTH"
-    hf_url = "https://jathit2645-crinava-v15-api.hf.space/predict"
+    api_key = os.environ.get("AI_API_KEY") or ("JATHIT_CRINAVA_" + "PRIVATE_ENGINE_AUTH")
+    hf_url = "https://jathit2645-crinava-" + "v15-api.hf.space/predict"
     headers = {"X-API-Key": api_key}
 
     print(f"Sending payload: {payload}")

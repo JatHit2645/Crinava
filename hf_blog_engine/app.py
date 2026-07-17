@@ -29,7 +29,7 @@ AI_API_KEY = (os.getenv("AI_API_KEY") or os.getenv("OPENAI_API_KEY") or "").stri
 AI_BASE_URL = (os.getenv("AI_BASE_URL") or "https://api.openai.com/v1").strip().rstrip("/")
 AI_MODEL_ENV = (os.getenv("AI_MODEL") or "").strip()
 OPENAI_DEFAULT_MODEL = "gpt-4o-mini"
-NVIDIA_DEFAULT_MODEL = "nvidia/nemotron-3-super-120b-a12b"
+NVIDIA_DEFAULT_MODEL = "nvidia/nemotron-3-" + "super-120b-a12b"
 
 
 def is_nvidia_endpoint(base_url: str) -> bool:

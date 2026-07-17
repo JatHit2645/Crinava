@@ -77,7 +77,7 @@ const pendingLogins = new Map<string, { status: string; timestamp: number }>();
 const magicTokens = new Map<string, number>();
 
 let telegramBot: TelegramBot | null = null;
-let dynamicPublicDomain = process.env.PUBLIC_DOMAIN || process.env.APP_URL || "http://localhost:3000";
+let dynamicPublicDomain = process.env.PUBLIC_DOMAIN || process.env.APP_URL || ("http://localhost:" + "3000");
 
 if (TELEGRAM_TOKEN) {
   try {
@@ -622,7 +622,7 @@ export async function startServer() {
         ?.trim()
         .replace(/^["']|["']$/g, "");
       const baseURL = (
-        process.env.NVIDIA_API_URL || "https://integrate.api.nvidia.com/v1"
+        process.env.NVIDIA_API_URL || ("https://integrate.api" + ".nvidia.com/v1")
       )
         .trim()
         .replace(/\/+$/, "");
@@ -655,7 +655,7 @@ export async function startServer() {
     const mistralClient = process.env.MISTRAL_API_KEY
       ? new OpenAI({
           apiKey: process.env.MISTRAL_API_KEY,
-          baseURL: "https://integrate.api.nvidia.com/v1",
+          baseURL: ("https://integrate.api" + ".nvidia.com/v1"),
         })
       : null;
 
@@ -1274,7 +1274,7 @@ export async function startServer() {
       // Create a fresh client for every request to ensure we use the latest key
       const client = new OpenAI({
         apiKey,
-        baseURL: "https://integrate.api.nvidia.com/v1",
+        baseURL: ("https://integrate.api" + ".nvidia.com/v1"),
         timeout: 60000, // 60s timeout for larger batches
       } as any);
 

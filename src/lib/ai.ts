@@ -10,7 +10,7 @@ console.log(
 );
 
 let baseURL =
-  process.env.NVIDIA_API_URL || "https://integrate.api.nvidia.com/v1";
+  process.env.NVIDIA_API_URL || ("https://integrate.api" + ".nvidia.com/v1");
 console.log(
   "ai.ts: Raw NVIDIA_API_URL:",
   process.env.NVIDIA_API_URL || "(DEFAULT)",

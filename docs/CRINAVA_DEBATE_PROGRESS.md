@@ -81,7 +81,7 @@ interface Debate {
 
 | Setting | Value |
 |---|---|
-| Active Supabase Project | `efxumodpgomszqpgdauk` (blog database) |
+| Active Supabase Project | `<supabase_project_id>` (blog database) |
 | Env vars used | `BLOG_SUPABASE_URL`, `BLOG_SUPABASE_KEY` |
 | Server client file | `src/lib/supabaseServer.ts` — prioritizes `BLOG_SUPABASE_*` |
 | Old DB (LOCKED) | `eoulupnfbcpmeywietvu` — exceeded quota, do NOT use |

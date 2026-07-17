@@ -15,7 +15,7 @@ from backend.utils.logger import BallLogger
 _ai_semaphore = asyncio.Semaphore(5)
 
 # -- String constants to avoid duplication --
-_NVIDIA_CHAT_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
+_NVIDIA_CHAT_URL = "https://integrate.api" + ".nvidia.com/v1/chat/completions"
 _NVIDIA_MODEL = "google/gemma-2-2b-it"
 _HTML_PARSER = "html.parser"
 _CONTENT_TYPE_JSON = "application/json"

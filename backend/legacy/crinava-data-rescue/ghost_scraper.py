@@ -7,7 +7,7 @@ from datetime import datetime
 from psycopg2.extras import execute_values
 
 # --- ⚙️ CONFIGURATION ---
-COCKROACH_URL = "postgresql://jay:xH1iQpJ4f8phXls4vjT5TQ@crinava-db-25836.j77.aws-ap-south-1.cockroachlabs.cloud:26257/defaultdb?sslmode=require"
+COCKROACH_URL = os.environ.get("COCKROACH_URL", "")
 TARGET_TABLE = "match_deliveries_v3"
 POLL_INTERVAL = 3  # Seconds between live updates
 
