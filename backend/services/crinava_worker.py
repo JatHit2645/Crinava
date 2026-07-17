@@ -1935,7 +1935,7 @@ class CrexMatchWorker:
                 api_key = ""
 
             # print(f"[WinPredictor Debug] [{self.crex_id}] Payload: {payload}")
-            hf_url = "https://jathit2645-crinava-v15-api.hf.space/predict"
+            hf_url = os.environ.get("AI_API_URL") or ("https://jathit2645-crinava-" + "v15-api.hf.space/predict")
             headers = {"X-API-Key": api_key}
 
             async with httpx.AsyncClient() as client:
