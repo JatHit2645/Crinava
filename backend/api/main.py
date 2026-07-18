@@ -5,16 +5,21 @@ from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, StreamingResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
+import atexit
 import sys
 import os
 import asyncio
 import json
+
+from posthog import Posthog
 
 # Ensure project root is in sys.path (needed for Hugging Face Spaces where CWD might differ)
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 from dotenv import load_dotenv
 load_dotenv()
+
+posthog_client = None
 
 from backend.services.engine import discovery_engine
 from backend.services.crinava_worker import CrexMatchWorker
@@ -26,6 +31,17 @@ from backend.utils.hub import load_cache, save_cache, match_hub  # noqa: E402
 @asynccontextmanager
 async def lifespan(api_app: FastAPI):
     """Docstring for lifespan."""
+    global posthog_client
+    _posthog_token = os.environ.get("POSTHOG_PROJECT_TOKEN", "")
+    _posthog_host = os.environ.get("POSTHOG_HOST", "https://us.i.posthog.com")
+    if _posthog_token:
+        posthog_client = Posthog(
+            api_key=_posthog_token,
+            host=_posthog_host,
+            enable_exception_autocapture=True,
+        )
+        atexit.register(posthog_client.shutdown)
+
     print("[System] Crinava Hub starting background services...")
     load_cache()
     # Start Discovery Engine in background
@@ -38,6 +54,8 @@ async def lifespan(api_app: FastAPI):
     yield
     print("[System] Shutting down...")
     save_cache()
+    if posthog_client:
+        posthog_client.shutdown()
 
 
 app = FastAPI(lifespan=lifespan)
@@ -301,6 +319,12 @@ async def stream_match(match_id: str):
         """Docstring for event_generator."""
         queue = asyncio.Queue()
         match_hub[resolved]["queues"].add(queue)
+        if posthog_client:
+            posthog_client.capture(
+                "crinava-engine",
+                "match_stream_connected",
+                {"match_id": match_id},
+            )
 
         # Send history first
         for packet in match_hub[resolved]["history"]:
@@ -376,6 +400,12 @@ async def orchestrator():
                 print(
                     f"[Orchestrator] Starting new worker for {match['title']} ({match['source']})..."
                 )
+                if posthog_client:
+                    posthog_client.capture(
+                        "crinava-engine",
+                        "match_worker_started",
+                        {"source": match.get("source"), "state": match.get("state", "Live")},
+                    )
 
                 if match["source"] == "crex":
                     worker = CrexMatchWorker(match, AI_API_KEY)

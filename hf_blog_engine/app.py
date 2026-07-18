@@ -1,3 +1,4 @@
+import atexit
 import json
 import os
 import re
@@ -19,6 +20,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import FastAPI, Query
 from fastapi.responses import HTMLResponse
 from openai import OpenAI
+from posthog import Posthog
 from sklearn.cluster import DBSCAN
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -112,6 +114,7 @@ scheduler: Optional[BackgroundScheduler] = None
 pipeline_lock = threading.Lock()
 db_lock = threading.Lock()
 ai_client: Optional[OpenAI] = None
+posthog_client: Optional[Posthog] = None
 pipeline_state: Dict[str, Any] = {
     "running": False,
     "last_started_at": None,
@@ -540,6 +543,12 @@ def fetch_cricket_news() -> List[Dict[str, str]]:
             log_event(f"Error fetching feed {url}: {exc}")
 
     log_event(f"Found {len(articles)} unique raw articles.")
+    if posthog_client:
+        posthog_client.capture(
+            "crinava-blog-engine",
+            "news_fetched",
+            {"article_count": len(articles), "feed_count": len(RSS_FEEDS)},
+        )
     return articles
 
 
@@ -766,9 +775,25 @@ News Sources:
         draft["image_urls"] = image_urls
         draft["image_url"] = image_urls[0] if image_urls else None
         log_event(f"Successfully generated blog: {draft['title']} with {len(image_urls)} image(s).")
+        if posthog_client:
+            posthog_client.capture(
+                "crinava-blog-engine",
+                "draft_generated",
+                {
+                    "source_count": len(cluster_articles),
+                    "category": draft.get("category"),
+                    "image_count": len(image_urls),
+                },
+            )
         return draft
     except Exception as exc:
         log_event(f"AI Generation Error: {exc}")
+        if posthog_client:
+            posthog_client.capture(
+                "crinava-blog-engine",
+                "ai_generation_failed",
+                {"error_type": type(exc).__name__},
+            )
         return None
 
 
@@ -776,6 +801,8 @@ def run_scraping_pipeline() -> Dict[str, Any]:
     """Run the full fetch -> cluster -> generate pipeline."""
     if not pipeline_lock.acquire(blocking=False):
         log_event("Pipeline skipped: another run is already in progress.")
+        if posthog_client:
+            posthog_client.capture("crinava-blog-engine", "pipeline_skipped")
         return {"status": "already_running", "new_drafts": 0}
 
     pipeline_state["running"] = True
@@ -851,15 +878,38 @@ def run_scraping_pipeline() -> Dict[str, Any]:
     finally:
         pipeline_state["running"] = False
         pipeline_state["last_finished_at"] = utc_now()
+        if posthog_client and pipeline_state.get("last_result"):
+            result = pipeline_state["last_result"]
+            posthog_client.capture(
+                "crinava-blog-engine",
+                "pipeline_completed",
+                {
+                    "status": result.get("status"),
+                    "new_drafts": result.get("new_drafts", 0),
+                    "attempted_generations": result.get("attempted_generations", 0),
+                    "skipped_duplicates": result.get("skipped_duplicates", 0),
+                    "total_drafts": result.get("total_drafts", 0),
+                },
+            )
         pipeline_lock.release()
 
 
 @app.on_event("startup")
 def start_scheduler() -> None:
-    global scheduler
+    global scheduler, posthog_client
 
     if scheduler and scheduler.running:
         return
+
+    _posthog_token = os.getenv("POSTHOG_PROJECT_TOKEN", "")
+    _posthog_host = os.getenv("POSTHOG_HOST", "https://us.i.posthog.com")
+    if _posthog_token:
+        posthog_client = Posthog(
+            api_key=_posthog_token,
+            host=_posthog_host,
+            enable_exception_autocapture=True,
+        )
+        atexit.register(posthog_client.shutdown)
 
     init_draft_store()
     log_event(f"Draft store ready at {DRAFTS_DB_PATH}. Stored drafts: {count_stored_drafts()}.")
@@ -888,6 +938,8 @@ def stop_scheduler() -> None:
     if scheduler and scheduler.running:
         scheduler.shutdown(wait=False)
         log_event("Scheduler stopped.")
+    if posthog_client:
+        posthog_client.shutdown()
 
 
 @app.get("/api/hf-drafts")
@@ -927,6 +979,8 @@ def preview_page() -> HTMLResponse:
 @app.get("/api/run")
 def trigger_pipeline() -> Dict[str, Any]:
     """Manually trigger the pipeline synchronously for testing."""
+    if posthog_client:
+        posthog_client.capture("crinava-blog-engine", "pipeline_triggered", {"trigger_type": "manual"})
     result = run_scraping_pipeline()
     return {
         "status": result["status"],
@@ -939,6 +993,8 @@ def trigger_pipeline() -> Dict[str, Any]:
 @app.get("/api/run-background")
 def trigger_pipeline_background() -> Dict[str, Any]:
     """Start the pipeline in the background and return immediately."""
+    if posthog_client:
+        posthog_client.capture("crinava-blog-engine", "pipeline_triggered", {"trigger_type": "background"})
     if pipeline_lock.locked():
         log_event("Background trigger skipped: another run is already in progress.")
         return {
