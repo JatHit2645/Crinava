@@ -21,6 +21,9 @@ Sentry.init({
   }
 });
 
+// Expose Sentry globally for console debugging
+(window as any).Sentry = Sentry;
+
 // Bypass Netlify's secret scanner by splitting the public token string
 const posthogKey = import.meta.env.VITE_POSTHOG_KEY || ["phc", "C645hXHxgBpatdVLC6cgvBK2UsV9unFwrmVYTUWUJ3uE"].join("_");
 const posthogHost = import.meta.env.VITE_POSTHOG_HOST || "https://us.i.posthog.com";
