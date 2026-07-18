@@ -26,3 +26,89 @@ This document summarizes the state of the **Automated AI Blog Image Pipeline** a
 ## 🛠️ Next Steps / Backlog
 * Run a full test of the automatic scraper pipeline by navigating to `/api/run-background` on the blog engine.
 * Verify database persistence when publishing custom local file images (Base64 vs URLs).
+
+---
+
+## 🔮 Future Builds: Autonomous RAG Web Search Pipeline
+To make the blog engine more powerful and factually accurate without losing the current layout, you can implement a **Search-Based Retrieval-Augmented Generation (RAG)** fallback. This solves factual gaps from scraper blocks (Problem 1) and enables writing custom topics on-demand (Problem 2) while staying 100% free.
+
+### 1. The Architecture (Quota-Safe Hybrid Search)
+
+```mermaid
+flowchart TD
+    A[Start Pipeline] --> B{News Feed or Custom Topic?}
+    
+    B -->|News RSS Pipeline| C[Fetch RSS Headlines]
+    C --> D{Full Article Scrape successful?}
+    D -->|Yes| E[Compile full text for LLM]
+    D -->|No: 403 / Timeout| F[DuckDuckGo Search \n-Free & Unlimited-]
+    F --> G[Extract snippets for stats/scores]
+    G --> E
+    
+    B -->|Custom Topic API| H[Tavily Search \n-High Quality, 1k Free/Mo-]
+    H --> I[Fetch top 5 detailed web pages]
+    I --> J[Compile comprehensive content]
+    
+    E --> K[LLM Writes Blog Draft]
+    J --> K
+    K --> L[Save to SQLite Draft Store]
+```
+
+### 2. Implementation Guide
+
+#### Step A: Dependencies
+Add the following to your Hugging Face space's `requirements.txt`:
+```text
+duckduckgo_search
+tavily-python
+```
+
+#### Step B: Environment Variables
+Get a free API key from [Tavily](https://tavily.com/) (1,000 free searches/month). Add it to Hugging Face **Settings -> Variables and secrets**:
+* `TAVILY_API_KEY`: `tvly-xxxxxxxxxxxxxxx`
+
+#### Step C: Code Additions (`app.py`)
+
+1. **DuckDuckGo News Fallback (Free & Unlimited):**
+   When `fetch_article_content()` fails due to a 403 error, run a quick search query to pull match facts:
+   ```python
+   from duckduckgo_search import DDGS
+
+   def search_duckduckgo_stats(headline: str) -> str:
+       """Fallback search to retrieve match summaries and scores."""
+       try:
+           with DDGS() as ddgs:
+               results = ddgs.text(f"{headline} scorecard stats match summary", max_results=3)
+               return "\n\n".join([r['body'] for r in results])
+       except Exception as e:
+           print(f"DDG Search failed: {e}")
+           return ""
+   ```
+
+2. **Tavily Custom Topic Generator (Premium RAG):**
+   Add a route to write evergreen articles on-demand:
+   ```python
+   from tavily import TavilyClient
+
+   @app.get("/api/run-custom")
+   def generate_custom_article(topic: str, x_signature: str = Header(None)):
+       """Generate a comprehensive blog draft on any custom topic using Tavily Search."""
+       if x_signature != ENGINE_SECRET_KEY:
+           raise HTTPException(status_code=403, detail="Unauthorized")
+       
+       # 1. Fetch search data
+       tavily = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
+       response = tavily.search(query=topic, search_depth="advanced", max_results=5)
+       
+       context = "\n\n".join([result["content"] for result in response["results"]])
+       
+       # 2. Feed to LLM & Save Draft
+       # (Call your existing generate_blog_draft template with the compiled context)
+       ...
+       return {"status": "success", "message": "Custom draft saved"}
+   ```
+
+3. **LLM Prompt Enrichment:**
+   Instruct the AI:
+   *"Use the provided search context to write an accurate, detail-rich news article. Focus on official scorecards, run counts, player names, and real events. Do not hallucinate stats. Do not include academic citations, write as a primary news source."*
+

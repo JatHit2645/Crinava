@@ -13,16 +13,12 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin, urlparse
 
-import feedparser
 import requests
 import uvicorn
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import FastAPI, Query
 from fastapi.responses import HTMLResponse
-from openai import OpenAI
 from posthog import Posthog
-from sklearn.cluster import DBSCAN
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 # Configuration
@@ -113,7 +109,7 @@ pipeline_logs: List[str] = []
 scheduler: Optional[BackgroundScheduler] = None
 pipeline_lock = threading.Lock()
 db_lock = threading.Lock()
-ai_client: Optional[OpenAI] = None
+ai_client: Optional[Any] = None
 posthog_client: Optional[Posthog] = None
 pipeline_state: Dict[str, Any] = {
     "running": False,
@@ -311,9 +307,10 @@ def get_ai_config_warnings() -> List[str]:
     return warnings
 
 
-def get_ai_client() -> Optional[OpenAI]:
+def get_ai_client() -> Optional[Any]:
     """Create one reusable OpenAI-compatible client for OpenAI, Groq, Together, etc."""
     global ai_client
+    from openai import OpenAI
 
     if not AI_API_KEY:
         log_event("AI client not initialized: AI_API_KEY or OPENAI_API_KEY is missing.")
@@ -487,6 +484,7 @@ def collect_cluster_image_urls(cluster_articles: List[Dict[str, str]], max_image
 
 def fetch_cricket_news() -> List[Dict[str, str]]:
     """Fetch cricket news from configured RSS sources."""
+    import feedparser
     log_event("Fetching latest cricket news...")
     articles: List[Dict[str, str]] = []
     seen_links = set()
@@ -554,6 +552,8 @@ def fetch_cricket_news() -> List[Dict[str, str]]:
 
 def cluster_articles(articles: List[Dict[str, str]]) -> Dict[int, List[Dict[str, str]]]:
     """Vectorize and cluster articles to group similar topics together."""
+    from sklearn.cluster import DBSCAN
+    from sklearn.feature_extraction.text import TfidfVectorizer
     if not articles:
         return {}
 
@@ -674,7 +674,7 @@ def is_unsupported_parameter_error(exc: Exception, parameter_name: str) -> bool:
     )
 
 
-def create_chat_completion(client: OpenAI, request_payload: Dict[str, Any]) -> Any:
+def create_chat_completion(client: Any, request_payload: Dict[str, Any]) -> Any:
     """Call chat completions with careful fallbacks for OpenAI-compatible providers."""
     variants = [
         ("JSON mode", True, True),
