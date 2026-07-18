@@ -9,7 +9,7 @@ import "./index.css";
 // Bypass Netlify's secret scanner by splitting the public token strings
 const sentryDsn = import.meta.env.VITE_SENTRY_DSN || [
   "https://98223770b8f9a8014b118c08a5629c97",
-  "o4511756508790784.ingest.us.sentry.io/4511756531073024"
+  "o4511756531073024.ingest.us.sentry.io/4511756531073024"
 ].join("@");
 
 Sentry.init({
