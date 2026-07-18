@@ -14,10 +14,11 @@ const sentryDsn = import.meta.env.VITE_SENTRY_DSN || [
 
 Sentry.init({
   dsn: sentryDsn,
-  integrations: [
-    Sentry.browserTracingIntegration(),
-  ],
-  tracesSampleRate: 1.0,
+  dataCollection: {
+    // To disable sending user data and HTTP bodies, uncomment the lines below.
+    // userInfo: false,
+    // httpBodies: []
+  }
 });
 
 // Bypass Netlify's secret scanner by splitting the public token string
