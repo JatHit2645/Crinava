@@ -7,6 +7,7 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { BlogArchive } from "./pages/BlogArchive";
 import { BlogPost } from "./pages/BlogPost";
 import React, { Suspense, useState, useEffect, useRef, useCallback } from "react";
+import posthog from "posthog-js";
 import { GoogleGenAI, Type } from "@google/genai";
 import {
   TrendingUp,
@@ -1203,6 +1204,10 @@ export default function App() {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    posthog.capture('$pageview');
+  }, [location]);
 
   // Handle auth callback route by replacing path to home
   useEffect(() => {
